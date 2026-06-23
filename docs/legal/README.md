@@ -51,7 +51,7 @@ Quando decidi di estendere pantedu ad altri docenti:
    ```
 
 3. [ ] **Configurare email abuse@**:
-   - Setup alias DNS + forward a privacy@pantedu.eu
+   - Setup alias DNS + forward a {{OPERATORE_EMAIL}}
    - Test ricezione
 
 4. [ ] **Integrare ToS check nel router**:

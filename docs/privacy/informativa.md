@@ -24,9 +24,9 @@ aliases: ["informativa", "privacy-policy"]
 
 | Campo | Valore |
 |-------|--------|
-| Nome | Vittorio Pantaleo |
-| Email contatto | `info@pantedu.eu` |
-| Email DPO | `info@pantedu.eu` (auto-nomina; per dimensioni attuali NON obbligatoria ex Art. 37, ma assunta come buona pratica) |
+| Nome | {{OPERATORE_NOME}} |
+| Email contatto | `{{OPERATORE_EMAIL}}` |
+| Email DPO | `{{OPERATORE_EMAIL}}` (auto-nomina; per dimensioni attuali NON obbligatoria ex Art. 37, ma assunta come buona pratica) |
 | Indirizzo | Italia (via comunicata su richiesta motivata) |
 
 ## 2. A chi è rivolta questa informativa
@@ -133,11 +133,11 @@ Per ogni utente registrato sono disponibili endpoint **self-service** (vedi `/me
 | Accesso ai propri dati | Art. 15 | `GET /me/export-data` (download JSON) |
 | Rettifica dati | Art. 16 | `POST /me/profile` (aggiorna nome/cognome/email) |
 | **Diritto all'oblio** | Art. 17 | `POST /me/request-deletion` → email conferma → 30g cooling-off → crypto-shredding O(1) |
-| Limitazione | Art. 18 | Richiesta a `info@pantedu.eu` |
+| Limitazione | Art. 18 | Richiesta a `{{OPERATORE_EMAIL}}` |
 | Portabilità | Art. 20 | `GET /me/export-data` (JSON strutturato user + consents + contenuti decifrati + override) |
 | Opposizione | Art. 21 | Revoca consensi via `POST /me/consents/revoke` |
 
-Per i diritti che non hanno endpoint self-service, inviare richiesta a `info@pantedu.eu` dall'indirizzo registrato. Risposta entro 30 giorni (prorogabile a 60 con comunicazione motivata in caso di complessità).
+Per i diritti che non hanno endpoint self-service, inviare richiesta a `{{OPERATORE_EMAIL}}` dall'indirizzo registrato. Risposta entro 30 giorni (prorogabile a 60 con comunicazione motivata in caso di complessità).
 
 In caso di insoddisfazione: reclamo al Garante per la protezione dei dati personali ([garanteprivacy.it](https://www.garanteprivacy.it)).
 
@@ -229,8 +229,7 @@ L'Applicativo è **software libero/open source** rilasciato sotto licenza
 di sicurezza WAF) — è **interamente ispezionabile** pubblicamente.
 
 Il codice sorgente è stato **scritto dai modelli di intelligenza artificiale
-Claude Opus 4.7 e 4.8 (Anthropic), sotto la guida e la direzione di Vittorio
-Pantaleo**, che ne ha curato ideazione, requisiti, revisione e responsabilità
+Claude Opus 4.7 e 4.8 (Anthropic), sotto la guida e la direzione di {{OPERATORE_NOME}}**, che ne ha curato ideazione, requisiti, revisione e responsabilità
 (co-autorialità uomo–AI). L'informazione è fornita a fini di **trasparenza**; la
 titolarità dei diritti d'autore del software è della persona fisica che lo ha
 diretto (un sistema di IA non può detenerli).
@@ -252,8 +251,8 @@ Questa informativa ha versione **2.0**. Ad ogni revisione sostanziale:
 
 | Tipo richiesta | Contatto |
 |----------------|----------|
-| Generiche / supporto | `info@pantedu.eu` |
-| DPO / privacy / esercizio diritti | `info@pantedu.eu` (oggetto: "GDPR — [tuo username]") |
+| Generiche / supporto | `{{OPERATORE_EMAIL}}` |
+| DPO / privacy / esercizio diritti | `{{OPERATORE_EMAIL}}` (oggetto: "GDPR — [tuo username]") |
 | Reclamo al Garante | [garanteprivacy.it/home/footer/contatti](https://www.garanteprivacy.it/home/footer/contatti) |
 
 ## Riferimenti tecnici (per audit professionali)

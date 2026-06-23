@@ -64,7 +64,7 @@ Casi di comportamento abusivo, molesto o altrimenti inaccettabile possono
 essere segnalati ai leader della comunità responsabili dell'enforcement
 all'indirizzo:
 
-**<vittorio.pantaleo@pantedu.eu>**
+**<vittop89@users.noreply.github.com>**
 
 Tutti i reclami saranno revisionati e investigati prontamente e con
 imparzialità.

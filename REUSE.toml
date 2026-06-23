@@ -17,7 +17,7 @@ version = 1
 [[annotations]]
 path = "**"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2026 Vittorio Pantaleo <vittorio.pantaleo@pantedu.eu>"
+SPDX-FileCopyrightText = "2026 Vittorio Pantaleo <vittop89@users.noreply.github.com>"
 SPDX-License-Identifier = "EUPL-1.2"
 
 # ─────────────────────────────────────────────────────────────────────────

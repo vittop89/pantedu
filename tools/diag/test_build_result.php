@@ -35,7 +35,7 @@ echo "=== MODE: ZIP ===\n";
 $resultZip = $builder->build($sel, VersionPicker::NORMAL, [
     'mode'           => BuildResult::MODE_ZIP,
     'variant_kind'   => 'NOR',
-    'docente_nome'   => 'Vittorio Pantaleo',
+    'docente_nome'   => '{{OPERATORE_NOME}}',
     'institute_name' => 'IIS di Esempio - Comune Esempio (XX)',
 ]);
 foreach ($resultZip->files as $f) {
@@ -46,7 +46,7 @@ echo "\n=== MODE: VSC ===\n";
 $resultVsc = $builder->build($sel, VersionPicker::NORMAL, [
     'mode'           => BuildResult::MODE_VSC,
     'variant_kind'   => 'SOL',
-    'docente_nome'   => 'Vittorio Pantaleo',
+    'docente_nome'   => '{{OPERATORE_NOME}}',
     'institute_name' => 'IIS di Esempio - Comune Esempio (XX)',
 ]);
 foreach ($resultVsc->files as $f) {

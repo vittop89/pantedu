@@ -5,7 +5,7 @@
 > del codice CSS, deprecazione legacy, ottimizzazione performance
 > mobile e accessibilità per utenti su reti lente.
 >
-> **Created**: 2026-05-23 · **Author**: Vittorio Pantaleo + Claude session
+> **Created**: 2026-05-23 · **Author**: {{OPERATORE_NOME}} + Claude session
 > · **Status**: planning · **Target completion**: 2026-Q4 → 2027-Q1
 
 ---

@@ -7,7 +7,7 @@
 | Repository pubblico | **❓ NON IDENTIFICATO** |
 | Licenza | **❓ Non verificabile (no source)** |
 | Data audit | 2026-05-23 |
-| Auditor | Vittorio Pantaleo (via Claude Code session) |
+| Auditor | {{OPERATORE_NOME}} (via Claude Code session) |
 | Verdict | **HOLD — REPLACE con accessibility-agents/action** |
 
 ## 1. Source repo identification
@@ -126,4 +126,4 @@ Se "CI/CD Accessibility Agent" pubblica:
 
 | Data | Auditor | Verdict |
 |---|---|---|
-| 2026-05-23 | Vittorio Pantaleo (via Claude Code session) | HOLD — replace con accessibility-agents/action + custom shim |
+| 2026-05-23 | {{OPERATORE_NOME}} (via Claude Code session) | HOLD — replace con accessibility-agents/action + custom shim |

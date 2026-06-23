@@ -249,8 +249,8 @@ PER DPO:
   tecnici.
 
 CONTATTI:
-  Data Controller / DPO interno pantedu: Vittorio Pantaleo
-  Email:                                   info@pantedu.eu
+  Data Controller / DPO interno pantedu: {{OPERATORE_NOME}}
+  Email:                                   operatore@example.net
   Pagina pubblica privacy:                 https://beta.pantedu.eu/privacy/informativa
   Pagina pubblica sicurezza:               https://beta.pantedu.eu/security
 

@@ -6,7 +6,7 @@ tags:
   - gdpr
 date: 2026-05-22
 status: accettato
-deciders: Vittorio Pantaleo
+deciders: {{OPERATORE_NOME}}
 ---
 
 # ADR-017 — Deployment mode switch: single-teacher (S1) vs multi-teacher istituto (S2)

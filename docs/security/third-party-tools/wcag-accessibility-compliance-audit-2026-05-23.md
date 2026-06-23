@@ -7,7 +7,7 @@
 | Repository pubblico | **❓ NON IDENTIFICATO** |
 | Licenza | **❓ Non verificabile (no source)** |
 | Data audit | 2026-05-23 |
-| Auditor | Vittorio Pantaleo (via Claude Code session) |
+| Auditor | {{OPERATORE_NOME}} (via Claude Code session) |
 | Verdict | **HOLD — REPLACE con accessibility-agents WCAG-guide agent** |
 
 ## 1. Source repo identification
@@ -87,4 +87,4 @@ Se "WCAG Accessibility Compliance" pubblica source pubblico + licenza:
 
 | Data | Auditor | Verdict |
 |---|---|---|
-| 2026-05-23 | Vittorio Pantaleo (via Claude Code session) | HOLD — replace con accessibility-agents (specialisti) + pa11y-ci |
+| 2026-05-23 | {{OPERATORE_NOME}} (via Claude Code session) | HOLD — replace con accessibility-agents (specialisti) + pa11y-ci |

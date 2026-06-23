@@ -11,7 +11,7 @@ geometry: "margin=2cm"
 # Termini di Servizio (ToS) — Docente
 
 **Versione**: 1.0 · **Data**: 20 maggio 2026
-**Applicativo**: pantedu.eu · **Operatore tecnico**: Vittorio Pantaleo
+**Applicativo**: pantedu.eu · **Operatore tecnico**: {{OPERATORE_NOME}}
 
 > **Stato operativo (2026-05-20)**: documento attivo e legalmente
 > applicabile per ogni docente che si registri su `pantedu.eu`.
@@ -151,7 +151,7 @@ a. **Ogni operazione di upload, modifica, eliminazione** dei propri
 b. Tali log sono conservati per almeno **365 giorni** e possono essere
    utilizzati in caso di indagine interna, richiesta di autorità
    competenti, o cooperazione su procedure di Notice & Takedown;
-c. L'operatore tecnico (Vittorio Pantaleo) **non può accedere ai
+c. L'operatore tecnico ({{OPERATORE_NOME}}) **non può accedere ai
    contenuti** caricati in formato decifrato grazie all'architettura
    di envelope encryption per-teacher KEK; può tuttavia accedere ai
    suddetti metadata.
@@ -175,7 +175,7 @@ b. Le norme applicabili includono in particolare:
      (art. 13 obbligo di segnalazione);
    - **D.Lgs. 165/2001** art. 53 (incompatibilità cumulo impieghi);
 
-c. L'utente **solleva l'operatore tecnico (Vittorio Pantaleo) da
+c. L'utente **solleva l'operatore tecnico ({{OPERATORE_NOME}}) da
    responsabilità per i contenuti caricati**, riconoscendo che
    l'architettura tecnica dell'Applicativo (envelope encryption
    per-teacher KEK) gli impedisce di accedere ai contenuti decifrati
@@ -203,7 +203,7 @@ c. Riconoscere che, in caso di mancata cooperazione, l'operatore tecnico
 ## 6. Obbligo di segnalazione (DPR 62/2013 art. 13)
 
 L'utente, in qualità di docente dipendente pubblico, si impegna a
-**segnalare** all'operatore tecnico (canale email `abuse@pantedu.eu`
+**segnalare** all'operatore tecnico (canale email `{{OPERATORE_EMAIL}}`
 o equivalente) qualsiasi violazione dei presenti Termini di cui dovesse
 venire a conoscenza, anche commessa da altri docenti che utilizzano
 l'Applicativo.
@@ -262,6 +262,6 @@ Dati registrati al momento dell'accettazione:
 
 ---
 
-*Per chiarimenti contattare: privacy@pantedu.eu*
+*Per chiarimenti contattare: {{OPERATORE_EMAIL}}*
 
 *Versione documento: 1.0 — 20 maggio 2026.*

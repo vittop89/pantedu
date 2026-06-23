@@ -29,10 +29,10 @@ aliases: ["registro", "ROPA", "art-30"]
 
 | Campo | Valore |
 |-------|--------|
-| Denominazione | Vittorio Pantaleo (persona fisica, professionista) |
+| Denominazione | {{OPERATORE_NOME}} (persona fisica, professionista) |
 | Sede | Italia |
-| Email contatto | info@pantedu.eu |
-| Email DPO | info@pantedu.eu (auto-nomina, dimensione attuale non richiede DPO formale ex Art. 37) |
+| Email contatto | {{OPERATORE_EMAIL}} |
+| Email DPO | {{OPERATORE_EMAIL}} (auto-nomina, dimensione attuale non richiede DPO formale ex Art. 37) |
 | Telefono | _da inserire_ |
 | Tipo organizzazione | Singolo professionista — piattaforma educativa per scuole superiori |
 
@@ -183,8 +183,8 @@ Se in futuro si introducesse tracking studente-DSA (es. profilo studente con fla
 
 | Data | Versione | Modifica | Operatore |
 |------|----------|----------|-----------|
-| 2026-04-27 | 1.0 | Prima compilazione (Phase 25.C8) | Vittorio Pantaleo |
-| 2026-04-29 | 1.1 | Sezione D Aruba aggiornata: DPA Art. 23 Condizioni Fornitura v4.4 archiviato + mappato vs Art. 28 §3 (10/10 requisiti) | Vittorio Pantaleo |
+| 2026-04-27 | 1.0 | Prima compilazione (Phase 25.C8) | {{OPERATORE_NOME}} |
+| 2026-04-29 | 1.1 | Sezione D Aruba aggiornata: DPA Art. 23 Condizioni Fornitura v4.4 archiviato + mappato vs Art. 28 §3 (10/10 requisiti) | {{OPERATORE_NOME}} |
 
 ### Data breach notificati
 

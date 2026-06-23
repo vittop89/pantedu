@@ -27,7 +27,7 @@ use InvalidArgumentException;
  * Misure di sicurezza necessarie pre-attivazione:
  *   - Rate limit (es. 5 submission/h per IP via fail2ban filter)
  *   - reCAPTCHA o hCaptcha per anti-bot
- *   - Mail notification a abuse@pantedu.eu con il content nuovo
+ *   - Mail notification a operatore@example.net con il content nuovo
  *   - Notifica Grafana alert su submission ad alto volume
  */
 class PublicTakedownController
@@ -76,20 +76,20 @@ class PublicTakedownController
         } catch (\Throwable $e) {
             error_log('[PublicTakedownController] ' . $e->getMessage());
             return Response::html(
-                $this->renderPage($this->renderFormBody('Errore interno. Riprova più tardi o contatta abuse@pantedu.eu')),
+                $this->renderPage($this->renderFormBody('Errore interno. Riprova più tardi o contatta operatore@example.net')),
                 500
             );
         }
     }
 
     /**
-     * Phase 25.Q — invia mail di notifica ad abuse@pantedu.eu.
+     * Phase 25.Q — invia mail di notifica ad operatore@example.net.
      * Best-effort: errori vengono solo loggati e non bloccano il submit.
      */
     private function notifyAbuseEmail(int $requestId, array $data): void
     {
         try {
-            $to = 'abuse@pantedu.eu';
+            $to = 'operatore@example.net';
             $subject = "[pantedu abuse-{$requestId}] Nuova segnalazione " . ($data['violation_type'] ?? '');
             $body = "Nuova segnalazione ricevuta su /segnalazione-contenuti.\n\n"
                   . "ID: {$requestId}\n"
@@ -101,8 +101,8 @@ class PublicTakedownController
                   . "Content ref: " . ($data['content_ref'] ?? '—') . "\n\n"
                   . "Descrizione:\n" . ($data['description'] ?? '—') . "\n\n"
                   . "Dettaglio + azione: https://beta.pantedu.eu/admin/takedown/{$requestId}\n";
-            $headers = "From: no-reply@pantedu.eu\r\n"
-                     . "Reply-To: " . ($data['submitter_email'] ?? 'no-reply@pantedu.eu') . "\r\n"
+            $headers = "From: operatore@example.net\r\n"
+                     . "Reply-To: " . ($data['submitter_email'] ?? 'operatore@example.net') . "\r\n"
                      . "Content-Type: text/plain; charset=UTF-8\r\n";
             @mail($to, $subject, $body, $headers);
         } catch (\Throwable $e) {
@@ -140,7 +140,7 @@ class PublicTakedownController
   <p>Procedura conforme a <strong>D.Lgs. 70/2003 art. 16</strong> (Direttiva
   2000/31/CE — Notice &amp; Takedown). Vedi dettagli in
   <a href="/legal/takedown-procedure">procedura completa</a>.</p>
-  <p>In alternativa puoi scrivere a <strong>abuse@pantedu.eu</strong>.</p>
+  <p>In alternativa puoi scrivere a <strong>operatore@example.net</strong>.</p>
 </div>
 
 {$errorHtml}
@@ -206,7 +206,7 @@ HTML;
 (vedi <a href="/legal/takedown-procedure">procedura</a>).</p>
 <p>Se hai indicato un'email valida, ti contatteremo non appena disponibile
 una risposta motivata.</p>
-<p>Per urgenze contattare direttamente <strong>abuse@pantedu.eu</strong>.</p>
+<p>Per urgenze contattare direttamente <strong>operatore@example.net</strong>.</p>
 <p><a href="/">← torna alla home</a></p>
 </div>
 HTML;

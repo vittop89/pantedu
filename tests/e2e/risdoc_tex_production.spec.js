@@ -56,7 +56,7 @@ test("tex production pipeline — all templates", async ({ browser }) => {
                             { __label: "con BES e PDP", value: "1" },
                         ],
                     },
-                    state: { classe: "2s", sezione: "A", indirizzo: "sc", disciplina: "MAT", professore: "Vittorio Pantaleo" },
+                    state: { classe: "2s", sezione: "A", indirizzo: "sc", disciplina: "MAT", professore: "{{OPERATORE_NOME}}" },
                 }),
             },
         });

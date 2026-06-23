@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: 🔒 Segnalazione di sicurezza
     url: https://github.com/vittop89/pantedu/security/policy
-    about: Vulnerabilità di sicurezza — NON usare le issue pubbliche. Vedi SECURITY.md / security@pantedu.eu.
+    about: Vulnerabilità di sicurezza — NON usare le issue pubbliche. Vedi SECURITY.md / {{OPERATORE_EMAIL}}.
   - name: 📖 Documentazione
     url: https://github.com/vittop89/pantedu/tree/main/docs
     about: Guide installazione, API, accessibilità, documenti legali.

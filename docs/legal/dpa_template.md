@@ -15,7 +15,7 @@ geometry: "margin=2cm"
 
 > **Stato (2026-05-20)**: documento **template non sottoscritto**.
 > L'app pantedu è oggi in Scenario A (singolo docente operatore =
-> Vittorio Pantaleo, anche utente unico). La sottoscrizione formale del
+> {{OPERATORE_NOME}}, anche utente unico). La sottoscrizione formale del
 > DPA avviene quando si estende a Scenario B/C (più docenti / adozione
 > istituzionale). Le misure di sicurezza descritte nell'Allegato 2 sono
 > già implementate in produzione (cifratura per-teacher, audit log,
@@ -31,7 +31,7 @@ Questo è un **template** di contratto Data Processing Agreement (DPA)
 ex **art. 28 GDPR** da personalizzare e firmare tra:
 
 - **Titolare del trattamento**: {{INSTITUTE_LEGAL_NAME}}
-- **Responsabile esterno del trattamento**: Vittorio Pantaleo (in qualità
+- **Responsabile esterno del trattamento**: {{OPERATORE_NOME}} (in qualità
   di operatore tecnico dell'applicativo pantedu) — contatto privacy:
   {{DPO_CONTACT}}
 
@@ -49,7 +49,7 @@ Ai sensi del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 196/2003 mod.
 
 - **Titolare**: {{INSTITUTE_LEGAL_NAME}}, rappresentato dal Dirigente
   Scolastico pro tempore.
-- **Responsabile**: Vittorio Pantaleo (CF __________), in qualità di
+- **Responsabile**: {{OPERATORE_NOME}} (CF __________), in qualità di
   docente in servizio presso l'Istituto e operatore tecnico
   dell'applicativo pantedu.
 - **Interessati**: studenti dell'Istituto + docenti Autorizzati ex art.
@@ -184,7 +184,7 @@ a. **Titolare (Istituto)**: nomina i docenti come Autorizzati ex art.
    eroga formazione GDPR ai docenti, attua sanzioni disciplinari per
    violazioni.
 
-b. **Responsabile (Vittorio Pantaleo)**: responsabile delle misure
+b. **Responsabile ({{OPERATORE_NOME}})**: responsabile delle misure
    tecniche/organizzative infrastrutturali ex art. 32 GDPR; **NON è
    responsabile dei contenuti caricati dai docenti Autorizzati**, in
    forza dell'architettura tecnica di envelope encryption per-teacher
@@ -388,7 +388,7 @@ Legge italiana.
 
 | Per il Titolare | Per il Responsabile |
 |------------------|---------------------|
-| {{INSTITUTE_LEGAL_NAME}} | Vittorio Pantaleo |
+| {{INSTITUTE_LEGAL_NAME}} | {{OPERATORE_NOME}} |
 | Dirigente Scolastico pro tempore: _______________ | CF: ______________ |
 | Firma: _______________ | Firma: _______________ |
 | Data: _______________ | Data: _______________ |
@@ -431,4 +431,4 @@ Dettaglio tecnico completo: `docs/todo/waf_security_prompt.md` (1700+ righe).
 
 *Versione documento: 1.0 — 20 maggio 2026.*
 
-*Per chiarimenti: privacy@pantedu.eu*
+*Per chiarimenti: {{OPERATORE_EMAIL}}*

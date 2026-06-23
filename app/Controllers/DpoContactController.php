@@ -156,8 +156,8 @@ final class DpoContactController
         string $message,
         bool $isMinor
     ): bool {
-        $from   = (string)($_ENV['MAIL_FROM'] ?? 'noreply@pantedu.eu');
-        $dpoTo  = (string)($_ENV['DPO_EMAIL'] ?? 'dpo@pantedu.eu');
+        $from   = (string)($_ENV['MAIL_FROM'] ?? 'operatore@example.net');
+        $dpoTo  = (string)($_ENV['DPO_EMAIL'] ?? 'operatore@example.net');
         $siteUrl = (string)(Config::get('app.url') ?: 'https://pantedu.eu');
         $subjectLabel = self::SUBJECT_LABELS[$subjectCode] ?? $subjectCode;
 

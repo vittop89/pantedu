@@ -9,7 +9,7 @@
 | Licenza | **MIT** ✓ |
 | Stars / Last commit | 282 ⭐ / activity continua (release 2026-05-06) |
 | Data audit | 2026-05-23 |
-| Auditor | Vittorio Pantaleo + Claude Code session |
+| Auditor | {{OPERATORE_NOME}} + Claude Code session |
 | Verdict | **APPROVE CONDITIONAL** |
 
 ## 1. Source repo inspection
@@ -151,7 +151,7 @@ Questo è IL disclaimer corretto. Il maintainer è onesto sui limiti.
 
 | Data | Auditor | Hash repo head auditato | Verdict |
 |---|---|---|---|
-| 2026-05-23 | Vittorio Pantaleo (via Claude Code session) | v5.4.0 release tag | APPROVE CONDITIONAL |
+| 2026-05-23 | {{OPERATORE_NOME}} (via Claude Code session) | v5.4.0 release tag | APPROVE CONDITIONAL |
 
 ---
 

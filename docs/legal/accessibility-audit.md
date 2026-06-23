@@ -76,7 +76,7 @@ dall'audit automatico senza violazioni serious/critical.
 
 Gli utenti possono segnalare problemi di accessibilità tramite:
 - modulo accessibile `/segnalazione-contenuti`;
-- email `accessibility@pantedu.eu` (e `dpo@pantedu.eu` per i diritti GDPR collegati).
+- email `{{OPERATORE_EMAIL}}` (e `{{OPERATORE_EMAIL}}` per i diritti GDPR collegati).
 
 Risposta entro 30 giorni (vedi Dichiarazione). Procedura di rinvio ad AgID in caso di risposta insoddisfacente.
 

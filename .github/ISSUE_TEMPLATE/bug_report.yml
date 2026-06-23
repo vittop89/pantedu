@@ -7,7 +7,7 @@ body:
       value: |
         Grazie per aiutarci a migliorare Pantedu.
         **Non segnalare qui vulnerabilità di sicurezza** — vedi [SECURITY.md](../../SECURITY.md)
-        e scrivi a security@pantedu.eu.
+        e scrivi a {{OPERATORE_EMAIL}}.
 
   - type: textarea
     id: descrizione

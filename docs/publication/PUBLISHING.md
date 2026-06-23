@@ -23,8 +23,14 @@ pubblicazione. Lo strumento:
 - **ri-scansiona** e segnala qualsiasi residuo (incl. binari come PDF/immagini),
   uscendo con codice ≠ 0 se restano residui dopo `--apply`.
 
-Cosa **resta** (attribuzioni legittime): l'autore/copyright «Vittorio Pantaleo»,
-il contatto maintainer `@pantedu.eu`, l'URL del repo `github.com/.../pantedu`.
+Cosa **resta** (attribuzioni legittime): l'autore/copyright «Vittorio Pantaleo»
+in LICENSE/NOTICE/publiccode/composer/CONTRIBUTING e l'URL del repo
+`github.com/.../pantedu`. Le email sul dominio del deployment NON restano: il contatto
+maintainer diventa `vittop89@users.noreply.github.com` (GitHub noreply), le
+email funzionali (info/security/dpo/abuse…) diventano `{{OPERATORE_EMAIL}}`
+nei doc template e `operatore@example.net` come default nel codice; il canale
+security primario è **GitHub Security Advisories**. Il nome come *operatore*
+nei doc legali diventa `{{OPERATORE_NOME}}` (l'adottante compila il proprio).
 
 ## Procedura
 

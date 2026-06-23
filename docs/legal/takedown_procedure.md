@@ -11,14 +11,14 @@ geometry: "margin=2cm"
 # Notice & Takedown Procedure
 
 **Versione**: 1.0 · **Data**: 20 maggio 2026
-**Applicativo**: pantedu.eu · **Operatore tecnico**: Vittorio Pantaleo
+**Applicativo**: pantedu.eu · **Operatore tecnico**: {{OPERATORE_NOME}}
 
 > **Stato operativo (2026-05-20)**: procedura attiva.
 > Componenti in produzione:
 >
 > - Form pubblico segnalazione: [`/segnalazione-contenuti`](https://beta.pantedu.eu/segnalazione-contenuti) (rate-limited 3/h/IP)
 > - Coda admin: [`/admin/takedown`](https://beta.pantedu.eu/admin/takedown) (super-admin only)
-> - Email contatto: `abuse@pantedu.eu` (alias Aruba → privacy@pantedu.eu)
+> - Email contatto: `{{OPERATORE_EMAIL}}` (alias Aruba → {{OPERATORE_EMAIL}})
 > - Tabella DB: `takedown_requests` (migration 057 applicata)
 > - Service: `App\Services\Gdpr\TakedownRequestService`
 >
@@ -52,16 +52,16 @@ purché:
 
 ### 1.1 Email dedicato
 
-**Indirizzo**: `abuse@pantedu.eu`
+**Indirizzo**: `{{OPERATORE_EMAIL}}`
 
 **Configurazione**: alias che forwarda a:
-- privacy@pantedu.eu (primario)
-- info@pantedu.eu (backup)
+- {{OPERATORE_EMAIL}} (primario)
+- {{OPERATORE_EMAIL}} (backup)
 
 Setup DNS:
 ```
 abuse.pantedu.eu.   MX   10  mx.pantedu.eu.
-abuse@pantedu.eu    →    forward → privacy@pantedu.eu
+{{OPERATORE_EMAIL}}    →    forward → {{OPERATORE_EMAIL}}
 ```
 
 ### 1.2 Form web pubblico
@@ -70,7 +70,7 @@ abuse@pantedu.eu    →    forward → privacy@pantedu.eu
 
 **Implementazione**: form PHP standalone (no autenticazione richiesta) →
 INSERT in tabella `takedown_requests` (vedi migration 057) → invio
-notifica email a `abuse@pantedu.eu`.
+notifica email a `{{OPERATORE_EMAIL}}`.
 
 Vedi: `app/Controllers/Public/PublicTakedownController.php` (✅ implementato).
 
@@ -101,7 +101,7 @@ Per atti formali di autorità giudiziaria o Garante Privacy:
 
 ### Fase 1 — Ricezione (T0)
 
-- Ricezione email su `abuse@pantedu.eu` o submission form
+- Ricezione email su `{{OPERATORE_EMAIL}}` o submission form
 - **Trigger**: notifica push (email + Grafana alert se attivo)
 - **Action**: creazione record in `takedown_requests` (status=`new`)
 - **Log**: ingresso in audit log con metadata segnalante + contenuto
@@ -209,8 +209,8 @@ come [tipologia]. La valuteremo entro le tempistiche SLA stabilite
 Procederemo a ricontattarLa entro [SLA] giorni con l'esito.
 
 Cordiali saluti,
-Vittorio Pantaleo — Operatore tecnico pantedu
-privacy@pantedu.eu
+{{OPERATORE_NOME}} — Operatore tecnico pantedu
+{{OPERATORE_EMAIL}}
 ```
 
 ### 5.2 Notifica rimozione (all'uploader)
@@ -235,8 +235,8 @@ Continueremo ad osservare il rispetto dei Termini di Servizio e
 dell'AUP nei tuoi futuri utilizzi dell'Applicativo.
 
 Cordiali saluti,
-Vittorio Pantaleo — Operatore tecnico pantedu
-privacy@pantedu.eu
+{{OPERATORE_NOME}} — Operatore tecnico pantedu
+{{OPERATORE_EMAIL}}
 ```
 
 ### 5.3 Rifiuto segnalazione (al segnalante)
@@ -258,7 +258,7 @@ In caso di disaccordo, Lei può:
 - Adire l'autorità giudiziaria competente.
 
 Cordiali saluti,
-Vittorio Pantaleo — Operatore tecnico pantedu
+{{OPERATORE_NOME}} — Operatore tecnico pantedu
 ```
 
 ---
@@ -329,4 +329,4 @@ verificabili.
 
 *Versione documento: 1.0 — 20 maggio 2026.*
 
-*Per segnalazioni: abuse@pantedu.eu*
+*Per segnalazioni: {{OPERATORE_EMAIL}}*

@@ -1,4 +1,4 @@
-Contact: mailto:info@pantedu.eu
+Contact: mailto:{{OPERATORE_EMAIL}}
 Expires: 2027-05-18T23:59:59.000Z
 Preferred-Languages: it, en
 Canonical: https://beta.pantedu.eu/.well-known/security.txt

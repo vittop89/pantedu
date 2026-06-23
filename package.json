@@ -5,12 +5,12 @@
   "license": "EUPL-1.2",
   "homepage": "https://pantedu.eu",
   "author": {
-    "name": "Vittorio Pantaleo",
-    "email": "vittorio.pantaleo@pantedu.eu"
+    "name": "{{OPERATORE_NOME}}",
+    "email": "vittop89@users.noreply.github.com"
   },
   "bugs": {
     "url": "https://github.com/vittop89/pantedu/issues",
-    "email": "vittorio.pantaleo@pantedu.eu"
+    "email": "vittop89@users.noreply.github.com"
   },
   "repository": {
     "type": "git",

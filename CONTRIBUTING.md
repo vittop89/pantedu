@@ -4,7 +4,7 @@
 > mentre completo l'hardening pre-public-release. Le PR esterne non sono
 > ancora aperte. Questa guida è già attiva per quando il repo passerà
 > a public (previsto entro fine 2026). Nel frattempo se vuoi segnalare
-> bug o discutere feature, scrivi a <vittorio.pantaleo@pantedu.eu>.
+> bug o discutere feature, scrivi a <vittop89@users.noreply.github.com>.
 
 Grazie per il tuo interesse a contribuire a Pantedu. Questo documento
 descrive come segnalare bug, proporre modifiche e inviare pull request
@@ -22,7 +22,7 @@ Aderiamo al [Contributor Covenant 2.1](CODE_OF_CONDUCT.md). In sintesi:
 sii rispettoso, pazienzioso e tecnico. Comportamenti tossici, molestie
 o discriminazioni non sono tollerati e portano al ban.
 
-Segnalazioni a <vittorio.pantaleo@pantedu.eu>.
+Segnalazioni a <vittop89@users.noreply.github.com>.
 
 ---
 
@@ -171,6 +171,6 @@ issue con report compatibilità.
 ## Contatti
 
 - Maintainer: Vittorio Pantaleo
-- Email: <vittorio.pantaleo@pantedu.eu>
-- Security: <security@pantedu.eu>
-- DPO: <dpo@pantedu.eu>
+- Email: <vittop89@users.noreply.github.com>
+- Security: <{{OPERATORE_EMAIL}}>
+- DPO: <{{OPERATORE_EMAIL}}>

@@ -153,7 +153,7 @@ Storico modifiche: [`CHANGELOG.md`](CHANGELOG.md) (Keep a Changelog) e
 
 **Repository attualmente privato** durante il completamento dell'hardening
 pre-public-release. PR esterne non ancora aperte. Per discussioni preliminari:
-<vittorio.pantaleo@pantedu.eu>.
+<vittop89@users.noreply.github.com>.
 
 Per security issues: vedi [SECURITY.md](SECURITY.md).
 

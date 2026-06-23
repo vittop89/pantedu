@@ -13,7 +13,7 @@
  *   SEED_ADMIN_USERNAME    username login           (default: superadmin)
  *   SEED_ADMIN_FIRSTNAME   nome                     (default: Vittorio)
  *   SEED_ADMIN_LASTNAME    cognome                  (default: Pantaleo)
- *   SEED_ADMIN_EMAIL       email                    (default: info@pantedu.eu)
+ *   SEED_ADMIN_EMAIL       email                    (default: operatore@example.net)
  *   SEED_ADMIN_PASSWORD    password (>= 8 caratteri, OBBLIGATORIA)
  *   SEED_INSTITUTE_CODE    cod. mecc. istituto      (default: MIUR-ESEMPIO-COMUNE ESEMPIO-SCI)
  *   SEED_INSTITUTE_NAME    nome istituto            (default: LICEO SC. ART. E SPORTIVO "ESEMPIO")
@@ -43,7 +43,7 @@ if (!Config::get('database.enabled') || !Database::isAvailable()) {
 $username   = $_ENV['SEED_ADMIN_USERNAME']  ?? 'superadmin';
 $firstName  = $_ENV['SEED_ADMIN_FIRSTNAME'] ?? 'Vittorio';
 $lastName   = $_ENV['SEED_ADMIN_LASTNAME']  ?? 'Pantaleo';
-$email      = $_ENV['SEED_ADMIN_EMAIL']     ?? 'info@pantedu.eu';
+$email      = $_ENV['SEED_ADMIN_EMAIL']     ?? 'operatore@example.net';
 $role       = 'teacher';
 $password   = $argv[1] ?? ($_ENV['SEED_ADMIN_PASSWORD'] ?? null);
 

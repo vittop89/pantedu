@@ -39,7 +39,7 @@ Se uno dei due manca → crypto-shredding O(1) automatico (Art. 17 GDPR).
 
 ### 2.1 Stato attuale (single-operator)
 
-- **Unico custode**: Vittorio Pantaleo (data controller).
+- **Unico custode**: {{OPERATORE_NOME}} (data controller).
 - **Fingerprint (SHA-256 della chiave, NO valore in chiaro)**: registrata
   nel sistema via evento `kms_backup_created` in `/admin/crypto-status`
   per verifica di integrità futura.
@@ -287,7 +287,7 @@ UI: `/admin/crypto-status` (super-admin only).
 
 | Ruolo | Persona | Contatto |
 |-------|---------|----------|
-| Data Controller / DPO | Vittorio Pantaleo | info@pantedu.eu |
+| Data Controller / DPO | {{OPERATORE_NOME}} | {{OPERATORE_EMAIL}} |
 | Legal advisor (TBD) | — | — |
 | Notaio custodia chiave | TODO | — |
 

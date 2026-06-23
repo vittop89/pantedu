@@ -2,7 +2,7 @@
 
 > Status: **proposal**, in attesa di approvazione. Nessuna delle fasi
 > D.0–D.4 è stata avviata (allineamento 2026-06-18).
-> Created: 2026-05-23 — autore: Vittorio Pantaleo + Claude Code session.
+> Created: 2026-05-23 — autore: {{OPERATORE_NOME}} + Claude Code session.
 >
 > ⚠️ **Verifiche licenza ancora da fare**: i marcatori "TODO verify"
 > nella tabella stack (AccessLint, CI/CD Accessibility Agent, WCAG

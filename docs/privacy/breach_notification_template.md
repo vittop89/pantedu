@@ -79,14 +79,14 @@ Puoi:
 ## Contatti
 
 Per domande su questo incidente:
-- **Email DPO**: info@pantedu.eu
+- **Email DPO**: {{OPERATORE_EMAIL}}
 - **Form contatto**: [/dpo-contact](https://pantedu.eu/dpo-contact)
 - **Riferimento incidente**: [BREACH-ID es. 2026-03-12-001]
 
 Ci scusiamo per il disagio. La sicurezza dei tuoi dati è la nostra priorità e abbiamo già implementato misure aggiuntive per prevenire incidenti simili.
 
 Cordiali saluti,
-**Vittorio Pantaleo** — Titolare del trattamento dati Pantedu
+**{{OPERATORE_NOME}}** — Titolare del trattamento dati Pantedu
 
 ---
 
@@ -109,7 +109,7 @@ Prima di inviare la comunicazione:
 - [ ] [DATA INCIDENTE], [DESCRIZIONE], [DATI COINVOLTI] compilati
 - [ ] [BREACH-ID] assegnato (formato `YYYY-MM-DD-NNN`)
 - [ ] Notifica Garante già inviata (Art. 33 — entro 72h)
-- [ ] Comunicazione inviata da indirizzo ufficiale (`info@pantedu.eu` o
+- [ ] Comunicazione inviata da indirizzo ufficiale (`{{OPERATORE_EMAIL}}` o
       mailer SMTP configurato)
 - [ ] Avviso dashboard predisposto e gating (mostrato solo a utenti impacted)
 - [ ] Log invio: `storage/gdpr/breach_notifications/[BREACH-ID].log`

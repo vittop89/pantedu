@@ -1,16 +1,16 @@
 ---
 title: "Pantedu — Pacchetto di accountability per il DPO/RPD scolastico"
 subtitle: "Documentazione tecnica e organizzativa ai sensi GDPR Art. 24, 28, 32, 35"
-author: "Vittorio Pantaleo — sviluppatore e operatore di Pantedu"
+author: "{{OPERATORE_NOME}} — sviluppatore e operatore di Pantedu"
 date: "2026-06-16"
 lang: it
 ---
 
 # 0. Sintesi per il DPO/RPD (in una pagina)
 
-**Pantedu** è una piattaforma didattica web (materiali di matematica/fisica: esercizi, verifiche, mappe, documenti) sviluppata e gestita personalmente da **Vittorio Pantaleo**. Questo documento è il pacchetto di *accountability* GDPR pensato per il DPO/RPD di una scuola che valuti l'adozione di Pantedu.
+**Pantedu** è una piattaforma didattica web (materiali di matematica/fisica: esercizi, verifiche, mappe, documenti) sviluppata e gestita personalmente da **{{OPERATORE_NOME}}**. Questo documento è il pacchetto di *accountability* GDPR pensato per il DPO/RPD di una scuola che valuti l'adozione di Pantedu.
 
-- **Natura d'uso (importante).** Pantedu nasce e opera per **uso personale** del suo autore (didattica propria). L'eventuale **adozione da parte di un Istituto è possibile su richiesta della scuola e a spese di quest'ultima** (hosting/risorse dedicate) — vedi §5. In tale scenario la scuola è **Titolare del trattamento** e Pantedu/Vittorio Pantaleo è **Responsabile del trattamento** (GDPR Art. 28), con DPA dedicato.
+- **Natura d'uso (importante).** Pantedu nasce e opera per **uso personale** del suo autore (didattica propria). L'eventuale **adozione da parte di un Istituto è possibile su richiesta della scuola e a spese di quest'ultima** (hosting/risorse dedicate) — vedi §5. In tale scenario la scuola è **Titolare del trattamento** e Pantedu/{{OPERATORE_NOME}} è **Responsabile del trattamento** (GDPR Art. 28), con DPA dedicato.
 - **Postura di sicurezza.** L'applicazione è stata sottoposta (giugno 2026) a un **audit di sicurezza esaustivo** (VA automatizzato + verifica manuale + test attivo su clone isolato). **Nessuna vulnerabilità Critical/High residua**; tutti i finding sono stati corretti e sono in produzione. Sintesi in §6.
 - **Minimizzazione dati.** Pantedu **non tratta dati identificativi diretti degli studenti** nel flusso didattico (vedi §4 e DPIA allegata). I dati BES/DSA **non** costituiscono dato sanitario Art. 9 (solo marcatori aggregati lato docente, nessun collegamento studente↔patologia in DB).
 - **Dati nell'UE.** Hosting su **Hetzner Cloud, datacenter di Norimberga (Germania, UE)**. Cifratura a riposo e in transito.
@@ -94,7 +94,7 @@ Posizione tecnica formale (Art. 32 + AgID ABSC 4): *l'applicazione è stata sott
 - **Uso personale (default).** Pantedu è gestito dall'autore per la **propria attività didattica**. In questo scenario il Titolare del trattamento dei propri dati è l'autore stesso.
 - **Uso da parte di una scuola (su richiesta, a spese della scuola).** Qualora un Istituto richieda di adottare Pantedu per i propri docenti/studenti:
   - la **scuola** assume il ruolo di **Titolare del trattamento**;
-  - **Pantedu / Vittorio Pantaleo** assume il ruolo di **Responsabile del trattamento (Art. 28)**, regolato da **apposito accordo (DPA)** che includerà: finalità e durata, categorie di dati e interessati, misure Art. 32 (questo pacchetto), elenco sub-responsabili (§4), obblighi di assistenza (Art. 33/34/35), istruzioni documentate, restituzione/cancellazione a fine rapporto;
+  - **Pantedu / {{OPERATORE_NOME}}** assume il ruolo di **Responsabile del trattamento (Art. 28)**, regolato da **apposito accordo (DPA)** che includerà: finalità e durata, categorie di dati e interessati, misure Art. 32 (questo pacchetto), elenco sub-responsabili (§4), obblighi di assistenza (Art. 33/34/35), istruzioni documentate, restituzione/cancellazione a fine rapporto;
   - i **costi** di infrastruttura dedicata (hosting, risorse, eventuali integrazioni SPID/CIE, pentest manuale certificato se richiesto dal DPO) sono **a carico della scuola**.
 - **Licenza software**: EUPL-1.2 (codice ispezionabile su richiesta, in linea con i principi Developers Italia).
 
@@ -125,7 +125,7 @@ Posizione tecnica formale (Art. 32 + AgID ABSC 4): *l'applicazione è stata sott
 
 Il Responsabile si rende disponibile a: chiarimenti tecnici, approfondimenti su singoli controlli, fornitura del report di audit firmato, sottoscrizione del DPA, e valutazione delle misure aggiuntive richieste dal DPO.
 
-**Contatto**: vittorio.pantaleo@pantedu.eu — DPO request form: https://pantedu.eu/dpo-contact
+**Contatto**: vittop89@users.noreply.github.com — DPO request form: https://pantedu.eu/dpo-contact
 
 ## Allegati disponibili su richiesta
 - A — DPIA completa (`docs/privacy/dpia.md`)

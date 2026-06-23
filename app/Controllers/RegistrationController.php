@@ -31,7 +31,7 @@ final class RegistrationController
 
     private function defaultMailer(): ?RegistrationMailer
     {
-        $from = (string)($_ENV['MAIL_FROM'] ?? 'noreply@pantedu.eu');
+        $from = (string)($_ENV['MAIL_FROM'] ?? 'operatore@example.net');
         $siteUrl = (string)(Config::get('app.url') ?: 'https://pantedu.eu');
         if ($from === '') {
             return null;

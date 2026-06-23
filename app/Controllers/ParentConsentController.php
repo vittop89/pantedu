@@ -153,7 +153,7 @@ final class ParentConsentController
             '<p>✅ Hai confermato il consenso. L\'account dello studente è ora attivo.</p>'
             . '<p>Lo studente può ora accedere a <a href="/login">Pantedu</a> con username e password.</p>'
             . '<p>Per revocare in futuro questo consenso (Art. 8 §3 GDPR), invia richiesta a '
-            . '<a href="mailto:dpo@pantedu.eu?subject=Revoca consenso parentale">dpo@pantedu.eu</a>.</p>'
+            . '<a href="mailto:operatore@example.net?subject=Revoca consenso parentale">operatore@example.net</a>.</p>'
         ));
     }
 

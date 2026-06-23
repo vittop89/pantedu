@@ -18,7 +18,7 @@
 
 | Campo | Valore |
 |---|---|
-| Nome del soggetto erogatore | Vittorio Pantaleo (Pantedu — progetto individuale) |
+| Nome del soggetto erogatore | {{OPERATORE_NOME}} (Pantedu — progetto individuale) |
 | Tipologia | Privato erogatore di servizio educativo open source |
 | Sito web | <https://pantedu.eu> |
 | Codice fiscale / P.IVA | _Non applicabile (progetto personale pre-PA-onboarding)_ |
@@ -119,8 +119,8 @@ Gli utenti possono notificare al soggetto erogatore eventuali casi di
 mancata conformità e richiedere informazioni o contenuti esclusi
 dall'ambito della Direttiva via:
 
-- **Email accessibilità**: <accessibility@pantedu.eu>
-- **Email DPO** (per esercizio diritti GDPR collegati): <dpo@pantedu.eu>
+- **Email accessibilità**: <{{OPERATORE_EMAIL}}>
+- **Email DPO** (per esercizio diritti GDPR collegati): <{{OPERATORE_EMAIL}}>
 - **Modulo segnalazione**: <https://pantedu.eu/segnalazione-contenuti>
 
 Il soggetto erogatore risponde entro **30 giorni** dalla richiesta,
@@ -210,7 +210,7 @@ Stato:
   del percorso).
 
 Per docenti di scuole pubbliche interessati a contribuire come
-"PA tenant pilota", contattare <vittorio.pantaleo@pantedu.eu>.
+"PA tenant pilota", contattare <vittop89@users.noreply.github.com>.
 
 ## Stato delle azioni di miglioramento (roadmap)
 

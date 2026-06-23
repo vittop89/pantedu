@@ -2,7 +2,7 @@
 
 Documentazione pronta da consegnare al DPO/RPD di una scuola che valuti l'adozione di **Pantedu**.
 Posizione: **uso personale**; uso da parte della scuola **su richiesta e a spese di quest'ultima**
-(scuola = Titolare, Pantedu/Vittorio Pantaleo = Responsabile Art. 28).
+(scuola = Titolare, Pantedu/{{OPERATORE_NOME}} = Responsabile Art. 28).
 
 ## Contenuto (versionato in questo repo)
 | File | Cosa |

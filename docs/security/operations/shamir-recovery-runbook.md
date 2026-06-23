@@ -4,7 +4,7 @@
 
 ## Scopo
 
-Eliminare il single-point-of-failure rappresentato dalla custodia esclusiva di `KMS_MASTER_KEY` da parte del data controller (Vittorio Pantaleo). Distribuire il segreto fra 5 custodi indipendenti tramite Shamir Secret Sharing 3-su-5: nessun custode singolo può ricomporre la chiave da solo; servono almeno 3 in concordia.
+Eliminare il single-point-of-failure rappresentato dalla custodia esclusiva di `KMS_MASTER_KEY` da parte del data controller ({{OPERATORE_NOME}}). Distribuire il segreto fra 5 custodi indipendenti tramite Shamir Secret Sharing 3-su-5: nessun custode singolo può ricomporre la chiave da solo; servono almeno 3 in concordia.
 
 Riferimento crittografico: Shamir 1979, "How to Share a Secret". Algoritmo GF(2^8) implementato in `app/Services/Crypto/ShamirSecretSharing.php`.
 
@@ -14,7 +14,7 @@ Configurazione bilanciata fra **operatività** (recovery facile in vita), **legi
 
 | # | Custode | Forma fisica | Ruolo nel recovery |
 |---|---|---|---|
-| 1 | **Vittorio Pantaleo** (data controller) | Password Safe locale (`.psafe3` cifrato) + USB Cryptomator | Operatività quotidiana, sempre disponibile |
+| 1 | **{{OPERATORE_NOME}}** (data controller) | Password Safe locale (`.psafe3` cifrato) + USB Cryptomator | Operatività quotidiana, sempre disponibile |
 | 2 | **Segreteria scuola** | Cassaforte istituto + busta sigillata + verbale consegna controfirmato dal DS (Dirigente Scolastico) | Recovery operativo + visibilità istituzionale dell'istituto sui propri dati |
 | 3 | **Avvocato/fiduciario di fiducia** | USB cifrato custodito in cassaforte dello studio + lettera istruzioni recovery | Recovery legale + post-mortem |
 | 4 | **Notaio** | Busta sigillata fisica con atto deposito (vedi §3) | Decreto magistrato + ultima istanza, chain-of-custody legalmente irrefutabile |
@@ -127,7 +127,7 @@ Memorizza **riferimento atto** (es. "Repertorio 12345/2026 Notaio Mario Rossi") 
 INSERT INTO crypto_custody_events (
   event_type, custodian_name, custody_location, description, legal_basis, occurred_at
 ) VALUES
-  ('kms_backup_created', 'Vittorio Pantaleo (data controller)', 'Password Safe + USB Cryptomator', 'Shamir share #1', 'Art. 32(1)(c) GDPR', NOW()),
+  ('kms_backup_created', '{{OPERATORE_NOME}} (data controller)', 'Password Safe + USB Cryptomator', 'Shamir share #1', 'Art. 32(1)(c) GDPR', NOW()),
   ('kms_backup_created', 'Segreteria <Nome Istituto>', 'Cassaforte istituto (busta sigillata, verbale DS)', 'Shamir share #2 — stakeholder istituzionale', 'Affidamento DPA scuola', NOW()),
   ('kms_backup_created', 'Avv. <Nome Cognome>', 'Studio legale <indirizzo>', 'Shamir share #3 — USB cifrato', 'Affidamento fiduciario', NOW()),
   ('kms_backup_created', 'Notaio <Nome Cognome>', 'Studio notarile (atto Rep. <N>/<anno>)', 'Shamir share #4 — busta sigillata atto notarile', 'Atto notarile Rep. N/anno', NOW()),

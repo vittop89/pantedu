@@ -21,7 +21,7 @@ declare(strict_types=1);
  *   - Cancellare buffer terminal dopo lettura share
  *
  * CUSTODI consigliati per pantedu KMS:
- *   1 = Vittorio Pantaleo (laptop dev — Password Safe locale)
+ *   1 = {{OPERATORE_NOME}} (laptop dev — Password Safe locale)
  *   2 = Notaio (busta sigillata fisica + atto deposito)
  *   3 = Avvocato/fiduciario di fiducia
  *   4 = Cassetta sicurezza banca (stampa cartacea)
@@ -106,7 +106,7 @@ echo "  1. Verifica fingerprint sopra: {$secretFingerprint}\n";
 echo "  2. Custodisci la TUA share in modo SICURO (offline preferred).\n";
 echo "  3. Mai condividere via email plain. Usa: USB cifrato + consegna a mano,\n";
 echo "     PEC, notaio per deposito, cassetta sicurezza.\n";
-echo "  4. Per recovery: contattare data controller (Vittorio Pantaleo).\n";
+echo "  4. Per recovery: contattare data controller ({{OPERATORE_NOME}}).\n";
 echo "     Servono almeno {$threshold} share su {$n}.\n";
 echo "═══════════════════════════════════════════════════════════════\n";
 

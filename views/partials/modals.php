@@ -156,9 +156,9 @@
      hidden>
     <div class="fm-modal-body">
         <h2 id="fm-author-modal-title">Informazioni Autore</h2>
-        <b>Autore:</b><span> Vittorio Pantaleo (Docente di Matematica e Fisica).</span><br>
+        <b>Autore:</b><span> {{OPERATORE_NOME}} (Docente di Matematica e Fisica).</span><br>
         <b>Contatti:</b><span> email - <a
-                href="mailto:vittorio.pantaleo@pantedu.eu">vittorio.pantaleo@pantedu.eu</a></span><br>
+                href="mailto:vittop89@users.noreply.github.com">vittop89@users.noreply.github.com</a></span><br>
         <button class="fm-modal-close" data-target-modal="fm-author-modal" type="button">Chiudi</button>
     </div>
 </div>

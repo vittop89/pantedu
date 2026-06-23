@@ -1,6 +1,6 @@
 /**
  * G22.S25 — Browser-level: Marco apre l'esercizio recuperato "Sistemi lineari
- * (importata da Vittorio Pantaleo)" e DEVE vedere la verifica correlata
+ * (importata da {{OPERATORE_NOME}})" e DEVE vedere la verifica correlata
  * iniettata in #type_verAll.
  *
  * Diagnostico (user feedback: "non vedo niente"):

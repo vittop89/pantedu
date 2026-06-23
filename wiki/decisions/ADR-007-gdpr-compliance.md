@@ -15,7 +15,7 @@ aliases: ["adr-007", "gdpr-compliance"]
 
 Phase 25 audit ha rilevato gap GDPR critici per produzione con minori:
 
-1. **Art. 17 (oblio)** richiedeva email manuale a `info@pantedu.eu`, no self-service
+1. **Art. 17 (oblio)** richiedeva email manuale a `{{OPERATORE_EMAIL}}`, no self-service
 2. **Art. 8 (minori)** nessuna validazione età né parent consent
 3. **Art. 30 (registro trattamenti)** mancante (raccomandato per accountability anche sotto soglia 250)
 4. **Art. 13 (informativa)** mancava disclosure IP/UA logging + retention dettaglio

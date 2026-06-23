@@ -43,8 +43,8 @@ aliases: ["dpia", "valutazione-impatto"]
 ## 1. Descrizione sistematica del trattamento (Art. 35 §7 a)
 
 ### Titolare del trattamento — modello di titolarità
-- **Uso personale (default)**: Vittorio Pantaleo è **Titolare** per la propria attività didattica.
-- **Adozione da parte di un Istituto** (su richiesta dell'Istituto e con oneri a suo carico): l'**Istituto è Titolare**, Vittorio Pantaleo è **Responsabile del trattamento (Art. 28)**, regolato da DPA dedicato (cfr. `docs/dpo/pacchetto-scuola/Bozza-DPA-Art28.md`).
+- **Uso personale (default)**: {{OPERATORE_NOME}} è **Titolare** per la propria attività didattica.
+- **Adozione da parte di un Istituto** (su richiesta dell'Istituto e con oneri a suo carico): l'**Istituto è Titolare**, {{OPERATORE_NOME}} è **Responsabile del trattamento (Art. 28)**, regolato da DPA dedicato (cfr. `docs/dpo/pacchetto-scuola/Bozza-DPA-Art28.md`).
 
 ### Ambito di accesso degli studenti (aggiornamento 2026-06)
 L'accesso studente è circoscritto ai **soli studenti del docente proponente** (non agli studenti di altri docenti) e alla **sola visualizzazione delle fonti** (badge + riferimento bibliografico) di esercizi tratti da libri protetti da diritto d'autore — **mai** traccia/soluzioni; nessuna creazione/modifica di contenuti da parte dello studente. La quantità di dati raccolti è **configurabile dal Titolare/super-admin** (`/admin/system/deployment`) tra **tre modalità** (default: Completa):
@@ -184,7 +184,7 @@ Trattamenti **rifiutati per proporzionalità insufficiente**:
 ### Organizzative (in implementazione)
 
 - ✅ **Privacy by design** documentato in ADR-006/007.
-- ✅ **DPO contact**: info@pantedu.eu (Phase 25.C13 form `/dpo-contact` PENDING).
+- ✅ **DPO contact**: {{OPERATORE_EMAIL}} (Phase 25.C13 form `/dpo-contact` PENDING).
 - ✅ **Retention policy**: `app/Config/retention.php` con anonimizzazione automatica.
 - ✅ **Data breach runbook**: `docs/privacy/data_breach_runbook.md` (Phase 25.C12 drill semestrale PENDING).
 - ✅ **Registro trattamenti Art. 30**: completato (Phase 25.C8). Non più obbligatorio ex §3 (no Art. 9), ma redatto come buona pratica per dati di minori e accountability Art. 5 §2.
@@ -227,8 +227,8 @@ Senza completamento del punto 6 (R7 Art. 8 minori), il go-live con utenti < 14 a
 
 | Campo | Valore |
 |-------|--------|
-| Titolare | Vittorio Pantaleo |
-| Email | info@pantedu.eu |
+| Titolare | {{OPERATORE_NOME}} |
+| Email | {{OPERATORE_EMAIL}} |
 | Data versione bozza | 2026-04-27 (agg. 2026-06-17) |
 | Versione DPIA | 1.1 |
 | Stato | BOZZA — go-live minori OK in Anonima/Ridotta; in Completa con consenso genitoriale (base concordata con l'Istituto) |

@@ -22,7 +22,8 @@ espone gli utenti.
 
 ### Canale Preferito
 
-Invia una email a: **security@pantedu.eu**
+Usa **GitHub Security Advisories** (canale privato ufficiale):
+→ https://github.com/vittop89/pantedu/security/advisories/new
 
 Includi:
 - Descrizione della vulnerabilità (cosa, dove, come)
@@ -30,10 +31,6 @@ Includi:
 - Impatto stimato (confidentiality / integrity / availability)
 - Versione/commit affetti (output di `git rev-parse HEAD`)
 - La tua identità o pseudonimo per il credit (opzionale)
-
-**Cifratura email (opzionale ma consigliata per vulnerabilità critiche)**:
-PGP public key disponibile su richiesta a security@pantedu.eu (fingerprint
-verrà pubblicato in questa sezione dopo apertura repo).
 
 ### Cosa Aspettarsi
 
@@ -133,4 +130,4 @@ _(Sezione vuota al momento — sii il primo!)_
 ---
 
 Ultimo aggiornamento: 2026-05-22
-Contatto: security@pantedu.eu
+Contatto: https://github.com/vittop89/pantedu/security/advisories/new

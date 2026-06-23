@@ -30,7 +30,7 @@
     </script>
     <meta name="description" content="Free Web math and physics materials">
     <meta name="keywords" content="matematica, fisica, mappe concettuali">
-    <meta name="author" content="Vittorio Pantaleo">
+    <meta name="author" content="{{OPERATORE_NOME}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv='cache-control' content='no-cache'>
     <meta http-equiv='expires' content='0'>

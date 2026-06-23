@@ -21,7 +21,7 @@ review: 2027-05-21
 
 | Ruolo | Persona | Contatto primario | Contatto secondario |
 |-------|---------|-------------------|---------------------|
-| Data Controller / DPO | Vittorio Pantaleo | info@pantedu.eu | (cell. personale) |
+| Data Controller / DPO | {{OPERATORE_NOME}} | {{OPERATORE_EMAIL}} | (cell. personale) |
 | DPO scolastico | TODO | TODO | TODO |
 | Hetzner support | — | support@hetzner.com | https://console.hetzner.cloud/support |
 | Backblaze support | — | https://help.backblaze.com | — |
@@ -356,11 +356,11 @@ COSA PUOI FARE:
 - Monitora per attività sospetta
 RIFERIMENTI:
 - Notifica Garante: protocollo n° [...]
-- DPO: info@pantedu.eu
+- DPO: {{OPERATORE_EMAIL}}
 - Garante Privacy reclami: https://servizi.gpdp.it
 
 Cordiali saluti,
-Vittorio Pantaleo
+{{OPERATORE_NOME}}
 Data Controller pantedu
 ```
 
@@ -384,7 +384,7 @@ Resto a disposizione per qualsiasi chiarimento o supporto al suo ruolo
 di DPO scolastico.
 
 Cordiali saluti,
-Vittorio Pantaleo
+{{OPERATORE_NOME}}
 docente + data controller pantedu
 ```
 

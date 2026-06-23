@@ -2,7 +2,7 @@
 
 > Status (allineamento 2026-06-18): **D.2.1 scaffolding ✅ COMPLETATO** —
 > il resto è **backlog, non iniziato**, in attesa di prerequisiti normativi.
-> Created: 2026-05-23 — auditor: Vittorio Pantaleo + Claude Code session.
+> Created: 2026-05-23 — auditor: {{OPERATORE_NOME}} + Claude Code session.
 >
 > **Stato reale verificato (2026-06-18)**:
 > - ✅ Controller stub presenti: `app/Controllers/Auth/SpidController.php`,
@@ -158,7 +158,7 @@ SPID_SP_ENTITY_ID=https://pantedu.eu/auth/spid/metadata
 SPID_SP_CERT_PATH=/etc/pantedu/spid/sp.crt
 SPID_SP_KEY_PATH=/etc/pantedu/spid/sp.key
 SPID_SP_ORGANIZATION="Pantedu — Piattaforma educativa"
-SPID_SP_TECH_CONTACT_EMAIL=dpo@pantedu.eu
+SPID_SP_TECH_CONTACT_EMAIL={{OPERATORE_EMAIL}}
 # AgID minimum: name, familyName, fiscalNumber, dateOfBirth
 SPID_REQUESTED_ATTRIBUTES=name,familyName,fiscalNumber,dateOfBirth,email
 SPID_REQUESTED_AUTH_LEVEL=2

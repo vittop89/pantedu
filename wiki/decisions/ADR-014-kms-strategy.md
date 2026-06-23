@@ -5,7 +5,7 @@ tags:
   - security/crypto
 date: 2026-05-21
 status: differito
-deciders: Vittorio Pantaleo
+deciders: {{OPERATORE_NOME}}
 ---
 
 # ADR-014 — KMS strategy (deferral pending DPO assessment)

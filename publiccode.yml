@@ -116,7 +116,7 @@ maintenance:
   type: internal
   contacts:
     - name: Vittorio Pantaleo
-      email: "vittorio.pantaleo@pantedu.eu"
+      email: "vittop89@users.noreply.github.com"
       affiliation: Pantedu (sole maintainer)
 
 localisation:

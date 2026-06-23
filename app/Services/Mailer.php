@@ -11,7 +11,7 @@ use RuntimeException;
  *   RESEND_API_KEY=re_xxxxxxx...   (da https://resend.com/api-keys)
  *
  * Setup (.env):
- *   APP_MAIL_FROM=noreply@pantedu.eu
+ *   APP_MAIL_FROM=operatore@example.net
  *   APP_MAIL_FROM_NAME=Pantedu
  *
  * Fallback: se RESEND_API_KEY è vuota, ricade su PHP mail() (utile in dev).

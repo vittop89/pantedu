@@ -9,7 +9,7 @@
 | Licenza | **❌ NESSUNA / non specificata** |
 | Stars | **3 ⭐** (community traction molto bassa) |
 | Data audit | 2026-05-23 |
-| Auditor | Vittorio Pantaleo (via Claude Code session) |
+| Auditor | {{OPERATORE_NOME}} (via Claude Code session) |
 | Verdict | **REJECT** |
 
 ## 1. Source repo inspection
@@ -90,4 +90,4 @@ Se AccessLint aggiunge `LICENSE` MIT/Apache/EUPL in futuro:
 
 | Data | Auditor | Verdict |
 |---|---|---|
-| 2026-05-23 | Vittorio Pantaleo (via Claude Code session) | REJECT — re-evaluate se aggiungono LICENSE |
+| 2026-05-23 | {{OPERATORE_NOME}} (via Claude Code session) | REJECT — re-evaluate se aggiungono LICENSE |

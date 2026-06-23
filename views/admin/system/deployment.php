@@ -80,7 +80,7 @@ $cap_sections    = $cap_sections ?? [];
         <p class="fm-text-em-xl">
             <?= $snapshot['institute_legal_name'] !== ''
                 ? $h($snapshot['institute_legal_name'])
-                : '<span class="fm-muted">(Vittorio Pantaleo — single)</span>' ?>
+                : '<span class="fm-muted">({{OPERATORE_NOME}} — single)</span>' ?>
         </p>
         <p class="fm-muted"><small>Mostrato in footer + privacy notice + DPA quando institute mode.</small></p>
     </div>

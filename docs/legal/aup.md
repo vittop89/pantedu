@@ -11,7 +11,7 @@ geometry: "margin=2cm"
 # Acceptable Use Policy (AUP)
 
 **Versione**: 1.0 · **Data**: 20 maggio 2026
-**Applicativo**: pantedu.eu · **Operatore tecnico**: Vittorio Pantaleo
+**Applicativo**: pantedu.eu · **Operatore tecnico**: {{OPERATORE_NOME}}
 
 > **Stato operativo (2026-05-20)**: l'AUP è attiva e vincolante. È
 > linkata in: footer pubblico, modale licenza, modale cookie, form di
@@ -231,7 +231,7 @@ L'individuazione di violazioni dell'AUP comporta le seguenti
 Chi ritiene che un contenuto presente sull'Applicativo violi i propri
 diritti (copyright, privacy, ecc.) può segnalarlo via:
 
-**Email**: `abuse@pantedu.eu` (forwarded a privacy@pantedu.eu)
+**Email**: `{{OPERATORE_EMAIL}}` (forwarded a {{OPERATORE_EMAIL}})
 
 **Form pubblico**: <https://beta.pantedu.eu/segnalazione-contenuti>
 
@@ -265,5 +265,5 @@ di 30 giorni e richiederanno nuova accettazione esplicita.
 
 *Versione documento: 1.0 — 20 maggio 2026.*
 
-*Per segnalazioni: abuse@pantedu.eu*
-*Per chiarimenti: privacy@pantedu.eu*
+*Per segnalazioni: {{OPERATORE_EMAIL}}*
+*Per chiarimenti: {{OPERATORE_EMAIL}}*

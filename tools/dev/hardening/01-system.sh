@@ -237,7 +237,7 @@ Unattended-Upgrade::Automatic-Reboot "true";
 Unattended-Upgrade::Automatic-Reboot-Time "03:00";
 
 // Email notification se errore o conflict (cambia con la tua email)
-// Unattended-Upgrade::Mail "info@pantedu.eu";
+// Unattended-Upgrade::Mail "{{OPERATORE_EMAIL}}";
 // Unattended-Upgrade::MailReport "on-change";
 
 // Verbose logging in /var/log/unattended-upgrades/

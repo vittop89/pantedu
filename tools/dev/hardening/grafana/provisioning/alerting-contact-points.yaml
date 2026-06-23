@@ -6,7 +6,7 @@ contactPoints:
       - uid: email-vittop89
         type: email
         settings:
-          addresses: info@pantedu.eu
+          addresses: {{OPERATORE_EMAIL}}
           subject: '[pantedu {{ .Status }}] {{ .CommonLabels.alertname }}'
           message: |
             {{ range .Alerts }}

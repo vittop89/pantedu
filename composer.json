@@ -7,12 +7,12 @@
     "authors": [
         {
             "name": "Vittorio Pantaleo",
-            "email": "vittorio.pantaleo@pantedu.eu",
+            "email": "vittop89@users.noreply.github.com",
             "role": "Maintainer"
         }
     ],
     "support": {
-        "email": "vittorio.pantaleo@pantedu.eu",
+        "email": "vittop89@users.noreply.github.com",
         "issues": "https://github.com/vittop89/pantedu/issues",
         "security": "https://github.com/vittop89/pantedu/security/policy",
         "source": "https://github.com/vittop89/pantedu"

@@ -29,7 +29,7 @@ final class ParentConsentMailerTest extends TestCase
     {
         $this->sent = [];
         $mailer = new Mailer(
-            'noreply@pantedu.eu',
+            'operatore@example.net',
             'Pantedu',
             function (string $to, string $subj, string $body, string $hdrs): bool {
                 $this->sent[] = compact('to', 'subj', 'body');

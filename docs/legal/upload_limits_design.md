@@ -388,4 +388,4 @@ Aggiungere alert rules:
 
 *Versione documento: 1.0 — 20 maggio 2026.*
 
-*Per chiarimenti: privacy@pantedu.eu*
+*Per chiarimenti: {{OPERATORE_EMAIL}}*
