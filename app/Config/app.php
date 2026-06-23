@@ -18,6 +18,9 @@ return [
         : 'single',
     'institute_owner_email'  => $_ENV['INSTITUTE_OWNER_EMAIL'] ?? '',
     'institute_legal_name'   => $_ENV['INSTITUTE_LEGAL_NAME']  ?? '',
+    // Nome dell'operatore/gestore dell'istanza (data controller in modo
+    // single S1). Se vuoto, le trust page usano un'etichetta generica.
+    'instance_operator_name' => $_ENV['INSTANCE_OPERATOR_NAME'] ?? '',
 
     'paths' => [
         // Code (sempre dal repo)

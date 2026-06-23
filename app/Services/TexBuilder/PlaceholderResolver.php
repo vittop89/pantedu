@@ -19,7 +19,7 @@ namespace App\Services\TexBuilder;
  *   {{MATERIA_CODE}}       → "MAT"
  *   {{ANNO}}               → "2026"
  *   {{TEMPO_MINUTI}}       → "55"
- *   {{DOCENTE_NOME}}       → "Vittorio Pantaleo"
+ *   {{DOCENTE_NOME}}       → es. "Mario Rossi"
  *   {{ISTITUTO_NOME}}      → es. "I.I.S. di Esempio - Comune Esempio (XX)" (header_label || name)
  *   {{COPIE_NOR/SOL/DSA/DIS}} → numero copie
  *   {{COMPENSA_OPEN}}, {{COMPENSA_CLOSE}}: "" se compensa attivo, "%" altrimenti (commenta riga)

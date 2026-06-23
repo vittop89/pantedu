@@ -242,7 +242,7 @@ final class TrustPagesController
      * con valori derivati dal deployment mode + env.
      *
      * Token supportati:
-     *   {{INSTITUTE_LEGAL_NAME}}  ragione sociale istituto (S2) / "Vittorio Pantaleo" (S1)
+     *   {{INSTITUTE_LEGAL_NAME}}  ragione sociale istituto (S2) / nome operatore (S1)
      *   {{DPO_CONTACT}}           email DPO o admin
      *   {{APP_URL}}               base URL istanza
      *   {{DEPLOYMENT_MODE}}       'single' | 'institute' (per condizionali markdown future)
@@ -251,7 +251,11 @@ final class TrustPagesController
     {
         $isInstitute = \App\Support\DeploymentMode::isInstitute();
         $institute   = \App\Support\DeploymentMode::instituteLegalName();
-        $controller  = $isInstitute && $institute ? $institute : 'Vittorio Pantaleo (gestore istanza)';
+        // In modo single (S1) il data controller è il gestore dell'istanza:
+        // nome da config (INSTANCE_OPERATOR_NAME) o etichetta generica.
+        $controller  = $isInstitute && $institute
+            ? $institute
+            : (\App\Core\Config::get('app.instance_operator_name') ?: 'Gestore dell\'istanza');
         $tokens = [
             '{{INSTITUTE_LEGAL_NAME}}' => $controller,
             '{{DPO_CONTACT}}'          => \App\Support\DeploymentMode::dpoContact() ?: '(DPO non configurato)',

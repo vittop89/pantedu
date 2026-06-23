@@ -382,7 +382,7 @@ TEX;
         if ($name === '' && $surname === '') {
             $full = trim((string)($teacher['name'] ?? ''));
             if ($full === '') {
-                // Username fallback: "superadmin" → "Vittorio Pantaleo"
+                // Username fallback: "mario.rossi" → "Mario Rossi"
                 $u = (string)($teacher['username'] ?? '');
                 $u = str_replace(['.', '_', '-'], ' ', $u);
                 $full = trim(ucwords($u));

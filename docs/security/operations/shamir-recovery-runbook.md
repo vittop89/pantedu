@@ -87,8 +87,8 @@ Per ogni share, stampa **DUE copie cartacee**:
    │ (continua...)                                    │
    │                                                  │
    │ Custode: <nome custode>                          │
-   │ Recovery: contattare Vittorio Pantaleo           │
-   │   PEC: vittop89@pec.it                           │
+   │ Recovery: contattare <operatore/gestore istanza> │
+   │   PEC: <pec operatore>                           │
    │   Tel: +39 ...                                   │
    │ Documento custodia: <riferimento atto notarile>  │
    └─────────────────────────────────────────────────┘
