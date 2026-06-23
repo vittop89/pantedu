@@ -1,0 +1,137 @@
+{
+    "$id": "scheda-di-recupero",
+    "title": "Scheda di recupero",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Scheda di recupero",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore",
+                "studente"
+            ]
+        },
+        {
+            "type": "text-section",
+            "name": "premessa",
+            "description": "A seguito del debito formativo, si indica di seguito il piano di recupero per competenze, abilità e conoscenze.",
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "competenze_disciplinari",
+            "title": "COMPETENZE DISCIPLINARI",
+            "description": "Recupero competenze da classi precedente/successiva",
+            "options": [],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "abilita",
+            "title": "ABILITA'",
+            "description": "Recupero abilità da classi precedente/successiva",
+            "options": [],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "conoscenze",
+            "title": "CONOSCENZE (teoria e/o dimostrazioni)",
+            "description": "Recupero conoscenze da classi precedente/successiva",
+            "options": [],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "CARENZE E CONSIGLI",
+            "name": "carenze_consigli",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "carenze_riscontrate",
+                    "title": "CARENZE RISCONTRATE",
+                    "options": [
+                        {
+                            "value": "mancanza di studio e di impegno a casa e a scuola;",
+                            "label": "mancanza di studio e di impegno a casa e a scuola;"
+                        },
+                        {
+                            "value": "mancata acquisizione di una parte significativa degli aspetti e/o concetti fondamentali;",
+                            "label": "mancata acquisizione di una parte significativa degli aspetti e/o concetti fondamentali;"
+                        },
+                        {
+                            "value": "difficoltà ad acquisire nuovi contenuti a causa di una preparazione di base carente;",
+                            "label": "difficoltà ad acquisire nuovi contenuti a causa di una preparazione di base carente;"
+                        },
+                        {
+                            "value": "difficoltà di comprensione e di rielaborazione dei dati;",
+                            "label": "difficoltà di comprensione e di rielaborazione dei dati;"
+                        },
+                        {
+                            "value": "carenze che riguardano i contenuti e le abilità ricettive e produttive;",
+                            "label": "carenze che riguardano i contenuti e le abilità ricettive e produttive;"
+                        },
+                        {
+                            "value": "difficoltà di espressione in forma orale, scritta, grafica.",
+                            "label": "difficoltà di espressione in forma orale, scritta, grafica."
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "consigli_recupero",
+                    "title": "CONSIGLI PER IL RECUPERO",
+                    "options": [
+                        {
+                            "value": "essere precisi e attenti nello studio;",
+                            "label": "essere precisi e attenti nello studio;"
+                        },
+                        {
+                            "value": "memorizzare, riordinare e rielaborare quanto appreso;",
+                            "label": "memorizzare, riordinare e rielaborare quanto appreso;"
+                        },
+                        {
+                            "value": "esercitarsi nell'applicare quanto studiato;",
+                            "label": "esercitarsi nell'applicare quanto studiato;"
+                        },
+                        {
+                            "value": "esercitarsi nella produzione di testi scritti e nell'applicazione di regole e procedure studiate",
+                            "label": "esercitarsi nella produzione di testi scritti e nell'applicazione di regole e procedure studiate"
+                        },
+                        {
+                            "value": "esprimersi ad alta voce e verificare forma e logica espressiva, uso del linguaggio specifico, completezza dei contenuti.",
+                            "label": "esprimersi ad alta voce e verificare forma e logica espressiva, uso del linguaggio specifico, completezza dei contenuti."
+                        },
+                        {
+                            "value": "svolgere diligentemente i compiti delle vacanze",
+                            "label": "svolgere diligentemente i compiti delle vacanze"
+                        },
+                        {
+                            "value": "esercitarsi nella cura dell'ordine nella realizzazione grafica.",
+                            "label": "esercitarsi nella cura dell'ordine nella realizzazione grafica."
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "ulteriori_considerazioni",
+            "label": "Ulteriori considerazioni",
+            "placeholder": "Ulteriori considerazioni..."
+        },
+        {
+            "type": "text-section",
+            "name": "nota_verifica",
+            "description": "La tipologia di verifica sarà strutturata con domande coerenti con gli obiettivi sopra indicati.",
+            "pt_unified": true
+        }
+    ]
+}

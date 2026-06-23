@@ -1,0 +1,233 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "25",
+        "periodo": "Trimestre",
+        "altre_disc": "Fisica",
+        "titolo": "SISTEMI LINEARI",
+        "contenuti": [
+            { "label": "Sistemi di equazioni", "checked": false },
+            { "label": "Metodo di sostituzione", "checked": false },
+            { "label": "Metodo del confronto", "checked": false },
+            { "label": "Metodo di riduzione", "checked": false },
+            { "label": "Metodo di Cramer", "checked": false },
+            { "label": "Matrici e determinanti", "checked": false },
+            { "label": "Sistemi di tre equazioni in tre incognite", "checked": false },
+            { "label": "Sistemi letterali e fratti", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "30",
+        "periodo": "Trimestre",
+        "altre_disc": "Fisica",
+        "titolo": "RADICALI",
+        "contenuti": [
+            { "label": "Numeri reali", "checked": false },
+            { "label": "Radici quadrate e radici cubiche", "checked": false },
+            { "label": "Radici n-esime", "checked": false },
+            { "label": "Proprietà invariantiva, semplificazione, confronto di radicali", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "30",
+        "periodo": "Trimestre",
+        "altre_disc": "",
+        "titolo": "OPERAZIONI CON I RADICALI",
+        "contenuti": [
+            { "label": "Moltiplicazione e divisione", "checked": false },
+            { "label": "Portare un fattore dentro o fuori dal segno di radice", "checked": false },
+            { "label": "Potenza e radice", "checked": false },
+            { "label": "Addizione e sottrazione", "checked": false },
+            { "label": "Razionalizzazione", "checked": false },
+            { "label": "Equazioni, disequazioni, sistemi con i radicali", "checked": false },
+            { "label": "Potenze con esponente razionale", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "Disegno e storia dell’arte, Fisica",
+        "titolo": "PIANO CARTESIANO E RETTA",
+        "contenuti": [
+            { "label": "Punti e segmenti", "checked": false },
+            { "label": "Rette", "checked": false },
+            { "label": "Rette parallele e rette perpendicolari", "checked": false },
+            { "label": "Rette passanti per un punto e per due punti", "checked": false },
+            { "label": "Distanza di un punto da una retta", "checked": false },
+            { "label": "Parti del piano e della retta", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "30",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "EQUAZIONI DI SECONDO GRADO",
+        "contenuti": [
+            { "label": "Risoluzione di un'equazione di secondo grado", "checked": false },
+            { "label": "Equazioni numeriche intere e problemi", "checked": false },
+            { "label": "Equazioni numeriche fratte", "checked": false },
+            { "label": "Equazioni letterali", "checked": false },
+            { "label": "Relazioni tra soluzioni e coefficienti", "checked": false },
+            { "label": "Scomposizione di un trinomio di secondo grado", "checked": false },
+            { "label": "Equazioni parametriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "30",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "PARABOLE, EQUAZIONI, SISTEMI",
+        "contenuti": [
+            { "label": "Parabola", "checked": false },
+            { "label": "Sistemi di secondo grado", "checked": false },
+            { "label": "Equazioni di grado superiore al secondo", "checked": false },
+            { "label": "Sistemi di grado superiore al secondo", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "30",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "DISEQUAZIONI DI SECONDO GRADO",
+        "contenuti": [
+            { "label": "Definizioni, principi, disequazioni lineari", "checked": false },
+            { "label": "Disequazioni di secondo grado intere", "checked": false },
+            { "label": "Disequazioni intere di grado superiore al secondo", "checked": false },
+            { "label": "Disequazioni fratte", "checked": false },
+            { "label": "Sistemi di disequazioni", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "30",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "APPLICAZIONI DELLE DISEQUAZIONI",
+        "contenuti": [
+            { "label": "Equazioni irrazionali", "checked": false },
+            { "label": "Disequazioni irrazionali", "checked": false },
+            { "label": "Equazioni con valori assoluti", "checked": false },
+            { "label": "Disequazioni con valori assoluti", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "PROBABILITÀ",
+        "contenuti": [
+            { "label": "Esperimenti ed eventi aleatori", "checked": false },
+            { "label": "Definizioni di probabilità", "checked": false },
+            { "label": "Probabilità della somma logica di eventi", "checked": false },
+            { "label": "Probabilità del prodotto logico di eventi", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "CIRCONFERENZE",
+        "contenuti": [
+            { "label": "Luoghi geometrici", "checked": true },
+            { "label": "Circonferenza e cerchio", "checked": true },
+            { "label": "Corde", "checked": true },
+            { "label": "Circonferenza e rette", "checked": true },
+            { "label": "Circonferenza e circonferenze", "checked": false },
+            { "label": "Angoli alla circonferenza", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "CIRCONFERENZE E POLIGONI",
+        "contenuti": [
+            { "label": "Poligoni inscritti e circoscritti", "checked": true },
+            { "label": "Triangoli e punti notevoli", "checked": true },
+            { "label": "Quadrilateri", "checked": true },
+            { "label": "Poligoni regolari", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "SUPERFICI EQUIVALENTI E AREE",
+        "contenuti": [
+            { "label": "Equivalenza di superfici", "checked": true },
+            { "label": "Equivalenza e area di parallelogrammi", "checked": true },
+            { "label": "Equivalenza e area di triangoli e trapezi", "checked": true },
+            { "label": "Da un poligono a un poligono equivalente", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "TEOREMI DI EUCLIDE E DI PITAGORA",
+        "contenuti": [
+            { "label": "Primo teorema di Euclide", "checked": true },
+            { "label": "Teorema di Pitagora", "checked": true },
+            { "label": "Particolari triangoli rettangoli", "checked": true },
+            { "label": "Secondo teorema di Euclide", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "25",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "PROPORZIONALITÀ E SIMILITUDINE",
+        "contenuti": [
+            { "label": "Grandezze geometriche e proporzioni", "checked": true },
+            { "label": "Teorema di Talete", "checked": true },
+            { "label": "Triangoli simili e criteri di similitudine", "checked": true },
+            { "label": "Similitudine e teoremi di Euclide", "checked": true },
+            { "label": "Poligoni simili", "checked": false },
+            { "label": "Corde, secanti, tangenti e similitudine", "checked": true },
+            { "label": "Sezione aurea", "checked": false },
+            { "label": "Lunghezza della circonferenza e area del cerchio", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "TRASFORMAZIONI GEOMETRICHE",
+        "contenuti": [
+            { "label": "Trasformazioni geometriche e isometrie", "checked": false },
+            { "label": "Traslazioni", "checked": false },
+            { "label": "Rotazioni", "checked": false },
+            { "label": "Simmetrie centrali", "checked": false },
+            { "label": "Simmetrie assiali", "checked": false },
+            { "label": "Omotetie", "checked": false }
+        ]
+    }
+]

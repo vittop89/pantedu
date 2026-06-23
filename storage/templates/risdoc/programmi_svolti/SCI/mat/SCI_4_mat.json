@@ -1,0 +1,192 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "FUNZIONI GONIOMETRICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Misura degli angoli", "checked": false },
+            { "label": "Funzioni seno e coseno", "checked": false },
+            { "label": "Funzione tangente", "checked": false },
+            { "label": "Funzioni secante e cosecante", "checked": false },
+            { "label": "Funzione cotangente", "checked": false },
+            { "label": "Funzioni goniometriche di angoli particolari", "checked": false },
+            { "label": "Angoli associati", "checked": false },
+            { "label": "Funzioni goniometriche inverse", "checked": false },
+            { "label": "Funzioni goniometriche e trasformazioni geometriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "FORMULE GONIOMETRICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Formule di addizione e sottrazione", "checked": false },
+            { "label": "Formule di duplicazione", "checked": false },
+            { "label": "Formule di bisezione", "checked": false },
+            { "label": "Formule parametriche", "checked": false },
+            { "label": "Formule di prostaferesi e di Werner", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "EQUAZIONI E DISEQUAZIONI GONIOMETRICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Equazioni goniometriche elementari", "checked": false },
+            { "label": "Equazioni lineari in seno e coseno", "checked": false },
+            { "label": "Equazioni omogenee di secondo grado in seno e coseno", "checked": false },
+            { "label": "Sistemi di equazioni goniometriche", "checked": false },
+            { "label": "Disequazioni goniometriche", "checked": false },
+            { "label": "Equazioni goniometriche parametriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "TRIGONOMETRIA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Triangoli rettangoli", "checked": false },
+            { "label": "Applicazioni dei teoremi sui triangoli rettangoli", "checked": false },
+            { "label": "Triangoli qualunque", "checked": false },
+            { "label": "Applicazioni della trigonometria", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "NUMERI COMPLESSI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Numeri complessi", "checked": false },
+            { "label": "Forma algebrica dei numeri complessi", "checked": false },
+            { "label": "Operazioni con i numeri immaginari", "checked": false },
+            { "label": "Operazioni con i numeri complessi in forma algebrica", "checked": false },
+            { "label": "Rappresentazione geometrica dei numeri complessi", "checked": false },
+            { "label": "Forma trigonometrica di un numero complesso", "checked": false },
+            { "label": "Operazioni fra numeri complessi in forma trigonometrica", "checked": false },
+            { "label": "Radici n-esime dell'unità", "checked": false },
+            { "label": "Radici n-esime di un numero complesso", "checked": false },
+            { "label": "Forma esponenziale di un numero complesso", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "VETTORI, MATRICI, DETERMINANTI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Vettori nel piano", "checked": false },
+            { "label": "Vettori nel piano cartesiano", "checked": false },
+            { "label": "Matrici", "checked": false },
+            { "label": "Operazioni con le matrici", "checked": false },
+            { "label": "Determinanti", "checked": false },
+            { "label": "Matrice inversa", "checked": false },
+            { "label": "Matrici e geometria analitica", "checked": false },
+            { "label": "Estensione ed equivalenza dei solidi", "checked": false },
+            { "label": "Volumi dei solidi", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "TRASFORMAZIONI GEOMETRICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Trasformazioni geometriche", "checked": false },
+            { "label": "Traslazione", "checked": false },
+            { "label": "Rotazione", "checked": false },
+            { "label": "Simmetria centrale", "checked": false },
+            { "label": "Simmetria assiale", "checked": false },
+            { "label": "Isometrie", "checked": false },
+            { "label": "Omotetia", "checked": false },
+            { "label": "Similitudine", "checked": false },
+            { "label": "Affinità", "checked": false },
+            { "label": "Trasformazioni geometriche e matrici", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "GEOMETRIA EUCLIDEA NELLO SPAZIO",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Punti, rette, piani nello spazio", "checked": false },
+            { "label": "Perpendicolarità e parallelismo", "checked": false },
+            { "label": "Distanze e angoli nello spazio", "checked": false },
+            { "label": "Trasformazioni geometriche", "checked": false },
+            { "label": "Poliedri", "checked": false },
+            { "label": "Solidi di rotazione", "checked": false },
+            { "label": "Aree dei solidi", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "GEOMETRIA ANALITICA NELLO SPAZIO",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Coordinate nello spazio", "checked": false },
+            { "label": "Vettori nello spazio", "checked": false },
+            { "label": "Piano e sua equazione", "checked": false },
+            { "label": "Retta e sua equazione", "checked": false },
+            { "label": "Posizione reciproca di una retta e un piano", "checked": false },
+            { "label": "Alcune superfici notevoli", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "α1 - CALCOLO COMBINATORIO",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Che cos'è il calcolo combinatorio", "checked": false },
+            { "label": "Disposizioni", "checked": false },
+            { "label": "Permutazioni", "checked": false },
+            { "label": "Combinazioni", "checked": false },
+            { "label": "Binomio di Newton", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "α2 - PROBABILITÀ",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Eventi", "checked": false },
+            { "label": "Definizione classica di probabilità", "checked": false },
+            { "label": "Somma logica di eventi", "checked": false },
+            { "label": "Probabilità condizionata", "checked": false },
+            { "label": "Prodotto logico di eventi", "checked": false },
+            { "label": "Teorema di Bayes", "checked": false },
+            { "label": "Definizione statistica di probabilità", "checked": false },
+            { "label": "Definizione soggettiva di probabilità", "checked": false },
+            { "label": "Impostazione assiomatica della probabilità", "checked": false }
+        ]
+    }
+]

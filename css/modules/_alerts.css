@@ -1,0 +1,93 @@
+/* ============================================================ */
+/* Alerts / Notifications — Phase C.4 modular component.          */
+/* WCAG 4.1.3 (Status Messages): role="alert" o "status"          */
+/* dovrebbe essere sul markup, qui solo styling.                  */
+/*                                                                */
+/* Usage:                                                         */
+/*   <div class="fm-alert fm-alert--danger" role="alert">         */
+/*     ...                                                         */
+/*   </div>                                                        */
+/*   <div class="fm-alert fm-alert--success" role="status">       */
+/*     ...                                                         */
+/*   </div>                                                        */
+/* ============================================================ */
+
+.fm-alert {
+    display: flex;
+    gap: var(--fm-space-3);
+    align-items: flex-start;
+    padding: var(--fm-space-3) var(--fm-space-4);
+    border-radius: var(--fm-radius-sm);
+    border-left: 4px solid var(--fm-c-border);
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    font-size: var(--fm-fs-sm);
+    line-height: var(--fm-lh-base);
+    margin: 0 0 var(--fm-space-4);
+}
+
+.fm-alert__icon {
+    flex-shrink: 0;
+    font-size: var(--fm-fs-lg);
+    line-height: 1;
+}
+
+.fm-alert__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.fm-alert__title {
+    font-weight: 700;
+    margin: 0 0 var(--fm-space-1);
+}
+
+/* ── Variants ─────────────────────────────────────────────── */
+
+.fm-alert--info {
+    background: var(--fm-c-info-light);
+    border-left-color: var(--fm-c-info);
+    color: var(--fm-c-text);
+}
+
+.fm-alert--success {
+    background: var(--fm-c-success-light);
+    border-left-color: var(--fm-c-success);
+    color: var(--fm-c-text);
+}
+
+.fm-alert--warning {
+    background: var(--fm-c-warning-light);
+    border-left-color: var(--fm-c-warning);
+    color: var(--fm-c-text);
+}
+
+.fm-alert--danger {
+    background: var(--fm-c-danger-light);
+    border-left-color: var(--fm-c-danger);
+    color: var(--fm-c-text);
+}
+
+/* ── Dismissible (with close button) ──────────────────────── */
+
+.fm-alert__dismiss {
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    opacity: 0.55;
+    cursor: pointer;
+    font-size: var(--fm-fs-lg);
+    line-height: 1;
+    padding: var(--fm-space-1);
+    border-radius: var(--fm-radius-sm);
+}
+.fm-alert__dismiss:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+}
+.fm-alert__dismiss:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+    opacity: 1;
+}

@@ -1,0 +1,52 @@
+/* ============================================================ */
+/* Badges / Status pills — Phase C.4 modular component.           */
+/* WCAG 1.4.1 Use of Color: il colore non e' l'unico mezzo, il    */
+/* testo del badge + uppercase signalling fornisce ridondanza.    */
+/* ============================================================ */
+
+.fm-status {
+    display: inline-block;
+    padding: 0.15rem var(--fm-space-2);
+    border-radius: var(--fm-radius-pill);
+    font-size: var(--fm-fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: var(--fm-lh-tight);
+    color: var(--fm-c-text);
+    background: var(--fm-c-surface-2);
+}
+
+/* Role-specific variants (data-role pattern) */
+.fm-status[data-role="administrator"],
+.fm-status[data-role="admin"] {
+    background: var(--fm-c-danger-light);
+    color: var(--fm-c-danger);
+}
+
+.fm-status[data-role="teacher"],
+.fm-status[data-role="collaborator"] {
+    background: var(--fm-c-primary-light);
+    color: var(--fm-c-primary);
+}
+
+.fm-status[data-role="student"] {
+    background: var(--fm-c-success-light);
+    color: var(--fm-c-success);
+}
+
+.fm-status[data-role="super"] {
+    background: var(--fm-c-warning-light);
+    color: var(--fm-c-warning);
+}
+
+.fm-status[data-role="guest"] {
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-muted);
+}
+
+/* Generic semantic variants (no data-role) */
+.fm-status--info    { background: var(--fm-c-info-light);    color: var(--fm-c-info); }
+.fm-status--success { background: var(--fm-c-success-light); color: var(--fm-c-success); }
+.fm-status--warning { background: var(--fm-c-warning-light); color: var(--fm-c-warning); }
+.fm-status--danger  { background: var(--fm-c-danger-light);  color: var(--fm-c-danger); }

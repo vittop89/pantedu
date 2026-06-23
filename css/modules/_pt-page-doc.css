@@ -1,0 +1,332 @@
+/* ============================================================
+ * G23 page-doc — block types per pagine informative.
+ * Modulo BEM: .pt-glossary-table, .pt-static-content, .pt-accordion,
+ *             .pt-link-list-pdf, .pt-citation-norma.
+ *
+ * Variabili design system: usa CSS custom properties da
+ * css/risdoc-tokens.css per dark mode / theming.
+ * WCAG 2.2 AA: heading hierarchy, focus-visible, contrast ratio.
+ * ============================================================ */
+
+/* ── glossary-table ──────────────────────────────────────── */
+.pt-glossary-table {
+    margin: 1em 0;
+    container-type: inline-size;
+}
+.pt-glossary-table .pt-glossary-search {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 0.5em;
+    padding: 0.4em 0.6em;
+    font-size: 0.9em;
+    border: 1px solid var(--fm-risdoc-border, var(--fm-c-border));
+    border-radius: 4px;
+    background: var(--fm-risdoc-input-bg, #fff);
+    color: var(--fm-risdoc-text, inherit);
+}
+.pt-glossary-table .pt-glossary-search:focus-visible {
+    outline: 2px solid var(--fm-risdoc-border-focus, #2a5ac7);
+    outline-offset: 1px;
+}
+.pt-glossary-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--fm-risdoc-card-bg, #fff);
+    color: var(--fm-risdoc-text, #1e293b);
+    font-size: 0.92em;
+}
+.pt-glossary-table .pt-glossary-caption {
+    caption-side: top;
+    text-align: left;
+    font-size: 0.85em;
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-style: italic;
+    padding: 0.3em 0;
+}
+.pt-glossary-table th,
+.pt-glossary-table td {
+    border: 1px solid var(--fm-risdoc-border, var(--fm-c-border));
+    padding: 0.4em 0.6em;
+    vertical-align: top;
+    text-align: left;
+}
+.pt-glossary-table th {
+    background: var(--fm-risdoc-th-bg, #e2e8f0);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+.pt-glossary-table tbody tr:nth-child(even) {
+    background: var(--fm-risdoc-row-alt-bg, #f8fafc);
+}
+.pt-glossary-table tbody tr:hover {
+    background: var(--fm-risdoc-row-hover-bg, #eff6ff);
+}
+.pt-glossary-table tbody tr.is-hidden {
+    display: none; /* search filter */
+}
+
+/* Editor-mode (in PT editor NodeView) */
+.pt-glossary-table.pt-editable {
+    padding: 8px;
+    background: var(--fm-risdoc-panel-bg, #f8f9fa);
+    border: 1px dashed var(--fm-risdoc-border-subtle, var(--fm-c-border));
+    border-radius: 6px;
+}
+.pt-glossary-toolbar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+.pt-glossary-btn {
+    padding: 2px 10px;
+    font-size: 12px;
+    background: var(--fm-risdoc-btn-bg, #fff);
+    color: var(--fm-risdoc-btn-fg, #334155);
+    border: 1px solid var(--fm-risdoc-btn-border, var(--fm-c-border));
+    border-radius: 3px;
+    cursor: pointer;
+}
+.pt-glossary-btn:hover {
+    background: var(--fm-risdoc-btn-hover, #f1f5f9);
+}
+.pt-glossary-cell-input {
+    width: 100%;
+    padding: 3px 5px;
+    font: inherit;
+    font-size: 13px;
+    background: transparent;
+    color: inherit;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+.pt-glossary-cell-input.pt-glossary-cell-header {
+    font-weight: 600;
+}
+.pt-glossary-cell-input.pt-glossary-cell-n {
+    text-align: center;
+    max-width: 70px;
+}
+.pt-glossary-cell-input:hover {
+    border-color: var(--fm-risdoc-border-subtle, #d1d5db);
+    background: var(--fm-risdoc-input-bg, #fff);
+}
+.pt-glossary-cell-input:focus-visible {
+    border-color: var(--fm-risdoc-border-focus, #2a5ac7);
+    background: var(--fm-risdoc-input-bg, #fff);
+    outline: none;
+}
+.pt-glossary-table-edit textarea.pt-glossary-cell-input {
+    resize: none;
+    overflow: hidden;
+    field-sizing: content;
+    min-height: 1.4em;
+}
+.pt-glossary-meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-style: italic;
+}
+
+/* ── static-content ──────────────────────────────────────── */
+.pt-static-content {
+    margin: 1em 0;
+}
+.pt-static-content > h2,
+.pt-static-content > h3,
+.pt-static-content > h4 {
+    color: var(--fm-risdoc-heading-fg, #1e293b);
+    margin: 1em 0 0.5em;
+}
+.pt-static-content__body {
+    line-height: 1.6;
+    color: var(--fm-risdoc-text, #334155);
+}
+.pt-static-content__body p {
+    margin: 0.6em 0;
+}
+.pt-static-content__body ul,
+.pt-static-content__body ol {
+    margin: 0.5em 0 0.5em 1.5em;
+}
+.pt-static-content__body blockquote {
+    margin: 0.8em 0;
+    padding: 0.6em 1em;
+    border-left: 4px solid var(--fm-risdoc-accent, #2a5ac7);
+    background: var(--fm-risdoc-quote-bg, #f1f5f9);
+    color: var(--fm-risdoc-text-muted, #475569);
+    font-style: italic;
+}
+.pt-static-content__body code {
+    background: var(--fm-risdoc-code-inline-bg, #f4f4f4);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 0.9em;
+}
+.pt-static-content--nested {
+    margin-left: 1em;
+    padding-left: 1em;
+    border-left: 2px solid var(--fm-risdoc-border-subtle, var(--fm-c-border));
+}
+
+/* ── accordion ───────────────────────────────────────────── */
+.pt-accordion {
+    margin: 1em 0;
+}
+.pt-accordion__item {
+    margin: 0.4em 0;
+    border: 1px solid var(--fm-risdoc-border, var(--fm-c-border));
+    border-radius: 6px;
+    background: var(--fm-risdoc-card-bg, #fff);
+    overflow: hidden;
+}
+.pt-accordion__item > summary {
+    padding: 0.6em 1em;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--fm-risdoc-accordion-bg, #f1f5f9);
+    color: var(--fm-risdoc-heading-fg, #1e293b);
+    list-style: none;
+    position: relative;
+    padding-left: 2em;
+}
+.pt-accordion__item > summary::-webkit-details-marker { display: none; }
+.pt-accordion__item > summary::before {
+    content: "▸";
+    position: absolute;
+    left: 0.7em;
+    transition: transform 0.15s ease;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+}
+.pt-accordion__item[open] > summary::before {
+    transform: rotate(90deg);
+}
+.pt-accordion__item > summary:hover {
+    background: var(--fm-risdoc-accordion-hover-bg, #e2e8f0);
+}
+.pt-accordion__item > summary:focus-visible {
+    outline: 2px solid var(--fm-risdoc-border-focus, #2a5ac7);
+    outline-offset: -2px;
+}
+.pt-accordion__body {
+    padding: 0.8em 1em;
+    line-height: 1.6;
+    color: var(--fm-risdoc-text, #334155);
+}
+
+/* ── link-list-pdf ───────────────────────────────────────── */
+.pt-link-list-pdf {
+    margin: 1em 0;
+}
+.pt-link-list-pdf__title {
+    color: var(--fm-risdoc-heading-fg, #1e293b);
+    margin: 0.5em 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.pt-link-list-pdf__list {
+    list-style: none;
+    padding-left: 0;
+}
+.pt-link-list-pdf__list > li {
+    margin: 0.6em 0;
+    padding-left: 1.2em;
+    position: relative;
+}
+.pt-link-list-pdf__list > li::before {
+    content: "📄";
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+}
+.pt-link-list-pdf__link {
+    color: var(--fm-risdoc-link-fg, #2a5ac7);
+    text-decoration: none;
+    font-weight: 500;
+}
+.pt-link-list-pdf__link:hover,
+.pt-link-list-pdf__link:focus-visible {
+    text-decoration: underline;
+    color: var(--fm-risdoc-link-hover, #1e3a8a);
+}
+.pt-link-list-pdf__icon {
+    font-size: 0.85em;
+    opacity: 0.7;
+    margin-left: 0.2em;
+}
+.pt-link-list-pdf__desc {
+    margin: 0.2em 0;
+    font-size: 0.9em;
+    color: var(--fm-risdoc-text-muted, #64748b);
+}
+.pt-link-list-pdf__sublist {
+    list-style: disc;
+    margin: 0.4em 0 0.4em 1.2em;
+    padding-left: 0.4em;
+}
+.pt-link-list-pdf__sublist > li {
+    margin: 0.3em 0;
+}
+.pt-link-list-pdf__sublist > li::before {
+    content: none;
+}
+
+/* ── citation-norma ──────────────────────────────────────── */
+.pt-citation-norma {
+    margin: 1em 0;
+    padding: 0.8em 1em;
+    border-left: 4px solid var(--fm-risdoc-norma-accent, #b45309);
+    background: var(--fm-risdoc-norma-bg, #fffbeb);
+    border-radius: 0 6px 6px 0;
+}
+.pt-citation-norma__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    margin-bottom: 0.4em;
+    color: var(--fm-risdoc-norma-fg, #78350f);
+    font-size: 0.95em;
+}
+.pt-citation-norma__articolo {
+    font-size: 0.85em;
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-style: italic;
+}
+.pt-citation-norma__quote {
+    margin: 0.4em 0;
+    padding: 0.3em 0 0.3em 0.6em;
+    border-left: 2px solid var(--fm-risdoc-norma-quote-border, #fbbf24);
+    color: var(--fm-risdoc-text, #1e293b);
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+.pt-citation-norma__title {
+    margin: 0.3em 0 0;
+    font-size: 0.9em;
+}
+.pt-citation-norma__title a {
+    color: var(--fm-risdoc-link-fg, #2a5ac7);
+    text-decoration: none;
+}
+.pt-citation-norma__title a:hover,
+.pt-citation-norma__title a:focus-visible {
+    text-decoration: underline;
+}
+
+/* ── Print styles (docenti possono voler stampare) ──────── */
+@media print {
+    .pt-glossary-search,
+    .pt-glossary-toolbar,
+    .pt-glossary-meta { display: none; }
+    .pt-accordion__item { break-inside: avoid; }
+    .pt-accordion__item[open] > summary::before,
+    .pt-accordion__item > summary::before { content: ""; }
+    .pt-accordion__body { display: block !important; }
+    details[open] { page-break-inside: avoid; }
+}

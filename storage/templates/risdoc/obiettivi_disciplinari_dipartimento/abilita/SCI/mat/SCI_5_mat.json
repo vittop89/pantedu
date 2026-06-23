@@ -1,0 +1,87 @@
+[
+    {
+        "titolo": "DERIVATE",
+        "contenuti": [
+            { "label": "Calcolare la derivata di una funzione in un punto utilizzando la definizione di limite del rapporto incrementale.", "checked": true },
+            { "label": "Applicare le regole di derivazione delle funzioni elementari (potenza, esponenziali, logaritmiche, goniometriche).", "checked": true },
+            { "label": "Calcolare la derivata di una somma, un prodotto e un quoziente di funzioni.", "checked": true },
+            { "label": "Applicare la regola della catena per calcolare la derivata di funzioni composte.", "checked": true },
+            { "label": "Applicare la regola per calcolare la derivata della funzione inversa.", "checked": true },
+            { "label": "Calcolare le derivate di ordine superiore al primo (derivata seconda, terza, ecc.).", "checked": true },
+            { "label": "Determinare l'equazione della retta tangente e della normale al grafico di una funzione in un suo punto.", "checked": true },
+            { "label": "Interpretare la derivata come velocità di variazione istantanea e applicarla in problemi di fisica e di altre discipline.", "checked": true },
+            { "label": "Calcolare il differenziale di una funzione e comprenderne il significato come approssimazione lineare della funzione.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "DERIVABILITÀ E TEOREMI DEL CALCOLO DIFFERENZIALE",
+        "contenuti": [
+            { "label": "Riconoscere e classificare i punti di non derivabilità di una funzione (punti angolosi, cuspidi, flessi a tangente verticale).", "checked": true },
+            { "label": "Enunciare, interpretare geometricamente e verificare le ipotesi del Teorema di Rolle.", "checked": true },
+            { "label": "Enunciare, interpretare geometricamente e verificare le ipotesi del Teorema di Lagrange.", "checked": true },
+            { "label": "Applicare i corollari del Teorema di Lagrange per determinare la monotonia di una funzione e per dimostrare identità.", "checked": true },
+            { "label": "Enunciare e applicare il Teorema di Cauchy.", "checked": true },
+            { "label": "Applicare il Teorema di De L'Hôpital per il calcolo di limiti che si presentano in forma indeterminata.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "MASSIMI, MINIMI E FLESSI",
+        "contenuti": [
+            { "label": "Definire i punti di massimo, minimo e flesso, distinguendo tra relativi e assoluti.", "checked": true },
+            { "label": "Utilizzare lo studio del segno della derivata prima per determinare gli intervalli di monotonia e i punti stazionari (massimi, minimi e flessi a tangente orizzontale).", "checked": true },
+            { "label": "Utilizzare lo studio del segno della derivata seconda per determinare gli intervalli di concavità/convessità e i punti di flesso.", "checked": true },
+            { "label": "Applicare il test delle derivate successive per classificare la natura dei punti stazionari.", "checked": true },
+            { "label": "Impostare e risolvere problemi di ottimizzazione per la ricerca di massimi e minimi assoluti in contesti geometrici, fisici ed economici.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "STUDIO DELLE FUNZIONI",
+        "contenuti": [
+            { "label": "Eseguire lo studio completo di una funzione (dominio, simmetrie, segno, intersezioni, limiti, asintoti, monotonia, massimi/minimi, concavità, flessi) e tracciarne il grafico qualitativo.", "checked": true },
+            { "label": "Mettere in relazione il grafico di una funzione con quello della sua derivata prima e seconda.", "checked": true },
+            { "label": "Applicare lo studio di funzione per analizzare e risolvere problemi complessi, anche di natura parametrica.", "checked": true },
+            { "label": "Utilizzare metodi numerici (es. bisezione, tangenti/Newton) per trovare valori approssimati degli zeri di una funzione.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "INTEGRALI INDEFINITI",
+        "contenuti": [
+            { "label": "Definire il concetto di primitiva e di integrale indefinito di una funzione.", "checked": true },
+            { "label": "Calcolare integrali indefiniti immediati o quasi immediati, applicando le proprietà di linearità.", "checked": true },
+            { "label": "Risolvere integrali indefiniti utilizzando il metodo di integrazione per sostituzione.", "checked": true },
+            { "label": "Risolvere integrali indefiniti utilizzando la formula di integrazione per parti.", "checked": true },
+            { "label": "Calcolare l'integrale indefinito di funzioni razionali fratte mediante la scomposizione in fratti semplici.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "INTEGRALI DEFINITI",
+        "contenuti": [
+            { "label": "Definire l'integrale definito come limite di somme di Riemann e interpretarlo geometricamente come area.", "checked": true },
+            { "label": "Enunciare e applicare il teorema fondamentale del calcolo integrale e la formula di Newton-Leibniz per calcolare integrali definiti.", "checked": true },
+            { "label": "Calcolare l'area di una regione piana delimitata da una o più curve.", "checked": true },
+            { "label": "Calcolare il volume di un solido di rotazione ottenuto ruotando una regione piana attorno a un asse.", "checked": true },
+            { "label": "Riconoscere e calcolare integrali impropri, studiandone la convergenza.", "checked": true },
+            { "label": "Applicare il calcolo integrale per risolvere problemi in contesti fisici (lavoro, spazio percorso, centri di massa).", "checked": true },
+            { "label": "Approssimare il valore di un integrale definito utilizzando metodi di integrazione numerica (es. metodo dei trapezi).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "EQUAZIONI DIFFERENZIALI",
+        "contenuti": [
+            { "label": "Riconoscere e classificare un'equazione differenziale (ordine, linearità) e verificare se una data funzione ne è soluzione (problema di Cauchy).", "checked": true },
+            { "label": "Risolvere equazioni differenziali del primo ordine a variabili separabili.", "checked": true },
+            { "label": "Risolvere equazioni differenziali lineari del primo ordine e del secondo ordine a coefficienti costanti.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "σ1 - DISTRIBUZIONI DI PROBABILITÀ",
+        "contenuti": [
+            { "label": "Definire una variabile casuale discreta, costruire la sua distribuzione di probabilità e rappresentarla graficamente.", "checked": true },
+            { "label": "Calcolare e interpretare il valore atteso, la varianza e la deviazione standard di una variabile casuale discreta.", "checked": true },
+            { "label": "Riconoscere e applicare le distribuzioni di probabilità notevoli (Bernoulli, binomiale, Poisson).", "checked": true },
+            { "label": "Analizzare giochi aleatori per determinarne l'equità.", "checked": true },
+            { "label": "Standardizzare una variabile casuale e utilizzare le tavole della distribuzione normale.", "checked": true },
+            { "label": "Definire una variabile casuale continua e la sua funzione di densità, calcolando la probabilità come area sotto la curva.", "checked": true }
+        ]
+    }
+]

@@ -1,0 +1,33 @@
+{
+  "_comment": "Pa11y-CI config — batch WCAG 2.1 AA scan. Phase C.4.",
+  "_usage": [
+    "npm install --save-dev pa11y-ci",
+    "FM_E2E_BASE_URL=https://pantedu.eu npx pa11y-ci"
+  ],
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 1500,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--disable-dev-shm-usage"]
+    },
+    "ignore": [
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G145.Fail"
+    ],
+    "_ignore_rationale": "Color-contrast suite escluso temporaneamente (Phase D — audit manuale palette in corso). Riabilitare dopo audit contrast completo."
+  },
+  "urls": [
+    "${FM_E2E_BASE_URL}/",
+    "${FM_E2E_BASE_URL}/login",
+    "${FM_E2E_BASE_URL}/register",
+    "${FM_E2E_BASE_URL}/legal/tos",
+    "${FM_E2E_BASE_URL}/legal/aup",
+    "${FM_E2E_BASE_URL}/privacy/informativa",
+    "${FM_E2E_BASE_URL}/accessibility"
+  ]
+}

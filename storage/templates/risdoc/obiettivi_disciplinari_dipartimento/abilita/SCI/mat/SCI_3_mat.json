@@ -1,0 +1,126 @@
+[
+    {
+        "titolo": "EQUAZIONI E DISEQUAZIONI",
+        "contenuti": [
+            { "label": "Risolvere disequazioni di primo grado, applicando correttamente i principi di equivalenza.", "checked": true },
+            { "label": "Risolvere disequazioni di secondo grado intere, analizzando il segno del trinomio associato e interpretando graficamente la soluzione.", "checked": true },
+            { "label": "Scomporre in fattori e risolvere disequazioni di grado superiore al secondo attraverso lo studio del segno dei singoli fattori.", "checked": true },
+            { "label": "Risolvere disequazioni fratte studiando il segno del numeratore e del denominatore e componendo i risultati in un grafico dei segni.", "checked": true },
+            { "label": "Risolvere sistemi di disequazioni, trovando l'intersezione degli insiemi delle soluzioni.", "checked": true },
+            { "label": "Risolvere equazioni e disequazioni contenenti uno o più valori assoluti, discutendo i casi in base al segno dell'argomento.", "checked": true },
+            { "label": "Risolvere equazioni e disequazioni irrazionali, impostando e risolvendo correttamente le condizioni di esistenza e di concordanza dei segni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "FUNZIONI",
+        "contenuti": [
+            { "label": "Definire una funzione, determinarne il dominio, il codominio, gli zeri e il segno.", "checked": true },
+            { "label": "Classificare una funzione in base alle sue proprietà di iniettività, suriettività e biunivocità, sia analiticamente che graficamente.", "checked": true },
+            { "label": "Determinare l'espressione analitica della funzione inversa di una funzione biunivoca e tracciarne il grafico.", "checked": true },
+            { "label": "Analizzare il grafico di una funzione per determinarne le proprietà (monotonia, simmetrie pari/dispari, periodicità).", "checked": true },
+            { "label": "Calcolare l'espressione analitica della funzione composta di due o più funzioni.", "checked": true },
+            { "label": "Applicare trasformazioni geometriche (traslazioni, simmetrie, dilatazioni) a funzioni elementari per dedurne il grafico.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "SUCCESSIONI E PROGRESSIONI",
+        "contenuti": [
+            { "label": "Definire una successione numerica, rappresentarne i termini e determinarne l'espressione analitica.", "checked": true },
+            { "label": "Applicare il principio di induzione per dimostrare la validità di una proprietà per tutti i numeri naturali.", "checked": true },
+            { "label": "Riconoscere una progressione aritmetica, calcolarne la ragione, il termine n-esimo e la somma dei primi n termini.", "checked": true },
+            { "label": "Riconoscere una progressione geometrica, calcolarne la ragione, il termine n-esimo e la somma dei primi n termini (anche per serie convergenti).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PIANO CARTESIANO E RETTA",
+        "contenuti": [
+            { "label": "Calcolare la distanza tra due punti, le coordinate del punto medio di un segmento e del baricentro di un triangolo.", "checked": true },
+            { "label": "Scrivere l'equazione di una retta (forma esplicita/implicita) e rappresentarla, interpretando il significato di coefficiente angolare e intercetta.", "checked": true },
+            { "label": "Analizzare algebricamente la posizione reciproca di due rette (incidenti, parallele, perpendicolari) e determinare l'eventuale punto di intersezione.", "checked": true },
+            { "label": "Calcolare la distanza di un punto da una retta utilizzando la formula specifica.", "checked": true },
+            { "label": "Scrivere l'equazione dell'asse di un segmento e della bisettrice di un angolo come luoghi geometrici.", "checked": true },
+            { "label": "Riconoscere e analizzare l'equazione di un fascio di rette (proprio o improprio), determinandone le caratteristiche.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PARABOLA",
+        "contenuti": [
+            { "label": "Scrivere e analizzare l'equazione di una parabola con asse parallelo all'asse y o all'asse x, determinandone gli elementi caratteristici (vertice, fuoco, direttrice).", "checked": true },
+            { "label": "Studiare la funzione quadratica y=ax²+bx+c, interpretando il grafico come una parabola.", "checked": true },
+            { "label": "Applicare trasformazioni geometriche per ottenere l'equazione di una parabola a partire da quella base.", "checked": true },
+            { "label": "Risolvere algebricamente e interpretare graficamente la posizione reciproca tra una retta e una parabola (secante, tangente, esterna).", "checked": true },
+            { "label": "Ricavare l'equazione di una parabola date tre condizioni (es. passaggio per tre punti, conoscenza del vertice e di un punto).", "checked": true },
+            { "label": "Analizzare un fascio di parabole per determinarne le caratteristiche, i punti base e le parabole degeneri.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "CIRCONFERENZA",
+        "contenuti": [
+            { "label": "Scrivere l'equazione di una circonferenza in forma canonica, determinandone centro e raggio.", "checked": true },
+            { "label": "Studiare la posizione reciproca tra retta e circonferenza e determinare le equazioni delle rette tangenti.", "checked": true },
+            { "label": "Ricavare l'equazione di una circonferenza note tre condizioni sufficienti.", "checked": true },
+            { "label": "Analizzare la posizione reciproca di due circonferenze e determinare l'asse radicale.", "checked": true },
+            { "label": "Studiare un fascio di circonferenze, individuandone i punti base e l'asse radicale.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "ELLISSE",
+        "contenuti": [
+            { "label": "Scrivere l'equazione di un'ellisse con centro nell'origine, determinandone fuochi, vertici ed eccentricità.", "checked": true },
+            { "label": "Studiare la posizione reciproca tra un'ellisse e una retta, determinando le eventuali rette tangenti.", "checked": true },
+            { "label": "Ricavare l'equazione di un'ellisse date condizioni sufficienti.", "checked": true },
+            { "label": "Applicare traslazioni per scrivere l'equazione di un'ellisse con centro fuori dall'origine.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "IPERBOLE",
+        "contenuti": [
+            { "label": "Scrivere l'equazione di un'iperbole con centro nell'origine, determinandone fuochi, vertici, asintoti ed eccentricità.", "checked": true },
+            { "label": "Studiare la posizione reciproca tra un'iperbole e una retta, determinando le eventuali rette tangenti.", "checked": true },
+            { "label": "Ricavare l'equazione di un'iperbole date condizioni sufficienti.", "checked": true },
+            { "label": "Riconoscere e rappresentare un'iperbole equilatera, inclusa quella riferita ai propri asintoti (funzione omografica).", "checked": true },
+            { "label": "Applicare traslazioni per scrivere l'equazione di un'iperbole con centro fuori dall'origine.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "CONICHE",
+        "contenuti": [
+            { "label": "Riconoscere il tipo di conica partendo dalla sua equazione generale in due variabili.", "checked": true },
+            { "label": "Classificare una conica (parabola, ellisse, iperbole) in base al valore della sua eccentricità.", "checked": true },
+            { "label": "Risolvere graficamente disequazioni in due incognite la cui equazione associata rappresenta una conica.", "checked": true },
+            { "label": "Risolvere problemi geometrici che coinvolgono l'intersezione e le proprietà delle diverse coniche.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "ESPONENZIALI",
+        "contenuti": [
+            { "label": "Applicare le proprietà delle potenze con esponente reale per semplificare espressioni.", "checked": true },
+            { "label": "Analizzare e rappresentare graficamente la funzione esponenziale, distinguendo i casi in base alla base.", "checked": true },
+            { "label": "Risolvere equazioni esponenziali, riconducendole alla stessa base o utilizzando metodi sostitutivi/logaritmi.", "checked": true },
+            { "label": "Risolvere disequazioni esponenziali, tenendo conto della monotonia della funzione esponenziale.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LOGARITMI",
+        "contenuti": [
+            { "label": "Calcolare logaritmi applicando la definizione e determinare le condizioni di esistenza.", "checked": true },
+            { "label": "Applicare le proprietà dei logaritmi per manipolare e semplificare espressioni.", "checked": true },
+            { "label": "Analizzare e rappresentare graficamente la funzione logaritmica, studiandone dominio, zeri e segno.", "checked": true },
+            { "label": "Risolvere equazioni logaritmiche, impostando le condizioni di esistenza e applicando le proprietà.", "checked": true },
+            { "label": "Risolvere disequazioni logaritmiche, impostando le condizioni di esistenza e tenendo conto della monotonia.", "checked": true },
+            { "label": "Determinare il dominio e studiare il segno di funzioni complesse contenenti esponenziali e logaritmi.", "checked": true },
+            { "label": "Utilizzare il metodo grafico per determinare le soluzioni di equazioni e disequazioni trascendenti non risolvibili algebricamente.", "checked": true },
+            { "label": "Utilizzare carte con scale logaritmiche e semilogaritmiche per rappresentare e linearizzare dati.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "STATISTICA",
+        "contenuti": [
+            { "label": "Organizzare e rappresentare dati statistici attraverso tabelle di frequenza e opportuni grafici.", "checked": true },
+            { "label": "Calcolare e interpretare i principali indici di posizione (media, moda, mediana) e di variabilità (varianza, deviazione standard).", "checked": true },
+            { "label": "Riconoscere e interpretare le proprietà della distribuzione normale (gaussiana).", "checked": true },
+            { "label": "Costruire e interpretare tabelle a doppia entrata e diagrammi di dispersione per analizzare la relazione tra due variabili.", "checked": true },
+            { "label": "Calcolare la retta di regressione lineare e interpretare il coefficiente di correlazione per quantificare la dipendenza tra due variabili.", "checked": true }
+        ]
+    }
+]

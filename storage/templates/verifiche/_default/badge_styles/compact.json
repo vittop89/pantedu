@@ -1,0 +1,20 @@
+{
+    "$schema": "fismapant.badge_style.v1",
+    "preset_name": "compact",
+    "scope": "_default",
+    "fonte": {
+        "title_size": "\\footnotesize",
+        "meta_size": "\\scriptsize",
+        "row_sep": "-3pt",
+        "col_spec": "|c|",
+        "vpad": "0pt"
+    },
+    "badge": {
+        "bg": "gray",
+        "txt": "white",
+        "ex_size": "\\normalsize",
+        "min_width": "0.8cm",
+        "diff_max": 4,
+        "diff_size": "\\Large"
+    }
+}

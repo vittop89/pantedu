@@ -1,0 +1,175 @@
+{
+  "source": "cdm_v4_ed1",
+
+  "destination": {
+    "file": "verifiche/php/MAT/MAT-Funzioni_equazioni_e_disequazioni_logaritmiche-ver.php",
+    "targets": {
+      "vf_main": {
+        "container": "#Funzioni_equazioni_e_disequazioni_logaritmiche-type_VF_ver_1-or_cmd_v4_ed1",
+        "scope_type": "type_VF",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {},
+          "topics": {}
+        }
+      },
+      "rmulti_main": {
+        "container": "#Funzioni_equazioni_e_disequazioni_logaritmiche-type_RMulti_ver_2-or_cmd_v4_ed1",
+        "scope_type": "type_RMulti",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {},
+          "topics": {},
+          "type_map": {
+            "type_RMultiA": [],
+            "type_RMultiB": []
+          }
+        }
+      },
+      "collect_disequ": {
+        "container": "#Funzioni_equazioni_e_disequazioni_logaritmiche-type_Collect_ver_3-or_cmd_v4_ed1",
+        "scope_type": "type_Collect",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [
+            "472","473","474","475","476",
+            "482","483","484","485","486"
+          ],
+          "badge_color": {
+            "green": ["331"],
+            "red": [],
+            "blue": [],
+            "orange": [
+              "472","473","474","475","476",
+              "482","483","484","485","486"
+            ]
+          },
+          "difficulty_map": {
+            "1": ["472","473","474","475","476"],
+            "2": ["482","483","484","485","486"],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "121": ["472","473","474","475","476","482","483","484","485","486"]
+          },
+          "topics": {
+            "disequazioni": ["472","473","474","475","476","482","483","484","485","486"]
+          }
+        }
+      },
+      "collect_equ": {
+        "container": "#Funzioni_equazioni_e_disequazioni_logaritmiche-type_Collect_ver_2-or_cmd_v4_ed1",
+        "scope_type": "type_Collect",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [
+            "329","330","331","332","333","334","335",
+            "339","340","341","342","343","344",
+            "354","355","356"
+          ],
+          "badge_color": {
+            "green": ["331"],
+            "red": [],
+            "blue": [],
+            "orange": [
+              "329","330","332","333","334","335",
+              "339","340","341","342","343","344",
+              "354","355","356"
+            ]
+          },
+          "difficulty_map": {
+            "1": ["329","331","332","333","334","335","339","340","341","342","343","344"],
+            "2": ["354","355","356"],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "114": ["329","330","331","332","333","334","335","339","340","341","342","343","344"],
+            "115": ["354","355","356"]
+          },
+          "topics": {
+            "equazioni": ["329","330","331","332","333","334","335","339","340","341","342","343","344","354","355","356"]
+          }
+        }
+      },
+      "collect_dom": {
+        "container": "#Funzioni_equazioni_e_disequazioni_logaritmiche-type_Collect_ver_4-or_cmd_v4_ed1",
+        "scope_type": "type_Collect",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [
+            "329","330","331","332","333","334","335",
+            "339","340","341","342","343","344",
+            "354","355","356",
+            "472","473","474","475","476",
+            "482","483","484","485","486",
+            "509","510","511","512","513","514","515","516","517"
+          ],
+          "badge_color": {
+            "green": ["331"],
+            "red": [],
+            "blue": [],
+            "orange": [
+              "509","510","511","512","513","514","515","516","517"
+            ]
+          },
+          "difficulty_map": {
+            "1": ["509","510","511","512","513"],
+            "2": ["514","515","516","517"],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "122": ["509","510","511","512","513","514","515","516","517"]
+          },
+          "topics": {
+            "dominio": ["509","510","511","512","513","514","515","516","517"]
+          }
+        }
+      }
+    }
+  },
+
+  "defaults_shared": {
+    "badge_color": {},
+    "difficulty_map": {},
+    "page_map": {}
+  },
+
+  "metadata": {
+    "version": "3.0.0",
+    "last_updated": "2026-03-01"
+  }
+}

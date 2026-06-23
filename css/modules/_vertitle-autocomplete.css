@@ -1,0 +1,33 @@
+/* ============================================================ */
+/* Estratto da js/modules/events/event-handler.js (#verTitle      */
+/* autocomplete). ADR-023 Fase 2 — elimina CSS-in-JS runtime.     */
+/* VERBATIM. ============================================================ */
+
+#verTitle-suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: none;
+}
+#verTitle-suggestions li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+#verTitle-suggestions li:hover,
+#verTitle-suggestions li.selected {
+    background-color: #f0f0f0;
+}
+#verTitle-suggestions li:last-child {
+    border-bottom: none;
+}

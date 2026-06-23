@@ -1,0 +1,48 @@
+{
+    "extends": ["stylelint-config-standard"],
+    "rules": {
+        "declaration-no-important": true,
+        "color-no-hex": [true, { "ignore": ["named"] }],
+        "selector-class-pattern": "^fm-[a-z0-9]+(--[a-z0-9]+|__[a-z0-9-]+)*$",
+        "custom-property-pattern": "^fm-[a-z0-9]+(-[a-z0-9]+)*$",
+        "no-duplicate-selectors": true,
+        "max-nesting-depth": 3,
+        "selector-no-vendor-prefix": null,
+        "at-rule-no-unknown": [true, { "ignoreAtRules": ["layer"] }],
+        "declaration-block-no-redundant-longhand-properties": null,
+        "import-notation": "string",
+        "media-feature-range-notation": "prefix"
+    },
+    "overrides": [
+        {
+            "files": [
+                "css/layout.css",
+                "css/shell.css",
+                "css/layout_*.css",
+                "css/admin.css",
+                "css/waf.css",
+                "css/risdoc-tokens.css"
+            ],
+            "rules": {
+                "declaration-no-important": null,
+                "color-no-hex": null,
+                "selector-class-pattern": null,
+                "no-duplicate-selectors": null,
+                "max-nesting-depth": null,
+                "custom-property-pattern": null
+            }
+        },
+        {
+            "files": ["css/utilities.css"],
+            "rules": {
+                "declaration-no-important": null
+            }
+        }
+    ],
+    "ignoreFiles": [
+        "node_modules/**",
+        "public/build/**",
+        "public/vendor/**",
+        "vendor/**"
+    ]
+}

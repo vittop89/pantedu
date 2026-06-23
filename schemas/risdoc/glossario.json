@@ -1,0 +1,22 @@
+{
+    "$id": "glossario",
+    "title": "Breve Glossario",
+    "category": "ALTRO",
+    "origin": "strcomp",
+    "body_class": "fm-studio-strcomp",
+    "_g23_status": "implemented (page-doc glossaryTable block, ADR-020)",
+    "body_pt_seed_ref": "schemas/risdoc/_pt/seeds/glossario.pt.json",
+    "sections": [
+        {
+            "type": "header",
+            "title": "BREVE GLOSSARIO",
+            "selectors": []
+        },
+        {
+            "type": "glossary-table",
+            "name": "glossario_lemmi",
+            "columns": ["N.", "Lemma", "Definizione", "Fonte"],
+            "seed_ref": "schemas/risdoc/_pt/seeds/glossario.pt.json"
+        }
+    ]
+}

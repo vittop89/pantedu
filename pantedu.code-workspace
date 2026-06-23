@@ -1,0 +1,90 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"latex-workshop.formatting.latex": "latexindent",
+		"latex-workshop.formatting.latexindent.path": "C:/Users/vitto/progetti_vscode/pantedu/.vscode/tools/latex/latexindent-wrapper.cmd",
+		"latex-workshop.view.pdf.viewer": "tab",
+		"latex-workshop.latex.autoView": "onBuilt",
+		"actionButtons": {
+			"defaultColor": "white",
+			"loadNpmCommands": false,
+			"reloadButton": "♻️",
+			"commands": [
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "⬇️ Sync_FolderVer",
+					"color": "lightblue",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/sync/sync_verifiche_winscp.ps1"
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "⬇️ Sync_TexPdf",
+					"color": "lightgreen",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/sync/sync_tex_pdf_winscp.ps1"
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "🌐 Sync_Workspace",
+					"color": "cyan",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/sync/sync_workspace_winscp.ps1"
+				},
+				{
+					"cwd": "${workspaceFolder}/pdf-scraping-tools",
+					"name": "🚀 PDF→Contracts",
+					"color": "orange",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File run_pipeline_phase1.ps1 -PdfPath ${file}"
+				},
+				{
+					"cwd": "${workspaceFolder}/pdf-scraping-tools",
+					"name": "🚀 HTML+PHP",
+					"color": "#66ff66",
+					"singleInstance": true,
+					"command": "python pipeline.py --continue"
+				},
+				{
+					"cwd": "${workspaceFolder}/pdf-scraping-tools",
+					"name": "⚡ HTML (no sol.)",
+					"color": "#fab387",
+					"singleInstance": true,
+					"command": "python pipeline.py --generate-html --no-solutions"
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "⛔ Stop",
+					"color": "red",
+					"singleInstance": true,
+					"command": "taskkill /F /IM python.exe 2>$null ; echo Processo terminato."
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "📦 Compila Tutti",
+					"color": "#ffcc00",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/latex/compile_all_tex_in_folder.ps1 -TexFilePath \"${file}\" -Compiler auto"
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "📦🚀 Compila+Push",
+					"color": "#ff8800",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/latex/compile_and_push.ps1 -TexFilePath \"${file}\" -Compiler auto"
+				},
+				{
+					"cwd": "${workspaceFolder}",
+					"name": "🗑️ Del-Srv ON/OFF",
+					"color": "#ff6644",
+					"singleInstance": true,
+					"command": "powershell.exe -ExecutionPolicy Bypass -File .vscode/tools/deploy/toggle_auto_delete.ps1"
+				}
+			]
+		}
+	}
+}

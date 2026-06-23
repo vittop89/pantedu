@@ -1,0 +1,39 @@
+[Unit]
+Description=tex-compile-vps — pantedu LaTeX compile microservice
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=texcompile
+Group=texcompile
+WorkingDirectory=/opt/tex-compile
+EnvironmentFile=/opt/tex-compile/.env
+# Host/port hardcoded per evitare bug di sostituzione variabili in ExecStart.
+# Per cambiarli, edita questo file e fai daemon-reload.
+ExecStart=/opt/tex-compile/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8001 --workers 2 --no-access-log
+Restart=on-failure
+RestartSec=3
+
+# Hardening minimale ma efficace.
+# NB: PrivateTmp=yes rende /tmp e /var/tmp privati al servizio →
+# il WORKDIR del compile DEVE puntare a /tmp/<sub> (vedi .env), NON a
+# /var/tmp/<sub> con ReadWritePaths (incompatibile con PrivateTmp).
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+
+# Resource limits — adatta in base alle dimensioni del VPS.
+LimitNOFILE=4096
+MemoryHigh=1G
+MemoryMax=2G
+CPUQuota=350%
+
+[Install]
+WantedBy=multi-user.target

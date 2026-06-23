@@ -1,0 +1,80 @@
+[
+    {
+        "titolo": "Unità 1: Introduzione all'analisi: funzioni e successioni",
+        "contenuti": [
+            { "label": "L'insieme R: richiami e complementi", "checked": true },
+            { "label": "Funzioni reali di variabile reale: dominio e studio del segno", "checked": true },
+            { "label": "Funzioni reali di variabile reale: prime proprietà", "checked": true },
+            { "label": "Successioni", "checked": false },
+            { "label": "Progressioni aritmetiche e geometriche", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 2: Limiti",
+        "contenuti": [
+            { "label": "Introduzione al concetto di limite", "checked": true },
+            { "label": "Dagli intorni alle definizioni di limite", "checked": true },
+            { "label": "Le funzioni continue e l'algebra dei limiti", "checked": true },
+            { "label": "Forme di indecisione di funzioni algebriche", "checked": true },
+            { "label": "Forme di indecisione di alcune funzioni trascendenti", "checked": true },
+            { "label": "Infiniti e loro confronto", "checked": true },
+            { "label": "Limiti di successioni", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 3: Continuità",
+        "contenuti": [
+            { "label": "Funzioni continue", "checked": true },
+            { "label": "Punti singolari e loro classificazione", "checked": true },
+            { "label": "Proprietà delle funzioni continue in un intervallo chiuso e limitato", "checked": true },
+            { "label": "Asintoti e grafico probabile di una funzione", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 4: La derivata",
+        "contenuti": [
+            { "label": "Il concetto di derivata", "checked": true },
+            { "label": "Continuità e derivabilità", "checked": true },
+            { "label": "Derivate delle funzioni elementari", "checked": true },
+            { "label": "Algebra delle derivate", "checked": true },
+            { "label": "Derivata della funzione composta", "checked": true },
+            { "label": "Classificazione e studio dei punti di non derivabilità", "checked": false },
+            { "label": "Applicazioni del concetto di derivata", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 5: Teoremi sulle funzioni derivabili",
+        "contenuti": [
+            { "label": "Concetti introduttivi: punti di estremo relativo e assoluto e punti di flesso", "checked": false },
+            { "label": "Teoremi sulle funzioni derivabili", "checked": false },
+            { "label": "Criteri per l'analisi dei punti stazionari e dei punti di flesso", "checked": false },
+            { "label": "Problemi di massimo e di minimo", "checked": false },
+            { "label": "Il teorema di de l'Hôpital", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 6: Lo studio di funzione",
+        "contenuti": [
+            { "label": "Schema per lo studio del grafico di una funzione", "checked": false },
+            { "label": "Esempi di studio di funzioni", "checked": false },
+            { "label": "Dal grafico di una funzione a quello della sua derivata prima", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 7: Integrale indefinito",
+        "contenuti": [
+            { "label": "L'integrale indefinito", "checked": false },
+            { "label": "Integrali immediati e integrazione per scomposizione", "checked": false },
+            { "label": "Integrazione di funzioni composte e per sostituzione", "checked": false },
+            { "label": "Integrazione per parti", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 8: Integrale definito",
+        "contenuti": [
+            { "label": "Dalle aree all'integrale definito", "checked": false },
+            { "label": "Proprietà dell'integrale definito e il suo calcolo", "checked": false },
+            { "label": "Applicazioni degli integrali definiti", "checked": false }
+        ]
+    }
+]

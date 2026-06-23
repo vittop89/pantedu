@@ -1,0 +1,331 @@
+/* ============================================================ */
+/* Pantedu — design tokens.                                       */
+/* Shared palette + spacing + typography + z-index.               */
+/* Include PRIMA di ogni CSS app (gia' importato da               */
+/* layout.css + shell.css).                                       */
+/*                                                                */
+/* Contrast minimum target: WCAG 2.1 AA                           */
+/*   - text: 4.5:1 (large text 3:1)                               */
+/*   - UI components / graphics: 3:1                              */
+/*                                                                */
+/* Theme strategy (Phase C.3):                                    */
+/*   - LIGHT default (max accessibility, no preference)           */
+/*   - DARK via @media (prefers-color-scheme: dark) OR via        */
+/*     attribute html[data-theme="dark"] OR body.fm-dark (legacy) */
+/*   - Override esplicito utente vince su system preference       */
+/*                                                                */
+/* Mass migration hex->var ancora in corso (Fase C.4). Per ora    */
+/* i nuovi componenti DEVONO usare var(--fm-c-*); il codice       */
+/* legacy puo' usare hex hardcoded ma andrebbe migrato.           */
+/* ============================================================ */
+
+:root {
+    /* ─────────── BRAND palette (light theme default) ─────────── */
+    --fm-c-primary:        #0b5fd1;       /* main brand blue */
+    --fm-c-primary-hover:  #084aab;
+    --fm-c-primary-d:      #0947a6;       /* legacy alias of primary-hover */
+    --fm-c-primary-light:  #e0ecf9;       /* tinted bg for buttons */
+    --fm-c-accent:         #2a9d8f;       /* teal accent */
+    --fm-c-accent-hover:   #1f7a72;
+
+    /* ─────────── Semantic colors ─────────── */
+    --fm-c-danger:         #c73149;
+    --fm-c-danger-hover:   #a02638;
+    --fm-c-danger-light:   #fce8ec;
+    --fm-c-warning:        #d97706;
+    --fm-c-warning-light:  #fef3e2;
+    --fm-c-success:        #2a7a3d;
+    --fm-c-success-hover:  #1e5c2c;
+    --fm-c-success-light:  #e1f5e7;
+    --fm-c-info:           #0b5fd1;       /* alias of primary */
+    --fm-c-info-light:     #e0ecf9;
+
+    /* ─────────── Surfaces / backgrounds ─────────── */
+    --fm-c-bg:             #f5f7fb;       /* page background */
+    --fm-c-surface:        #ffffff;       /* card/modal background */
+    --fm-c-surface-2:      #fafbfc;       /* alternate card bg */
+    --fm-c-overlay:        rgba(0, 0, 0, 0.5); /* modal backdrop */
+
+    /* ─────────── Borders / dividers ─────────── */
+    --fm-c-border:         #d9dee6;
+    --fm-c-border-strong:  #b3becb;
+    --fm-c-divider:        #e7ebf1;
+
+    /* ─────────── Text ─────────── */
+    --fm-c-text:           #1f2937;       /* primary text (14.9:1 on white) */
+    --fm-c-text-2:         #4b5563;       /* secondary text (8.5:1 on white) */
+    --fm-c-muted:          #6b7280;       /* tertiary muted (4.6:1 on white = AA min) */
+    --fm-c-text-inverse:   #ffffff;       /* on dark surfaces */
+    --fm-c-text-on-primary: #ffffff;      /* on .primary buttons */
+
+    /* ─────────── Links ─────────── */
+    --fm-c-link:           #0b5fd1;
+    --fm-c-link-hover:     #084aab;
+    --fm-c-link-visited:   #6b21a8;
+
+    /* ─────────── Focus / interaction (WCAG 2.4.7) ─────────── */
+    --fm-c-focus-ring:     #2563eb;       /* visibility ring outline */
+    --fm-c-focus-ring-d:   #93c5fd;       /* dark variant */
+
+    /* ─────────── Spacing scale ─────────── */
+    --fm-space-0: 0;
+    --fm-space-1: 0.25rem;   /* 4px */
+    --fm-space-2: 0.5rem;    /* 8px */
+    --fm-space-3: 0.75rem;   /* 12px */
+    --fm-space-4: 1rem;      /* 16px */
+    --fm-space-5: 1.25rem;   /* 20px */
+    --fm-space-6: 1.5rem;    /* 24px */
+    --fm-space-8: 2rem;      /* 32px */
+    --fm-space-10: 2.5rem;   /* 40px */
+    --fm-space-12: 3rem;     /* 48px */
+
+    /* ─────────── Radii ─────────── */
+    --fm-radius-sm:   4px;
+    --fm-radius:      8px;
+    --fm-radius-lg:   12px;
+    --fm-radius-pill: 9999px;
+
+    /* ─────────── Shadows ─────────── */
+    --fm-shadow:    0 4px 16px rgba(0, 0, 0, 0.08);
+    --fm-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --fm-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+
+    /* ─────────── Font family ─────────── */
+    --fm-font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --fm-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* ─────────── Typography scale (Phase C.2 — WCAG 1.4.4) ─────────── */
+    --fm-fs-xs:   0.75rem;   /* 12px */
+    --fm-fs-sm:   0.875rem;  /* 14px */
+    --fm-fs-base: 1rem;      /* 16px */
+    --fm-fs-md:   1.125rem;  /* 18px */
+    --fm-fs-lg:   1.25rem;   /* 20px */
+    --fm-fs-xl:   1.5rem;    /* 24px */
+    --fm-fs-2xl:  1.875rem;  /* 30px */
+    --fm-fs-3xl:  2.25rem;   /* 36px */
+
+    /* Line-height ratios */
+    --fm-lh-tight:  1.2;
+    --fm-lh-base:   1.5;
+    --fm-lh-loose:  1.75;
+
+    /* Z-index scale */
+    --fm-z-dropdown:  100;
+    --fm-z-sticky:    200;
+    --fm-z-fixed:     300;
+    --fm-z-modal-bg:  400;
+    --fm-z-modal:     500;
+    --fm-z-toast:     600;
+    --fm-z-tooltip:   700;
+    --fm-z-skiplink:  9999;
+
+    /* ─────────── Motion (WCAG 2.3.3) ─────────── */
+    --fm-transition-fast:   0.12s;
+    --fm-transition:        0.2s;
+    --fm-transition-slow:   0.4s;
+    --fm-easing:            cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ─────────── WCAG 2.2 AA — Target Size 2.5.8 (24px min) ─────────
+       Touch/click target minimo per WCAG 2.2 AA = 24x24 CSS pixels.
+       AAA (2.5.5) = 44x44. Pantedu adotta 44px come default (best UX
+       mobile) e degrada a 24px solo per icone inline. */
+    --fm-target-aa:    1.5rem;    /* 24px — WCAG 2.2 AA minimum */
+    --fm-target-aaa:   2.75rem;   /* 44px — WCAG 2.5.5 AAA + mobile */
+
+    /* ─────────── WCAG 2.2 AA — Focus Appearance 2.4.13 ─────────────
+       Outline minimo 2px solid, contrasto ≥3:1 con background adiacente.
+       Spacing ≥2px tra outline e elemento per separation chiara. */
+    --fm-focus-width:    2px;
+    --fm-focus-offset:   2px;
+    --fm-focus-style:    solid;
+
+    /* ─────────── Breakpoints (em-based per resize 200% support) ────
+       Phase Roadmap 5 — em invece di px così breakpoint scalano con
+       user font-size preference (WCAG 1.4.4 + 1.4.10 reflow). */
+    --fm-bp-sm:   30em;    /* 480px */
+    --fm-bp-md:   48em;    /* 768px */
+    --fm-bp-lg:   64em;    /* 1024px */
+    --fm-bp-xl:   80em;    /* 1280px */
+    --fm-bp-2xl: 100em;    /* 1600px */
+
+    /* ─────────── Sidebar section brand colors (Phase D.x TODO #4) ───
+       Color identity per sezione sidebar (mappe / lab / eser / verif /
+       bes / risdoc). Pastel, used as visual markers + hover variants.
+       NOTA: contrast text-on-bg ridotto su pastel chiari -> usare
+       --fm-c-text scuro come testo, mai bianco. WCAG 1.4.3 verificato. */
+    --fm-c-sec-mappe:        rgb(134, 239, 181);
+    --fm-c-sec-mappe-hover:  rgb(162, 240, 197);
+    --fm-c-sec-lab:          rgb(134, 190, 239);
+    --fm-c-sec-lab-hover:    rgb(150, 195, 234);
+    --fm-c-sec-eser:         rgb(240, 221, 152);
+    --fm-c-sec-eser-hover:   rgb(240, 221, 152);
+    --fm-c-sec-verif:        rgb(255, 176, 0);
+    --fm-c-sec-verif-border: rgb(240, 221, 152);
+    --fm-c-sec-bes:          rgb(239, 134, 134);
+    --fm-c-sec-bes-hover:    rgb(236, 161, 161);
+    --fm-c-sec-risdoc:       rgb(237, 105, 213);
+    --fm-c-sec-risdoc-border: rgb(233, 87, 206);
+    --fm-c-sec-risdoc-hover: rgb(243, 138, 224);
+}
+
+/* ============================================================ */
+/* DARK THEME — automatic via prefers-color-scheme, OR explicit  */
+/* via html[data-theme="dark"] OR body.fm-dark (legacy support). */
+/* ============================================================ */
+
+/* 1) Sistema dark mode preference */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not(.fm-light) {
+        --fm-c-primary:        #4d9aff;
+        --fm-c-primary-hover:  #79b5ff;
+        --fm-c-primary-d:      #4d9aff;
+        --fm-c-primary-light:  #1a2a44;
+        --fm-c-accent:         #5fb8aa;
+        --fm-c-accent-hover:   #7fc9bc;
+
+        --fm-c-danger:         #f87171;
+        --fm-c-danger-hover:   #fca5a5;
+        --fm-c-danger-light:   #3a1a1f;
+        --fm-c-warning:        #fbbf24;
+        --fm-c-warning-light:  #3a2a14;
+        --fm-c-success:        #6ee7b7;
+        --fm-c-success-hover:  #a7f3d0;
+        --fm-c-success-light:  #15302a;
+        --fm-c-info:           #4d9aff;
+        --fm-c-info-light:     #1a2a44;
+
+        --fm-c-bg:             #0f1218;
+        --fm-c-surface:        #1a1f29;
+        --fm-c-surface-2:      #232a36;
+        --fm-c-overlay:        rgba(0, 0, 0, 0.7);
+
+        --fm-c-border:         #2d3441;
+        --fm-c-border-strong:  #4a5567;
+        --fm-c-divider:        #232a36;
+
+        --fm-c-text:           #e5e7eb;
+        --fm-c-text-2:         #b8c0cc;
+        --fm-c-muted:          #93a0ae;       /* 4.6:1 on #0f1218 */
+        --fm-c-text-inverse:   #1f2937;
+        --fm-c-text-on-primary: #0f1218;
+
+        --fm-c-link:           #79b5ff;
+        --fm-c-link-hover:     #a5cdff;
+        --fm-c-link-visited:   #c4b5fd;
+
+        --fm-c-focus-ring:     #93c5fd;
+        --fm-c-focus-ring-d:   #c5e0ff;
+
+        --fm-shadow:    0 4px 16px rgba(0, 0, 0, 0.4);
+        --fm-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+        --fm-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* 2) Override esplicito utente: data-theme="dark" su <html> */
+:root[data-theme="dark"] {
+    --fm-c-primary:        #4d9aff;
+    --fm-c-primary-hover:  #79b5ff;
+    --fm-c-primary-d:      #4d9aff;
+    --fm-c-primary-light:  #1a2a44;
+    --fm-c-accent:         #5fb8aa;
+    --fm-c-accent-hover:   #7fc9bc;
+
+    --fm-c-danger:         #f87171;
+    --fm-c-danger-hover:   #fca5a5;
+    --fm-c-danger-light:   #3a1a1f;
+    --fm-c-warning:        #fbbf24;
+    --fm-c-warning-light:  #3a2a14;
+    --fm-c-success:        #6ee7b7;
+    --fm-c-success-hover:  #a7f3d0;
+    --fm-c-success-light:  #15302a;
+    --fm-c-info:           #4d9aff;
+    --fm-c-info-light:     #1a2a44;
+
+    --fm-c-bg:             #0f1218;
+    --fm-c-surface:        #1a1f29;
+    --fm-c-surface-2:      #232a36;
+    --fm-c-overlay:        rgba(0, 0, 0, 0.7);
+
+    --fm-c-border:         #2d3441;
+    --fm-c-border-strong:  #4a5567;
+    --fm-c-divider:        #232a36;
+
+    --fm-c-text:           #e5e7eb;
+    --fm-c-text-2:         #b8c0cc;
+    --fm-c-muted:          #93a0ae;
+    --fm-c-text-inverse:   #1f2937;
+    --fm-c-text-on-primary: #0f1218;
+
+    --fm-c-link:           #79b5ff;
+    --fm-c-link-hover:     #a5cdff;
+    --fm-c-link-visited:   #c4b5fd;
+
+    --fm-c-focus-ring:     #93c5fd;
+    --fm-c-focus-ring-d:   #c5e0ff;
+
+    --fm-shadow:    0 4px 16px rgba(0, 0, 0, 0.4);
+    --fm-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+    --fm-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 3) Legacy body.fm-dark override — eredita stessi token via attr selector
+   sul body. Mantenuto per compat con il toggle UI corrente.
+   Phase C.4 deprecato: switch verso html[data-theme]. */
+body.fm-dark {
+    --fm-c-primary:        #4d9aff;
+    --fm-c-primary-hover:  #79b5ff;
+    --fm-c-primary-d:      #4d9aff;
+    --fm-c-primary-light:  #1a2a44;
+    --fm-c-accent:         #5fb8aa;
+    --fm-c-accent-hover:   #7fc9bc;
+
+    --fm-c-danger:         #f87171;
+    --fm-c-danger-hover:   #fca5a5;
+    --fm-c-danger-light:   #3a1a1f;
+    --fm-c-warning:        #fbbf24;
+    --fm-c-warning-light:  #3a2a14;
+    --fm-c-success:        #6ee7b7;
+    --fm-c-success-hover:  #a7f3d0;
+    --fm-c-success-light:  #15302a;
+    --fm-c-info:           #4d9aff;
+    --fm-c-info-light:     #1a2a44;
+
+    --fm-c-bg:             #0f1218;
+    --fm-c-surface:        #1a1f29;
+    --fm-c-surface-2:      #232a36;
+    --fm-c-overlay:        rgba(0, 0, 0, 0.7);
+
+    --fm-c-border:         #2d3441;
+    --fm-c-border-strong:  #4a5567;
+    --fm-c-divider:        #232a36;
+
+    --fm-c-text:           #e5e7eb;
+    --fm-c-text-2:         #b8c0cc;
+    --fm-c-muted:          #93a0ae;
+    --fm-c-text-inverse:   #1f2937;
+    --fm-c-text-on-primary: #0f1218;
+
+    --fm-c-link:           #79b5ff;
+    --fm-c-link-hover:     #a5cdff;
+    --fm-c-link-visited:   #c4b5fd;
+
+    --fm-c-focus-ring:     #93c5fd;
+    --fm-c-focus-ring-d:   #c5e0ff;
+
+    --fm-shadow:    0 4px 16px rgba(0, 0, 0, 0.4);
+    --fm-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+    --fm-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 4) Override esplicito light (data-theme="light" on <html>) — vince
+   anche su prefers-color-scheme: dark. Per utenti che vogliono FORZARE
+   light mode su un sistema in dark. */
+:root[data-theme="light"] {
+    /* Niente da fare — il default :root e' gia' light. Lasciato come
+       hook semantico per future regole light-only. */
+    color-scheme: light;
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+}

@@ -1,0 +1,86 @@
+# Gitleaks config (Phase 25.E1).
+#
+# Scan history per credenziali leakate. Run sia in CI (workflow) sia in
+# pre-commit. Allow list per credenziali test/seed legittime documentate.
+
+title = "Pantedu gitleaks rules"
+
+[extend]
+useDefault = true   # estende le ~150 rules built-in (AWS, GCP, Slack, etc.)
+
+# ─────── Custom rules project-specific ───────
+
+[[rules]]
+id = "pantedu-kms-master-key"
+description = "KMS_master_key per envelope encryption (Phase 25.D) — mai in repo"
+regex = '''(?i)KMS_MASTER_KEY\s*=\s*['"]?[a-f0-9]{64}['"]?'''
+keywords = ["KMS_MASTER_KEY"]
+secretGroup = 0
+
+[[rules]]
+id = "pantedu-php-session-secret"
+description = "PHP session secret / app secret hardcoded"
+regex = '''(?i)(APP_SECRET|SESSION_SECRET|JWT_SECRET)\s*=\s*['"]?[A-Za-z0-9+/=_-]{32,}['"]?'''
+keywords = ["APP_SECRET", "SESSION_SECRET", "JWT_SECRET"]
+
+[[rules]]
+id = "pantedu-bcrypt-hash"
+description = "Bcrypt hash hardcoded (segno di password test in repo)"
+regex = '''\$2[aby]\$\d{2}\$[A-Za-z0-9./]{53}'''
+keywords = ["$2a$", "$2b$", "$2y$"]
+# Allow test fixtures con hash documentati
+allowlists = [
+    { paths = [".*tests/.*", ".*seeds/.*", ".*fixtures/.*"] }
+]
+
+[[rules]]
+id = "pantedu-italian-fiscal-code"
+description = "Codice fiscale italiano (PII — non deve essere committato)"
+regex = '''\b[A-Z]{6}[0-9]{2}[A-EHLMPRST][0-9]{2}[A-Z][0-9]{3}[A-Z]\b'''
+keywords = []  # match-all
+allowlists = [
+    { paths = [".*tests/.*", ".*docs/privacy/.*"], description = "esempi/test legittimi" }
+]
+
+# ─────── Allowlist globale ───────
+
+[allowlist]
+description = "Path/regex sempre safe"
+paths = [
+    '''node_modules/.*''',
+    '''vendor/.*''',
+    '''public/build/.*''',          # bundle minified, no secrets reali
+    '''storage/logs/.*''',          # log production, scrubbed
+    '''\.lock$''',
+    '''\.min\.(js|css)$''',
+    # Audit deliverable: contengono evidence di secret rilevati durante pentest
+    # (gitleaks output, bcrypt hash in sample DB dump, ecc.). Sono parte del
+    # deliverable di accountability ex GDPR Art. 32 §1(d), NON secret introdotti.
+    '''docs/security/pentest/.*''',
+    # Storage cache MIUR: codici scuola pattern simile a JWT (FP gitleaks)
+    '''storage/cache/scuole_miur_index\.json$''',
+    # Storage backups: PII + bcrypt by design (vedi finding SECRET-003).
+    # Da rimuovere/gitignore in Sprint 2 remediation post-audit.
+    '''storage/backups/.*''',
+    # Legacy debug log (vedi finding SECRET-003)
+    '''log/errors/debug\.log$''',
+    # Legacy users.json pre-Phase 18 (storia, deprecati)
+    '''storage/objects/institutes/.*/private/.*/eser/.*/users/users\.json$''',
+    '''_archive_phase18/.*''',
+    # Test fixtures con dummy bcrypt
+    '''tests/Fixtures/.*''',
+]
+regexes = [
+    '''example\.com''',
+    '''localhost''',
+    '''127\.0\.0\.1''',
+    '''CHANGE_ME''',
+    '''<your-.*-here>''',
+    '''<your .* (from|token)''',     # placeholder doc tipo "<your token from CF dashboard>"
+    # curl -u verso Grafana locale in tools/webhook/_vps_*.sh: ora env-var,
+    # non più credenziale hardcoded (vedi history sanitization 2026-06-01).
+    # FP del rule curl-auth-user (matcha il pattern -u, non un segreto reale).
+    '''admin:\$\{GRAFANA_ADMIN_PASS''',
+    '''admin:__REDACTED__''',
+    '''admin:<password''',
+]

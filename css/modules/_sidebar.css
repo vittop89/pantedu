@@ -1,0 +1,244 @@
+/* ============================================================ */
+/* Sidebar — Phase C.4 modular component (structural core only). */
+/* WCAG 1.4.13 Content on Hover/Focus, 2.1.1 Keyboard.            */
+/*                                                                */
+/* Scope: layout + chrome strutturale della sidebar. Le sezioni   */
+/* coloured (.fm-sb-sec[data-sidepage="mappe"|"lab"|"eser"|...])  */
+/* sono PRODUCT-SPECIFIC e restano in layout.css legacy (non      */
+/* hanno token semantic equivalents — sono brand identity).      */
+/*                                                                */
+/* Migration strategy: nuovi componenti usano questo modulo come  */
+/* base; le sezioni coloured vanno migrate quando lo schema       */
+/* colori sara' tokenizzato (Phase D.x roadmap).                  */
+/*                                                                */
+/* NOTA: questo modulo NON sostituisce ancora le regole in        */
+/* layout.css (rischio regression). Aggiunto come PARALLEL CLEAN  */
+/* implementation. Marker DEPRECATED in layout.css inviterebbe    */
+/* migration progressiva.                                          */
+/* ============================================================ */
+
+/* Container */
+.fm-sidebar {
+    background: var(--fm-c-surface-2);
+    height: calc(100vh - 34px);
+    width: var(--widthLsidebar);
+    position: fixed;
+    top: 34px;
+    left: 0;
+    z-index: var(--fm-z-fixed);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 1;
+    transition: width var(--fm-transition) var(--fm-easing),
+                opacity var(--fm-transition) var(--fm-easing);
+}
+
+/* Stato chiuso: CSS-driven, no JS animations */
+body.fm-sidebar-closed .fm-sidebar {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Selector triplet wrapper (Indirizzo/Classe/Materia) */
+.fm-sidebar__selector {
+    width: 100%;
+    background: var(--fm-c-primary);
+    flex-shrink: 0;
+    padding: var(--fm-space-3) 0;
+    box-sizing: border-box;
+    color: var(--fm-c-text-on-primary);
+}
+
+.fm-sidebar__label {
+    width: 80px;
+    text-align: right;
+    color: var(--fm-c-text-on-primary);
+    display: inline-block;
+    margin-right: var(--fm-space-1);
+    vertical-align: middle;
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-sidebar__select {
+    width: var(--widthSelector);
+    vertical-align: middle;
+    margin-bottom: var(--fm-space-1);
+    padding: var(--fm-space-1) var(--fm-space-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-sidebar__select:focus,
+.fm-sidebar__select:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+    border-color: var(--fm-c-primary);
+}
+
+/* Scroll area */
+.fm-sidebar__scroll {
+    width: 100%;
+    flex-grow: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--fm-c-border-strong) transparent;
+}
+
+.fm-sidebar__scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.fm-sidebar__scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fm-sidebar__scroll::-webkit-scrollbar-thumb {
+    background: var(--fm-c-border-strong);
+    border-radius: var(--fm-radius-pill);
+}
+
+.fm-sidebar__scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--fm-c-muted);
+}
+
+/* ============================================================ */
+/* Section button — TODO #2 step 2 (2026-05-23).                  */
+/* BEM-equivalent del legacy .fm-sb-sec[data-sidepage="..."]      */
+/* che vive in _sidebar-core.css. Permette migration view-by-view */
+/* del attributo class senza cambiare data-sidepage HTML.         */
+/*                                                                */
+/* Coverage parallela a _sidebar-core.css:                        */
+/*   - .fm-sidebar__section (base sticky, structural)             */
+/*   - [data-sidepage="mappe|lab|eser|verif|bes|risdoc"] variants */
+/*     (sticky top:0/30/60/90/120/150 + tokenized colors via      */
+/*     var(--fm-c-sec-*) gia` definiti in tokens.css)             */
+/*   - .fm-is-active / focus-visible / hover variants per-sidepage   */
+/*   - .fm-sidebar__panel (panel content)                          */
+/*   - .fm-sidebar__tip + #control-panel-tooltip                  */
+/*                                                                */
+/* Strategia migrazione (TODO #2 step 3):                         */
+/*   view-by-view: class="fm-sb-sec" → class="fm-sidebar__section"*/
+/*   data-sidepage HTML invariato.                                */
+/*   Quando 100% migrate, rimuovere _sidebar-core.css (step 4).   */
+/* ============================================================ */
+
+/* Section button base — structural (sticky positioning) */
+.fm-sidebar__section {
+    position: sticky;
+    width: var(--widthLsidebar);
+    padding-right: 10px;
+    border-style: outset;
+    cursor: pointer;
+    z-index: 17;
+    font-size: var(--fm-fs-sm);
+    transition: background var(--fm-transition-fast) var(--fm-easing);
+}
+
+.fm-sidebar__section:not([data-sidepage="mappe"]) {
+    margin: 10px 0 0 0;
+}
+
+/* Section variants per-sidepage (tokenized brand colors).
+ * Equivalent al legacy .fm-sb-sec[data-sidepage="..."] in _sidebar-core.css. */
+.fm-sidebar__section[data-sidepage="mappe"] {
+    top: 0;
+    border-color: var(--fm-c-sec-mappe);
+    background: var(--fm-c-sec-mappe);
+}
+.fm-sidebar__section[data-sidepage="lab"] {
+    top: 30px;
+    border-color: var(--fm-c-sec-lab);
+    background-color: var(--fm-c-sec-lab);
+}
+.fm-sidebar__section[data-sidepage="eser"] {
+    top: 60px;
+    border-color: var(--fm-c-sec-eser);
+    background-color: var(--fm-c-sec-eser);
+}
+.fm-sidebar__section[data-sidepage="verif"] {
+    top: 90px;
+    border-color: var(--fm-c-sec-verif-border);
+    background-color: var(--fm-c-sec-verif);
+}
+.fm-sidebar__section[data-sidepage="bes"] {
+    top: 120px;
+    border-color: var(--fm-c-sec-bes);
+    background-color: var(--fm-c-sec-bes);
+}
+.fm-sidebar__section[data-sidepage="risdoc"] {
+    top: 150px;
+    border-color: var(--fm-c-sec-risdoc-border);
+    background-color: var(--fm-c-sec-risdoc);
+}
+
+/* Hover variants */
+.fm-sidebar__section[data-sidepage="mappe"]:hover {
+    background-color: var(--fm-c-sec-mappe-hover);
+}
+.fm-sidebar__section[data-sidepage="lab"]:hover {
+    background-color: var(--fm-c-sec-lab-hover);
+}
+.fm-sidebar__section[data-sidepage="eser"]:hover {
+    background-color: var(--fm-c-sec-eser-hover);
+}
+.fm-sidebar__section[data-sidepage="bes"]:hover {
+    background-color: var(--fm-c-sec-bes-hover);
+}
+.fm-sidebar__section[data-sidepage="risdoc"]:hover {
+    background-color: var(--fm-c-sec-risdoc-hover);
+}
+
+/* Active state — BEM modifier .fm-is-active OR legacy .active */
+.fm-sidebar__section.fm-is-active,
+.fm-sidebar__section.active {
+    border-style: inset;
+}
+
+/* Focus-visible (a11y) */
+.fm-sidebar__section:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: -2px;
+}
+
+/* Sidebar tooltip "ATTIVA" — equivalent del legacy .fm-sb-tip */
+.fm-sidebar__tip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    border-radius: 3px;
+    display: none;
+    z-index: 1000;
+    width: 200px;
+    height: 45px;
+    word-wrap: break-word;
+}
+
+/* Panel content (sidepage panel) */
+.fm-sidebar__panel {
+    display: none;
+}
+
+/* Per-sidepage panel bg & z-index — equivalent del legacy #fm-sp-* */
+.fm-sidebar__panel[data-sidepage="mappe"]  { padding: 9px 0; position: relative; top: 0; z-index: 16; background-color: rgb(185, 215, 185); }
+.fm-sidebar__panel[data-sidepage="lab"]    { padding: 9px 0; position: relative; top: 0; z-index: 14; background-color: rgb(169, 169, 241); }
+.fm-sidebar__panel[data-sidepage="eser"]   { padding: 9px 0; position: relative; top: 0; z-index: 12; background-color: rgb(238, 233, 201); }
+.fm-sidebar__panel[data-sidepage="verif"]  { padding: 9px 0; position: relative; top: 0; z-index: 10; background-color: rgb(255, 203, 88); }
+.fm-sidebar__panel[data-sidepage="bes"]    { padding: 9px 0; position: relative; top: 0; z-index: 8;  background-color: rgb(237, 172, 168); }
+.fm-sidebar__panel[data-sidepage="risdoc"] { padding: 9px 0; position: relative; top: 0; z-index: 6;  background-color: rgb(243, 138, 224); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .fm-sidebar,
+    .fm-sidebar__section {
+        transition: none;
+    }
+}

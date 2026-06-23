@@ -1,0 +1,145 @@
+# Semgrep custom rules (Phase 25.E1).
+#
+# Estende le regole standard p/php + p/javascript + p/owasp-top-10 con
+# regole project-specific per Pantedu. Run da CI:
+#   semgrep --config p/php --config p/javascript --config p/owasp-top-10 \
+#           --config .semgrep.yml --error
+#
+# Le regole standard catturano XSS, SQL injection, hardcoded secrets,
+# path traversal, weak crypto. Qui aggiungiamo gli idiomi pericolosi
+# specifici del nostro codebase.
+
+rules:
+  # ─────── PHP project-specific ───────
+
+  - id: php-no-direct-pdo-query
+    severity: WARNING
+    languages: [php]
+    message: |
+      Evita PDO->query() / exec() con stringa interpolata. Usa
+      prepared statement con bound parameters per prevenire SQL injection.
+    pattern-either:
+      - pattern: $PDO->query("...$VAR...")
+      - pattern: $PDO->exec("...$VAR...")
+    paths:
+      include:
+        - app/
+
+  - id: php-csrf-token-required-on-post
+    severity: ERROR
+    languages: [php]
+    message: |
+      Controller method handling POST deve verificare CSRF (middleware
+      'csrf' nella route oppure Csrf::verify() esplicito). Senza, attacker
+      può forzare azioni con cookie auth.
+    pattern: |
+      public function $METHOD(Request $req): Response {
+          ...
+      }
+    pattern-not-inside: |
+      class $C {
+          ...
+          public function $METHOD(Request $req): Response {
+              ...
+              Csrf::verify(...);
+              ...
+          }
+      }
+    paths:
+      include:
+        - app/Controllers/
+      exclude:
+        - "*ViewController.php"   # GET handlers
+        - "*Controller.php:*show*"
+
+  - id: php-no-eval
+    severity: ERROR
+    languages: [php]
+    message: |
+      eval() / create_function() / assert(string) sono RCE vector.
+      Vietati nel codebase produttivo.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: create_function(...)
+      - pattern: assert($STR)
+
+  - id: php-superglobal-direct-use
+    severity: WARNING
+    languages: [php]
+    message: |
+      Evita uso diretto di $_GET / $_POST / $_REQUEST / $_COOKIE.
+      Usa Request::query[]/post[]/cookie[] (sanitizzato) o app/Core/Request.
+    pattern-either:
+      - pattern: $_GET[...]
+      - pattern: $_POST[...]
+      - pattern: $_REQUEST[...]
+    paths:
+      include:
+        - app/Controllers/
+        - app/Services/
+      exclude:
+        - app/Core/Request.php  # legittimo qui
+
+  # ─────── JS project-specific ───────
+
+  - id: js-localstorage-no-username-prefix
+    severity: WARNING
+    languages: [javascript]
+    message: |
+      localStorage.setItem senza prefisso username per chiavi user-scoped.
+      Phase 24.69+: chiavi devono essere prefissate con
+      `fm.<scope>.<feature>.<username>` per evitare leak cross-utente
+      sullo stesso browser. Vedi sidepage-custom-categories.js.
+    patterns:
+      - pattern: localStorage.setItem("$KEY", ...)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: '^fm\.(?!sidepage|risdoc|exercise)\.'
+    paths:
+      include:
+        - js/modules/
+
+  - id: js-innerhtml-with-user-data
+    severity: WARNING
+    languages: [javascript]
+    message: |
+      innerHTML con dato user-controllato è XSS vector. Usa textContent
+      o escHtml() (js/modules/core/dom-utils.js Phase 25.A).
+    pattern-either:
+      - pattern: $EL.innerHTML = `...${$VAR}...`
+      - pattern: $EL.innerHTML = "...$VAR..."
+
+  - id: js-fetch-no-csrf-on-post
+    severity: WARNING
+    languages: [javascript]
+    message: |
+      fetch POST senza _csrf nel body / X-CSRF header. Verifica che la
+      route sia GET-only oppure aggiungi await fetchCsrf() dal CsrfHelper.
+    patterns:
+      - pattern: |
+          fetch($URL, { method: "POST", ... })
+      - pattern-not-inside: |
+          fetch($URL, { method: "POST", ..., body: $BODY })
+    paths:
+      include:
+        - js/modules/
+
+  # ─────── Cross-cutting ───────
+
+  - id: hardcoded-credentials
+    severity: ERROR
+    languages: [php, javascript]
+    message: |
+      Possibile credenziale hardcoded. Usa env var (.env) + Config::get()
+      (PHP) o build-time injection (JS).
+    pattern-either:
+      - pattern-regex: 'password\s*=\s*["''][A-Za-z0-9!@#$%^&*]{8,}["'']'
+      - pattern-regex: 'api[_-]?key\s*=\s*["''][A-Za-z0-9_-]{20,}["'']'
+      - pattern-regex: 'secret\s*=\s*["''][A-Za-z0-9_-]{16,}["'']'
+    paths:
+      exclude:
+        - tests/
+        - "**/*.test.*"
+        - "**/*.spec.*"
+        - "**/seed_*.php"
+        - "**/*.example"

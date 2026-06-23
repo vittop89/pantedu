@@ -1,0 +1,206 @@
+/* ============================================================ */
+/* Admin Toolnav — Phase C.4 modular component.                   */
+/* Pattern usato in views/admin/_partials/page_head.php per la    */
+/* nav rapida tools (Core / Governance / GDPR / Operations).      */
+/* WCAG 4.1.2 Name/Role/Value: ogni btn ha aria-label, gruppi     */
+/* hanno role="group" + aria-label nel markup.                    */
+/* ============================================================ */
+
+.fm-admin-toolnav {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-3);
+    flex-wrap: wrap;
+    margin: 0 var(--fm-space-2);
+}
+
+/* Phase 25.R.22 — Group sezioni: separatore verticale + label sopra */
+.fm-admin-toolnav__group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fm-space-1);
+    padding: 0 0.55rem;
+    border-left: 1px solid var(--fm-c-border);
+    position: relative;
+}
+
+.fm-admin-toolnav__group:first-child {
+    border-left: 0;
+    padding-left: 0;
+}
+
+.fm-admin-toolnav__group-lbl {
+    font-size: var(--fm-fs-xs);
+    font-weight: 600;
+    color: var(--fm-c-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 0.2rem;
+    user-select: none;
+}
+
+@media (max-width: 900px) {
+    .fm-admin-toolnav__group-lbl { display: none; }
+    .fm-admin-toolnav__group { padding: 0 0.3rem; }
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+
+.fm-admin-toolnav__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+    text-decoration: none;
+    font-size: var(--fm-fs-sm);
+    line-height: 1.1;
+    border: 1px solid var(--fm-c-border);
+    transition: background var(--fm-transition-fast) var(--fm-easing),
+                border-color var(--fm-transition-fast) var(--fm-easing),
+                transform var(--fm-transition-fast) var(--fm-easing);
+    white-space: nowrap;
+}
+
+.fm-admin-toolnav__btn:hover {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-primary);
+    transform: translateY(-1px);
+}
+
+.fm-admin-toolnav__btn:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+
+.fm-admin-toolnav__btn.fm-is-active {
+    background: var(--fm-c-primary);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-primary);
+}
+
+.fm-admin-toolnav__btn.fm-is-active:hover {
+    transform: none;
+}
+
+.fm-admin-toolnav__lbl {
+    font-weight: 500;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .fm-admin-toolnav__btn {
+        transition: none;
+    }
+    .fm-admin-toolnav__btn:hover {
+        transform: none;
+    }
+}
+
+/* Responsive: nascondi label, lascia solo icone su schermi piccoli.
+ * Esteso da admin.css:152-156 (Sprint A3.1 dedup 2026-05-24). */
+@media (max-width: 900px) {
+    .fm-admin-toolnav__lbl { display: none; }
+    .fm-admin-toolnav__btn { padding: 0.3rem 0.5rem; }
+}
+
+/* ============================================================ */
+/* Phase 25.R.30 — variante "menu a tendina per gruppo".          */
+/* Una riga di pulsanti-gruppo; il menu dei tool si apre al click. */
+/* ============================================================ */
+.fm-admin-toolnav--menus {
+    gap: var(--fm-space-2);
+}
+.fm-admin-toolnav--menus .fm-admin-toolnav__group {
+    border-left: 0;
+    padding: 0;
+    position: relative;
+}
+
+.fm-admin-toolnav__grpbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+    font-size: var(--fm-fs-sm);
+    font-weight: 600;
+    line-height: 1.1;
+    border: 1px solid var(--fm-c-border);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--fm-transition-fast) var(--fm-easing),
+                border-color var(--fm-transition-fast) var(--fm-easing);
+}
+.fm-admin-toolnav__grpbtn:hover {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-primary);
+}
+.fm-admin-toolnav__grpbtn:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+/* gruppo che contiene la pagina corrente → evidenziato */
+.fm-admin-toolnav__group.is-active .fm-admin-toolnav__grpbtn {
+    background: var(--fm-c-primary);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-primary);
+}
+.fm-admin-toolnav__caret {
+    font-size: 0.7em;
+    opacity: 0.8;
+    transition: transform var(--fm-transition-fast) var(--fm-easing);
+}
+.fm-admin-toolnav__group.is-open .fm-admin-toolnav__caret { transform: rotate(180deg); }
+
+.fm-admin-toolnav__menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 1200;
+    min-width: 11rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 0.3rem;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.fm-admin-toolnav__menu[hidden] { display: none; }
+
+.fm-admin-toolnav__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--fm-radius-sm);
+    color: var(--fm-c-text);
+    text-decoration: none;
+    font-size: var(--fm-fs-sm);
+    white-space: nowrap;
+}
+.fm-admin-toolnav__item:hover {
+    background: var(--fm-c-bg);
+}
+.fm-admin-toolnav__item.is-active {
+    background: color-mix(in srgb, var(--fm-c-primary) 18%, transparent);
+    color: var(--fm-c-primary);
+    font-weight: 600;
+}
+
+/* Admin page_head topbar (.fm-topbar con .fm-admin-toolnav): il padding era
+   solo bottom → contenuto top-heavy nella barra gradiente. Padding verticale
+   simmetrico + center, così titolo e nav sono centrati nella barra. Scoped via
+   :has per non toccare il topbar editor (stessa classe .fm-topbar). */
+.fm-topbar:has(.fm-admin-toolnav) {
+    align-items: center !important;
+    padding-top: var(--fm-space-3) !important;
+    padding-bottom: var(--fm-space-3) !important;
+}

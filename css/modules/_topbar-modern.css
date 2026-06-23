@@ -1,0 +1,2384 @@
+/* ============================================================ */
+/* Topbar modern — Phase Roadmap Sprint 32.                       */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (2332 LOC). Visual byte-equivalent.*/
+/* Modern unified topbar Phase G8 (sostituisce .fm-upbar legacy).    */
+/* 3 zone: meta (titolo/tipo) | target (azioni) | actions (filtri)*/
+/* topbar-modern.js gestisce visibilita a runtime.                 */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-topbar (fixed + gradient blue, position relativa a sidebar)*/
+/*   - .fm-topbar__zone[--meta|--target|--actions|--eser]          */
+/*   - .fm-topbar__btn (primary/accent/danger variants)            */
+/*   - .fm-topbar__title, .fm-topbar__type, .fm-topbar__lbl        */
+/*   - Body state classes: .fm-topbar-active, .fm-info-open       */
+/*   - .fm-selector-eser, .fm-eser-zone--{printinfo,scelte,create}   */
+/*   - .fm-printinfo-actions, .fm-create-eser-btn                  */
+/*   - Sticky behavior + sidebar offset (var(--widthLsidebar))    */
+/*   - Mobile responsive (@media max-width: 720px)                 */
+/*   - Dark theme overrides (body.fm-dark)                         */
+/* ============================================================ */
+
+/* ──────────── Phase G8 — Modern unified topbar ────────────
+ * Sostituisce gradualmente `.fm-upbar > .selwrapbtncopy` legacy.
+ * 3 zone: meta (titolo/tipo) | target (azioni primarie) | actions (filtri/editor).
+ * topbar-modern.js gestisce visibilita a runtime (body.exercise-context).
+ * Bridge legacy invisibile (#overleaf/#Server/#syncDrive/#btnCopyver) interno. */
+.fm-topbar {
+    display: flex;
+    /* G19.26 — wrap permette a `.fm-topbar__zone--eser` di andare a
+     * nuova riga (flex-basis: 100% + order: 99). Le 3 zone primarie
+     * (meta/target/actions) restano sulla stessa riga via `flex: 0 1 auto`. */
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #1f3b5c 0%, #2a5d8a 50%, #1f3b5c 100%);
+    color: #f1f5f9;
+    border-bottom: 1px solid #0f172a;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    /* G9.14 — position fixed: rimane in top durante scroll pagina,
+     * indipendente da overflow degli ancestor (sticky non funziona
+     * dentro #fm-content che ha overflow). left = sidebar width
+     * cosi' non si sovrappone alla sidebar. */
+    position: fixed;
+    top: 0;
+    left: var(--widthLsidebar, 200px);
+    right: 0;
+    z-index: 1500;
+    font-size: 0.8125rem;
+    line-height: 1.2;
+    /* Phase 24.77 — segue in modo fluido l'apertura/chiusura sidebar in sync
+       con `#fm-content { transition: margin-left .3s }`. Senza, `left` saltava
+       di colpo mentre il contenuto scorreva → reflow a scatto. */
+    transition: left .3s ease;
+}
+body.fm-sidebar-closed .fm-topbar {
+    left: 34px; /* sidebar collassata */
+}
+/* Phase 25.Q.14 — reserve top space per .fm-topbar fixed con altezza
+ * dinamica via CSS custom property --fm-topbar-h, aggiornata in
+ * runtime da topbar-modern.js (ResizeObserver sull'elemento .fm-topbar)
+ * cosi' scala automaticamente quando la zona --eser viene popolata
+ * (zona --eser aggiunge ~28-32px alla topbar primary). */
+:root { --fm-topbar-h: 50px; }
+body.fm-topbar-active.fm-has-upbar #fm-content,
+body.fm-topbar-active.fm-has-upbar main#fm-content,
+body.fm-topbar-active.fm-has-upbar .fm-pagestyle,
+body.fm-topbar-active.fm-has-upbar > main {
+    padding-top: var(--fm-topbar-h) !important;
+    margin-top: 0 !important;
+}
+.fm-topbar[hidden] { display: none; }
+.fm-topbar__zone {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.fm-topbar__zone--meta {
+    flex: 0 1 auto;
+    min-width: 140px;
+    padding-right: 6px;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+}
+.fm-topbar__zone--target {
+    flex: 0 1 auto;
+    gap: 8px;
+}
+.fm-topbar__zone--actions {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding-left: 6px;
+    border-left: 1px solid rgba(255,255,255,0.12);
+}
+/* G20.6 — .fm-printinfo-actions dentro topbar/.fm-selector-eser DEVE essere
+ * inline-flex nowrap per tenere [save | load | Info | verTitlePrefix |
+ * verTitle] tutti sulla stessa riga. Senza questo verTitle finiva sotto
+ * verTitlePrefix per default block layout. */
+.fm-topbar__zone--eser .fm-printinfo-actions {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 3px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+/* G20.6 — verTitlePrefix + verTitle rilocati dentro .fm-printinfo-actions
+ * (zone --eser), subito dopo il bottone Info. Compatti per stare in linea
+ * con scelte-verifica-wrapper senza forzare wrap. */
+.fm-printinfo-actions #verTitlePrefix,
+.fm-printinfo-actions #verTitle {
+    height: 22px;
+    font-size: 0.6875rem;
+    background: rgba(255,255,255,0.08);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 4px;
+    padding: 0 6px;
+    margin-left: 3px;
+}
+.fm-printinfo-actions #verTitlePrefix,
+.fm-scelte-verifica-wrapper #verTitlePrefix {
+    min-width: 50px;
+    max-width: 90px;
+    padding: 0 4px;
+}
+.fm-printinfo-actions #verTitle,
+.fm-scelte-verifica-wrapper #verTitle {
+    flex: 1 1 auto;
+    min-width: 70px;
+    /* G20.7 — verTitle si estende fino al margine destro della zona scelte. */
+    max-width: none;
+}
+/* Versione + verTitle/Prefix dentro .fm-scelte-verifica-wrapper: stessi stili
+ * compatti che applichiamo in .fm-printinfo-actions. */
+.fm-scelte-verifica-wrapper #verTitlePrefix,
+.fm-scelte-verifica-wrapper #verTitle,
+.fm-scelte-verifica-wrapper #versione {
+    height: 22px;
+    font-size: 0.6875rem;
+    background: rgba(255,255,255,0.08);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 4px;
+}
+.fm-scelte-verifica-wrapper #versione {
+    width: 56px;
+    padding: 0 4px;
+}
+body.fm-light .fm-scelte-verifica-wrapper #verTitlePrefix,
+body.fm-light .fm-scelte-verifica-wrapper #verTitle,
+body.fm-light .fm-scelte-verifica-wrapper #versione {
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border);
+}
+.fm-printinfo-actions #verTitle:focus,
+.fm-printinfo-actions #verTitlePrefix:focus,
+.fm-printinfo-actions #verTitle:focus-visible,
+.fm-printinfo-actions #verTitlePrefix:focus-visible {
+    outline: none;
+    border-color: rgba(96,165,250,0.5);
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.35);
+}
+body.fm-light .fm-printinfo-actions #verTitlePrefix,
+body.fm-light .fm-printinfo-actions #verTitle {
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border);
+}
+/* Info btn rilocato in --eser zone: compatto. */
+.fm-printinfo-actions [data-fm-action="info"].fm-topbar__btn--in-eser {
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 6px !important;
+    margin-left: 3px !important;
+    font-size: 0.6875rem !important;
+}
+.fm-printinfo-actions [data-fm-action="info"].fm-topbar__btn--in-eser .fm-topbar__lbl {
+    font-size: 0.6875rem;
+    margin-left: 2px;
+}
+/* G19.22 + G19.26 + G19.27 — slot per `.fm-selector-eser` rilocata in topbar:
+ * forzato su nuova riga (flex-basis 100% + order 99) cosi' non comprime
+ * le zone meta/target/actions. Style uniformato al topbar dark
+ * (semi-trasparente, compatti 24px h). */
+.fm-topbar__zone--eser {
+    flex: 0 0 100%;
+    order: 99;
+    gap: 4px;
+    padding: 3px 0 0;
+    margin-top: 3px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    min-width: 0;
+    flex-wrap: nowrap;
+}
+.fm-topbar__zone--eser .fm-selector-eser {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+/* G20.7 — 3 sub-zone visualmente separate dentro .fm-selector-eser:
+ * [Crea] | [Help + PrintInfo (💾📂 + ⓘInfo)] | [Help + Scelte (💾v1v2v3📂 + verTitle)]
+ * Separazione: border-left semi-trasparente. */
+.fm-topbar__zone--eser .fm-eser-zone {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 6px;
+    flex-wrap: nowrap;
+}
+.fm-topbar__zone--eser .fm-eser-zone--printinfo,
+.fm-topbar__zone--eser .fm-eser-zone--scelte {
+    border-left: 1px solid rgba(255,255,255,0.16);
+}
+.fm-topbar__zone--eser .fm-eser-zone--scelte { flex: 1 1 auto; min-width: 0; }
+.fm-topbar__zone--eser .fm-eser-zone--create { flex: 0 0 auto; padding-left: 0; }
+body.fm-light .fm-topbar__zone--eser .fm-eser-zone--printinfo,
+body.fm-light .fm-topbar__zone--eser .fm-eser-zone--scelte {
+    border-left-color: rgba(15,23,42,0.12);
+}
+
+/* `+ Crea esercizi` — compatto, accent verde sobrio */
+.fm-topbar__zone--eser .fm-selector-eser .fm-create-eser-btn,
+.fm-topbar__zone--eser .fm-selector-eser #fm-create-exercise-btn {
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 8px !important;
+    background: rgba(34, 197, 94, 0.18) !important;
+    color: #d1fae5 !important;
+    border: 1px solid rgba(34, 197, 94, 0.42) !important;
+    border-radius: 4px !important;
+    font-size: 0.6875rem !important;
+    font-weight: 600;
+    line-height: 1 !important;
+    box-shadow: none !important;
+    text-transform: none;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .12s, border-color .12s;
+}
+.fm-topbar__zone--eser .fm-selector-eser .fm-create-eser-btn:hover,
+.fm-topbar__zone--eser .fm-selector-eser #fm-create-exercise-btn:hover {
+    background: rgba(34, 197, 94, 0.32) !important;
+    border-color: rgba(34, 197, 94, 0.7) !important;
+    color: #ffffff !important;
+}
+.fm-topbar__zone--eser .fm-selector-eser .fm-create-eser-icon {
+    margin-right: 4px;
+    font-size: 0.8125rem;
+    color: #86efac;
+}
+.fm-topbar__zone--eser .fm-selector-eser .fm-create-eser-btn:hover .fm-create-eser-icon {
+    color: #ffffff;
+}
+
+/* help-circle (?) — discreto, neutro */
+.fm-topbar__zone--eser .fm-selector-eser .fm-help-circle {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    background: rgba(255,255,255,0.08) !important;
+    color: rgba(255,255,255,0.65) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    font-size: 0.6875rem;
+}
+.fm-topbar__zone--eser .fm-selector-eser .fm-help-circle:hover {
+    background: rgba(255,255,255,0.16) !important;
+    color: #ffffff !important;
+}
+
+/* PrintInfo save/load (💾/📂) — compatti 22x22, semi-trasparenti */
+body.fm-topbar-active .fm-topbar__zone--eser #savePrintInfoBtn,
+body.fm-topbar-active .fm-topbar__zone--eser #loadPrintInfoBtn,
+.fm-topbar__zone--eser #savePrintInfoBtn,
+.fm-topbar__zone--eser #loadPrintInfoBtn {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+    font-size: 0.6875rem !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+    background: rgba(255,255,255,0.10) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+body.fm-topbar-active .fm-topbar__zone--eser #savePrintInfoBtn:hover,
+.fm-topbar__zone--eser #savePrintInfoBtn:hover {
+    background: rgba(20, 184, 166, 0.32) !important;
+    border-color: rgba(20, 184, 166, 0.62) !important;
+    color: #ffffff !important;
+}
+body.fm-topbar-active .fm-topbar__zone--eser #loadPrintInfoBtn:hover,
+.fm-topbar__zone--eser #loadPrintInfoBtn:hover {
+    background: rgba(59, 130, 246, 0.32) !important;
+    border-color: rgba(59, 130, 246, 0.62) !important;
+    color: #ffffff !important;
+}
+
+/* `.fm-scelte-verifica-wrapper` (Salva/Carica Scelte + v1/v2/v3) — uniformato
+ * al topbar dark. Spinge a destra via margin-left auto. */
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    box-shadow: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-salva-scelte-btn,
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-carica-scelte-btn {
+    height: 22px !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    font-size: 0.6875rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 600;
+    line-height: 1 !important;
+    border: 1px solid;
+    cursor: pointer;
+    text-transform: none;
+    white-space: nowrap;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-salva-scelte-btn {
+    background: rgba(22, 163, 74, 0.22) !important;
+    color: #d1fae5 !important;
+    border-color: rgba(22, 163, 74, 0.5) !important;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-salva-scelte-btn:hover {
+    background: rgba(22, 163, 74, 0.4) !important;
+    color: #ffffff !important;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-carica-scelte-btn {
+    background: rgba(37, 99, 235, 0.22) !important;
+    color: #dbeafe !important;
+    border-color: rgba(37, 99, 235, 0.5) !important;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper .fm-carica-scelte-btn:hover {
+    background: rgba(37, 99, 235, 0.4) !important;
+    color: #ffffff !important;
+}
+/* PDF-Import launcher — iniettato via JS dentro .fm-scelte-verifica-wrapper.
+   Stesso footprint 22x22 dei bottoni scelte, accent viola per distinguere il tool. */
+.fm-topbar__zone--eser .fm-pdfimport-launch {
+    height: 22px;
+    width: 22px;
+    min-width: 22px;
+    margin-left: 6px;
+    padding: 0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    cursor: pointer;
+    background: rgba(139, 92, 246, 0.22);
+    color: #ede9fe;
+    border: 1px solid rgba(139, 92, 246, 0.5);
+}
+.fm-topbar__zone--eser .fm-pdfimport-launch:hover {
+    background: rgba(139, 92, 246, 0.4);
+    color: #ffffff;
+}
+.fm-topbar__zone--eser .fm-pdfimport-launch:focus-visible {
+    outline: 2px solid #c4b5fd;
+    outline-offset: 1px;
+}
+/* G20.7 — .fm-scelte-versioni come segmented buttons (v1/v2/v3 toggle).
+ * Compatto: ogni button 22x22, border condiviso. Active = inset+pressed. */
+.fm-topbar__zone--eser .fm-scelte-versioni {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    height: 22px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    box-sizing: border-box;
+}
+.fm-topbar__zone--eser .fm-scelte-versioni .fm-version-btn {
+    height: 20px;
+    min-width: 22px;
+    padding: 0 6px;
+    background: transparent;
+    color: rgba(255,255,255,0.65);
+    border: 0;
+    border-left: 1px solid rgba(255,255,255,0.14);
+    font-size: 0.6562rem;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+}
+.fm-topbar__zone--eser .fm-scelte-versioni .fm-version-btn:first-child { border-left: 0; }
+.fm-topbar__zone--eser .fm-scelte-versioni .fm-version-btn:hover {
+    background: rgba(255,255,255,0.10);
+    color: #ffffff;
+}
+.fm-topbar__zone--eser .fm-scelte-versioni .fm-version-btn--active {
+    background: rgba(96,165,250,0.32);
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* G20.7 — Random selection toggle + button (zone scelte) */
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-toggle,
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-pick {
+    height: 22px;
+    width: 26px;
+    min-width: 26px;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    color: #e2e8f0;
+    font-size: 0.8125rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-toggle[aria-pressed="true"] {
+    background: rgba(168, 85, 247, 0.32);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+    color: #fff;
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-toggle:hover,
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-pick:hover {
+    background: rgba(255,255,255,0.14);
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-pick {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: rgba(245, 158, 11, 0.5);
+}
+.fm-topbar__zone--eser .fm-scelte-verifica-wrapper #fm-random-pick:hover {
+    background: rgba(245, 158, 11, 0.4);
+}
+
+/* G20.7 — Modernizzazione del .fm-check header (problem) e .fm-input-wrapper-pt-tot.
+ * Layout pill-style coerente con gli altri controlli del topbar. */
+.fm-groupcollex .fm-check {
+    height: auto !important;
+    min-height: 26px;
+    padding: 2px 4px !important;
+    gap: 4px !important;
+    border-left: 1px solid rgba(99,102,241,0.35) !important;
+    border-right: 1px solid rgba(99,102,241,0.35) !important;
+    flex-wrap: nowrap;
+    overflow: visible;
+}
+.fm-groupcollex .fm-check > div {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+/* G20.7 — A/R checkbox: input nativo nascosto, .labcheck diventa una pill
+ * cliccabile (`<label for=>` mantiene il toggle). Stato checked controllato
+ * via :has() sul wrapper div. */
+.fm-groupcollex .fm-check .checkboxA,
+.fm-groupcollex .fm-check .checkboxB {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+}
+.fm-groupcollex .fm-check .labcheck {
+    margin: 0;
+    height: 20px;
+    width: 22px;
+    min-width: 22px;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.30);
+    background: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.6562rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0;
+    transition: background-color .12s, color .12s, border-color .12s;
+}
+.fm-groupcollex .fm-check .labcheck:hover {
+    background: rgba(255,255,255,0.18);
+    color: #ffffff;
+}
+/* checked state: A → verde, R → arancione */
+.fm-groupcollex .fm-check > div:has(.checkboxA:checked) .labcheck {
+    background: #16a34a;
+    border-color: #15803d;
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+}
+.fm-groupcollex .fm-check > div:has(.checkboxB:checked) .labcheck {
+    background: #f59e0b;
+    border-color: #d97706;
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+}
+/* Phase 24.77 — fallback class-based (toggle JS in checkin-handlers
+   onCheckinChange): garantisce l'evidenziazione anche dove :has() non
+   stila il discendente. A → verde, R → arancione. */
+.fm-groupcollex .fm-check .labcheck.is-on-a {
+    background: #16a34a !important; border-color: #15803d !important; color: #ffffff !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+}
+.fm-groupcollex .fm-check .labcheck.is-on-b {
+    background: #f59e0b !important; border-color: #d97706 !important; color: #ffffff !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+}
+/* Light-theme override (background biancastro) */
+body.fm-light .fm-groupcollex .fm-check .labcheck {
+    border-color: rgba(15,23,42,0.20);
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text-2);
+}
+body.fm-light .fm-groupcollex .fm-check .labcheck:hover { background: var(--fm-c-surface-2); color: #0f172a; }
+/* ptA / ptR: pill compatti. Il .selection ha sfondo dark indigo
+ * (#5959a9) → testi devono avere contrasto bianco (era indigo on indigo,
+ * illeggibile). Sfondo pill semi-trasparente bianco; testi white. */
+.fm-groupcollex .fm-check .fm-input-wrapper-pt-tot {
+    height: 20px;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0 6px !important;
+    margin: 0 !important;
+    /* WCAG 2.2 AA (ADR-023): overlay 0.14→0.08 → pill più indigo, testo
+       bianco passa da 4.49 a ~5.1:1 sul .selection #5959a9. */
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.28) !important;
+    border-radius: 4px !important;
+    font-size: 0.625rem;
+    font-weight: 600;
+    gap: 3px;
+    line-height: 1;
+    flex-shrink: 1;
+}
+.fm-groupcollex .fm-check .fm-pt-tot-a,
+.fm-groupcollex .fm-check .fm-pt-tot-b {
+    margin: 0 !important;
+    padding: 0 !important;
+    /* WCAG 2.2 AA (ADR-023): bianco pieno (era rgba .78 = #e0e0ef, 3.44:1
+       sul pill indigo). #fff su questo pill ≈ 4.8:1, come .total-points*. */
+    color: #ffffff;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.fm-groupcollex .fm-check .total-pointsA,
+.fm-groupcollex .fm-check .total-pointsB {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.6562rem;
+}
+/* Light theme: indigo testi su sfondo bianco (contrasto OK). */
+body.fm-light .fm-groupcollex .fm-check .fm-input-wrapper-pt-tot {
+    background: rgba(99,102,241,0.10) !important;
+    border-color: rgba(99,102,241,0.35) !important;
+}
+body.fm-light .fm-groupcollex .fm-check .fm-pt-tot-a,
+body.fm-light .fm-groupcollex .fm-check .fm-pt-tot-b { color: rgba(99,102,241,0.95); }
+body.fm-light .fm-groupcollex .fm-check .total-pointsA,
+body.fm-light .fm-groupcollex .fm-check .total-pointsB { color: var(--fm-c-text); }
+
+/* G20.7 — Random per-problem inputs: hidden by default, visible quando
+ * body ha .fm-rand-mode (toggle attivo). Compatti accanto ai checkbox A/R. */
+.fm-rand-inputs { display: none; }
+body.fm-rand-mode .fm-rand-inputs {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+}
+body.fm-rand-mode .fm-rand-inputs .fm-rand-n,
+body.fm-rand-mode .fm-rand-inputs .fm-rand-pt {
+    width: 48px;
+    height: 20px;
+    padding: 0 4px;
+    font-size: 0.6562rem;
+    border: 1px solid rgba(216, 180, 254, 0.7);
+    border-radius: 4px;
+    background: rgba(216, 180, 254, 0.18);
+    color: #ffffff;
+    font-weight: 600;
+}
+body.fm-rand-mode .fm-rand-inputs .fm-rand-n::placeholder,
+body.fm-rand-mode .fm-rand-inputs .fm-rand-pt::placeholder {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+body.fm-light.fm-rand-mode .fm-rand-inputs .fm-rand-n,
+body.fm-light.fm-rand-mode .fm-rand-inputs .fm-rand-pt {
+    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(168, 85, 247, 0.08);
+    color: var(--fm-c-text);
+}
+body.fm-light.fm-rand-mode .fm-rand-inputs .fm-rand-n::placeholder,
+body.fm-light.fm-rand-mode .fm-rand-inputs .fm-rand-pt::placeholder {
+    color: rgba(168, 85, 247, 0.7);
+}
+
+/* G20.7 — .selection auto-width: si adatta al contenuto invece di
+ * occupare 305px fissi. Per far estendere .fm-collapsible fino al bordo
+ * destro coprendo TUTTO lo spazio rimanente (era residuo blu vuoto a
+ * destra) convertiamo .fm-groupcollex da float-based a flex.
+ * - .fm-pos-check-es: flex 0 0 auto (size to content)
+ * - .fm-collapsible: flex 1 1 auto (riempie il resto)
+ * - .content: flex 1 1 100% via flex-wrap → va a capo sotto. */
+body.fm-admin-access .fm-groupcollex {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+body.fm-admin-access .fm-pos-check-es > .selection {
+    width: auto !important;
+}
+body.fm-admin-access .fm-groupcollex > .fm-pos-check-es {
+    width: auto !important;
+    float: none !important;
+    flex: 0 0 auto;
+}
+body.fm-admin-access .fm-groupcollex > .fm-collapsible {
+    width: auto !important;
+    flex: 1 1 auto;
+    /* Phase 24.77 — gap 0: .selection e .fm-collapsible hanno lo stesso sfondo
+       indigo; con margin si vedeva la pagina in mezzo (brutto). Flush. */
+    margin-left: 0;
+}
+body.fm-admin-access .fm-groupcollex > .content {
+    flex: 1 1 100%;
+}
+
+/* G20.7-update — verTitle/Prefix dentro .fm-titolo.fm-related-header.
+ * Si allineano accanto al testo "Verifiche correlate". */
+.fm-titolo.fm-related-header {
+    margin-top: 35px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.fm-titolo.fm-related-header #verTitlePrefix,
+.fm-titolo.fm-related-header #verTitle {
+    height: 28px;
+    font-size: 0.8125rem;
+    padding: 0 8px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+}
+.fm-titolo.fm-related-header #verTitlePrefix { min-width: 120px; max-width: 160px; }
+.fm-titolo.fm-related-header #verTitle { flex: 1 1 200px; min-width: 200px; }
+body.fm-dark .fm-titolo.fm-related-header #verTitlePrefix,
+body.fm-dark .fm-titolo.fm-related-header #verTitle {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+.fm-topbar__doctype {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: 0.4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    color: #cfe3ff;
+}
+.fm-topbar__title {
+    font-weight: 500;
+    font-size: 0.8125rem;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 28vw;
+}
+/* G9.25 — slot per P.TOT-A / P.TOT-R sempre visibili nel topbar.
+ * Le sub_wrapInfoSchool spostate dentro vengono compattate. */
+.fm-topbar__totals {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+    flex: 0 0 auto;
+}
+.fm-topbar__totals:empty { display: none; }
+.fm-topbar__totals .fm-sub-wrap-info-school {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 3px;
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    border-radius: 4px !important;
+    padding: 1px 5px !important;
+    margin: 0 !important;
+    height: 22px !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+.fm-topbar__totals p {
+    margin: 0 !important;
+    font-size: 0.5625rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #cfe3ff !important;
+    white-space: nowrap;
+    line-height: 1;
+}
+.fm-topbar__totals input {
+    width: 36px !important;
+    background: rgba(0,0,0,0.22) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 3px !important;
+    padding: 1px 3px !important;
+    font-size: 0.6875rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    height: 18px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+body.fm-dark .fm-topbar__totals .fm-sub-wrap-info-school {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+}
+.fm-topbar__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+    color: #f1f5f9;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+    white-space: nowrap;
+}
+.fm-topbar__btn:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.fm-topbar__btn:active { transform: translateY(0); box-shadow: none; }
+.fm-topbar__btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.fm-topbar__btn--primary {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    border-color: #15803d;
+    color: #ffffff;
+    font-weight: 600;
+}
+/* G20.7 — btn topbar con logo SVG (Overleaf, ZIP, VSCode): proporzionato
+ * agli altri btn topbar (text height ~16px + padding 6px = ~28px). Logo
+ * 16px altezza per allinearsi visualmente al testo dei btn vicini. */
+.fm-topbar__btn--logo {
+    padding: 2px 3px !important;
+    gap: 0 !important;
+}
+.fm-topbar__logo {
+    height: 21px;
+    width: auto;
+    max-width: 56px;
+    display: block;
+    object-fit: contain;
+}
+/* VSCode logo e' molto colorato → sfondo neutro non-accent
+ * (override del btn--accent che ora serve solo per il bordo evidenziato). */
+.fm-topbar__btn--logo.fm-topbar__btn--accent {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(96, 165, 250, 0.5);
+}
+.fm-topbar__btn--logo.fm-topbar__btn--accent:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(96, 165, 250, 0.8);
+}
+.fm-topbar__btn--primary:hover {
+    background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+}
+.fm-topbar__btn--accent {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    border-color: #b45309;
+    color: #ffffff;
+    font-weight: 600;
+}
+.fm-topbar__btn--accent:hover {
+    background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+}
+.fm-topbar__btn--icon {
+    padding: 6px 10px;
+}
+.fm-topbar__btn[aria-pressed="true"] {
+    background: rgba(34, 197, 94, 0.32);
+    border-color: #22c55e;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+.fm-topbar__ico {
+    font-size: 0.875rem;
+    line-height: 1;
+}
+.fm-topbar__lbl {
+    font-size: 0.8125rem;
+}
+
+/* Bridge legacy invisibile: ID-only, non occupa spazio. */
+.fm-topbar__legacy-bridge { display: none; }
+
+/* Phase G8 — quando topbar moderna e' attiva, nasconde la upbar legacy
+ * SENZA rimuoverla (script.js / selettori jQuery sui controlli filtri
+ * residui di upbar-controls-container devono restare disponibili).
+ * Implementato via class su <body> aggiunta da topbar-modern.js. */
+body.fm-topbar-active .fm-upbar {
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+}
+body.fm-topbar-active .fm-upbar #upbar-toggle-container { display: none; }
+body.fm-topbar-active .fm-upbar .fm-scrollbar-up-bar {
+    padding-top: 0;
+    transform: none;
+    transition: none;
+}
+/* G8.13 / G9.1 / G9.6 — upbar-controls-container come drawer slide-in via ⚙ filtri.
+ * Default: nascosta quando topbar moderna attiva. Visibile solo quando
+ * body ha .fm-filtri-open. La .fm-upbar quando aperta NON deve occupare
+ * spazio nel flow (altrimenti pusha la topbar in basso): la rendiamo
+ * position:fixed wrapper trasparente che non interferisce con sticky topbar.
+ * Il drawer interno (.fm-upbar-controls-container) e' a sua volta position:fixed
+ * con coordinate proprie. */
+body.fm-topbar-active .fm-upbar { display: none; }
+body.fm-topbar-active.fm-filtri-open .fm-upbar {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    z-index: 1599;
+    pointer-events: none;
+    padding: 0;
+    margin: 0;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar #upbar-toggle-container,
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-scrollbar-up-bar > .selwrapbtncopy,
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-scrollbar-up-bar > .fm-upbar-controls-container > .fm-wrapgrid:empty {
+    display: none;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-scrollbar-up-bar {
+    transform: none;
+    transition: none;
+    padding: 0;
+    overflow: visible;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container {
+    /* G9.21 — single row con 4 sezioni (dopo merge JS DIFFICOLTÀ+ORIGINE):
+     *   col 1 = FILTRI (DIFFICOLTÀ + ORIGINE)
+     *   col 2 = VISIBILITÀ
+     *   col 3 = SHOWCHECKED
+     *   col 4 = SELEZIONA TUTTI
+     * Layout flex-row con figli a width fissa cosi' nessuno si squisha. */
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    position: fixed;
+    top: 50px;
+    right: 12px;
+    z-index: 1600;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    padding: 14px 16px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    box-shadow: 0 16px 44px rgba(0,0,0,0.28);
+    width: min(900px, 96vw);
+    max-height: calc(100vh - 80px);
+    overflow: visible;
+    font-size: 0.8125rem;
+    align-items: stretch;
+    pointer-events: auto;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid,
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid-checks {
+    flex: 1 1 0;
+    min-width: 160px;
+}
+/* Empty .fm-wrapgrid (placeholder legacy senza figli): non occupa colonna */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:empty {
+    display: none !important;
+}
+/* G9.21 — Header drawer "⚙ FILTRI": rimosso (ridondante con ::before
+ * della prima wrapgrid che gia' dice "📊 Filtri"). Il bottone topbar
+ * filtri attivo (aria-pressed=true) gia' indica lo stato. */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container::before {
+    content: none !important;
+    display: none !important;
+}
+/* Wrapper sezione (gruppi di controlli) — uniforme padding/border */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid,
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid-checks {
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0;
+    min-height: 0;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid:empty {
+    display: none;
+}
+/* Header logico per i gruppi via prima riga (nessun H tag esistente,
+ * usiamo pseudo-elements sui gruppi noti). */
+body.fm-topbar-active.fm-filtri-open #toggle-visibility-control::before {
+    content: "👁 Visibilità";
+}
+body.fm-topbar-active.fm-filtri-open #toggle-checkboxABin-control::before {
+    content: "✅ ShowChecked";
+}
+body.fm-topbar-active.fm-filtri-open #toggle-selectAll-control::before {
+    content: "☑ Seleziona tutti";
+}
+body.fm-topbar-active.fm-filtri-open #wrapper-mods::before {
+    content: "🏷 Origine";
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > div::before {
+    display: block;
+    font-weight: 600;
+    font-size: 0.6875rem;
+    line-height: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--fm-c-text-2);
+    margin: 0 0 6px 0;
+    padding: 0 0 6px 0;
+    border-bottom: 1px dashed var(--fm-c-border);
+    /* G9.23 — altezza fissa cosi' la dashed line cade allo stesso y in
+     * tutte le sezioni indipendentemente da content/text-wrap. */
+    height: 21px;
+    min-height: 21px;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+}
+/* G9.21 — primo .fm-wrapgrid (combina DIFFICOLTÀ + ORIGINE dopo JS merge) */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:first-of-type::before {
+    content: "📊 Filtri";
+}
+/* Override legacy bg green su #sel-origin (era admin-style, non serve qui) */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container #sel-origin {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+/* Layout dei 2 dropdown nel primo wrapgrid: flex-column, ognuno con
+ * label propria sopra il button (evita ridondanza con section header). */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:first-of-type {
+    flex-direction: column;
+    gap: 10px;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:first-of-type > .dropdown {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:first-of-type > .dropdown > div:not(.fm-dropdown-content) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 3px;
+}
+/* In questo layout combinato i label inner (DIFFICOLTÀ/ORIGINE) servono
+ * a distinguere i 2 dropdown — li mostriamo come pill compatte sopra. */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > .fm-wrapgrid:first-of-type .fm-label-btn-drop {
+    display: inline-block !important;
+    color: var(--fm-c-text-2) !important;
+    background: transparent !important;
+    font-size: 0.625rem !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+/* Dropdown nel drawer: full-width pulito */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    background: transparent;
+    border: 0;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown > div:not(.fm-dropdown-content) {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+}
+/* G9.16 — labelBtnDrop legacy ridondante: il section header ::before
+ * gia' mostra "DIFFICOLTÀ"/"ORIGINE"/etc. Nascondi il label inner.
+ * Eccezione: i checkbox-row li mantengono perche' indicano il singolo
+ * controllo (HideAll Eser, ShowChecked-A, etc). */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown .fm-label-btn-drop {
+    display: none !important;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row .fm-label-btn-drop {
+    color: var(--fm-c-text-2) !important;
+    font-size: 0.75rem !important;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    flex: 1 1 auto;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown-button {
+    flex: 1 1 auto;
+    background: var(--fm-c-surface) !important;
+    color: var(--fm-c-text) !important;
+    border: 1px solid var(--fm-c-border) !important;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: none;
+    margin: 0;
+    width: auto;
+    height: auto;
+    line-height: 1.3;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown-button::after {
+    content: " ▾";
+    color: var(--fm-c-muted);
+    font-size: 0.625rem;
+}
+/* G9.5 — .dropdown wrapper full-width nel drawer (sostituisce inline-flex
+ * legacy a 80px). Necessario perche' la popover ancora a .dropdown
+ * (position:relative) e prende la sua larghezza. */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    position: relative;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    gap: 8px;
+}
+/* G9.11 — target SOLO il wrapper label+button (primo <div>), non
+ * .fm-dropdown-content (anch'esso <div> figlio di .dropdown). */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown > div:not(.fm-dropdown-content) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+/* Dropdown content come popover scrollabile (escapa il container) */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content {
+    position: absolute !important;
+    top: calc(100% + 6px) !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    background: var(--fm-c-surface) !important;
+    border: 1px solid var(--fm-c-border) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.22) !important;
+    z-index: 1800 !important;
+    min-width: 100% !important;
+    max-width: min(360px, 90vw) !important;
+    width: max-content !important;
+    max-height: 240px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 4px 0 !important;
+    display: none;
+    /* Stack a column dei figli (a tags) */
+    flex-direction: column !important;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content.fm-is-open {
+    display: flex !important;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content a {
+    display: block !important;
+    padding: 6px 14px !important;
+    color: var(--fm-c-text) !important;
+    text-decoration: none !important;
+    font-size: 0.8125rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    text-align: left !important;
+    line-height: 1.3;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    justify-content: flex-start !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content a:hover {
+    background: #e0f2fe !important;
+}
+/* La .fm-wrapgrid contenitore del dropdown deve avere position:relative
+ * (gia' lo ha) e overflow:visible per non clippare il popover */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid,
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid-checks {
+    overflow: visible;
+    position: relative;
+}
+/* Checkbox rows — uniformi label-checkbox flex */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    display: flex;
+    align-items: center;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row .fm-no-drop {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    width: 100%;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row .fm-no-drop > div {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 3px 0;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row .fm-label-btn-drop {
+    flex: 1 1 auto;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #0b5fd1;
+}
+/* btnP (HideAll Probl) — rendelo button uniforme alla riga */
+body.fm-topbar-active.fm-filtri-open .fm-upbar #btnP.fm-btn-up-bar {
+    width: 100%;
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    margin: 0;
+    height: auto;
+    box-shadow: none;
+    transform: none;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar #btnP.fm-btn-up-bar:hover {
+    background: #e0f2fe;
+    border-color: #0284c7;
+}
+/* Dark theme drawer */
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container {
+    background: #1f2330;
+    color: #cfd8e8;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid,
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-wrapgrid-checks {
+    background: #0f172a;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container > div::before {
+    color: var(--fm-c-muted);
+    border-bottom-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container::before {
+    color: #60a5fa;
+    border-bottom-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-label-btn-drop {
+    color: var(--fm-c-muted) !important;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .dropdown-button,
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar #btnP.fm-btn-up-bar {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content {
+    background: #1f2330;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content a {
+    color: #cfd8e8;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content a:hover {
+    background: #1e3a8a;
+}
+/* G9.18 dark — checkbox + buttons drawer filtri */
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row .fm-label-btn-drop {
+    color: #cbd5e1 !important;
+}
+body.fm-dark.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-checkbox-row input[type="checkbox"] {
+    accent-color: #38bdf8;
+}
+
+/* ──────────── Phase G9 — Info verifica drawer modernizzato ──────────── */
+/* Default: quando topbar moderna attiva, #scrollbarInfo nascosta (assorbita
+ * nel drawer ⓘ Info). Visibile solo con body.fm-info-open. */
+body.fm-topbar-active #scrollbarInfo {
+    display: none;
+}
+body.fm-topbar-active.fm-info-open #scrollbarInfo {
+    /* G27.infover.bottom — pannello full-page-width ANCORATO IN BASSO
+     * (richiesta utente: "uscisse sotto" invece che fixed-top sotto la
+     * topbar). left=widthLsidebar (rispetta sidebar), right=0, border
+     * arrotondato in alto (slide-up visivo). Box-shadow verso l'alto
+     * per separazione dal contenuto. */
+    display: block;
+    position: fixed;
+    top: 84px;
+    left: var(--widthLsidebar, 200px);
+    right: 0;
+    z-index: 1600;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    padding: 14px 16px;
+    border: 1px solid var(--fm-c-border);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -12px 28px rgba(0,0,0,0.22);
+    width: auto;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: auto;
+    transform: none;
+    transition: none;
+}
+body.fm-topbar-active.fm-info-open.fm-sidebar-closed #scrollbarInfo {
+    /* sidebar collassata (34px) */
+    left: 34px;
+}
+/* G9.9 — scrollbar orizzontale stilizzata */
+body.fm-topbar-active.fm-info-open #scrollbarInfo::-webkit-scrollbar {
+    height: 10px !important;
+    width: 10px;
+}
+body.fm-topbar-active.fm-info-open #scrollbarInfo::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 6px;
+}
+body.fm-topbar-active.fm-info-open #scrollbarInfo::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+body.fm-topbar-active.fm-info-open #scrollbarInfo::-webkit-scrollbar-track {
+    background: var(--fm-c-surface-2);
+    border-radius: 6px;
+}
+/* G9.7 — Header pseudo-element del drawer: pulito senza ::before
+ * ornamentali del legacy (erano gradient powderblue inutili). */
+body.fm-topbar-active.fm-info-open #scrollbarInfo > h3.fm-info-title,
+body.fm-topbar-active.fm-info-open #scrollbarInfo .fm-info-title-fallback {
+    display: block;
+}
+/* G9.7 — RIMOSSO ::before "ⓘ Info verifica" header del drawer:
+ * il bottone ⓘ Info nella topbar rimane "active" (aria-pressed=true)
+ * indicando lo stato; il titolo era ridondante. */
+body.fm-topbar-active.fm-info-open #scrollbarInfo-toggle-container {
+    display: none;
+}
+body.fm-topbar-active.fm-info-open #scrollbarInfo #infoVer {
+    background: transparent;
+    color: var(--fm-c-text);
+    padding: 0;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+}
+/* G9.13/G9.22 — #wrapInfoSchool: flex-wrap permesso. Le prime 7 card
+ * (ANNO/TIME/CL/SEZ/INDIRIZZO/ISTITUTO/VERSIONE) hanno width specifiche
+ * cosi' entrano tutte sulla riga 1. Il resto (NUM.COPIE/SALVA/P.TOT-A/R/
+ * studente) wrappa alla 2a riga. Horizontal scroll resta abilitato come
+ * fallback se la finestra e' molto stretta. */
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoSchool {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    overflow: visible;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoSchool > * {
+    flex: 0 0 auto;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic,
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin: 0;
+    flex: 0 0 auto;
+    width: 100px;
+}
+/* G9.22 — width specifiche per i campi InfoVer (riga 1 fino a VERSIONE). */
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#anno),
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#verTime) {
+    width: 60px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#classe),
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#sezione) {
+    width: 40px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#addressSchool) {
+    width: 130px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic:has(#istituto) {
+    width: 160px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school:has(#versione) {
+    width: 90px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school:has(#nPrint) {
+    width: 150px;  /* NUM.COPIE: 3 inputs side by side */
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school:has(#SumPtotA),
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school:has(#SumPtotB) {
+    width: 90px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic p,
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school > p {
+    font-size: 0.625rem;
+    color: var(--fm-c-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0;
+    font-weight: 600;
+}
+body.fm-topbar-active.fm-info-open #infoVer input[type="text"],
+body.fm-topbar-active.fm-info-open #infoVer input:not([type]),
+body.fm-topbar-active.fm-info-open #infoVer input[type="number"],
+body.fm-topbar-active.fm-info-open #infoVer input[type="search"] {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8125rem;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    box-shadow: none;
+    text-align: left;
+}
+body.fm-topbar-active.fm-info-open #infoVer input:focus {
+    outline: none;
+    border-color: #0b5fd1;
+    box-shadow: 0 0 0 2px rgba(11, 95, 209, 0.18);
+}
+body.fm-topbar-active.fm-info-open #infoVer input[readonly] {
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text-2);
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 3px 5px;
+    margin: 0 2px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print p {
+    font-size: 0.5625rem;
+    margin: 0;
+    color: var(--fm-c-text-2);
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print .fm-input-print {
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    border: 0;
+    background: transparent;
+}
+
+/* G27.darktheme — override dark mode per .infoVer toolbar (ANNO/TIME/CL/
+   SEZ/INDIRIZZO/ISTITUTO/VERSIONE/NUM.COPIE).
+   I selettori `body.fm-topbar-active.fm-info-open #infoVer ...` sopra hanno
+   specificità (0,0,3,1) che sovrascrive `body.fm-dark #infoVer ...` (0,0,2,1).
+   Qui replico la specificità con `body.fm-dark.fm-topbar-active.fm-info-open`
+   per ribaltare in dark mode. */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic p,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school > p {
+    color: #cbd5e1;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input[type="text"],
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input:not([type]),
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input[type="number"],
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input[type="search"] {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #475569;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input::placeholder {
+    color: var(--fm-c-muted);
+    font-style: italic;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25);
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input[readonly] {
+    background: #0f172a;
+    color: #cbd5e1;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print {
+    background: #1e293b;
+    border-color: #475569;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print p {
+    color: #cbd5e1;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-print .fm-input-print {
+    color: #f8fafc;
+}
+/* G19.20 — `#savePrintInfoBtn` + `#loadPrintInfoBtn` icon-only, stesse
+ * dimensioni di `.fm-salva-scelte-btn` (28px h), spostati accanto a
+ * `.fm-scelte-verifica-wrapper` dentro `.fm-selector-eser`. Niente label "Salva". */
+body.fm-topbar-active.fm-info-open #infoVer .fm-printinfo-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+    margin: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn,
+body.fm-topbar-active.fm-info-open #infoVer #loadPrintInfoBtn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+    font-size: 0.875rem !important;
+    line-height: 1 !important;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+    flex: 0 0 auto !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn {
+    background: #0f766e !important;
+    color: #ffffff !important;
+    border: 1px solid #0d6964 !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn:hover {
+    background: #115e59 !important;
+    border-color: #0a504c !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer #loadPrintInfoBtn {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border: 1px solid #1d4ed8 !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer #loadPrintInfoBtn:hover {
+    background: #1d4ed8 !important;
+    border-color: #1e3a8a !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn::after,
+body.fm-topbar-active.fm-info-open #infoVer #loadPrintInfoBtn::after {
+    content: none !important;
+}
+/* G19.21 — toggle button per `#wrapInfoStudent` (verifica nominativa) */
+body.fm-topbar-active.fm-info-open #infoVer #fm-toggle-student {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 28px;
+    padding: 0;
+    margin: 0 2px 0 0;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    font-size: 0.875rem;
+    line-height: 1;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+body.fm-topbar-active.fm-info-open #infoVer #fm-toggle-student[aria-pressed="true"] {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #1d4ed8;
+}
+body.fm-topbar-active.fm-info-open #infoVer #fm-toggle-student:hover {
+    border-color: #2563eb;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #fm-toggle-student {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #fm-toggle-student[aria-pressed="true"] {
+    background: #2563eb;
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoStudent {
+    display: flex;
+    gap: 6px;
+    background: transparent;
+    padding: 0;
+    flex: 1 1 240px;
+    min-width: 240px;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoStudent[hidden] {
+    display: none;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoStudent input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+/* #wrapInfoVer — checkbox + verTitle row */
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoVer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+    background: transparent;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapDSA,
+body.fm-topbar-active.fm-info-open #infoVer #wrapGriglieMisure {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--fm-c-surface-2);
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoVer label {
+    font-size: 0.75rem;
+    color: var(--fm-c-text);
+    font-weight: 500;
+    margin: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer #wrapInfoVer input[type="checkbox"] {
+    accent-color: #0b5fd1;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer #verTitlePrefix,
+body.fm-topbar-active.fm-info-open #infoVer #verTitle {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 0.8125rem;
+    color: var(--fm-c-text);
+}
+body.fm-topbar-active.fm-info-open #infoVer #verTitle {
+    flex: 1 1 200px;
+    min-width: 200px;
+}
+/* selector-eser + scelte-verifica-wrapper: layout pulito */
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    background: transparent;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser select,
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-dropdown-button-gen {
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text);
+}
+/* G19.9 — wrapper INSIDE `.fm-selector-eser` (template moved). Push to
+ * the right with margin-left:auto so it sits at the end of the row,
+ * dopo `.fm-tipo-esercizio-ver` + `.fm-sync-quesiti-ver-btn`. */
+body.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper {
+    display: inline-flex !important;
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-items: center;
+    height: 28px;
+    box-sizing: border-box;
+    padding: 0 8px;
+    margin: 0 0 0 30px;
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper button {
+    height: 22px;
+    padding: 0 8px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: 4px;
+    line-height: 1;
+}
+/* G19.5 — dark mode override per il wrapper inline e i suoi children,
+ * altrimenti `#f1f5f9` (light) si nota su layout scuro. */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper .fm-scelte-versioni {
+    /* G19.10 — `.fm-scelte-versioni` ora naked (no border/bg) */
+    background: transparent;
+    border: none;
+}
+
+/* ─────────── Print info modal (.fm-pi-*, .fm-load-printinfo) — REMOVED Sprint 29 ───────────
+   Estratto VERBATIM in css/modules/_print-info.css (283 LOC).
+   ────────────────────────────────────────────────────────────────────────────────────────── */
+
+/* G19.18 — `#loadPrintInfoBtn` accanto al save (📂 verde) */
+#savePrintInfoBtn,
+#loadPrintInfoBtn {
+    height: 26px;
+    width: auto;
+    padding: 0 10px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 5px;
+    background: var(--fm-c-surface-2);
+    cursor: pointer;
+    font-size: 0.875rem;
+    line-height: 1;
+    transition: background-color .12s, border-color .12s;
+    margin: 0 2px;
+}
+#savePrintInfoBtn:hover,
+#loadPrintInfoBtn:hover {
+    background: #eff6ff;
+    border-color: #2563eb;
+}
+body.fm-dark #savePrintInfoBtn,
+body.fm-dark #loadPrintInfoBtn {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark #savePrintInfoBtn:hover,
+body.fm-dark #loadPrintInfoBtn:hover {
+    background: #1e293b;
+    border-color: #38bdf8;
+}
+
+/* G19.13 (revertito) — modal flottante per `.fm-editor-panel` revertito.
+ * L'utente vuole poter aprire più editor inline contemporaneamente per
+ * editing parallelo. Stili `.fm-editor-modal` non più usati ma lasciati
+ * per eventuale re-attivazione futura selettiva (es. solo su mobile). */
+.fm-editor-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 9000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 20px 20px;
+    opacity: 0;
+    transition: opacity .15s;
+    overflow-y: auto;
+}
+.fm-editor-modal.fm-modal--visible {
+    opacity: 1;
+}
+.fm-editor-modal .fm-editor-panel {
+    background: #fffbe6;
+    border: 2px dashed #b58900;
+    border-radius: 12px;
+    padding: 16px 20px;
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    position: relative;
+    color: var(--fm-c-text);
+    box-sizing: border-box;
+}
+body.fm-dark .fm-editor-modal .fm-editor-panel {
+    background: #1f2330;
+    border-color: #b58900;
+    color: #e2e8f0;
+}
+/* Lock body scroll quando modal aperta */
+body.fm-editor-modal-open {
+    overflow: hidden;
+}
+
+/* G19.12 — `+ Crea esercizio` button: launcher unico del wizard
+ * (sostituisce i 2 select `tipoEsercizio` + `dropdown_gen`). */
+.fm-create-eser-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 14px;
+    border: 1px solid #15803d;
+    border-radius: 6px;
+    background: #16a34a;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .15s, transform .1s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.fm-create-eser-btn:hover {
+    background: #15803d;
+}
+.fm-create-eser-btn:active {
+    transform: translateY(1px);
+}
+.fm-create-eser-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* G19.12 — Wizard modal "Crea esercizio" */
+.fm-exercise-wizard-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 9000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 20px 20px;
+    opacity: 0;
+    transition: opacity .15s;
+    overflow-y: auto;
+}
+.fm-exercise-wizard-modal.fm-modal--visible {
+    opacity: 1;
+}
+.fm-exercise-wizard {
+    background: var(--fm-c-surface);
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    position: relative;
+    color: var(--fm-c-text);
+}
+.fm-exercise-wizard h3 {
+    margin: 0 0 16px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--fm-c-text);
+}
+/* .fm-exercise-wizard .fm-modal-close → stile × canonico in _modals.css */
+.fm-ew-section {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    padding: 12px 14px 14px;
+    margin: 0 0 14px;
+}
+.fm-ew-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fm-c-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+}
+body.fm-dark .fm-ew-section-title { color: var(--fm-c-muted); }
+
+.fm-ew-intro {
+    margin: -4px 0 14px;
+    font-size: 0.75rem;
+    color: var(--fm-c-muted);
+    line-height: 1.4;
+}
+.fm-ew-intro code {
+    background: var(--fm-c-surface-2);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.6875rem;
+    font-family: ui-monospace, Consolas, monospace;
+    color: #2a5ac7;
+}
+body.fm-dark .fm-ew-intro { color: var(--fm-c-muted); }
+body.fm-dark .fm-ew-intro code { background: #1e293b; color: #60a5fa; }
+.fm-ew-radio-card {
+    display: flex !important;
+    width: 100%;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0;
+    box-sizing: border-box;
+    transition: border-color .12s, background-color .12s;
+}
+.fm-ew-radio-card:hover {
+    background: var(--fm-c-surface-2);
+    border-color: var(--fm-c-border);
+}
+.fm-ew-radio-card input[type="radio"] {
+    margin: 2px 0 0 0;
+    flex-shrink: 0;
+    accent-color: #16a34a;
+}
+.fm-ew-radio-card input[type="radio"]:checked ~ * {
+    color: var(--fm-c-text);
+}
+.fm-ew-radio-card:has(input:checked) {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+.fm-ew-card-icon {
+    font-size: 1.125rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+.fm-ew-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+.fm-ew-card-body strong {
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+.fm-ew-card-body .fm-muted {
+    font-size: 0.6875rem;
+    color: var(--fm-c-muted);
+    line-height: 1.3;
+}
+.fm-ew-select,
+.fm-ew-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 5px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    font-size: 0.8125rem;
+    box-sizing: border-box;
+}
+.fm-ew-select:focus,
+.fm-ew-input:focus {
+    outline: 2px solid #16a34a;
+    outline-offset: -1px;
+}
+.fm-ew-hint {
+    margin: 6px 0 0;
+    font-size: 0.6875rem;
+    color: var(--fm-c-muted);
+    line-height: 1.4;
+}
+.fm-exercise-wizard .fm-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+}
+.fm-exercise-wizard .fm-btn {
+    height: 32px;
+    padding: 0 16px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 5px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .12s, border-color .12s;
+}
+.fm-exercise-wizard .fm-btn:hover {
+    background: var(--fm-c-surface-2);
+}
+.fm-exercise-wizard .fm-btn-primary {
+    background: #16a34a;
+    color: #ffffff;
+    border-color: #15803d;
+}
+.fm-exercise-wizard .fm-btn-primary:hover {
+    background: #15803d;
+}
+
+/* Dark mode */
+body.fm-dark .fm-exercise-wizard {
+    background: #1f2330;
+    color: #e2e8f0;
+}
+body.fm-dark .fm-exercise-wizard h3 { color: #e2e8f0; }
+body.fm-dark .fm-exercise-wizard .fm-modal-close { color: var(--fm-c-muted); }
+body.fm-dark .fm-exercise-wizard .fm-modal-close:hover {
+    background: #334155;
+    color: #e2e8f0;
+}
+body.fm-dark .fm-ew-section {
+    border-color: #334155;
+}
+body.fm-dark .fm-ew-section legend { color: var(--fm-c-muted); }
+body.fm-dark .fm-ew-radio-card {
+    border-color: #334155;
+}
+body.fm-dark .fm-ew-radio-card:hover {
+    background: #1e293b;
+    border-color: #475569;
+}
+body.fm-dark .fm-ew-radio-card:has(input:checked) {
+    border-color: #16a34a;
+    background: rgba(22, 163, 74, 0.12);
+}
+body.fm-dark .fm-ew-card-body strong { color: #e2e8f0; }
+body.fm-dark .fm-ew-card-body .fm-muted { color: var(--fm-c-muted); }
+body.fm-dark .fm-ew-select,
+body.fm-dark .fm-ew-input {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark .fm-exercise-wizard .fm-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark .fm-exercise-wizard .fm-btn:hover { background: #334155; }
+
+/* G19.13/G19.16 — orphan declarations rimosse (erano residuo del
+ * rule body originale G19.10 prima dello split fix per fix parse error
+ * a layout.css:3984). Le declarations naked dark sono già nella nuova
+ * regola a riga ~3985. */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper .fm-salva-scelte-btn,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper .fm-carica-scelte-btn {
+    color: #ffffff;
+    border-color: transparent;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper .fm-salva-scelte-btn {
+    background-color: #16a34a;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper .fm-carica-scelte-btn {
+    background-color: #3b82f6;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .scelte-versione-option {
+    color: #cbd5e1;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-salva-scelte-btn,
+body.fm-topbar-active.fm-info-open #infoVer .fm-carica-scelte-btn {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text);
+    cursor: pointer;
+}
+
+/* G19.5 — dedupe-hide RIMOSSA. Originariamente nascondeva la
+ * `.fm-scelte-verifica-wrapper` INSIDE `.fm-selector-eser` per evitare
+ * doppione (ui-comp.js cloneva 2 wrapper). Ora il template ha
+ * `display:none` rimosso E `verifica-scelte.js` mostra UNA SOLA
+ * istanza. Serve invece NASCONDERE LE SUCCESSIVE (defensive — se
+ * il clone legacy ne genera ancora 2, mostriamo la prima): */
+body.fm-topbar-active.fm-info-open #infoVer .fm-scelte-verifica-wrapper ~ .fm-scelte-verifica-wrapper {
+    display: none !important;
+}
+
+/* G9.18 — selector-eser: layout uniforme + button modernizzati */
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser {
+    overflow: visible;
+    gap: 8px !important;
+}
+/* G19.5 — `margin-left: auto` rimosso (user request): pushava
+ * `.fm-help-circle` a destra creando vasto vuoto centrale tra gruppo sx
+ * (`.fm-tipo-esercizio + sync + dropdown`) e gruppo dx (`?` + `.fm-tipo-esercizio-ver
+ * + sync_ver + .fm-scelte-verifica-wrapper`). Ora il flow è naturale,
+ * gli elementi seguono il document order con `gap: 8px` uniforme. */
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-help-circle {
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text-2);
+    border: 1px solid var(--fm-c-border);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    cursor: help;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-dropdown-gen {
+    position: relative;
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-dropdown-content-gen {
+    max-height: 220px;
+    overflow-y: auto;
+}
+/* G9.18 — select native (.fm-tipo-esercizio, .fm-tipo-esercizio-ver, #verTitlePrefix)
+ * uniformi: light card, border 1px, font 12. */
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser select,
+body.fm-topbar-active.fm-info-open #infoVer .fm-tipo-esercizio,
+body.fm-topbar-active.fm-info-open #infoVer .fm-tipo-esercizio-ver {
+    background: var(--fm-c-surface-2) !important;
+    color: var(--fm-c-text) !important;
+    border: 1px solid var(--fm-c-border) !important;
+    border-radius: 4px !important;
+    padding: 0 8px !important;
+    font-size: 0.75rem !important;
+    height: 28px !important;
+    box-sizing: border-box;
+    line-height: 26px;
+    cursor: pointer;
+    margin: 0 !important;
+}
+/* dropdown-button_gen ("Seleziona origine") + half-moon-button (+ verde):
+ * teal coerente con SALVA INFO, non eccessivo */
+body.fm-topbar-active.fm-info-open #infoVer .fm-dropdown-button-gen {
+    background: var(--fm-c-surface-2) !important;
+    color: var(--fm-c-text) !important;
+    border: 1px solid var(--fm-c-border) !important;
+    border-radius: 4px 0 0 4px !important;
+    padding: 0 10px !important;
+    font-size: 0.75rem !important;
+    height: 28px !important;
+    box-sizing: border-box;
+    line-height: 26px;
+    width: auto !important;
+    margin: 0 !important;
+    cursor: pointer;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-dropdown-button-gen:hover {
+    background: #e0f2fe !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-half-moon-button {
+    background: #0f766e !important;
+    color: #ffffff !important;
+    border: 1px solid #0d6964 !important;
+    border-left: 0 !important;
+    border-radius: 0 4px 4px 0 !important;
+    padding: 0 8px !important;
+    font-size: 0.875rem !important;
+    height: 28px !important;
+    box-sizing: border-box;
+    cursor: pointer;
+    line-height: 1;
+    margin: 0 !important;
+    width: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-half-moon-button:hover {
+    background: #115e59 !important;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-half-moon-button > span {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* G19.11 — sync btns nel selector-eser ora stile half-moon (green pill,
+ * white icon, glued via border-radius asimmetrico). L'override sotto
+ * mantiene la coerenza nello scope `body.fm-topbar-active.fm-info-open`
+ * (che ha priorità sul CSS base in layout_es.css). */
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn img,
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn img {
+    /* Filter brightness(0) invert(1) → icona update.svg diventa BIANCA */
+    filter: brightness(0) invert(1);
+    width: 14px;
+    height: 14px;
+    display: block;
+}
+/* Le altre img[src$="/update.svg"] (non sync-btn) restano scure */
+body.fm-topbar-active.fm-info-open #infoVer img[src$="/update.svg"]:not(.fm-sync-quesiti-btn img):not(.fm-sync-quesiti-ver-btn img) {
+    filter: invert(1) brightness(0.55) contrast(1.2);
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn,
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn {
+    background: #16a34a;
+    border: 1px solid #15803d;
+    border-radius: 0 6px 6px 0;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 120ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn:hover,
+body.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn:hover {
+    background: #15803d;
+}
+/* Group containers nello scope #infoVer: select+sync incollati */
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-eser-group,
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-ver-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-eser-group > select,
+body.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-ver-group > select {
+    border-radius: 4px 0 0 4px !important;
+    border-right: none !important;
+}
+
+/* G9.10 / G9.11 — force dropdown-content closed di default + flex-column
+ * quando aperto. positionDropdownContent (upbar-controls.js) imposta
+ * inline style position/top/left/min-width/max-height al click — quei
+ * inline styles vincono sul nostro CSS. Per il drawer overrride con
+ * !important AND attribute selector che batte inline style.
+ * Soluzione: forziamo position absolute via attribute style override. */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content {
+    display: none !important;
+    flex-direction: column !important;
+}
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content.fm-is-open {
+    display: flex !important;
+    flex-direction: column !important;
+    /* Override gli inline style che positionDropdownContent imposta:
+     * forziamo position absolute (non fixed) cosi' il popover sta nel
+     * flow del drawer e non viaggia per il viewport. */
+    position: absolute !important;
+    top: calc(100% + 6px) !important;
+    left: 0 !important;
+    transform: none !important;
+    min-width: 100% !important;
+    max-width: min(360px, 90vw) !important;
+}
+/* Items in colonna sempre, con override block (il legacy ha flex su a) */
+body.fm-topbar-active.fm-filtri-open .fm-upbar .fm-upbar-controls-container .fm-dropdown-content > a {
+    display: block !important;
+    width: 100% !important;
+    flex: 0 0 auto !important;
+}
+
+/* G9.4 — wrapInfoSchool sub-card: punteggi auto-stretch full width */
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school {
+    min-width: 0;
+}
+body.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school > div[style*="display: flex"] {
+    gap: 4px;
+}
+
+/* G9.4 — assicura solid bg su topbar (no transparency su pagine con
+ * sfondo chiaro/cementizio sotto). */
+.fm-topbar {
+    background: linear-gradient(135deg, #1f3b5c 0%, #2a5d8a 50%, #1f3b5c 100%) !important;
+    backdrop-filter: blur(0);
+}
+
+/* G9.4 — quando filtri o info aperti, click outside copre tutto il viewport
+ * con un velo trasparente per indicare modal-like behaviour, oltre a
+ * intercettare i click. Veil iniettato lato JS solo se serve. */
+body.fm-filtri-open::after,
+body.fm-info-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.18);
+    z-index: 1550;
+    pointer-events: none;
+}
+
+/* Dark theme info drawer */
+body.fm-dark.fm-topbar-active.fm-info-open #scrollbarInfo {
+    background: #1f2330;
+    color: #cfd8e8;
+    border-color: #334155;
+}
+/* G9.7 — rimosso dark-mode equivalente del ::before drawer header */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school {
+    background: #0f172a;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-wrap-info-basic p,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sub-wrap-info-school > p {
+    color: var(--fm-c-muted);
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer input,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #verTitle,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #verTitlePrefix {
+    background: #1f2330;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #wrapInfoVer {
+    border-top-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #wrapDSA,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #wrapGriglieMisure {
+    background: #0f172a;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #wrapInfoVer label,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-salva-scelte-btn,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-carica-scelte-btn {
+    color: #cfd8e8;
+}
+
+/* G9.16-G9.18 dark theme overrides */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn {
+    background: #134e4a !important;       /* teal-900 dark */
+    border-color: #0d3a37 !important;
+    color: #ffffff !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer #savePrintInfoBtn:hover {
+    background: #0f3735 !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser .fm-help-circle {
+    background: #1f2330;
+    color: var(--fm-c-muted);
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-selector-eser select,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-tipo-esercizio,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-tipo-esercizio-ver,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-dropdown-button-gen {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-dropdown-button-gen:hover {
+    background: #1e293b !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-half-moon-button {
+    background: #134e4a !important;
+    border-color: #0d3a37 !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-half-moon-button:hover {
+    background: #0f3735 !important;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn {
+    background: #0f172a;
+    border-color: #334155;
+}
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn:hover,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn:hover {
+    background: #1e293b;
+    border-color: #38bdf8;
+}
+/* update.svg in dark: invert riduce a colore chiaro su sfondo scuro,
+ * applichiamo solo brightness/contrast (no invert ulteriore). */
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-btn img,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer .fm-sync-quesiti-ver-btn img,
+body.fm-dark.fm-topbar-active.fm-info-open #infoVer img[src$="/update.svg"] {
+    filter: brightness(1.1) contrast(1.1);
+}
+
+/* Dark theme — gia' coerente coi gradient blu, solo overrides border. */
+body.fm-dark .fm-topbar {
+    border-bottom-color: #000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+body.fm-dark .fm-topbar__btn {
+    border-color: rgba(255,255,255,0.14);
+}
+
+/* Responsive: collassa labels sotto 720px. */
+@media (max-width: 720px) {
+    .fm-topbar { padding: 6px 10px; gap: 6px; }
+    .fm-topbar__zone--meta { min-width: 0; border-right: none; padding-right: 0; flex-basis: 100%; }
+    .fm-topbar__zone--actions { border-left: none; margin-left: 0; }
+    .fm-topbar__lbl { display: none; }
+    .fm-topbar__btn--primary .fm-topbar__lbl,
+    .fm-topbar__btn--accent .fm-topbar__lbl { display: inline; }
+    .fm-topbar__title { max-width: 60vw; }
+}

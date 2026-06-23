@@ -1,0 +1,170 @@
+/* ============================================================ */
+/* layout.css — Phase Roadmap 5 EXTRACTION COMPLETE.              */
+/*                                                                */
+/* Originale: 9302 LOC monolite legacy. Stato attuale: ~146 LOC   */
+/* (solo :root vars + body/a baseline + removal markers).         */
+/*                                                                */
+/* Mass-extraction completata via Sprint 26-43 (17 sprint).       */
+/* Tutte le regole CSS sono state migrate in moduli dedicati      */
+/* sotto css/modules/_*.css (VERBATIM byte-equivalent extraction). */
+/*                                                                */
+/* Il file resta come entry-point storico per:                    */
+/*   - @import url('/css/tokens.css') (palette/spacing tokens)    */
+/*   - :root width vars (--widthLsidebar, --widthSelector,        */
+/*     --heightsidebar) usate dai moduli sidebar-core+content-    */
+/*     layout (BEM module ref same names — single source of truth)*/
+/*   - body { margin:0 padding:0 height:100% } (CSS reset base)   */
+/*   - a { text-decoration:none } (link default)                  */
+/*   - Markers di estrazione (riga per riga sotto, in ordine      */
+/*     storico per facilitare ricerca git blame).                 */
+/*                                                                */
+/* Estrazioni eseguite (riepilogo):                               */
+/*   Sprint 26-34: 9302 -> 3035 LOC (-68% / Phase 1)              */
+/*   Sprint 35-43: 3035 -> 146  LOC (-95% cumulative / Phase 2)   */
+/*                                                                */
+/* Moduli prodotti in css/modules/:                               */
+/*   _verifica-doc.css      1407 LOC  Sprint 28                   */
+/*   _topbar-modern.css     2353 LOC  Sprint 32                   */
+/*   _exercise-overrides.css 923 LOC  Sprint 34                   */
+/*   _area-docente.css       817 LOC  Sprint 33                   */
+/*   _dark-mode.css          677 LOC  Sprint 38                   */
+/*   _sidebar-widgets.css    485 LOC  Sprint 36                   */
+/*   _db-sidepage.css        439 LOC  Sprint 37                   */
+/*   _sidebar-core.css       386 LOC  Sprint 43                   */
+/*   _legacy-modals.css      335 LOC  Sprint 39                   */
+/*   _editor-toolbar.css     322 LOC  Sprint 31                   */
+/*   _upbar-legacy.css       314 LOC  Sprint 42                   */
+/*   _print-info.css         301 LOC  Sprint 29                   */
+/*   _drive-integration.css  280 LOC  Sprint 35                   */
+/*   _import-bundle.css      263 LOC  Sprint 27                   */
+/*   _control-panel.css      220 LOC  Sprint 40                   */
+/*   _sync-bar.css           182 LOC  Sprint 30                   */
+/*   _content-layout.css     101 LOC  Sprint 41                   */
+/*                                                                */
+/* Visual byte-equivalent guarantee: hex colors hardcoded         */
+/* preservati identici nei moduli per garantire zero visual       */
+/* drift (Playwright snapshot baseline acquisita Sprint 26).      */
+/*                                                                */
+/* Next: token migration (hex hardcoded -> var(--fm-c-*)) negli   */
+/* moduli singolarmente, con snapshot diff verifica per modulo.   */
+/*                                                                */
+/* Roadmap: docs/plans/css-refactor-residue-todo.md               */
+/* ============================================================ */
+
+/* Import shared design tokens (palette, spacing, font-size scale, z-index)
+   per averli disponibili in ogni regola downstream. tokens.css e' anche
+   importato da shell.css per il layout admin/login. */
+@import url('/css/tokens.css');
+
+:root {
+    --widthLsidebar: 280px;
+    --widthSelector: 180px;
+    /* --widthProblem: 160px; */
+    --heightsidebar: 100vh;
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+a {
+    text-decoration: none;
+}
+
+/* ─────────── Sidebar core (.fm-switch + .sidebar + .sel-wrapper + .fm-sb-* +
+   sidepage #fm-sp-* + .frame + #header + slide-right) — REMOVED Sprint 43.
+   Estratto VERBATIM in css/modules/_sidebar-core.css (352 LOC).
+   NB: parallel BEM in _sidebar.css. Queste regole legacy restano per
+   back-compat con view legacy (docs/plans/css-refactor-residue-todo.md #2).
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Upbar legacy + exercise inputs — REMOVED Sprint 42 ──────────
+   Estratto VERBATIM in css/modules/_upbar-legacy.css (274 LOC).
+   Include: .fm-upbar purple bar, .selwrap, .selwrapbtn-es, .wrapbtn-es_sidebar,
+   .btn-es*_sidebar, .materia/.documenti, .linkref, .numArg/.argomento,
+   .input-wrapper-* (linkref/href/numArg), .input-numArg/-argomento/-href,
+   .h-link-opener, .addArgBtn/.delArgBtn/.DriveBtn family,
+   .bannerNotReg, .tool_sidebar, .checkbox-wrapper-accessFile/saveFile,
+   .suggestions/.suggestion-item, .highlight.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Legacy modals (#bottom-bar + .fm-modal + cookie + license)
+   REMOVED Sprint 39. Estratto VERBATIM in css/modules/_legacy-modals.css (311 LOC).
+   Include: #bottom-bar footer fixed, .fm-modal legacy wrapper, #fm-modal-overlay,
+   #fm-cookie-modal categories/actions, .switch_cookies + .slider_cookies toggle,
+   #fm-license-modal license-details, @media (max-width: 768px) responsive.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/* ─────────── Control panel + btn-syncG family — REMOVED Sprint 40 ────────
+   Estratto VERBATIM in css/modules/_control-panel.css (196 LOC).
+   Include: .control-panel collapsible + class sync bar sticky,
+   .btn-syncG family (default + danger/info/warning/secondary),
+   .btn-stop-sync + .btn-close-panel + .result/.success/.error banners.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Sidebar-aware content layout (#fm-content, .fm-pagestyle margin)
+   REMOVED Sprint 41. Estratto VERBATIM in css/modules/_content-layout.css (79 LOC).
+   Include: layout dinamico margin-left/top per body state classes (fm-sidebar-
+   closed, fm-has-upbar, fm-no-edit, fm-topbar-active, fm-embed) +
+   .fm-external-iframe.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/* ─────────── Sidebar widgets (Phase 13/13.5/14/18) — REMOVED Sprint 36 ───
+   Estratto VERBATIM in css/modules/_sidebar-widgets.css (458 LOC).
+   Include: .fm-resource-auth, .fm-sb-panel .btn-esAct_sidebar, .fm-db-head
+   edit, .fm-newcat, .fm-section-add, .fm-item-actions/role, .fm-darkmode-mini,
+   .fm-session-banner, .sel-wrapper-actions + .sel-action-link, .fm-super-badge,
+   .fm-edit-toolbar, li.fm-risdoc-instance, .fm-admin-badge + @keyframes pulse.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/* ─────────── DB-backed sidepage (PHASE 18) — REMOVED Sprint 37 ──────────
+   Estratto VERBATIM in css/modules/_db-sidepage.css (410 LOC).
+   Include: ul.fm-db-block content, body.fm-mappa-view + esercizio-multiarg,
+   .fm-edit-toolbar inline, .fm-item-actions/btn, .fm-modal-backdrop + form
+   + layout fieldset, dark-mode legacy modals + cookie + bottom-bar,
+   accent per-sidepage (#fm-sp-*), #sel-mater optgroup.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Dark mode global (body.fm-dark) — REMOVED Sprint 38 ─────────
+   Estratto VERBATIM in css/modules/_dark-mode.css (624 LOC).
+   Include: body.fm-dark base, sidebar/upbar/content/pagestyle palette,
+   .fm-check-in/.fm-titolo-quesito, .fm-cell-popup-preview, .fm-editor-panel +
+   .fm-rm-layout-section dark, rgba whites overrides, #infoVer + cookie,
+   .fas.fa-edit, .fm-geogebra-wrap, #fm-tex-action-dialog, .fm-collection/.fm-sol,
+   TikZ SVG invert, .fm-rm-table, .fm-badge, MathJax mjx-container,
+   shell pages (.fm-card/.fm-tile/.fm-big), .fm-tile--alert (light+dark),
+   .fm-code, #fm-sp-* tinted dark, .fm-table/.fm-input/.fm-label,
+   .fm-contract-render multiarg, .fm-multiarg-union banner, .fm-btn dark,
+   .fm-tpl-page templates editor coverage completa.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/* ─────────── Drive integration (.fm-drive-pill, .fm-drive-sync-panel,
+   .fm-modal-doc-section, .fm-drawio-*, .fm-drop-zone, modal-cancel dark)
+   REMOVED Sprint 35. Estratto VERBATIM in css/modules/_drive-integration.css (259 LOC).
+   Include: Drive status pill + Modal create mappa drag-drop + Drive sync log
+   panel floating + drawio editor overlay + per-item drive icon sizing.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Topbar modern (.fm-topbar, .fm-topbar__*) — REMOVED Sprint 32 ───
+   Estratto VERBATIM in css/modules/_topbar-modern.css (2332 LOC).
+   Include: .fm-topbar, .fm-topbar__zone[--meta|--target|--actions|--eser],
+   .fm-topbar__btn variants, body state classes, mobile responsive.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* ─────────── Verifica documents (.fm-vd-*) — REMOVED Sprint 28 ───────────
+   Estratto VERBATIM in css/modules/_verifica-doc.css (1407 LOC).
+   Include: .fm-vd-host, .fm-vd-block, .fm-vd-modal/upload/progress/viewer,
+   .fm-vd-detail-* (modal con cols/slots/tex versions), .fm-pulse animation.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/* ─────────── Exercise context overrides + DSA wrapper + Backup dropdown
+   REMOVED Sprint 34. Estratto VERBATIM in css/modules/_exercise-overrides.css (909 LOC).
+   Include: light mode overrides exercise-context, DSA wrapper inline,
+   Backup dropdown menu.
+   ──────────────────────────────────────────────────────────────────────── */
+

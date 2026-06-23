@@ -1,0 +1,44 @@
+# REUSE.toml — dichiarazione copyright/licenza machine-readable (REUSE 3.x / SPDX).
+# Conformità FSFE REUSE per la pubblicazione su Developers Italia (EUPL-1.2).
+# Valida con:  reuse lint   (oppure: pipx run reuse lint)
+#
+# Strategia: invece di un header SPDX in ognuno delle migliaia di file, queste
+# annotazioni dichiarano copyright e licenza per gruppi di path. Tutto il
+# repository è © Vittorio Pantaleo / EUPL-1.2, ECCETTO le librerie di terze
+# parti vendored (js/vendor/), attribuite ai rispettivi autori (override).
+
+version = 1
+
+# ─────────────────────────────────────────────────────────────────────────
+# Catch-all: tutto il progetto è © Vittorio Pantaleo, EUPL-1.2.
+# (I file in .gitignore — vendor/, node_modules/, storage runtime, ecc. —
+#  non vengono considerati da REUSE.)
+# ─────────────────────────────────────────────────────────────────────────
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Vittorio Pantaleo <vittorio.pantaleo@pantedu.eu>"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# ─────────────────────────────────────────────────────────────────────────
+# Librerie di terze parti vendored — copyright e licenza ORIGINALI (override).
+# ─────────────────────────────────────────────────────────────────────────
+[[annotations]]
+path = "js/vendor/sortablejs/**"
+precedence = "override"
+SPDX-FileCopyrightText = "2019 All contributors to SortableJS"
+SPDX-License-Identifier = "MIT"
+
+# Stemma della Repubblica Italiana — opera dello Stato, non coperta da
+# copyright proprietario (uso istituzionale). Dichiarato come tale.
+[[annotations]]
+path = ["img/stemma_REP1.png", "img/sources/stemma_REP1.png"]
+precedence = "override"
+SPDX-FileCopyrightText = "Repubblica Italiana — emblema di Stato (uso istituzionale)"
+SPDX-License-Identifier = "LicenseRef-Italy-State-Emblem"
+
+# NB: js/vendor/tikzjax.js RIMOSSO 2026-06-01 (era dead code: TikZJax
+# deprecato G22.S15.bis, render TikZ ora 100% server-side via /tikz/render).
+# NB: js/vendor/jquery.sticky.js RIMOSSO 2026-06-03 (era dead code: plugin
+# jQuery non più caricato dal phase7.2, .sticky() mai chiamato — sticky
+# stacking ora 100% vanilla via js/modules/features/verifica-sticky.js).

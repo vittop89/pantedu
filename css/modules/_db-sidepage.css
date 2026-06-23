@@ -1,0 +1,508 @@
+/* ============================================================ */
+/* DB Sidepage — Phase Roadmap Sprint 37.                         */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (410 LOC). Visual byte-equivalent.*/
+/* Phase 18 — DB-backed sidepage content (db-sidepage.js) +       */
+/* FmEditModal + dark mode legacy modals + accent per-sidepage.   */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - ul.fm-db-block (DB-backed sidepage content)                 */
+/*   - ul.fm-db-block .fm-db-head / li / a / .fm-numarg / .fm-error*/
+/*   - body.fm-mappa-view (pagina mappa full-width drawio)         */
+/*   - body.fm-esercizio-multiarg (multiarg hidden student-ex)     */
+/*   - .fm-related-header + .fm-toggle-student-ex                  */
+/*   - .fm-sb-panel li[data-content-id|template-id].fm-open        */
+/*   - .sel-admin-link (admin curriculum link sidebar)             */
+/*   - .fm-edit-toolbar inline + __title/__actions                 */
+/*   - .fm-item-actions / .fm-item-btn (✎🗑👁📥 styling)            */
+/*   - .fm-db-block[data-edit-active] (outline edit mode)          */
+/*   - .fm-modal-backdrop + @keyframes fm-modal-in                 */
+/*   - .fm-modal + .fm-modal-header + .fm-modal-form               */
+/*   - .fm-modal-form label/input/select/textarea                  */
+/*   - .fm-modal-error + .fm-modal-actions                         */
+/*   - .fm-modal-layout fieldset + __opt radio inline              */
+/*   - Dark mode: .fm-modal/header/form coverage aggressiva        */
+/*   - Dark mode: #fm-cookie-modal + #bottom-bar                   */
+/*   - Accent per-sidepage (#fm-sp-mappe/lab/eser/verif/bes/risdoc)*/
+/*   - #sel-mater optgroup[data-fm-teacher-group]                  */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 18 — DB-backed sidepage content (db-sidepage.js).
+   `ul.fm-db-block` va dentro #M/#G/#F del template sidepage e
+   sostituisce l'<ul> legacy + nasconde il `.materia` header
+   ridondante. Lo styling accent deriva dal btn corrispondente
+   (btn0 verde / btn1 azzurro / btn2 giallo / btn5 arancio /
+   btn3 rosso / btn4 rosa) per coerenza visiva.
+   ══════════════════════════════════════════════════════════════════ */
+ul.fm-db-block {
+    list-style: none;
+    margin: 4px 0;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border-left: 3px solid transparent;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 0 4px 4px 0;
+}
+ul.fm-db-block .fm-db-head {
+    font-weight: bold;
+    font-size: 0.8125rem;
+    letter-spacing: 0.5px;
+    padding: 4px 6px 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+    text-align: center;
+    color: inherit;
+}
+body.fm-dark ul.fm-db-block .fm-db-head {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+ul.fm-db-block li {
+    padding: 3px 0;
+    line-height: 1.35;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.06);
+    text-align: left;
+}
+ul.fm-db-block li:last-child { border-bottom: none; }
+ul.fm-db-block li[data-content-id],
+ul.fm-db-block a {
+    color: inherit;
+    text-decoration: none;
+    text-align: left;
+}
+ul.fm-db-block a:hover { text-decoration: underline; }
+ul.fm-db-block .fm-numarg {
+    display: inline-block;
+    min-width: 2em;
+    padding: 0 5px;
+    margin-right: 4px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.08);
+    text-align: center;
+    opacity: 0.75;
+}
+ul.fm-db-block li.fm-error { color: #b00020; font-size: 0.6875rem; }
+
+/* Phase 18 — pagina mappa: niente upbar, niente padding fisso,
+   iframe Drawio full-width. */
+body.fm-mappa-view { padding-top: 0; background-color: powderblue; min-width: 555px; }
+body.fm-mappa-view .fm-mappa-study { padding: 0; }
+body.fm-mappa-view .fm-mappa-wrap { margin: 8px; }
+body.fm-dark.fm-mappa-view { background-color: #1e1e2a; }
+
+/* Phase 20 — modalità multiarg esercizio: URL ha ?ids=N,M[,...] con ≥2
+ * ids in /studio/esercizio/... Nasconde gli esercizi assegnati agli
+ * studenti (.fm-contract-wrap diretti, non in #type_verAll) così il
+ * docente vede solo "Verifiche correlate" aggregate dai topic cross.
+ * Checkbox #fm-show-student-ex ri-abilita la visibilità.
+ * Il nascondimento si applica SOLO quando #type_verAll è stato caricato
+ * (Phase 21: auto-on per admin via ensureVerificaMode), altrimenti la pagina
+ * resterebbe vuota. */
+body.fm-esercizio-multiarg:has(#type_verAll):not(.fm-show-student-ex) #fm-content > .fm-pagestyle > .fm-draggable-container > .fm-contract-wrap,
+body.fm-esercizio-multiarg:has(#type_verAll):not(.fm-show-student-ex) #fm-content > .fm-pagestyle > .fm-contract-wrap,
+body.fm-esercizio-multiarg:has(#type_verAll):not(.fm-show-student-ex) .fm-draggable-container > .fm-contract-wrap:not([data-kind="verifica"]) {
+    display: none;
+}
+/* Header "Verifiche correlate" con checkbox affiancato */
+.fm-related-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.fm-toggle-student-ex {
+    display: none; /* solo visible in multiarg */
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--fm-c-text-2);
+    cursor: pointer;
+    padding: 4px 10px;
+    border: 1px solid #c0c8d0;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.6);
+}
+body.fm-esercizio-multiarg .fm-toggle-student-ex { display: inline-flex; }
+.fm-toggle-student-ex input { margin: 0; cursor: pointer; }
+body.fm-dark .fm-toggle-student-ex {
+    color: #c8d0dc;
+    border-color: #3a3a4a;
+    background: rgba(30, 30, 45, 0.6);
+}
+
+/* Phase 20/24.13 — highlight dell'item sidepage aperto. Matching:
+ *   - data-content-id (esercizi/verifiche/mappe/bes DB-backed)
+ *   - data-template-id (risdoc/strcomp template view)
+ * Supporta multiarg: più items evidenziati se più contract attivi. */
+.fm-sb-panel li[data-content-id].fm-open,
+.fm-sb-panel li[data-template-id].fm-open {
+    background: linear-gradient(90deg, rgba(255, 225, 100, 0.55), rgba(255, 225, 100, 0.15));
+    border-left: 3px solid #e8a800;
+    padding-left: 6px;
+    font-weight: 600;
+}
+.fm-sb-panel li[data-content-id].fm-open a,
+.fm-sb-panel li[data-template-id].fm-open a { color: #5a3d00; }
+body.fm-dark .fm-sb-panel li[data-content-id].fm-open,
+body.fm-dark .fm-sb-panel li[data-template-id].fm-open {
+    background: linear-gradient(90deg, rgba(255, 200, 80, 0.2), rgba(255, 200, 80, 0.05));
+    border-left-color: #d4a017;
+}
+body.fm-dark .fm-sb-panel li[data-content-id].fm-open a,
+body.fm-dark .fm-sb-panel li[data-template-id].fm-open a { color: #ffe066; }
+/* Phase 20 — mappe: azzera padding/margin-top di body.exercise-context
+ * + content containers. layout_es.css imposta body.exercise-context
+ * padding-top:84px per le pagine con upbar; le mappe non hanno upbar,
+ * quindi recupero l'altezza per l'iframe full-height. */
+body.fm-mappa-view.fm-exercise-context,
+body.exercise-context.fm-mappa-view                   { padding-top: 0; }
+body.fm-mappa-view #fm-content,
+body.fm-mappa-view main#fm-content,
+body.fm-mappa-view .fm-pagestyle,
+body.fm-mappa-view > main                             { margin-top: 0; min-height: 100vh; }
+
+/* Phase 18 — link admin curriculum nella sel-wrapper sidebar. */
+.sel-admin-link {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+    background: #6a4ca8;
+    border-radius: 4px;
+}
+.sel-admin-link:hover { background: #8060c8; }
+body.fm-dark .sel-admin-link { background: #7050a0; }
+
+/* Phase 18 — edit-section toolbar: tutto in una sola riga allineato.
+   title + actions inline. Discreto, non accecante. */
+.fm-edit-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 48px 4px 8px; /* right padding per btn .js-edit-section absolute */
+    margin: 0 4px 6px;
+    background: rgba(255, 250, 200, 0.6);
+    border: 1px dashed rgba(181, 137, 0, 0.6);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    min-height: 28px;
+}
+.fm-edit-toolbar__title {
+    font-weight: 600;
+    color: #7a5b00;
+    white-space: nowrap;
+}
+.fm-edit-toolbar__title code {
+    background: rgba(0, 0, 0, 0.08);
+    padding: 0 5px;
+    border-radius: 3px;
+    font-size: 0.6875rem;
+}
+.fm-edit-toolbar__actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex: 1;
+}
+body.fm-dark .fm-edit-toolbar {
+    background: rgba(70, 55, 10, 0.4);
+    border-color: rgba(212, 160, 32, 0.5);
+}
+body.fm-dark .fm-edit-toolbar__title { color: #ffd88a; }
+body.fm-dark .fm-edit-toolbar__title code {
+    background: rgba(255, 255, 255, 0.1);
+    color: inherit;
+}
+
+/* Phase 24.48 — Inline action buttons (✎🗑👁📥) per-block.
+ * Override: la sola regola di visibility è in cima (riga ~1271):
+ *   .fm-item-actions { display: none }
+ *   .fm-db-block[data-edit-active="1"] .fm-item-actions { display: inline-flex }
+ * Qui solo styling (no display) per evitare cascade override. */
+.fm-item-actions {
+    gap: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+.fm-item-btn {
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.fm-item-btn:hover { background: rgba(0, 0, 0, 0.16); }
+body.fm-dark .fm-item-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: inherit;
+}
+body.fm-dark .fm-item-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Phase 24.47 — sezione (.fm-db-block) in edit mode: bordo distintivo
+ * scoped al block, non più all'intera .fm-sb-panel. */
+.fm-db-block[data-edit-active="1"] {
+    outline: 2px dashed #ff6b00;
+    outline-offset: -2px;
+}
+
+/* Phase 18 — FmEditModal (create/edit content).
+ * 2026-05-24 fix: scoped a `.fm-modal-backdrop .fm-modal` per evitare
+ * conflict con il legacy .fm-modal standalone (license/cookie/author modal
+ * in views/partials/modals.php). Quel pattern legacy si aspetta
+ * `.fm-modal { display: none }` di default (via _modals.css); senza scope
+ * le rule qui sovrascrivevano con `display: flex` → modal sempre visibile.
+ */
+.fm-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fm-modal-in 0.15s ease-out;
+}
+@keyframes fm-modal-in { from { opacity: 0; } to { opacity: 1; } }
+.fm-modal-backdrop .fm-modal {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 540px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: auto;
+    display: flex; flex-direction: column;
+}
+.fm-modal-header {
+    padding: 14px 18px;
+    background: #f0f4fa;
+    border-bottom: 1px solid #d0d8e0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+.fm-modal-header code { background: #e8eef5; padding: 1px 6px; border-radius: 3px; font-size: 0.8125rem; }
+/* Phase 24.52 — X header rimossa: chiusura solo via Annulla / backdrop / Esc. */
+.fm-modal-form {
+    padding: 18px;
+    display: grid; gap: 12px;
+}
+.fm-modal-form label {
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 0.75rem; font-weight: 600; color: var(--fm-c-text-2);
+}
+.fm-modal-form input,
+.fm-modal-form select,
+.fm-modal-form textarea {
+    padding: 7px 10px;
+    font-size: 0.875rem;
+    border: 1px solid #c0c8d0;
+    border-radius: 4px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    font-weight: normal;
+}
+.fm-modal-form input:focus,
+.fm-modal-form select:focus {
+    outline: none; border-color: #5a8fd8; box-shadow: 0 0 0 2px rgba(90,143,216,0.25);
+}
+.fm-modal-error:empty { display: none; }
+.fm-modal-error {
+    padding: 8px 12px; background: #fde4e4; color: #8a1d1d;
+    border-radius: 4px; font-size: 0.8125rem;
+}
+.fm-modal-actions {
+    display: flex; gap: 8px; justify-content: flex-end;
+    padding-top: 6px;
+}
+/* Phase 24.44 — fieldset Modello documento */
+.fm-modal-layout {
+    border: 1px solid #d0d8e0;
+    border-radius: 4px;
+    padding: 8px 12px 10px;
+    margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
+}
+.fm-modal-layout legend { padding: 0 4px; }
+/* Phase 24.46 — override .fm-modal-form label flex-direction:column.
+ * Il radio + testo deve restare INLINE (no wrap dopo il bullet). */
+.fm-modal-form .fm-modal-layout__opt {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: normal;
+    color: var(--fm-c-text);
+    cursor: pointer;
+}
+.fm-modal-layout__opt input[type="radio"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+.fm-modal-layout__opt > span { flex: 1; line-height: 1.4; }
+body.fm-dark .fm-modal-layout { border-color: #3a3a4a; }
+body.fm-dark .fm-modal-form .fm-modal-layout__opt { color: #d0d0d8; }
+
+/* Ruoli D/C/R (chip sidepage) — override flex-direction:column del label globale */
+.fm-modal-roles { margin-top: 8px; }
+.fm-modal-roles__lbl {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--fm-c-text-muted, #475569);
+}
+.fm-modal-roles__hint { font-weight: 400; font-style: italic; opacity: 0.8; }
+.fm-modal-roles__opts { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.fm-modal-form .fm-modal-roles__opt {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: normal;
+    color: var(--fm-c-text);
+}
+.fm-modal-roles__opt input[type="radio"],
+.fm-modal-roles__opt input[type="checkbox"] { margin: 0; flex-shrink: 0; }
+.fm-modal-roles__txt { white-space: nowrap; }
+.fm-modal-roles__txt strong {
+    display: inline-block;
+    min-width: 1.2em;
+    text-align: center;
+    color: var(--fm-c-primary, #2563eb);
+}
+body.fm-dark .fm-modal-roles__lbl { color: #9aa0ac; }
+body.fm-dark .fm-modal-form .fm-modal-roles__opt { color: #d0d0d8; }
+body.fm-dark .fm-modal-roles__txt strong { color: #60a5fa; }
+
+/* ADR-024 — fork picker (modal unico cross-categoria) */
+.fm-modal-fork-pick {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 10px;
+    margin-left: 26px;
+    border-left: 2px solid var(--fm-c-border, #d0d8e0);
+}
+.fm-modal-fork-role {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.75rem;
+}
+.fm-modal-fork-role__lbl { font-weight: 600; color: var(--fm-c-muted, #64748b); }
+.fm-modal-fork-role label {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.fm-modal-fork-pick select { font-size: 0.8125rem; }
+body.fm-dark .fm-modal-fork-pick { border-left-color: #3a3a4a; }
+
+/* Dark mode */
+body.fm-dark .fm-modal { background: #24242e; color: #e0e0e0; }
+body.fm-dark .fm-modal-header { background: #1a1a24; border-color: #3a3a4a; color: #e0e0e0; }
+body.fm-dark .fm-modal-header code { background: #3a3a4a; color: #cfd8e8; }
+body.fm-dark .fm-modal-close { color: var(--fm-c-muted); }
+body.fm-dark .fm-modal-close:hover { color: #fff; }
+body.fm-dark .fm-modal-form label { color: #bbb; }
+body.fm-dark .fm-modal-form input,
+body.fm-dark .fm-modal-form select,
+body.fm-dark .fm-modal-form textarea {
+    background: #1a1a24; color: #e0e0e0; border-color: #444;
+}
+body.fm-dark .fm-modal-error { background: #402020; color: #ffb0b0; }
+
+/* ───── Dark mode: legacy modals (License/Author/Cookie) ─────
+   NB: copertura aggressiva per ereditare color chiaro su tutti i
+   descendants non-link (text nodes, b, strong, em, span). I selettori
+   .fm-modal span/p/h2 light-mode hanno color: var(--fm-c-text-2)/#333 hardcoded che
+   altrimenti vincerebbero per specificità + cascade. */
+body.fm-dark .fm-modal,
+body.fm-dark .fm-modal-body,
+body.fm-dark .fm-modal .fm-modal-body,
+body.fm-dark .fm-modal .license-details,
+body.fm-dark .fm-modal p,
+body.fm-dark .fm-modal span,
+body.fm-dark .fm-modal b,
+body.fm-dark .fm-modal strong,
+body.fm-dark .fm-modal em,
+body.fm-dark .fm-modal li,
+body.fm-dark .fm-modal label {
+    color: #e0e0e0;
+}
+body.fm-dark .fm-modal .fm-modal-body h2 {
+    color: #e0e0e0;
+    border-bottom-color: #3a3a4a;
+}
+body.fm-dark .fm-modal a { color: #93c5fd; }
+body.fm-dark .fm-modal a:hover { color: #bfdbfe; }
+body.fm-dark .fm-modal-close {
+    background-color: #4a5568;
+    color: #fff;
+}
+body.fm-dark .fm-modal-close:hover { background-color: #6b7280; }
+
+/* Cookie modal sub-elements */
+body.fm-dark #fm-cookie-modal .fm-cookie-cat {
+    background-color: #2a2a36;
+    border-color: #3a3a4a;
+}
+body.fm-dark #fm-cookie-modal .fm-cookie-cat-title { color: #e0e0e0; }
+body.fm-dark #fm-cookie-modal .fm-cookie-cat-title .always-active { color: #6ee7b7; }
+body.fm-dark #fm-cookie-modal .fm-cookie-cat-description { color: #b0b0bf; }
+body.fm-dark #fm-cookie-modal .fm-cookie-modal-actions { border-top-color: #3a3a4a; }
+body.fm-dark #fm-cookie-modal .warning-message { color: #fca5a5; }
+
+/* Modal overlay più contrastato in dark */
+body.fm-dark #fm-modal-overlay { background-color: rgba(0, 0, 0, 0.78); }
+
+/* ───── Dark mode: bottom-bar ───── */
+body.fm-dark #bottom-bar {
+    background-color: #14141c;
+    border-top: 1px solid #2a2a36;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.5);
+}
+body.fm-dark #bottom-bar a { color: #d0d0d8; }
+body.fm-dark #bottom-bar a:hover { background-color: #2a2a36; color: #fff; }
+
+/* Accent per-sidepage (derivato dai colori btn) */
+#fm-sp-mappe ul.fm-db-block  { border-left-color: rgb(134, 239, 170); }
+#fm-sp-lab ul.fm-db-block    { border-left-color: rgb(134, 190, 239); }
+#fm-sp-eser ul.fm-db-block   { border-left-color: rgb(240, 221, 152); }
+#fm-sp-verif ul.fm-db-block  { border-left-color: rgb(255, 176, 0); }
+#fm-sp-bes ul.fm-db-block    { border-left-color: rgb(239, 134, 134); }
+#fm-sp-risdoc ul.fm-db-block { border-left-color: rgb(237, 105, 213); }
+
+/* Dark mode: bg più trasparente per lasciare trasparire il tint sidepage */
+body.fm-dark ul.fm-db-block {
+    background: rgba(0, 0, 0, 0.25);
+}
+body.fm-dark ul.fm-db-block li {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+body.fm-dark ul.fm-db-block .fm-numarg {
+    background: rgba(255, 255, 255, 0.1);
+    color: inherit;
+}
+
+/* Optgroup separato per materie del docente in #sel-mater */
+#sel-mater optgroup[data-fm-teacher-group] {
+    font-style: italic;
+}
+

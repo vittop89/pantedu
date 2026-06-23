@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "COMPETENZE",
+    "contenuti": [
+      {
+        "label": "Formulare e risolvere problemi più impegnativi, tratti anche dall'esperienza quotidiana, utilizzando l'impianto teorico della fisica e la sua sintesi formale.",
+        "checked": true
+      },
+      {
+        "label": "Esaminare criticamente il concetto di interazione a distanza e il suo superamento attraverso l'introduzione di interazioni mediate dal campo elettrico e magnetico.",
+        "checked": true
+      }
+    ]
+  }
+]

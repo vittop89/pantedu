@@ -1,0 +1,3876 @@
+openapi: 3.1.0
+info:
+  title: 'Pantedu API'
+  version: 1.0.0
+  description: |
+    REST API per Pantedu — piattaforma educativa di didattica della fisica.
+
+    **Generato automaticamente** da `tools/api/generate_openapi.php`. Le
+    annotazioni request/response schema sui 30 endpoint critici sono manuali
+    (sezione `paths` di `docs/api/openapi.yaml`).
+
+    Auth: session cookie (PANTEDU_SID, httponly, samesite=Lax) o Bearer
+    token solo su `/metrics`.
+  contact:
+    name: 'DPO Pantedu'
+    url: 'https://pantedu.eu/dpo-contact'
+  license:
+    name: Proprietary
+servers:
+  -
+    url: 'https://www.pantedu.eu'
+    description: Production
+  -
+    url: 'http://pantedu.local'
+    description: 'Local dev (XAMPP)'
+tags:
+  -
+    name: Misc
+  -
+    name: Auth
+  -
+    name: 'GDPR self-service (Art. 7/15-22)'
+  -
+    name: 'GDPR parent consent (Art. 8)'
+  -
+    name: 'GDPR DPO contact (Art. 12-22, 37-39)'
+  -
+    name: 'Trust Pages'
+  -
+    name: Observability
+  -
+    name: Registration
+  -
+    name: 'API Public'
+  -
+    name: Storage
+  -
+    name: Studio
+  -
+    name: 'Admin UI'
+  -
+    name: 'Teacher Content'
+  -
+    name: Risdoc
+  -
+    name: 'Risdoc Templates'
+  -
+    name: Admin
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: PANTEDU_SID
+      description: 'Session cookie httponly + samesite=Lax + secure (prod).'
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer token (solo su `/metrics`, env METRICS_BEARER_TOKEN).'
+    csrfHeader:
+      type: apiKey
+      in: header
+      name: X-CSRF-Token
+      description: |
+        Token CSRF richiesto su POST/PUT/PATCH/DELETE. Recuperabile via
+        GET /auth/csrf. Alternativa: campo form `_csrf`.
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: invalid_credentials
+        retry_after:
+          type: integer
+          description: 'Seconds before retry (rate limit)'
+    Success:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        role:
+          type: string
+          enum:
+            - guest
+            - student
+            - teacher
+            - collaborator
+            - administrator
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        active:
+          type: boolean
+    Consent:
+      type: object
+      properties:
+        consent_type:
+          type: string
+          enum:
+            - analytics
+            - marketing
+            - parent_8_minor
+        status:
+          type: string
+          enum:
+            - granted
+            - revoked
+        granted_at:
+          type: string
+          format: date-time
+        revoked_at:
+          type: string
+          format: date-time
+          nullable: true
+        text_version:
+          type: string
+    DeletionRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending_confirm
+            - cooling_off
+            - executed
+            - cancelled
+            - expired
+        execute_after:
+          type: string
+          format: date-time
+          nullable: true
+    TeacherContent:
+      type: object
+      properties:
+        id:
+          type: integer
+        teacher_id:
+          type: integer
+        content_type:
+          type: string
+          enum:
+            - esercizio
+            - verifica
+            - lab
+            - mappa
+            - risdoc
+            - bes
+        subject_code:
+          type: string
+          example: MAT
+        indirizzo:
+          type: string
+          example: ITIA
+        classe:
+          type: string
+          example: 3A
+        topic:
+          type: string
+        title:
+          type: string
+        visibility:
+          type: string
+          enum:
+            - draft
+            - published
+            - archived
+        metadata:
+          type: object
+          additionalProperties: true
+        updated_at:
+          type: string
+          format: date-time
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+        - _csrf
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          example: vittorio
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: ••••••••
+        _csrf:
+          type: string
+          description: 'CSRF token from GET /auth/csrf'
+        redirect:
+          type: string
+          description: 'Path to redirect after successful login (whitelist /-prefixed only)'
+          example: /
+    LoginSuccess:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+        username:
+          type: string
+        role:
+          type: string
+          enum:
+            - student
+            - teacher
+            - collaborator
+            - administrator
+    RegistrationRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - first_name
+        - last_name
+        - role
+        - accept_tos
+        - _csrf
+      properties:
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        first_name:
+          type: string
+          maxLength: 100
+        last_name:
+          type: string
+          maxLength: 100
+        role:
+          type: string
+          enum:
+            - student
+            - teacher
+        institute_id:
+          type: integer
+          description: 'Required for student role'
+        birth_date:
+          type: string
+          format: date
+          description: |
+            Required if role=student. Birth date YYYY-MM-DD.
+            Se età < 14 (Italia D.Lgs. 101/2018), richiede `parent_email`.
+        parent_email:
+          type: string
+          format: email
+          description: |
+            Required if studente minore (< 14 anni). Innesca workflow Art. 8 GDPR
+            con doppio opt-in genitore (token TTL 30g).
+        parent_name:
+          type: string
+          description: 'Optional, for personalized parent email greeting'
+        accept_tos:
+          type: boolean
+          description: 'Must be true (Art. 7 GDPR)'
+        _csrf:
+          type: string
+    ConsentGrantRequest:
+      type: object
+      required:
+        - consent_type
+        - _csrf
+      properties:
+        consent_type:
+          type: string
+          enum:
+            - analytics
+            - marketing
+            - parent_8_minor
+        text_version:
+          type: string
+          description: 'Version of informativa to consent to (e.g. v2.0)'
+        _csrf:
+          type: string
+    ConsentList:
+      type: object
+      properties:
+        consents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consent'
+    DeletionRequestSubmit:
+      type: object
+      required:
+        - _csrf
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+          description: 'Optional reason text'
+        _csrf:
+          type: string
+    DeletionRequestSuccess:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        request_id:
+          type: integer
+        confirm_token_sent_to:
+          type: string
+          format: email
+          description: 'User email — token in email body, not in API response'
+    ParentConsentConfirmRequest:
+      type: object
+      required:
+        - _csrf
+      properties:
+        action:
+          type: string
+          enum:
+            - confirm
+            - reject
+        _csrf:
+          type: string
+    ProfilePatchRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 100
+        last_name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        _csrf:
+          type: string
+    ExportData:
+      type: object
+      description: |
+        GDPR Art. 20 portability — user data + consents + content + overrides.
+        Returned as JSON download (Content-Disposition: attachment).
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        consents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consent'
+        teacher_content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherContent'
+        risdoc_overrides:
+          type: array
+          items:
+            type: object
+            properties:
+              template_id:
+                type: integer
+              instance_key:
+                type: string
+              kind:
+                type: string
+                enum:
+                  - html
+                  - tex
+                  - css
+                  - json
+                  - image
+                  - texCommon
+              relative_path:
+                type: string
+              body:
+                type: string
+                nullable: true
+        exported_at:
+          type: string
+          format: date-time
+    DpoContactRequest:
+      type: object
+      required:
+        - name
+        - email
+        - subject
+        - message
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        subject:
+          type: string
+          enum:
+            - access
+            - rectification
+            - erasure
+            - portability
+            - restriction
+            - objection
+            - consent_revoke
+            - breach_report
+            - other
+        message:
+          type: string
+          maxLength: 5000
+        url_field:
+          type: string
+          description: 'Honeypot anti-spam — must be empty'
+          example: ''
+    TeacherContentList:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        count:
+          type: integer
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherContent'
+    MetricsResponse:
+      type: string
+      description: |
+        Prometheus exposition format text/plain version=0.0.4. Gauge + counter
+        aggregati: users_total, teacher_content_total, consents_active_total,
+        deletion_requests_total, dpo_requests_total, parent_consents_total,
+        crypto_keys_total, crypto_access_24h_total, app_info.
+      example: |
+        # HELP pantedu_app_info Application info
+        # TYPE pantedu_app_info gauge
+        pantedu_app_info{version="25.E"} 1
+        # HELP pantedu_users_total Users by role and status
+        # TYPE pantedu_users_total gauge
+        pantedu_users_total{role="teacher",status="active"} 12
+  responses:
+    Unauthorized:
+      description: 'Authentication required'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'CSRF token invalid or insufficient privileges'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'Resource not found'
+    RateLimited:
+      description: 'Rate limit exceeded'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: 'Invalid input (missing/malformed field)'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+security:
+  -
+    sessionAuth: {  }
+paths:
+  /:
+    get:
+      tags:
+        - Misc
+      operationId: indexHomeController
+      summary: 'Index (HomeController)'
+      x-controller: 'HomeController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /Elementi_Riservati.html:
+    get:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: dashboardAdminController
+      summary: 'Dashboard (AdminController)'
+      x-controller: 'AdminController::dashboard'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/access-log:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: accesslogAdminController
+      summary: 'Access Log (AdminController)'
+      x-controller: 'AdminController::accessLog'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/access-stats:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: accessstatsAdminController
+      summary: 'Access Stats (AdminController)'
+      x-controller: 'AdminController::accessStats'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/analytics:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: pageAdminAnalyticsController
+      summary: 'Page (AdminAnalyticsController)'
+      x-controller: 'AdminAnalyticsController::page'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/curriculum:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: editorpageCurriculumController
+      summary: 'Editor Page (CurriculumController)'
+      x-controller: 'CurriculumController::editorPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/dashboard:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: dashboardAdminController
+      summary: 'Dashboard (AdminController)'
+      x-controller: 'AdminController::dashboard'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/debug-log:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: debuglogAdminController
+      summary: 'Debug Log (AdminController)'
+      x-controller: 'AdminController::debugLog'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/infrastructure:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: pageAdminInfrastructureController
+      summary: 'Page (AdminInfrastructureController)'
+      x-controller: 'AdminInfrastructureController::page'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/registrations:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: listpendingRegistrationController
+      summary: 'List Pending (RegistrationController)'
+      x-controller: 'RegistrationController::listPending'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/risdoc:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: pageRisdocAdminController
+      summary: 'Page (RisdocAdminController)'
+      x-controller: 'RisdocAdminController::page'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/tools:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: pageAdminToolsController
+      summary: 'Page (AdminToolsController)'
+      x-controller: 'AdminToolsController::page'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/tools/hash:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: hashtoolpageAdminController
+      summary: 'Hash Tool Page (AdminController)'
+      x-controller: 'AdminController::hashToolPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /admin/whoami:
+    get:
+      tags:
+        - 'Admin UI'
+      operationId: whoamiAdminController
+      summary: 'Who Am I (AdminController)'
+      x-controller: 'AdminController::whoAmI'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /analytics/nav:
+    post:
+      tags:
+        - Misc
+      operationId: navbeaconAnalyticsController
+      summary: 'Nav Beacon (AnalyticsController)'
+      x-controller: 'AnalyticsController::navBeacon'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/access/status:
+    get:
+      tags:
+        - 'API Public'
+      operationId: studentstatusTeacherCredentialController
+      summary: 'Student Status (TeacherCredentialController)'
+      x-controller: 'TeacherCredentialController::studentStatus'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/access/student-login:
+    post:
+      tags:
+        - 'API Public'
+      operationId: studentloginTeacherCredentialController
+      summary: 'Student Login (TeacherCredentialController)'
+      x-controller: 'TeacherCredentialController::studentLogin'
+      x-middleware:
+        - csrf
+        - rate
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        429:
+          $ref: '#/components/responses/RateLimited'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/access/student-logout:
+    post:
+      tags:
+        - 'API Public'
+      operationId: studentlogoutTeacherCredentialController
+      summary: 'Student Logout (TeacherCredentialController)'
+      x-controller: 'TeacherCredentialController::studentLogout'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/admin/analytics:
+    get:
+      tags:
+        - Admin
+      operationId: snapshotAdminAnalyticsController
+      summary: 'Snapshot (AdminAnalyticsController)'
+      x-controller: 'AdminAnalyticsController::snapshot'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/analytics/cross-search:
+    get:
+      tags:
+        - Admin
+      operationId: crosssearchAdminAnalyticsController
+      summary: 'Cross Search (AdminAnalyticsController)'
+      x-controller: 'AdminAnalyticsController::crossSearch'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/admin/analytics/teacher/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Admin
+      operationId: forteacherAdminAnalyticsController
+      summary: 'For Teacher (AdminAnalyticsController)'
+      x-controller: 'AdminAnalyticsController::forTeacher'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/infrastructure.json:
+    get:
+      tags:
+        - Admin
+      operationId: snapshotjsonAdminInfrastructureController
+      summary: 'Snapshot Json (AdminInfrastructureController)'
+      x-controller: 'AdminInfrastructureController::snapshotJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/notifications:
+    get:
+      tags:
+        - Admin
+      operationId: notificationsAdminController
+      summary: 'Notifications (AdminController)'
+      x-controller: 'AdminController::notifications'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/risdoc/drift:
+    get:
+      tags:
+        - Admin
+      operationId: driftlistRisdocAdminController
+      summary: 'Drift List (RisdocAdminController)'
+      x-controller: 'RisdocAdminController::driftList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/risdoc/teachers:
+    get:
+      tags:
+        - Admin
+      operationId: teacherslistRisdocAdminController
+      summary: 'Teachers List (RisdocAdminController)'
+      x-controller: 'RisdocAdminController::teachersList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/risdoc/templates:
+    get:
+      tags:
+        - Admin
+      operationId: templateslistRisdocAdminController
+      summary: 'Templates List (RisdocAdminController)'
+      x-controller: 'RisdocAdminController::templatesList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/admin/risdoc/templates/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Admin
+      operationId: templatedetailRisdocAdminController
+      summary: 'Template Detail (RisdocAdminController)'
+      x-controller: 'RisdocAdminController::templateDetail'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/security/anomalies:
+    get:
+      tags:
+        - Admin
+      operationId: anomaliesSecurityAdminController
+      summary: 'Anomalies (SecurityAdminController)'
+      x-controller: 'SecurityAdminController::anomalies'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/security/blocked-credentials:
+    get:
+      tags:
+        - Admin
+      operationId: listblockedcredentialsSecurityAdminController
+      summary: 'List Blocked Credentials (SecurityAdminController)'
+      x-controller: 'SecurityAdminController::listBlockedCredentials'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/security/blocked-ips:
+    get:
+      tags:
+        - Admin
+      operationId: listblockedipsSecurityAdminController
+      summary: 'List Blocked Ips (SecurityAdminController)'
+      x-controller: 'SecurityAdminController::listBlockedIps'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/security/config:
+    get:
+      tags:
+        - Admin
+      operationId: getconfigSecurityAdminController
+      summary: 'Get Config (SecurityAdminController)'
+      x-controller: 'SecurityAdminController::getConfig'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/admin/users:
+    get:
+      tags:
+        - Admin
+      operationId: indexUsersAdminController
+      summary: 'Index (UsersAdminController)'
+      x-controller: 'UsersAdminController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/institutes:
+    get:
+      tags:
+        - 'API Public'
+      operationId: indexInstituteController
+      summary: 'Index (InstituteController)'
+      x-controller: 'InstituteController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/compilations/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: showCompilationController
+      summary: 'Show (CompilationController)'
+      x-controller: 'CompilationController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/exports/{file}':
+    parameters:
+      -
+        name: file
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: serveExportController
+      summary: 'Serve (ExportController)'
+      x-controller: 'ExportController::serve'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/risdoc/options-sources:
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: optionssourcesTemplateController
+      summary: 'Options Sources (TemplateController)'
+      x-controller: 'TemplateController::optionsSources'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/shared/{file}':
+    parameters:
+      -
+        name: file
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: sharedassetTemplateController
+      summary: 'Shared Asset (TemplateController)'
+      x-controller: 'TemplateController::sharedAsset'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/risdoc/teacher/instances:
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: teacherallinstancesTemplateController
+      summary: 'Teacher All Instances (TemplateController)'
+      x-controller: 'TemplateController::teacherAllInstances'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/risdoc/templates:
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: indexTemplateController
+      summary: 'Index (TemplateController)'
+      x-controller: 'TemplateController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: showTemplateController
+      summary: 'Show (TemplateController)'
+      x-controller: 'TemplateController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/compilations':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: indexCompilationController
+      summary: 'Index (CompilationController)'
+      x-controller: 'CompilationController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/drift':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: driftstatusTemplateController
+      summary: 'Drift Status (TemplateController)'
+      x-controller: 'TemplateController::driftStatus'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/file':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: fileTemplateController
+      summary: 'File (TemplateController)'
+      x-controller: 'TemplateController::file'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/instances':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: instanceslistTemplateController
+      summary: 'Instances List (TemplateController)'
+      x-controller: 'TemplateController::instancesList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/institutional-overrides':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: institutionaloverrideslistTemplateController
+      summary: 'Institutional Overrides List (TemplateController)'
+      x-controller: 'TemplateController::institutionalOverridesList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/json-files':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: jsonfilesTemplateController
+      summary: 'Json Files (TemplateController)'
+      x-controller: 'TemplateController::jsonFiles'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/overrides':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: overrideslistTemplateController
+      summary: 'Overrides List (TemplateController)'
+      x-controller: 'TemplateController::overridesList'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/schema':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: schemaTemplateController
+      summary: 'Schema (TemplateController)'
+      x-controller: 'TemplateController::schema'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/risdoc/templates/{id}/tex':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Risdoc Templates'
+      operationId: texTemplateController
+      summary: 'Tex (TemplateController)'
+      x-controller: 'TemplateController::tex'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/scuole:
+    get:
+      tags:
+        - 'API Public'
+      operationId: searchSchoolsController
+      summary: 'Search (SchoolsController)'
+      x-controller: 'SchoolsController::search'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/sidepage/topics:
+    get:
+      tags:
+        - 'API Public'
+      operationId: topicsSidepageController
+      summary: 'Topics (SidepageController)'
+      x-controller: 'SidepageController::topics'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/sources/common:
+    get:
+      tags:
+        - 'API Public'
+      operationId: sourcescommonjsonContentStudyController
+      summary: 'Sources Common Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::sourcesCommonJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/studio/exercise/{id}.json':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'API Public'
+      operationId: exercisejsonExerciseStudyController
+      summary: 'Exercise Json (ExerciseStudyController)'
+      x-controller: 'ExerciseStudyController::exerciseJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/studio/exercises.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: exercisesjsonExerciseStudyController
+      summary: 'Exercises Json (ExerciseStudyController)'
+      x-controller: 'ExerciseStudyController::exercisesJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/studio/topics.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: topicsjsonExerciseStudyController
+      summary: 'Topics Json (ExerciseStudyController)'
+      x-controller: 'ExerciseStudyController::topicsJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/study/content.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: contentjsonContentStudyController
+      summary: 'Content Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::contentJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/study/content/{id}.json':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'API Public'
+      operationId: contentsinglejsonContentStudyController
+      summary: 'Content Single Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::contentSingleJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/study/related-verifiche.html:
+    get:
+      tags:
+        - 'API Public'
+      operationId: relatedverificahtmlContentStudyController
+      summary: 'Related Verifica Html (ContentStudyController)'
+      x-controller: 'ContentStudyController::relatedVerificaHtml'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/study/topics.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: topicsjsonContentStudyController
+      summary: 'Topics Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::topicsJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/checked-origins.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: checkedoriginsjsonContentStudyController
+      summary: 'Checked Origins Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::checkedOriginsJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags:
+        - 'API Public'
+      operationId: checkedoriginssaveContentStudyController
+      summary: 'Checked Origins Save (ContentStudyController)'
+      x-controller: 'ContentStudyController::checkedOriginsSave'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/teacher/content:
+    get:
+      tags:
+        - 'Teacher Content'
+      operationId: teacherContentIndex
+      summary: 'List teacher content (filtered)'
+      x-controller: 'TeacherContentController::index'
+      responses:
+        200:
+          description: 'Content list'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherContentList'
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: '"a1b2c3d4..."'
+            Cache-Control:
+              schema:
+                type: string
+                example: 'private, max-age=30, must-revalidate'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        304:
+          description: 'Not Modified (ETag match)'
+        503:
+          description: 'Database unavailable'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      description: |
+        Returns teacher_content rows with optional filters. ETag conditional
+        GET supportato (Phase 17 + Phase 25.A4 client cache): se If-None-Match
+        matcha la signature corrente (max updated_at + count) ritorna 304.
+      parameters:
+        -
+          name: type
+          in: query
+          schema:
+            type: string
+            enum:
+              - esercizio
+              - verifica
+              - lab
+              - mappa
+              - risdoc
+              - bes
+        -
+          name: subject
+          in: query
+          schema:
+            type: string
+            example: MAT
+        -
+          name: indirizzo
+          in: query
+          schema:
+            type: string
+            example: ITIA
+        -
+          name: classe
+          in: query
+          schema:
+            type: string
+            example: 3A
+        -
+          name: visibility
+          in: query
+          schema:
+            type: string
+            enum:
+              - draft
+              - published
+              - archived
+        -
+          name: with_metadata
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+        -
+          name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        -
+          name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        -
+          name: If-None-Match
+          in: header
+          schema:
+            type: string
+  '/api/teacher/content/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Teacher Content'
+      operationId: showTeacherContentController
+      summary: 'Show (TeacherContentController)'
+      x-controller: 'TeacherContentController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/teacher/content/{id}/contract':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'Teacher Content'
+      operationId: contractTeacherContentController
+      summary: 'Contract (TeacherContentController)'
+      x-controller: 'TeacherContentController::contract'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/credentials:
+    get:
+      tags:
+        - 'API Public'
+      operationId: indexTeacherCredentialController
+      summary: 'Index (TeacherCredentialController)'
+      x-controller: 'TeacherCredentialController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/header-page.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: headerpagejsonContentStudyController
+      summary: 'Header Page Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::headerPageJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags:
+        - 'API Public'
+      operationId: headerpagesaveContentStudyController
+      summary: 'Header Page Save (ContentStudyController)'
+      x-controller: 'ContentStudyController::headerPageSave'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/teacher/institutes:
+    get:
+      tags:
+        - 'API Public'
+      operationId: listforteacherInstituteController
+      summary: 'List For Teacher (InstituteController)'
+      x-controller: 'InstituteController::listForTeacher'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/teacher/manifest/{type}':
+    parameters:
+      -
+        name: type
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - 'API Public'
+      operationId: manifestTeacherContentController
+      summary: 'Manifest (TeacherContentController)'
+      x-controller: 'TeacherContentController::manifest'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/origins.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: originsjsonContentStudyController
+      summary: 'Origins Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::originsJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/sidebar:
+    get:
+      tags:
+        - 'API Public'
+      operationId: indexTeacherSidebarController
+      summary: 'Index (TeacherSidebarController)'
+      x-controller: 'TeacherSidebarController::index'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/sources.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: sourcescommonjsonContentStudyController
+      summary: 'Sources Common Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::sourcesCommonJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags:
+        - 'API Public'
+      operationId: sourcessaveContentStudyController
+      summary: 'Sources Save (ContentStudyController)'
+      x-controller: 'ContentStudyController::sourcesSave'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/teacher/sources.registry.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: sourcesregistryjsonContentStudyController
+      summary: 'Sources Registry Json (ContentStudyController)'
+      x-controller: 'ContentStudyController::sourcesRegistryJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags:
+        - 'API Public'
+      operationId: sourcesregistrysaveContentStudyController
+      summary: 'Sources Registry Save (ContentStudyController)'
+      x-controller: 'ContentStudyController::sourcesRegistrySave'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/teacher/subjects:
+    get:
+      tags:
+        - 'API Public'
+      operationId: listmineTeacherSubjectController
+      summary: 'List Mine (TeacherSubjectController)'
+      x-controller: 'TeacherSubjectController::listMine'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /api/teacher/templates.json:
+    get:
+      tags:
+        - 'API Public'
+      operationId: templatesjsonTeacherContentController
+      summary: 'Templates Json (TeacherContentController)'
+      x-controller: 'TeacherContentController::templatesJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags:
+        - 'API Public'
+      operationId: templatessaveTeacherContentController
+      summary: 'Templates Save (TeacherContentController)'
+      x-controller: 'TeacherContentController::templatesSave'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /api/verifiche:
+    get:
+      tags:
+        - 'API Public'
+      operationId: listmineVerificaBuilderController
+      summary: 'List Mine (VerificaBuilderController)'
+      x-controller: 'VerificaBuilderController::listMine'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/api/verifiche/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - 'API Public'
+      operationId: showVerificaBuilderController
+      summary: 'Show (VerificaBuilderController)'
+      x-controller: 'VerificaBuilderController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /auth/csrf:
+    get:
+      tags:
+        - Auth
+      operationId: authCsrf
+      summary: 'Get CSRF token'
+      x-controller: 'AuthController::csrf'
+      responses:
+        200:
+          description: 'Token retrieved'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+                type: object
+                properties:
+                  csrf:
+                    type: string
+                    example: <INSERIRE_QUI_LA_NUOVA_KEY>
+        401:
+          $ref: '#/components/responses/Unauthorized'
+      description: |
+        Returns current session's CSRF token. Token TTL = `CSRF_TOKEN_LIFETIME`
+        env (default 7200s). Use as `_csrf` form field or `X-CSRF-Token` header.
+      security: {  }
+  /auth/user-info:
+    get:
+      tags:
+        - Auth
+      operationId: userinfoAuthController
+      summary: 'User Info (AuthController)'
+      x-controller: 'AuthController::userInfo'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /curriculum:
+    get:
+      tags:
+        - Misc
+      operationId: indexCurriculumController
+      summary: 'Index (CurriculumController)'
+      x-controller: 'CurriculumController::index'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+  /dpo-contact:
+    get:
+      tags:
+        - 'GDPR DPO contact (Art. 12-22, 37-39)'
+      operationId: showDpoContactController
+      summary: 'Show (DpoContactController)'
+      x-controller: 'DpoContactController::show'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+    post:
+      tags:
+        - 'GDPR DPO contact (Art. 12-22, 37-39)'
+      operationId: dpoContactSubmit
+      summary: 'Submit DPO contact request'
+      x-controller: 'DpoContactController::submit'
+      x-middleware:
+        - 'rate:dpo,3'
+      security: {  }
+      responses:
+        200:
+          description: 'Request submitted'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        429:
+          $ref: '#/components/responses/RateLimited'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      description: |
+        Public no-auth form. Antispam: honeypot `url_field` + rate-limit 3/min/IP.
+        Stores in `dpo_requests` table with workflow status (open → acknowledged
+        → responded → closed | spam).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DpoContactRequest'
+  /exercises:
+    get:
+      tags:
+        - Misc
+      operationId: searchpageExerciseController
+      summary: 'Search Page (ExerciseController)'
+      x-controller: 'ExerciseController::searchPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /exercises/search.json:
+    get:
+      tags:
+        - Misc
+      operationId: searchjsonExerciseController
+      summary: 'Search Json (ExerciseController)'
+      x-controller: 'ExerciseController::searchJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /files/list:
+    get:
+      tags:
+        - Misc
+      operationId: listFileController
+      summary: 'List (FileController)'
+      x-controller: 'FileController::list'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/log/admin/{path*}':
+    get:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/log/auth/{path*}':
+    get:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/log/logging/{path*}':
+    get:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/log/logout/{path*}':
+    get:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/log/security/{path*}':
+    get:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showLogServeController
+      summary: 'Show (LogServeController)'
+      x-controller: 'LogServeController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /login:
+    get:
+      tags:
+        - Auth
+      operationId: showloginAuthController
+      summary: 'Show Login (AuthController)'
+      x-controller: 'AuthController::showLogin'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+    post:
+      tags:
+        - Auth
+      operationId: authLogin
+      summary: 'Authenticate user'
+      x-controller: 'AuthController::login'
+      x-middleware:
+        - csrf
+        - 'rate:login,10'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        429:
+          $ref: '#/components/responses/RateLimited'
+          description: 'Rate limit (10/min/IP after 5 failed attempts → +5min lockout)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          $ref: '#/components/responses/ValidationError'
+        302:
+          description: 'Redirect to home or `?redirect=` on success, to `/login?error=...` on failure'
+      description: |
+        Validate credentials + create session. Rate-limited 10/min/IP.
+        On success: session cookie set + redirect to `?redirect=` (whitelist).
+
+        Side-effects:
+        - `session_regenerate_id(true)` (anti-fixation)
+        - `users.last_login_at` updated
+        - `access_log` row inserted
+
+        On failure: HTTP 302 to `/login?error=<reason>&redirect=<original>`.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+  /logout:
+    get:
+      tags:
+        - Misc
+      operationId: logoutAuthController
+      summary: 'Logout (AuthController)'
+      x-controller: 'AuthController::logout'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: logoutAuthController
+      summary: 'Logout (AuthController)'
+      x-controller: 'AuthController::logout'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: logoutAuthController
+      summary: 'Logout (AuthController)'
+      x-controller: 'AuthController::logout'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: logoutAuthController
+      summary: 'Logout (AuthController)'
+      x-controller: 'AuthController::logout'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: logoutAuthController
+      summary: 'Logout (AuthController)'
+      x-controller: 'AuthController::logout'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /me/cancel-deletion:
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meCancelDeletion
+      summary: 'Cancel pending deletion (during cooling-off)'
+      x-controller: 'SelfServiceController::cancelDeletion'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: "Status moved to 'cancelled'"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - _csrf
+              properties:
+                _csrf:
+                  type: string
+  /me/change-password:
+    get:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: showchangepasswordUserProfileController
+      summary: 'Show Change Password (UserProfileController)'
+      x-controller: 'UserProfileController::showChangePassword'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: changepasswordUserProfileController
+      summary: 'Change Password (UserProfileController)'
+      x-controller: 'UserProfileController::changePassword'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+  /me/confirm-deletion:
+    get:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meConfirmDeletion
+      summary: 'Confirm deletion via email token'
+      x-controller: 'SelfServiceController::confirmDeletion'
+      responses:
+        200:
+          description: 'Status moved to cooling_off, execute_after set NOW+30g'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          description: 'Token invalid or expired'
+      parameters:
+        -
+          name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      security: {  }
+  /me/consents:
+    get:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meConsentsList
+      summary: 'List active consents'
+      x-controller: 'SelfServiceController::consentsList'
+      responses:
+        200:
+          description: 'List of consents'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentList'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+      description: 'GDPR Art. 15 — user può vedere quali consensi ha attivi + revoke history'
+  /me/consents/grant:
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meConsentGrant
+      summary: 'Grant consent (Art. 7)'
+      x-controller: 'SelfServiceController::consentGrant'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Consent granted (idempotent)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConsentGrantRequest'
+  /me/consents/revoke:
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meConsentRevoke
+      summary: 'Revoke consent (Art. 7 §3)'
+      x-controller: 'SelfServiceController::consentRevoke'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Revoked (history preserved, no DELETE)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - consent_type
+                - _csrf
+              properties:
+                consent_type:
+                  type: string
+                _csrf:
+                  type: string
+  /me/deletion-status:
+    get:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meDeletionStatus
+      summary: 'Get current deletion request status'
+      x-controller: 'SelfServiceController::deletionStatus'
+      responses:
+        200:
+          description: Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+                type: object
+                properties:
+                  active:
+                    oneOf:
+                      - { $ref: '#/components/schemas/DeletionRequest' }
+                      - { type: 'null' }
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /me/export-data:
+    get:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meExportData
+      summary: 'Export user data (Art. 20 portability)'
+      x-controller: 'SelfServiceController::exportData'
+      x-middleware:
+        - 'rate:export,3'
+      responses:
+        200:
+          description: 'JSON download'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportData'
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename="pantedu-data-42-2026-04-28.json"'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        429:
+          $ref: '#/components/responses/RateLimited'
+      description: |
+        Returns JSON download with full user data:
+        - profile + consents + deletion_requests
+        - teacher_content (decifrato se Phase 25.D ciphertext)
+        - risdoc_teacher_overrides
+
+        Rate-limited 3/min/user (heavy operation).
+        Content-Disposition: attachment; filename="pantedu-data-{user_id}-{date}.json"
+  /me/profile:
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meProfilePatch
+      summary: 'Update profile (Art. 16 rectification)'
+      x-controller: 'SelfServiceController::profilePatch'
+      x-middleware:
+        - csrf
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Profile updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfilePatchRequest'
+  /me/request-deletion:
+    post:
+      tags:
+        - 'GDPR self-service (Art. 7/15-22)'
+      operationId: meRequestDeletion
+      summary: 'Request account deletion (Art. 17)'
+      x-controller: 'SelfServiceController::requestDeletion'
+      x-middleware:
+        - csrf
+        - 'rate:deletion,5'
+      security:
+        -
+          sessionAuth: {  }
+          csrfHeader: {  }
+      responses:
+        200:
+          description: 'Request created, email sent'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletionRequestSuccess'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        429:
+          $ref: '#/components/responses/RateLimited'
+        400:
+          $ref: '#/components/responses/ValidationError'
+      description: |
+        Self-service "right to be forgotten". Workflow:
+        1. POST → status='pending_confirm', email con confirm token (TTL 7g)
+        2. Click email → status='cooling_off', execute_after = NOW + 30g
+        3. Cooling-off cancellabile via POST /me/cancel-deletion
+        4. Cron daily executePending → crypto-shredding + anonymization
+
+        Rate-limited 5/min/user.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeletionRequestSubmit'
+  /metrics:
+    get:
+      tags:
+        - Observability
+      operationId: metricsShow
+      summary: 'Prometheus metrics exposition'
+      x-controller: 'MetricsController::show'
+      responses:
+        200:
+          description: 'Prometheus exposition'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+      description: |
+        Phase 25.E4.2 — text/plain version=0.0.4. Auth: super_admin session OR
+        Bearer token (env `METRICS_BEARER_TOKEN`). Multi-fallback header
+        extraction: HTTP_AUTHORIZATION, REDIRECT_HTTP_AUTHORIZATION,
+        apache_request_headers, query string `?bearer=` (deprecated, vedi
+        finding API-001).
+
+        9 metriche aggregate (no PII raw).
+      security:
+        -
+          sessionAuth: {  }
+        -
+          bearerAuth: {  }
+  /modelli_tikz.json:
+    get:
+      tags:
+        - Misc
+      operationId: showTikzDataController
+      summary: 'Show (TikzDataController)'
+      x-controller: 'TikzDataController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /modelli_tikz_elements.json:
+    get:
+      tags:
+        - Misc
+      operationId: showTikzDataController
+      summary: 'Show (TikzDataController)'
+      x-controller: 'TikzDataController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /modelli_tikz_traccia.json:
+    get:
+      tags:
+        - Misc
+      operationId: showTikzDataController
+      summary: 'Show (TikzDataController)'
+      x-controller: 'TikzDataController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /modello_pag_listSidebar.php:
+    get:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    put:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    patch:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        400:
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Misc
+      operationId: showAdminPartialController
+      summary: 'Show (AdminPartialController)'
+      x-controller: 'AdminPartialController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/parent-consent/{token}':
+    parameters:
+      -
+        name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+    get:
+      tags:
+        - 'GDPR parent consent (Art. 8)'
+      operationId: parentConsentPreview
+      summary: 'Preview parent consent form'
+      x-controller: 'ParentConsentController::preview'
+      security: {  }
+      responses:
+        200:
+          description: 'HTML preview'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+            text/html:
+              schema:
+                type: string
+        404:
+          description: 'Token invalid, expired (>30g), or already used'
+      description: |
+        Public no-auth (token = parent identity proof). Shows student name +
+        consent text + confirm/reject buttons.
+    post:
+      tags:
+        - 'GDPR parent consent (Art. 8)'
+      operationId: parentConsentConfirm
+      summary: 'Confirm or reject parent consent'
+      x-controller: 'ParentConsentController::confirm'
+      security: {  }
+      responses:
+        200:
+          description: 'Confirmation success page'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        400:
+          $ref: '#/components/responses/ValidationError'
+        404:
+          description: 'Token invalid or expired'
+      description: |
+        Single-use token. On confirm: student account activated + log IP/UA hash.
+        On reject: student account deleted (cascade Art. 17 minor).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParentConsentConfirmRequest'
+  /privacy/informativa:
+    get:
+      tags:
+        - 'Trust Pages'
+      operationId: informativaTrustPagesController
+      summary: 'Informativa (TrustPagesController)'
+      x-controller: 'TrustPagesController::informativa'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+  /privacy/your-data:
+    get:
+      tags:
+        - 'Trust Pages'
+      operationId: yourdataTrustPagesController
+      summary: 'Your Data (TrustPagesController)'
+      x-controller: 'TrustPagesController::yourData'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+  /register:
+    get:
+      tags:
+        - Registration
+      operationId: showformRegistrationController
+      summary: 'Show Form (RegistrationController)'
+      x-controller: 'RegistrationController::showForm'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+    post:
+      tags:
+        - Registration
+      operationId: authRegister
+      summary: 'Submit registration request'
+      x-controller: 'RegistrationController::submit'
+      x-middleware:
+        - csrf
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        400:
+          $ref: '#/components/responses/ValidationError'
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        302:
+          description: 'Redirect to /register?success=1 on submit OK'
+      description: |
+        Public signup. Account created with `status='pending_approval'`,
+        admin must approve via /admin/registrations.
+
+        **Phase 25.C7 minori (< 14a Italia D.Lgs. 101/2018):**
+        Se birth_date implica età < 14, account `pending_parent_consent`,
+        `parent_email` obbligatoria, ParentConsentService genera token TTL 30g
+        + email automatica al genitore (se APP_MAIL_FROM configurata).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+  '/risdoc/edit/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Risdoc
+      operationId: showTemplateEditorController
+      summary: 'Show (TemplateEditorController)'
+      x-controller: 'TemplateEditorController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/risdoc/view/{id}':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Risdoc
+      operationId: showTemplateViewController
+      summary: 'Show (TemplateViewController)'
+      x-controller: 'TemplateViewController::show'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/risdoc/{category}/php/{filename}':
+    parameters:
+      -
+        name: category
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: filename
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Risdoc
+      operationId: showbylegacypathTemplateViewController
+      summary: 'Show By Legacy Path (TemplateViewController)'
+      x-controller: 'TemplateViewController::showByLegacyPath'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/risdoc/{path*}':
+    get:
+      tags:
+        - Risdoc
+      operationId: legacypathTemplateController
+      summary: 'Legacy Path (TemplateController)'
+      x-controller: 'TemplateController::legacyPath'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /security:
+    get:
+      tags:
+        - 'Trust Pages'
+      operationId: securityTrustPagesController
+      summary: 'Security (TrustPagesController)'
+      x-controller: 'TrustPagesController::security'
+      security: {  }
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+  /storage/signed:
+    get:
+      tags:
+        - Storage
+      operationId: signedStorageController
+      summary: 'Signed (StorageController)'
+      x-controller: 'StorageController::signed'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/studio/{indirizzo}/{classe}/{materia}':
+    parameters:
+      -
+        name: indirizzo
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: classe
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: materia
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Studio
+      operationId: topicspageExerciseStudyController
+      summary: 'Topics Page (ExerciseStudyController)'
+      x-controller: 'ExerciseStudyController::topicsPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/studio/{indirizzo}/{classe}/{materia}/{topic}':
+    parameters:
+      -
+        name: indirizzo
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: classe
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: materia
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: topic
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Studio
+      operationId: topicpageExerciseStudyController
+      summary: 'Topic Page (ExerciseStudyController)'
+      x-controller: 'ExerciseStudyController::topicPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/studio/{type}/{ind}/{cls}/{subj}':
+    parameters:
+      -
+        name: type
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: ind
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: cls
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: subj
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Studio
+      operationId: topicspageContentStudyController
+      summary: 'Topics Page (ContentStudyController)'
+      x-controller: 'ContentStudyController::topicsPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/studio/{type}/{ind}/{cls}/{subj}/{topic}':
+    parameters:
+      -
+        name: type
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: ind
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: cls
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: subj
+        in: path
+        required: true
+        schema:
+          type: string
+      -
+        name: topic
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Studio
+      operationId: topicpageContentStudyController
+      summary: 'Topic Page (ContentStudyController)'
+      x-controller: 'ContentStudyController::topicPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /teacher:
+    get:
+      tags:
+        - Misc
+      operationId: dashboardTeacherController
+      summary: 'Dashboard (TeacherController)'
+      x-controller: 'TeacherController::dashboard'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /teacher/dashboard:
+    get:
+      tags:
+        - Misc
+      operationId: dashboardTeacherController
+      summary: 'Dashboard (TeacherController)'
+      x-controller: 'TeacherController::dashboard'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /teacher/resources:
+    get:
+      tags:
+        - Misc
+      operationId: resourcesTeacherController
+      summary: 'Resources (TeacherController)'
+      x-controller: 'TeacherController::resources'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /teacher/templates:
+    get:
+      tags:
+        - Misc
+      operationId: templatespageTeacherController
+      summary: 'Templates Page (TeacherController)'
+      x-controller: 'TeacherController::templatesPage'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /teacher/verifiche.json:
+    get:
+      tags:
+        - Misc
+      operationId: verificheTeacherController
+      summary: 'Verifiche (TeacherController)'
+      x-controller: 'TeacherController::verifiche'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  '/teacher/verifiche/{id}/download':
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Misc
+      operationId: downloadverificaTeacherController
+      summary: 'Download Verifica (TeacherController)'
+      x-controller: 'TeacherController::downloadVerifica'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /tikz/content:
+    get:
+      tags:
+        - Misc
+      operationId: contentTikzController
+      summary: 'Content (TikzController)'
+      x-controller: 'TikzController::content'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+  /tikz/ensure-json:
+    get:
+      tags:
+        - Misc
+      operationId: ensurejsonTikzController
+      summary: 'Ensure Json (TikzController)'
+      x-controller: 'TikzController::ensureJson'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'

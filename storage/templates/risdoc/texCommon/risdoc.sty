@@ -1,0 +1,206 @@
+% modelli.sty
+% Pacchetto personalizzato per la documentazione didattica (Piano Annuale, Relazione Finale, etc.)
+
+\ProvidesPackage{risdoc}[2024/05/21 v1.0 Pacchetto per risorse e documenti del odcente]
+
+% --- 1. DIPENDENZE (Pacchetti richiesti) ---
+% Babel italiano via caricamento MODERNO basato su .ini (\babelprovide):
+% il TeX Live del servizio di compilazione non ha il classico italian.ldf
+% (texlive-lang-european non lo fornisce) → `\usepackage[italian]{babel}`
+% dava "! Package babel Error: Unknown option 'italian'". babel-italian.tex
+% (locale) è presente → \babelprovide importa la lingua. Output equivalente.
+\RequirePackage{babel}
+\babelprovide[import, main]{italian}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{makecell}
+\RequirePackage{longtable}
+\RequirePackage{array}    % Per un controllo più fine sulle colonne delle tabelle
+\RequirePackage{tabularx} % Per tabelle che si adattano alla larghezza
+\RequirePackage{geometry}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage[table]{xcolor} % Per colori nelle tabelle
+\RequirePackage{graphicx} % Per includere immagini
+\RequirePackage{calc}     % Per calcoli con le dimensioni (es. per \myarraystretch * \height)
+\RequirePackage{enumitem} % Per liste personalizzate
+\RequirePackage{multicol} % Gruppi di checkbox su 2 colonne (\begin{multicols}{2})
+\RequirePackage{amsmath}
+\RequirePackage{amssymb} % Simboli liste ($\blacksquare$, $\rightarrow$, $\diamond$, $\star$, $\circ$) — preset elenchi PT
+\RequirePackage{microtype} % Migliora la tipografia
+\RequirePackage{pdflscape}
+\RequirePackage{multirow}
+\RequirePackage{tikz}    % Per disegnare caselle di controllo
+\RequirePackage{fancyhdr}
+\RequirePackage{url}      % fornisce \url senza attivare il link (no hyperref)
+\RequirePackage{datetime} % \newdate usato in firma documenti
+
+% --- 1.1. CONFIGURAZIONE DELLA GEOMETRIA ---
+\geometry{
+    a4paper,
+    %[landscape]
+    top=1cm,
+    bottom=2cm,
+    left=2.5cm,
+    right=2.5cm,
+}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+% --- 1.2. CONFIGURAZIONE DI HEADER E FOOTER (LA SOLUZIONE) ---
+\pagestyle{fancy}           % Applica lo stile fancy a tutte le pagine
+\fancyhf{}                  % Pulisce tutti i campi di header e footer
+\fancyfoot[C]{\thepage}     % Mette il numero di pagina (\thepage) al Centro (C) del Footer (F)
+\renewcommand{\headrulewidth}{0pt} % Rimuove la linea di separazione dell'header
+\renewcommand{\footrulewidth}{0pt} % Rimuove la linea di separazione del footer
+
+
+% --- 2. DEFINIZIONE COLORI ---
+% Questo colore di default può essere sovrascritto dal JavaScript se necessario.
+\definecolor{colorBackTitleSec}{RGB}{219, 228, 240}
+\definecolor{borderColor}{RGB}{120, 120, 120}
+\definecolor{titleTextColor}{RGB}{0,0,0}
+\definecolor{tableHeaderGray}{RGB}{231, 233, 238}
+\definecolor{logoDarkBlue}{RGB}{29, 37, 73}
+\definecolor{backGTitleSection}{RGB}{219, 228, 240}
+
+% --- 3. DEFINIZIONE NUOVI TIPI DI COLONNA PER TABELLE ---
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}} % Centrata, larghezza fissa, allineata verticalmente al centro
+\newcolumntype{C}{>{\centering\arraybackslash}X}      % Come X ma centrata
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}    % Come X ma allineata a sinistra
+\newcolumntype{T}{>{\centering\arraybackslash}c}
+
+% --- 4. COMANDI PERSONALIZZATI ---
+\newcommand{\prevyear}{\the\numexpr\year-1\relax} % Anno precedente
+\newcommand{\nextyear}{\the\numexpr\year+1\relax} % Anno successivo
+\newcommand{\thisyear}{\the\year} % Anno corrente
+
+% Comando per l'anno scolastico: 
+% Se siamo tra settembre e dicembre: anno corrente/anno successivo
+% Se siamo tra gennaio e agosto: anno precedente/anno corrente
+\newcommand{\schoolyear}{%
+  \ifnum\month<9
+    \prevyear/\thisyear%
+  \else
+    \thisyear/\nextyear%
+  \fi
+}
+
+% G27.listmk — marker liste a dimensione uniforme + default itemize ●○■.
+% \fmmk normalizza l'altezza dei simboli amssymb (taglie native molto diverse)
+% via \resizebox → marker uniformi, coerenti con la resa a schermo. SORGENTE
+% condivisa con verifica.sty (vedi Sanitizer::listLabel / PtToTex).
+\providecommand{\fmmk}[1]{\raisebox{0.12ex}{\resizebox{!}{0.85ex}{\ensuremath{#1}}}}
+\setlist[itemize,1]{label=\fmmk{\bullet}}
+\setlist[itemize,2]{label=\fmmk{\circ}}
+\setlist[itemize,3]{label=\fmmk{\blacksquare}}
+
+\newcommand{\simplefield}[2]{\par\noindent\textbf{#1}: #2} % Comando per un campo semplice (es. Classe: [valore])
+\newcommand{\fillfield}[1]{\par\noindent\hangindent=2em\hangafter=0 #1 \dotfill} % Stile per i campi da compilare con linee punteggiate
+\newcommand{\checkbox}{%
+    \begin{tikzpicture}[baseline=0]
+        \draw (0,0) rectangle (1.5ex,1.5ex);
+    \end{tikzpicture}%
+}
+\newcommand{\xcheckbox}{%
+    \begin{tikzpicture}[baseline=0]
+        \draw (0,0) rectangle (1.5ex,1.5ex);
+        \draw (0,0) -- (1.5ex,1.5ex);
+        \draw (0,1.5ex) -- (1.5ex,0);
+    \end{tikzpicture}%
+}
+\newcommand{\itemcheckbox}[1]{%
+  \ifnum#1=1
+    \item[\checkbox]
+  \else
+    \item[\xcheckbox]
+  \fi
+}
+
+% --- 5. AMBIENTI PERSONALIZZATI ---
+
+% 5.1 CREAZIONE E RIEMPIMENTO DEL BOX PER IL CONTENUTO CENTRALE DELL'INTESTAZIONE
+% Dobbiamo prima creare il contenuto per poterlo misurare.
+%======================================================================
+\newsavebox{\middlecellcontentbox}
+\sbox{\middlecellcontentbox}{%
+  \begin{minipage}{0.6\textwidth}% Larghezza della colonna centrale della tabella
+    \centering
+    {\footnotesize
+        \textbf{\large Istituto di Esempio} \\
+        \textbf{Liceo Artistico - Liceo Musicale - Liceo Scientifico} \\
+        \textbf{COMUNE ESEMPIO (XX) Via di Esempio, 1}\\
+        \textbf{tel. 0000/000000 fax. 0000/000000} \\
+        \textbf{e-mail:}
+        \url{protocollo@scuola-esempio.edu.it} \quad
+        \url{protocollo@pec.scuola-esempio.it}\\
+        \textbf{sito web:}
+        \url{https://www.scuola-esempio.edu.it}\quad
+        \textbf{CF: 00000000000}
+    }
+  \end{minipage}%
+}
+% 5.1.1 DEFINIZIONE E CALCOLO DELLE DIMENSIONI VERTICALI
+% Ora che il box è pieno, possiamo misurarlo e calcolare l'altezza della riga.
+%======================================================================
+\newlength{\naturalmiddlecellheight} % Dimensione per l'altezza naturale del contenuto
+\newlength{\targetrowheight}         % Dimensione per l'altezza finale desiderata della riga
+% Misura l'altezza totale del box riempito e salva il valore.
+\settototalheight{\naturalmiddlecellheight}{\usebox{\middlecellcontentbox}}
+% Calcola l'altezza finale della riga, aggiungendo un po' di spazio verticale
+\newcommand{\myarraystretch}{1.15} %    MODIFICA QUESTO VALORE SE DESIDERI UN ARRAYSTRETCH DIVERSO.
+\setlength{\targetrowheight}{\myarraystretch\naturalmiddlecellheight}
+
+
+
+% 5.2 STILE PER LE SEZIONI PRINCIPALI MODIFICATO
+\newtcolorbox{sectionbox}[1]{
+    enhanced,
+    colback=white,
+    colframe=borderColor,
+    boxrule=0.5pt,
+    sharp corners,
+    valign=top,
+    % Opzioni per il titolo e la sua "barra"
+    title=#1,
+    fonttitle=\bfseries\large,
+    coltitle=titleTextColor,
+    colbacktitle=colorBackTitleSec,
+    %
+    % Padding corretto per l'area del titolo
+    toptitle=4pt,
+    bottomtitle=4pt,
+    lefttitle=3mm,
+    %
+    % Lo stile per la cornice del titolo
+    boxed title style={
+        sharp corners,
+        boxrule=0.5pt,
+        colframe=backGTitleSection, % In questo caso, la cornice è dello stesso colore dello sfondo
+    },
+    % Padding interno del contenuto
+    left=3mm, right=3mm, top=2mm, bottom=3mm,
+    % Spazio prima e dopo
+    before=\par\medskip\noindent,
+    after=\par\medskip,
+    breakable
+    % Opzionale: se vuoi che il titolo venga ripetuto sulla pagina successiva
+    % break MODO = {
+    %     title continuation = { (continua)}, % Testo da aggiungere al titolo sulla nuova pagina
+    %     % Puoi anche specificare uno stile diverso per il titolo continuato
+    % }
+}
+\DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
+\endinput
+
+
+% Ridefinisce il tipo di colonna base per X da 'p' (top-aligned) a 'm' (middle-aligned)
+% \renewcommand{\tabularxcolumn}[1]{>{\arraybackslash}m{#1}}
+% da NON usare nel preambolo, ma là dove ci sarà effettivamente la tabella, esempio:
+% {
+% 1. Aumenta lo spazio tra le righe per questa tabella
+% \renewcommand{\arraystretch}{1.5}   
+% 2. Allinea verticalmente al centro le colonne X per questa tabella
+% \renewcommand{\tabularxcolumn}[1]{>{\arraybackslash}m{#1}}
+% TABELLA
+% }

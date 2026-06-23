@@ -1,0 +1,25 @@
+/* ════════════════════════════════════════════════════════════
+ * layout_es.css — EMPTIED 2026-05-24 (Sprint E).
+ *
+ * @deprecated TUTTO il contenuto (3921 LOC) è stato spostato in
+ *   css/modules/_exercise-legacy.css (caricato globalmente via
+ *   main.bundle.css → main.css @layer components).
+ *
+ * Esecuzione: extraction VERBATIM byte-equivalent. Nessun rule
+ * modificata, solo riallocata al modulo. Cascade preserved.
+ *
+ * Selettori principali nel modulo:
+ *   :root vars (--widthSelection, --heightCollapsible)
+ *   body.fm-exercise-context wrappers
+ *   .fm-upbar + variants + .fm-scrollbar-up-bar + .fm-logout-btn/-module
+ *   .fm-check-in + .fm-titolo-quesito (embedded + standalone)
+ *   .fm-collection__item + .fm-collexercise + .fm-groupcollex + .content
+ *   .pt + .input-wrapper-* + .fm-input-pt + .fm-a-bin
+ *   .fm-edit-quesito / .fm-move-quesito / .fm-sync-quesito-btn
+ *   .fm-modifica-btn / .fm-origin-selector / .fm-color-selector
+ *   .fm-tabelle / .dina / .fm-rm-table wrappers
+ *   Sticky logic (.fm-problem-editing) + collapsible states
+ *   Multi-arg verifica selectors + Phase 16/G20.7 palette
+ *
+ * Loader: head.php tiene il <link> per evitare 404 (Phase 6 rimuove).
+ * ════════════════════════════════════════════════════════════ */

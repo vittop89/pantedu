@@ -1,0 +1,119 @@
+/* ============================================================
+ * <fm-pt-document> content area (ADR-022 + ADR-024).
+ *
+ * La TOPBAR è ora il componente centralizzato <fm-doc-topbar> con BEM
+ * unica .fm-doc-topbar (modulo _doc-topbar.css, adattiva WCAG, condivisa
+ * con risdoc). Qui restano SOLO gli stili dell'area contenuto del documento
+ * (.ptdoc*). I block render interni usano _pt-page-doc.css.
+ * ============================================================ */
+
+/* ── Body wrapper ────────────────────────────────────────── */
+.ptdoc {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 24px;
+}
+
+/* ── Title (heading documento, non chrome) ───────────────── */
+.ptdoc__title {
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--fm-ptdoc-title-fg, #005A8D);
+    border-bottom: 2px solid var(--fm-ptdoc-title-rule, #7AB8D4);
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+.ptdoc__body {
+    line-height: 1.6;
+    color: var(--fm-ptdoc-body-fg, #1e293b);
+}
+.ptdoc__body--editing {
+    padding: 10px;
+    border: 2px dashed var(--fm-ptdoc-accent, #2a5ac7);
+    border-radius: 8px;
+    background: var(--fm-ptdoc-edit-bg, #f8fafc);
+}
+/* render_mode=html standalone (studente, nessun componente): articolo pulito. */
+.ptdoc__body--standalone {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+    line-height: 1.6;
+    color: var(--fm-ptdoc-body-fg, #1e293b);
+}
+.ptdoc__pt-toolbar {
+    display: block;
+    margin-bottom: 10px;
+}
+/* Rework editor (ADR-024) — l'edit è ora un elenco di card sezione
+ * <fm-risdoc-pt-section> (stessa UI risdoc). Niente box tratteggiato: ogni
+ * card ha già il proprio bordo/sfondo (con theming --fm-risdoc-* anche dark).
+ * La toolbar PT resta sticky-friendly in cima. */
+.ptdoc__edit {
+    display: block;
+}
+.ptdoc__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.ptdoc__sections:empty::after {
+    content: "Nessuna sezione. Usa “+ Nuova sezione” nella barra per iniziare.";
+    display: block;
+    padding: 16px;
+    text-align: center;
+    color: var(--fm-ptdoc-muted, #64748b);
+    font-style: italic;
+}
+.ptdoc__loading {
+    color: var(--fm-ptdoc-muted, #64748b);
+    font-style: italic;
+}
+
+/* ── Status line ─────────────────────────────────────────── */
+.ptdoc__status {
+    max-width: 900px;
+    margin: 10px auto 0;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--fm-ptdoc-muted, #64748b);
+    background: var(--fm-ptdoc-status-bg, #f8fafc);
+    border-left: 3px solid var(--fm-ptdoc-accent, #2a5ac7);
+    border-radius: 0 4px 4px 0;
+}
+
+/* ── Dark mode (ADR-024): l'area editor custom deve adattarsi (no sfondo
+ *    bianco). Allineata alla palette scura della topbar/risdoc. ──────── */
+body.fm-dark .ptdoc__title,
+html.fm-dark .ptdoc__title {
+    color: #93c5fd;
+    border-bottom-color: #2a4365;
+}
+body.fm-dark .ptdoc__body,
+html.fm-dark .ptdoc__body {
+    color: #e2e8f0;
+}
+body.fm-dark .ptdoc__body--editing,
+html.fm-dark .ptdoc__body--editing {
+    background: #131c33;
+    border-color: #3b5278;
+}
+body.fm-dark .ptdoc__body--standalone,
+html.fm-dark .ptdoc__body--standalone {
+    color: #e2e8f0;
+}
+body.fm-dark .ptdoc__status,
+html.fm-dark .ptdoc__status {
+    background: #131c33;
+    color: #cbd5e1;
+    border-left-color: #3b82f6;
+}
+
+/* ── Print: nascondi status ──────────────────────────────── */
+@media print {
+    .ptdoc__status { display: none; }
+    .ptdoc { max-width: none; margin: 0; padding: 0; }
+    .ptdoc__body--editing { border: none; background: none; padding: 0; }
+}

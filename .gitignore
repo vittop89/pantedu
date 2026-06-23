@@ -1,0 +1,273 @@
+# Phase 20 — backup-friendly .gitignore
+# Progetto privato, single dev. Ignoro SOLO cartelle grandi facilmente
+# ricreabili (deps managers, test output). Tutto il resto è versionato
+# per avere un backup completo del lavoro (file sensibili inclusi).
+
+# Marcatore "repo di sviluppo": deve restare UNTRACKED così un git clone
+# pulito (destinato alla pubblicazione) non lo eredita e il sanitizzatore
+# può girare con --apply lì. Vedi docs/publication/PUBLISHING.md.
+.pantedu-dev-repo
+
+# ========================================
+# DEPENDENCY MANAGERS (rebuild: npm install / composer install)
+# ========================================
+node_modules/
+/vendor/
+composer.phar
+
+# ========================================
+# DRAWIO WEBAPP self-hosted (~145MB, install via tools/install-drawio.sh)
+# ========================================
+/public/drawio-app/*
+!/public/drawio-app/.htaccess
+# anche la copia che vite duplica nel build dir
+/public/build/drawio-app/
+
+# ========================================
+# VITE BUILD output (Fase 1 — generato da deploy.sh: npm run build)
+# Asset hashati + manifest.json. Locale: rigenera con `npm run build`.
+# ========================================
+/public/build/assets/
+/public/build/manifest.json
+
+# ========================================
+# TEST / BUILD OUTPUT (rigenerabile)
+# ========================================
+.phpunit.cache/
+.phpunit.result.cache
+/playwright-report/
+/test-results/
+/tests/e2e-results/
+/tests/e2e/.auth/
+
+# ========================================
+# RUNTIME LOGS (rotation noise — non utile al backup)
+# ========================================
+# I file in storage/logs/ ruotano ad ogni request (access_log/access_stats/
+# debug.log/php_errors.log). Commit ogni save → noise inutile in git history.
+storage/logs/*.json
+storage/logs/*.log
+
+# ========================================
+# SISTEMA / IDE (non utile al backup)
+# ========================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+desktop.ini
+.idea/
+.claude/worktrees/
+.claude/settings.local.json
+__pycache__/
+*.pyc
+
+# ========================================
+# Phase 25.D — SECRETS (eccezione esplicita al "tutto versionato")
+# ========================================
+# .env.local contiene KMS_MASTER_KEY (envelope encryption). Leak/perdita
+# di questa chiave compromette TUTTI i contenuti cifrati. Backup off-line
+# documentato in docs/security/kms-recovery.md (Yubikey + paper BIP-39).
+.env.local
+
+# Hetzner Cloud API config (contiene HETZNER_API_TOKEN). Leak permetterebbe
+# all'attaccante di creare/cancellare snapshot, riavviare VPS, ecc.
+# Il file reale vive in /etc/pantedu/hetzner-api.env sul VPS (mode 600 root).
+# Versionato solo lo .example come template.
+hetzner-api.env
+!tools/webhook/hetzner-api.env.example
+
+# CSS bundle artifact (generato da tools/build-css-bundle.php al deploy)
+# 481KB concat ricorsivo di main.css + 37 @import — rigenerato ad ogni deploy
+# dal deploy.sh, non ha senso versionarlo.
+css/main.bundle.css
+
+# JS cache-bust dist (generato da tools/build-js-cache-bust.php al deploy)
+# bootstrap.js processato con ?v=<mtime> in tutti i 75 import nested.
+# Rigenerato ad ogni deploy quando i sub-moduli cambiano.
+js/modules/bootstrap.dist.js
+
+# Optimized images (generato da tools/build/optimize-images.mjs al deploy)
+# WebP/AVIF varianti responsive da img/sources/*.png → rigenerati ad ogni
+# deploy se sharp installato. Manifest JSON committed via .gitkeep alternative.
+public/img/optimized/
+
+# ========================================
+# DB sync artifacts (PII protection — defense in depth)
+# ========================================
+# tools/sync-db-from-vps.sh produce dump in /tmp/pantedu-dev/ (fuori repo)
+# ma se mai venisse scritto dentro al progetto, MAI committare:
+*.sql
+*.sql.gz
+*.sql.bz2
+*.dump
+db.sql*
+pantedu_dev.sql*
+/tmp/pantedu-dev/
+# ECCEZIONE: le migration DEVONO essere versionate (prima erano force-add a mano,
+# rischio di dimenticarne una = drift dev/prod). Whitelist esplicita.
+!database/migrations/*.sql
+
+# ========================================
+# Storage temp artifacts (TTL'd, ricreabili a runtime)
+# ========================================
+# storage/risdoc-tmp/ contiene ZIP TeX temp generati da export endpoint.
+# cleanupOld() li rimuove dopo 1h. Versionarli sarebbe spreco bandwidth.
+storage/risdoc-tmp/
+# storage/_tmp/ contiene file temporanei dev (baseline, extract per refactor).
+storage/_tmp/
+# storage/_backups/ contiene mysqldump pre-migration (PII docenti hash secrets).
+storage/_backups/
+
+# ========================================
+# Pentest reports — build artifacts intermedi
+# ========================================
+# I sorgenti markdown sono tracked (repo privato, classified CONFIDENZIALE).
+# I PDF firmati finali ENTRANO in git come deliverable di accountability
+# (Art. 32 §1(d) GDPR). I build artifacts intermedi NO.
+docs/security/pentest/*/test-build.pdf
+docs/security/pentest/*/report-unsigned.pdf
+docs/security/pentest/*/*.zip
+docs/security/pentest/*/signed/
+
+# ========================================
+# Privacy / GDPR — accountability files con PII
+# ========================================
+# Documenti di accountability (Art. 28/30/32 GDPR) scaricati dal portale
+# Aruba contengono PII billing (codice cliente, dati pagamento, indirizzi).
+# I file binari NON entrano in git. README + SHA256SUMS sì (no PII, prova
+# integrità degli archivi off-site).
+docs/privacy/aruba-accountability/*
+!docs/privacy/aruba-accountability/README.md
+!docs/privacy/aruba-accountability/SHA256SUMS.txt
+!docs/privacy/aruba-accountability/.gitkeep
+tools/webhook/_vps_env_local.sh
+tools/webhook/_vps_db_diag.sh
+
+# ========================================
+# G24.phase1 — HTMLPurifier definition cache (regenerable)
+# ========================================
+storage/htmlpurifier-cache/
+
+# ========================================
+# G27 — diagnostic/build artifacts e shell junk
+# ========================================
+# Cache TEX format VPS (regen on demand).
+storage/cache/
+# Diagnostic dumps (debug runtime, regen ad hoc).
+storage/_diag/
+# Test screenshots (E2E playwright artifact).
+tmp-vf-screenshots/
+# Diagnostic dumps tikz/svg compile (transient).
+_tikz_*.json
+smoke_*.log
+texput.log
+# Shell var-expansion errors (es. $d, $dir mistyped).
+$d/
+$dir/
+
+# Phase 25.C — WAF GeoIP database (binary, regenerated monthly via cron)
+storage/geoip/
+*.mmdb
+
+# ========================================
+# OSS publish prep (2026-05-22) — leak vectors fuori repo
+# ========================================
+# pdf-scraping-tools contiene .env con Anthropic API + Linear secrets
+# (legacy helper offline). Tutta la dir fuori repo: il codice non è
+# part of production app. Storia git verrà ripulita pre-publish.
+pdf-scraping-tools/
+
+# Gitleaks scan output (può contenere segreti in chiaro nel report)
+gitleaks-report.json
+gitleaks-*.json
+.gitleaks/
+
+# DPO export packets contengono PII utenti (Art. 28 evidence) —
+# generati on-demand in /admin/gdpr, mai committare.
+storage/dpo-packets/
+
+# ========================================
+# DEPRECATED — tikzjax client-side build (GPL-3.0+, EUPL-publish prep)
+# ========================================
+# Sostituita da render server-side via VPS (vedi ADR-013 + .deprecated file).
+# Cartella ancora tracked in git history — rimuovere fisicamente via
+# `git rm -r --cached tikzjax-develop/` prima del primo release EUPL,
+# per evitare di trascinare obblighi NOTICE GPL-3.0 nel pacchetto pubblicato.
+tikzjax-develop/
+
+# ========================================
+# Phase S2 Fase 1 (2026-05-22) — DECOUPLING dati produzione da git
+# ========================================
+# Previene NUOVE PII / blob cifrati di entrare in git. I file già tracciati
+# restano per ora (verranno rimossi via filter-repo pre-OSS, vedi
+# docs/todo/data_decoupling_phase2.md). VPS auto-deploy non è impattato.
+#
+# Modello finale: tutti i dati app vivono in /var/lib/pantedu-data/ (VPS)
+# o storage/_local-data/ (dev), accessibili via PANTEDU_DATA_PATH config.
+# Git tracka solo CODICE, non DATI.
+
+# Blob cifrati AES-256-GCM per docente (contenuto verifiche/mappe).
+# Sono crypto-safe ma pesanti (~50MB) e non hanno senso in git.
+storage/verifiche_enc/
+storage/maps_enc/
+
+# JSON utenti + scelte studenti + ownership (PII anche se aggregata).
+storage/data/registrations.json
+storage/data/ownership.json
+storage/data/print_info.json
+storage/data/print_info/
+storage/data/scelte/
+storage/data/checked_origins.json
+storage/data/curriculum.json
+
+# Filesystem objects (drawio plaintext + asset per-docente).
+# Path pattern: storage/objects/institutes/{iid}/private/{tid}/...
+# Contiene contenuti didattici personali. Mai in repo pubblico.
+storage/objects/institutes/
+
+# Legacy log/data — admin_users.json (bcrypt 77 utenti), blocked_ips,
+# collaborators, access_log. PII pesante + dati operativi WAF.
+log/data/*.json
+log/data/*.txt
+log/data/*.html
+# Manteniamo .htaccess + README + index.php (sono guard files)
+!log/data/.htaccess
+!log/data/README.md
+!log/data/index.php
+
+# Teacher_keys wrapped KEK (se mai dovessero finire su filesystem fuori DB)
+storage/teacher_keys/
+
+# Test E2E con credenziali in chiaro (login locale/VPS): mai committare.
+# Pattern: tutti i file `tests/e2e/_*.spec.js` sono local-dev only.
+tests/e2e/_*.spec.js
+# Screenshot di confronto visivo locali (output dei test _local_*.spec.js)
+tests/e2e/_local_screenshots/
+# Credenziali LOCALI per test/diagnostica (login progetto + VPS passphrase).
+# Da RUOTARE dopo l'uso. Mai committare.
+.env.e2e.local
+# Tool diagnostici dev usa-e-getta (screenshot sidebar/syncbar)
+tools/dev/_shot_*.mjs
+# Script di setup dev locale (Windows batch per vhost/hosts)
+add-hosts.bat
+
+# ADR-026 Step 4/5 — artifact migrazione rigenerabili (node tools/*.mjs)
+tools/_master-bodypt.json
+tools/_compilations-bodypt.json
+tools/_tpl-schema-map.json
+storage/backups/
+storage/templates/verifiche/t_*/
+docs/analysis/eser-sync/
+docs/analysis/verifiche-sync/
+
+# WAF HMAC key-file auto-generato (segreto, mai committare)
+storage/keys/
+
+# Agent/dev tooling artifacts (ruflo, claude-flow, pentesterflow) — mai versionare
+ruvector.db
+agentdb.rvf
+agentdb.rvf.lock
+*.rvf
+.claude-flow/
+.pentesterflow/

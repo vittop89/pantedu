@@ -1,0 +1,20 @@
+Contact: mailto:info@pantedu.eu
+Expires: 2027-05-18T23:59:59.000Z
+Preferred-Languages: it, en
+Canonical: https://beta.pantedu.eu/.well-known/security.txt
+Policy: https://beta.pantedu.eu/security
+
+# Pantedu — Coordinated Vulnerability Disclosure
+#
+# Se hai trovato una vulnerabilità di sicurezza in pantedu.eu o
+# beta.pantedu.eu, contattaci all'indirizzo sopra indicato.
+#
+# Si prega di:
+#   - NON divulgare pubblicamente la vulnerabilità prima della patch
+#   - NON accedere a dati di altri utenti
+#   - NON eseguire test attivi su produzione che potrebbero causare
+#     interruzione di servizio
+#   - Concedere ragionevole tempo per il fix (target 30 giorni per High,
+#     90 giorni per Medium/Low)
+#
+# RFC 9116 compliant.

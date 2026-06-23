@@ -1,0 +1,206 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Numeri reali e radicali",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Richiamiamo l'insieme R dei numeri reali", "checked": true },
+            { "label": "Radici quadrate, cubiche, n-esime", "checked": true },
+            { "label": "I radicali: condizioni di esistenza e segno", "checked": true },
+            { "label": "Semplificazione e riduzione allo stesso indice", "checked": true },
+            { "label": "Operazioni con i radicali", "checked": true },
+            { "label": "Razionalizzazioni", "checked": true },
+            { "label": "Radicali, equazioni e disequazioni", "checked": true },
+            { "label": "Radicali e valore assoluto", "checked": true },
+            { "label": "Potenze con esponente razionale", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Sistemi lineari",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione ai sistemi", "checked": true },
+            { "label": "Sistemi lineari di due equazioni in due incognite", "checked": true },
+            { "label": "Metodi risolutivi di un sistema lineare di due equazioni in due incognite", "checked": true },
+            { "label": "Criterio del rapporto", "checked": true },
+            { "label": "Sistemi lineari di tre equazioni in tre incognite", "checked": true },
+            { "label": "Problemi che hanno come modello sistemi lineari", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Rette nel piano cartesiano",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Richiami sul piano cartesiano", "checked": true },
+            { "label": "Distanza tra due punti", "checked": true },
+            { "label": "Punto medio di un segmento", "checked": true },
+            { "label": "Alcune isometrie nel piano cartesiano", "checked": true },
+            { "label": "La funzione lineare", "checked": true },
+            { "label": "L'equazione generale della retta nel piano cartesiano", "checked": true },
+            { "label": "Posizione reciproca di due rette e condizioni di parallelismo e perpendicolarità tra due rette", "checked": true },
+            { "label": "Punto di intersezione di due rette", "checked": true },
+            { "label": "Distanza di un punto da una retta", "checked": true },
+            { "label": "Problemi di scelta che hanno modelli lineari", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Frazioni algebriche",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione alle frazioni algebriche", "checked": true },
+            { "label": "Frazioni algebriche equivalenti e proprietà invariantiva", "checked": true },
+            { "label": "Addizione e sottrazione tra frazioni algebriche", "checked": true },
+            { "label": "Moltiplicazione e divisione tra frazioni algebriche. Elevamento a potenza di una frazione algebrica", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Equazioni di primo grado frazionarie e letterali",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Equazioni frazionarie", "checked": true },
+            { "label": "Equazioni letterali", "checked": true },
+            { "label": "Problemi che hanno come modello equazioni frazionarie e letterali", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Disequazioni frazionarie",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Richiami sulle disequazioni di primo grado", "checked": true },
+            { "label": "Disequazioni frazionarie", "checked": true },
+            { "label": "Disequazioni risolvibili mediante scomposizione in fattori", "checked": true },
+            { "label": "Sistemi di disequazioni contenenti disequazioni frazionarie o di grado superiore al primo", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "7",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Probabilità",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il linguaggio degli eventi", "checked": true },
+            { "label": "Il concetto di probabilità e il calcolo della probabilità secondo la definizione classica", "checked": true },
+            { "label": "I teoremi sul calcolo delle probabilità", "checked": true },
+            { "label": "La definizione frequentista di probabilità e la legge dei grandi numeri", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "8",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Area",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Equivalenza ed equiscomponibilità", "checked": true },
+            { "label": "Teoremi di equivalenza", "checked": true },
+            { "label": "Aree dei poligoni", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "9",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Teorema di Pitagora",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Teorema di Pitagora e suo teorema inverso", "checked": true },
+            { "label": "Applicazioni del teorema di Pitagora", "checked": true },
+            { "label": "Problemi geometrici risolvibili per via algebrica", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "10",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Teorema di Talete",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Segmenti e proporzioni", "checked": true },
+            { "label": "Teorema di Talete e sue conseguenze", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "11",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Similitudine",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il concetto di forma e la similitudine nei triangoli", "checked": true },
+            { "label": "La similitudine nei triangoli: criteri di similitudine per i triangoli", "checked": true },
+            { "label": "Similitudine e triangoli rettangoli: i teoremi di Euclide", "checked": true },
+            { "label": "Problemi di applicazione della similitudine", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "12",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Omotetie e similitudini",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Omotetie", "checked": true },
+            { "label": "Omotetie nel piano cartesiano", "checked": true },
+            { "label": "Dalle omotetie alle similitudini", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "C1",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Divisibilità di polinomi e applicazioni alle scomposizioni",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Divisibilità di polinomi", "checked": true },
+            { "label": "La regola di Ruffini", "checked": true },
+            { "label": "Il teorema del resto e applicazioni alla scomposizione di polinomi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "C2",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Circonferenza e poligoni inscritti e circoscritti",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Circonferenza, cerchio e corde", "checked": true },
+            { "label": "Rette e circonferenza", "checked": true },
+            { "label": "Posizioni reciproche di due circonferenze", "checked": true },
+            { "label": "Angoli al centro e angoli alla circonferenza", "checked": true },
+            { "label": "Poligoni inscritti e circoscritti", "checked": true },
+            { "label": "Lunghezza della circonferenza e area del cerchio", "checked": true }
+        ]
+    }
+]

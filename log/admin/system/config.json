@@ -1,0 +1,142 @@
+{
+    "security_alerts": {
+        "excessive_access": {
+            "enabled": true,
+            "description": "Rileva quando un singolo IP/fingerprint accede più volte alla stessa sezione",
+            "threshold_per_section": 2,
+            "time_window_hours": 24,
+            "risk_levels": {
+                "low": {
+                    "min_accesses": 3,
+                    "max_accesses": 25
+                },
+                "medium": {
+                    "min_accesses": 26,
+                    "max_accesses": 50
+                },
+                "high": {
+                    "min_accesses": 51,
+                    "max_accesses": 999999
+                }
+            }
+        },
+        "credential_sharing": {
+            "enabled": true,
+            "description": "Rileva quando le stesse credenziali vengono utilizzate da molti IP diversi",
+            "min_ips_required": 5,
+            "min_accesses_per_ip": 2,
+            "time_window_hours": 24,
+            "risk_levels": {
+                "low": {
+                    "min_ips": 5,
+                    "max_ips": 7
+                },
+                "medium": {
+                    "min_ips": 8,
+                    "max_ips": 10
+                },
+                "high": {
+                    "min_ips": 11,
+                    "max_ips": 999999
+                }
+            }
+        },
+        "rapid_succession": {
+            "enabled": false,
+            "description": "Rileva accessi troppo rapidi in successione (possibile bot)",
+            "max_seconds_between_accesses": 5,
+            "min_rapid_accesses": 10,
+            "time_window_minutes": 15,
+            "risk_levels": {
+                "low": {
+                    "min_accesses": 10,
+                    "max_accesses": 20
+                },
+                "medium": {
+                    "min_accesses": 21,
+                    "max_accesses": 50
+                },
+                "high": {
+                    "min_accesses": 51,
+                    "max_accesses": 999999
+                }
+            }
+        },
+        "suspicious_patterns": {
+            "enabled": false,
+            "description": "Rileva pattern sospetti negli accessi (orari inusuali, user agent anomali, etc.)",
+            "unusual_hours": {
+                "enabled": true,
+                "start_hour": 23,
+                "end_hour": 6,
+                "min_accesses": 5
+            },
+            "suspicious_user_agents": {
+                "enabled": true,
+                "patterns": [
+                    "bot",
+                    "crawler",
+                    "spider",
+                    "scraper",
+                    "curl",
+                    "wget"
+                ],
+                "min_accesses": 3
+            },
+            "geographic_anomalies": {
+                "enabled": false,
+                "description": "Rileva accessi da paesi inusuali (richiede servizio GeoIP)",
+                "allowed_countries": ["IT", "SM", "VA"],
+                "min_accesses": 1
+            }
+        },
+        "failed_login_attempts": {
+            "enabled": false,
+            "description": "Rileva tentativi di login falliti ripetuti",
+            "max_failed_attempts": 10,
+            "time_window_minutes": 30,
+            "risk_levels": {
+                "low": {
+                    "min_attempts": 10,
+                    "max_attempts": 20
+                },
+                "medium": {
+                    "min_attempts": 21,
+                    "max_attempts": 50
+                },
+                "high": {
+                    "min_attempts": 51,
+                    "max_attempts": 999999
+                }
+            }
+        }
+    },
+    "general_settings": {
+        "auto_redirect": {
+            "enabled": true,
+            "description": "Reindirizza automaticamente l'admin agli alert quando ci sono anomalie attive"
+        },
+        "email_notifications": {
+            "enabled": false,
+            "smtp_host": "",
+            "smtp_port": 587,
+            "smtp_user": "",
+            "smtp_password": "",
+            "admin_emails": [
+                "admin@pantedu.eu"
+            ],
+            "send_on_risk_levels": ["high", "medium"]
+        },
+        "log_retention": {
+            "days": 90,
+            "description": "Numero di giorni per cui mantenere i log di accesso"
+        },
+        "alert_retention": {
+            "days": 30,
+            "description": "Numero di giorni per cui mantenere gli alert visionati/bloccati"
+        }
+    },
+    "version": "1.0.0",
+    "last_updated": "2025-08-20T00:00:00Z",
+    "description": "Configurazione per il sistema di rilevamento anomalie negli accessi. Modifica i parametri per adattare la sensibilità del sistema alle tue esigenze."
+}

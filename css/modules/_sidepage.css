@@ -1,0 +1,167 @@
+/* ============================================================ */
+/* Sidepage panels — Phase Roadmap 3 (extract from layout.css).  */
+/*                                                                */
+/* Pannelli sidepage (mappe/lab/eser/verif/bes/risdoc). Display   */
+/* inline-block container con header sticky + content scroll.    */
+/*                                                                */
+/* Mobile: panel takes full viewport, slide-in from right.        */
+/* ============================================================ */
+
+/* Container base */
+.fm-sidepage {
+    background: var(--fm-c-surface);
+    border-radius: var(--fm-radius);
+    box-shadow: var(--fm-shadow-sm);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.fm-sidepage__header {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    padding: var(--fm-space-3) var(--fm-space-4);
+    background: var(--fm-c-surface-2);
+    border-bottom: 1px solid var(--fm-c-border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.fm-sidepage__title {
+    margin: 0;
+    font-size: var(--fm-fs-md);
+    font-weight: 600;
+    flex: 1 1 auto;
+}
+
+.fm-sidepage__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    flex-wrap: wrap;
+}
+
+.fm-sidepage__content {
+    flex: 1 1 auto;
+    padding: var(--fm-space-3) var(--fm-space-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Empty state */
+.fm-sidepage__empty {
+    text-align: center;
+    color: var(--fm-c-muted);
+    padding: var(--fm-space-6) var(--fm-space-4);
+    font-size: var(--fm-fs-sm);
+}
+
+/* Section group per data-sidepage. Brand color border-left. */
+.fm-sidepage--mappe   { border-left: 4px solid var(--fm-c-sec-mappe); }
+.fm-sidepage--lab     { border-left: 4px solid var(--fm-c-sec-lab); }
+.fm-sidepage--eser    { border-left: 4px solid var(--fm-c-sec-eser); }
+.fm-sidepage--verif   { border-left: 4px solid var(--fm-c-sec-verif); }
+.fm-sidepage--bes     { border-left: 4px solid var(--fm-c-sec-bes); }
+.fm-sidepage--risdoc  { border-left: 4px solid var(--fm-c-sec-risdoc); }
+
+/* Mobile: slide-in pattern (toggled by JS) */
+@media (max-width: 47.99em) {
+    .fm-sidepage--mobile-full {
+        position: fixed;
+        top: 0; right: 0; bottom: 0;
+        width: 100vw;
+        max-width: none;
+        z-index: var(--fm-z-modal);
+        border-radius: 0;
+        transform: translateX(100%);
+        transition: transform var(--fm-transition) var(--fm-easing);
+    }
+    .fm-sidepage--mobile-full.fm-is-open {
+        transform: translateX(0);
+    }
+}
+
+/* InfoTip riusabile — ⓘ + popover a richiesta (ADR-028 / pulizia UI). Sostituisce
+   le descrizioni inline: .fm-infotip accanto a un titolo/campo, .fm-sb-info nei
+   button sezione (variante assoluta). Vedi section-scope-hint.js.
+   Target cliccabile ≥24px (WCAG 2.5.8) ma TRASPARENTE; cerchio VISIBILE piccolo
+   (14px) disegnato dal ::before — compatto e accessibile. */
+.fm-infotip,
+.fm-sb-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: 0;            /* nasconde la "i" di fallback nel markup */
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+    color: inherit;
+}
+.fm-infotip { margin-left: 5px; }
+.fm-sb-info {               /* variante sidebar: ancorata a destra nel button */
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.fm-infotip::before,
+.fm-sb-info::before {
+    content: "i";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    font: italic 700 9.5px/1 Georgia, "Times New Roman", serif;
+    opacity: .7;
+    transition: opacity var(--fm-transition, .15s) ease, background var(--fm-transition, .15s) ease;
+}
+.fm-infotip:hover::before,
+.fm-infotip:focus-visible::before,
+.fm-sb-info:hover::before,
+.fm-sb-info:focus-visible::before {
+    opacity: 1;
+    background: rgba(127, 127, 127, .25);
+}
+.fm-infotip:focus-visible,
+.fm-sb-info:focus-visible { outline: none; }
+
+.fm-infotip-popover {
+    /* !important: una regola legacy (layer overrides) imponeva position:relative,
+       ancorando il popover in fondo al body invece che al viewport. */
+    position: fixed !important;
+    z-index: 1000;
+    max-width: 280px;
+    padding: 10px 12px 12px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--fm-c-text);
+    background: var(--fm-c-surface, #1e293b);
+    border: 1px solid var(--fm-c-border-strong, var(--fm-c-border, #334155));
+    border-radius: var(--fm-radius, 8px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+}
+.fm-infotip-popover p { margin: 0 0 6px; }
+.fm-infotip-popover p:last-of-type { margin-bottom: 0; }
+.fm-infotip-popover a { color: var(--fm-c-link, #4d9aff); font-weight: 600; }
+.fm-infotip-popover code { background: rgba(127,127,127,.2); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+.fm-infotip-popover__close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    border: 0;
+    background: none;
+    color: var(--fm-c-muted);
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+}
+.fm-infotip-popover__close:hover { color: var(--fm-c-text); }

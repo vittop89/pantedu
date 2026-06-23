@@ -1,0 +1,44 @@
+[Unit]
+Description=pantedu — TikZ cache prewarm (compila offline i blocchi cache-miss)
+# Aspetta che PHP-FPM e tex-compile siano pronti (il prewarm chiama il VPS via
+# rete, no dipendenza diretta — serve solo la rete attiva).
+After=network-online.target tex-compile.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Eseguito come 'pantedu' (owner del repo /var/www/pantedu + cache).
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+# NB: .env NON caricato via EnvironmentFile. Causa PHP exit 255 silenzioso
+# (motivo non chiaro — pattern empirico: systemd-run senza EnvironmentFile
+# funziona, con EnvironmentFile=-.env fail). bootstrap.php (vlucas/phpdotenv)
+# carica direttamente .env + .env.local a runtime quando legge da
+# WorkingDirectory.
+
+# delay=2 → 30 req/min, sotto il rate-limit nginx (60r/m + burst 20).
+# Lo script salta i blocchi gia' cached (idempotente) → riesecuzioni veloci.
+# /usr/bin/php su Debian con php8.4-fpm punta al CLI corretto via update-alternatives.
+ExecStart=/usr/bin/php /var/www/pantedu/tools/tikz_prewarm_cache.php --delay=2
+
+# NB: Type=oneshot già previene execution sovrapposta (systemd attende
+# che ExecStart termini prima di accettare un nuovo start). Anti-doppione
+# delegato a systemd, no lock file necessario.
+
+# Timeout massimo: 90 minuti. Se finisce prima ok; se va lungo viene killato.
+TimeoutStartSec=5400
+
+# Esce 0 se complete, !=0 se errore. systemd registra lo stato in journal.
+Restart=no
+
+# Hardening rimosso completamente — PrivateTmp causa 255/EXCEPTION su
+# PHP CLI con MiKTeX/dotenv (motivo non chiaro, pattern empirico).
+# Limiti memoria/CPU rimossi per evitare timeout/OOM su content pesante.
+NoNewPrivileges=yes
+
+# Limiti rimossi: PHP CLI prewarm fa I/O di rete (HTTP to VPS) + cache fs,
+# poco RAM/CPU. Senza limiti, comportamento prevedibile uguale a CLI manuale.
+
+[Install]
+WantedBy=multi-user.target

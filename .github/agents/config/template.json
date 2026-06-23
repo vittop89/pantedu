@@ -1,0 +1,144 @@
+{
+  "source": "pcf_v1_ed1",
+
+  "destination": {
+    "file": "verifiche/php/FIS/FIS-Temperatura_e_calore-ver.php",
+    "targets": {
+      "collect_fill": {
+        "container": "#La_temperatura_e_il_calore-type_Collect_ver_1-or_personal",
+        "scope_type": "type_Collect",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [
+            {
+              "difficulty": "string",
+              "page": "string",
+              "number": "string",
+              "badge_color": "string",
+              "topic": "string"
+            }
+          ],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "408": [],
+            "414": []
+          },
+          "topics": {
+            "fusione e solidificazione": [],
+            "propagazione del calore": []
+          }
+        }
+      },
+      "collect_problems": {
+        "container": "#La_temperatura_e_il_calore-type_Collect_ver_2-or_personal",
+        "scope_type": "type_Collect",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "410": [],
+            "416": []
+          },
+          "topics": {
+            "fusione e solidificazione": [],
+            "vaporizzazione e condensazione": [],
+            "propagazione del calore": [],
+            "conduzione del calore": []
+          }
+        }
+      },
+      "vf_main": {
+        "container": "#TODO_inserire_id_container_VF",
+        "scope_type": "type_VF",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {},
+          "topics": {}
+        }
+      },
+      "rmulti_mixed": {
+        "container": "#La_temperatura_e_il_calore-type_RMulti_ver_1-or_personal",
+        "scope_type": "type_RMulti",
+        "defaults": {
+          "target_entries_mode": "prefer",
+          "target_entries": [],
+          "target_numbers": [],
+          "badge_color": {
+            "green": [],
+            "red": [],
+            "blue": [],
+            "orange": []
+          },
+          "difficulty_map": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
+          },
+          "page_map": {
+            "408": [],
+            "414": []
+          },
+          "topics": {
+            "fusione e solidificazione": [],
+            "propagazione del calore": []
+          },
+          "type_map": {
+            "type_RMultiA": [],
+            "type_RMultiB": []
+          }
+        }
+      }
+    }
+  },
+
+  "defaults_shared": {
+    "badge_color": {},
+    "difficulty_map": {},
+    "page_map": {}
+  },
+
+  "metadata": {
+    "version": "3.0.0",
+    "last_updated": "2026-02-28"
+  }
+}

@@ -1,0 +1,27 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Analizzare e risolvere problemi complessi, anche non standard, utilizzando in modo strategico e flessibile gli strumenti del calcolo algebrico e trascendente (equazioni, disequazioni, sistemi), modellizzando situazioni reali e interpretando criticamente i risultati.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare il concetto di funzione per analizzare e descrivere qualitativamente e quantitativamente le relazioni tra variabili e l'evoluzione di fenomeni, utilizzando le proprietà delle funzioni elementari, algebriche e trascendenti e le trasformazioni geometriche.",
+                "checked": true
+            },
+            {
+                "label": "Utilizzare il metodo delle coordinate cartesiane per studiare, rappresentare e risolvere problemi relativi alle coniche e ai luoghi geometrici, dimostrando la capacità di integrare l'approccio algebrico e quello geometrico.",
+                "checked": true
+            },
+            {
+                "label": "Analizzare criticamente e interpretare insiemi di dati, anche bivariati, utilizzando opportuni indici, modelli di distribuzione e di regressione per descrivere fenomeni e valutare la correlazione tra variabili.",
+                "checked": true
+            },
+            {
+                "label": "Riconoscere e formalizzare strutture e regolarità in contesti numerici (come successioni e progressioni), utilizzando il ragionamento induttivo e il linguaggio matematico per costruire dimostrazioni e generalizzare proprietà.",
+                "checked": true
+            }
+        ]
+    }
+]

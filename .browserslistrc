@@ -1,0 +1,12 @@
+# Pantedu browser support — 2026 baseline.
+# Allineato con docs/legal/accessibility.md "Tecnologie e compatibilità".
+# Esclude browser senza supporto :focus-visible / @layer (security e a11y baseline).
+
+# >= 1% global usage in last 2 years
+> 0.5% in IT, > 1% in EU, last 2 years
+not dead
+not op_mini all
+not ie 11
+not safari < 15.4
+not chrome < 99
+not firefox < 97

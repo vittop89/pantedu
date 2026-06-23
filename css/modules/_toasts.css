@@ -1,0 +1,165 @@
+/* ============================================================ */
+/* Toasts — Phase Roadmap 3 + Sprint 25 enhanced.                */
+/*                                                                */
+/* Toast notifications bottom-right. Auto-dismiss (JS-driven).    */
+/* ARIA: container deve avere role="status" aria-live="polite".   */
+/*                                                                */
+/* Variants: loading, success, error, warning, info.              */
+/* Components: .toast-icon, .toast-content, .toast-title,         */
+/*             .toast-message, .toast-spinner.                    */
+/* States: .removing (exit animation).                             */
+/* ============================================================ */
+
+.toast-container,
+.fm-toast-container {
+    position: fixed;
+    bottom: var(--fm-space-5);
+    right: var(--fm-space-5);
+    z-index: var(--fm-z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2);
+    max-width: 400px;
+    pointer-events: none;
+}
+
+.toast,
+.fm-toast {
+    padding: var(--fm-space-4) var(--fm-space-5);
+    border-radius: var(--fm-radius);
+    box-shadow: var(--fm-shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-3);
+    min-width: 300px;
+    animation: fm-toast-slidein 0.3s var(--fm-easing);
+    font-size: var(--fm-fs-sm);
+    font-weight: 500;
+    pointer-events: auto;
+}
+
+.toast-loading,
+.fm-toast--loading {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: #ffffff;
+    border-left: 4px solid #0d47a1;
+}
+
+.toast-success,
+.fm-toast--success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: #ffffff;
+    border-left: 4px solid #2e7d32;
+}
+
+.toast-error,
+.fm-toast--error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: #ffffff;
+    border-left: 4px solid #c62828;
+}
+
+.toast-warning,
+.fm-toast--warning {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: #ffffff;
+    border-left: 4px solid #e65100;
+}
+
+.toast-info,
+.fm-toast--info {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #ffffff;
+    border-left: 4px solid #0369a1;
+}
+
+/* Dark theme: contrasto + box-shadow piu' forti */
+body.fm-dark .toast {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+}
+body.fm-dark .toast-loading {
+    background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+    border-left-color: #60a5fa;
+}
+body.fm-dark .toast-success {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-left-color: #86efac;
+}
+body.fm-dark .toast-error {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border-left-color: #fca5a5;
+}
+body.fm-dark .toast-warning {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    border-left-color: #fcd34d;
+}
+body.fm-dark .toast-info {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    border-left-color: #7dd3fc;
+}
+
+/* Components interni */
+.toast-icon {
+    font-size: var(--fm-fs-lg);
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: bold;
+    margin-bottom: var(--fm-space-1);
+}
+
+.toast-message {
+    font-size: var(--fm-fs-sm);
+    opacity: 0.95;
+}
+
+.toast-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: fm-toast-spin 0.8s linear infinite;
+}
+
+/* Animations */
+@keyframes fm-toast-slidein {
+    from { transform: translateX(400px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fm-toast-slideout {
+    from { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(400px); opacity: 0; }
+}
+
+@keyframes fm-toast-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Exit animation state */
+.toast.removing,
+.fm-toast.removing {
+    animation: fm-toast-slideout 0.3s ease-out forwards;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .toast,
+    .fm-toast {
+        animation: none;
+    }
+    .toast.removing,
+    .fm-toast.removing {
+        animation: none;
+        opacity: 0;
+    }
+    .toast-spinner {
+        animation: none;
+    }
+}

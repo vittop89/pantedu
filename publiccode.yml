@@ -1,0 +1,158 @@
+# publiccode.yml v0.4 — Developers Italia catalog metadata.
+# Spec: https://yml.publiccode.tools/
+# Validator: https://italia.github.io/publiccode-editor/
+
+publiccodeYmlVersion: "0.4"
+
+name: Pantedu
+url: "https://github.com/vittop89/pantedu"
+landingURL: "https://pantedu.eu"
+softwareVersion: "0.1.0"
+releaseDate: "2026-05-23"
+logo: "public/favicon.svg"
+
+platforms:
+  - web
+  - linux
+
+categories:
+  - learning-management-system
+  - knowledge-management
+  - document-management
+  - data-collection
+  - identity-management
+
+usedBy: []
+
+developmentStatus: beta
+softwareType: "standalone/web"
+
+intendedAudience:
+  scope:
+    - education
+    - research
+  countries:
+    - it
+  unsupportedCountries: []
+
+description:
+  it:
+    localisedName: Pantedu
+    shortDescription: >-
+      Piattaforma educativa self-hosted privacy-first per docenti italiani:
+      mappe concettuali, esercizi, verifiche, gestione classi e materiali
+      didattici cifrati end-to-end.
+
+    longDescription: |
+      Pantedu è una piattaforma didattica web self-hosted progettata per
+      docenti di scuola secondaria italiana (liceo / tecnico / professionale).
+      Permette di produrre, organizzare e condividere materiale didattico
+      multi-formato (mappe concettuali drawio, esercizi LaTeX, verifiche,
+      laboratori, documenti BES) con un modello privacy-by-design conforme
+      a GDPR e Linee Guida AgID.
+
+      **Caratteristiche principali**
+
+      - **Mappe concettuali** drawio integrate, cifrate per docente
+      - **Esercizi e verifiche** con compilazione TeX → PDF lato server
+      - **Gestione classi multi-indirizzo** (Liceo Scientifico / Classico /
+        Linguistico / Artistico, Tecnico, Professionale) con override per
+        istituto
+      - **Conformità GDPR**: export Art. 15/20 self-service, authority
+        cooperation Art. 6(1)(c), DPIA documentata, log accessi append-only
+      - **Crittografia envelope**: AES-256-GCM, KEK per docente con
+        wrapping HKDF da master key, Shamir 3-of-5 per recovery key
+        management (KMS senza single point of failure)
+      - **WAF applicativo self-contained**: challenge Proof-of-Work
+        anti-bot, scoring euristico del fingerprint browser con segnali
+        server-side, geo-filtering non spoofabile (es. accesso solo da IT),
+        threat-intelligence multi-sorgente (Spamhaus, Tor, ASN), bouncer
+        CrowdSec, honeypot con auto-blacklist, rule engine custom con
+        protezione ReDoS, e ban brute-force (lockout temporaneo username +
+        ban IP su credential-stuffing, "NAT-safe" per le reti scolastiche
+        condivise). Cookie di sessione WAF firmato HMAC e legato a IP+UA;
+        fail-closed in caso di errore interno.
+      - **Difesa di bordo** (deployment raccomandato): reverse-proxy con
+        origin lockato ai soli IP del CDN/proxy (firewall), risoluzione
+        dell'IP client reale a prova di spoofing X-Forwarded-For e
+        rate-limiting di bordo (login + anti-flood)
+      - **Audit logging append-only** con conservazione 7-10 anni configurabile
+      - **Multi-tenant istituto**: ogni scuola può overrideare materie,
+        classi, indirizzi del catalogo nazionale
+      - **Self-host**: nginx + PHP-FPM + MariaDB su un singolo VPS
+        Hetzner/AWS, no dipendenze SaaS proprietarie
+
+    documentation: "https://github.com/vittop89/pantedu/tree/main/docs"
+    apiDocumentation: "https://github.com/vittop89/pantedu/tree/main/docs/api"
+
+    features:
+      - Creazione mappe concettuali cifrate con drawio.net self-hosted
+      - Compilazione esercizi LaTeX -> PDF server-side
+      - Verifiche multi-documento (texCommon, versioni, griglie correzione)
+      - Gestione gerarchia istituto -> indirizzo -> classe -> materia -> topic
+      - Cifratura envelope AES-256-GCM con KEK per docente
+      - Crypto-shredding GDPR Art. 17 (O(1) via DROP teacher_keys row)
+      - Authority export GDPR Art. 6(1)(c) firmato HMAC
+      - WAF applicativo: Proof-of-Work, scoring, geo-filtering, threat-intel, CrowdSec
+      - Ban brute-force NAT-safe (lockout username + ban IP su credential-stuffing)
+      - Difesa di bordo: origin-lock al proxy/CDN + rate-limiting + anti IP-spoofing
+      - Audit log append-only con conservazione configurabile
+      - SSO opzionale via Cloudflare Access / nginx auth_request
+      - Accessibilità WCAG 2.2 AA / EN 301 549 (Legge 4/2004 "Stanca"): dichiarazione AgID Form-A, audit per criterio, gate axe-core in CI, formule matematiche con MathML assistivo per screen reader
+
+    screenshots: []
+
+    videos: []
+
+    awards: []
+
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Vittorio Pantaleo
+  repoOwner: Vittorio Pantaleo
+  authorsFile: "NOTICE.md"
+
+maintenance:
+  type: internal
+  contacts:
+    - name: Vittorio Pantaleo
+      email: "vittorio.pantaleo@pantedu.eu"
+      affiliation: Pantedu (sole maintainer)
+
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - it
+
+dependsOn:
+  open:
+    - name: PHP
+      versionMin: "8.3"
+      versionMax: "8.4"
+      optional: false
+    - name: MariaDB
+      versionMin: "11.0"
+      optional: false
+    - name: nginx
+      versionMin: "1.24"
+      optional: false
+  proprietary: []
+  hardware: []
+
+it:
+  countryExtensionVersion: "1.0"
+
+  riuso: {}
+
+  piattaforme:
+    spid: false
+    cie: false
+    anpr: false
+    pagopa: false
+    io: false
+
+  conforme:
+    lineeGuidaDesign: false
+    modelloInteroperabilita: false
+    misureMinimeSicurezza: true
+    gdpr: true

@@ -1,0 +1,149 @@
+[
+    {
+        "titolo": "Consolidare la misurazione e l'analisi dei dati",
+        "contenuti": [
+            { "label": "Applicare con precisione le procedure di misurazione utilizzando le unità del Sistema Internazionale.", "checked": false },
+            { "label": "Esprimere e manipolare fluentemente numeri in notazione scientifica e determinare l'ordine di grandezza.", "checked": false },
+            { "label": "Eseguire e convertire misure di lunghezza, area e volume con consapevolezza degli strumenti e delle loro portate.", "checked": false },
+            { "label": "Misurare intervalli di tempo, masse e densità, interpretando i risultati nel contesto fisico.", "checked": false },
+            { "label": "Analizzare e quantificare l'incertezza nelle misure dirette e indirette, utilizzando le cifre significative in modo appropriato.", "checked": false },
+            { "label": "Derivare grandezze fisiche da misure indirette, applicando correttamente la propagazione degli errori.", "checked": false },
+            { "label": "Formulare e verificare leggi fisiche attraverso l'analisi di dati sperimentali e la costruzione di modelli.", "checked": false },
+            { "label": "Interpretare e costruire grafici per visualizzare e analizzare le relazioni funzionali tra grandezze fisiche.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Padroneggiare i vettori e le forze",
+        "contenuti": [
+            { "label": "Operare con grandezze vettoriali (somma, differenza, prodotto per uno scalare) e rappresentarle graficamente e analiticamente.", "checked": false },
+            { "label": "Scomporre vettori nelle loro componenti cartesiane e calcolare modulo e direzione del vettore risultante.", "checked": false },
+            { "label": "Misurare le forze utilizzando strumenti appropriati e interpretare il concetto di forza come interazione tra corpi.", "checked": false },
+            { "label": "Applicare il principio di azione e reazione per analizzare le forze scambiate tra due o più corpi.", "checked": false },
+            { "label": "Calcolare la forza peso e distinguerla dalla massa, comprendendone la natura vettoriale.", "checked": false },
+            { "label": "Applicare la legge di Hooke per descrivere e calcolare la forza elastica esercitata da una molla.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Padroneggiare l'equilibrio dei corpi rigidi e puntiformi",
+        "contenuti": [
+            { "label": "Analizzare e risolvere problemi relativi all'equilibrio di un punto materiale, identificando e calcolando la forza normale e altre forze agenti.", "checked": false },
+            { "label": "Quantificare e applicare il concetto di attrito radente (statico e dinamico) nella risoluzione di problemi di equilibrio.", "checked": false },
+            { "label": "Risolvere problemi di equilibrio che coinvolgono tensioni e corpi su piani inclinati, scomponendo le forze in modo appropriato.", "checked": false },
+            { "label": "Calcolare il momento di una forza e applicare la condizione di equilibrio rotazionale per corpi rigidi.", "checked": false },
+            { "label": "Verificare e applicare le condizioni di equilibrio statico (traslazionale e rotazionale) a corpi estesi e sistemi complessi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Padroneggiare l'equilibrio dei fluidi",
+        "contenuti": [
+            { "label": "Calcolare e interpretare la pressione esercitata da forze su superfici e all'interno dei fluidi.", "checked": false },
+            { "label": "Descrivere le caratteristiche distintive dei fluidi (liquidi e gas) e il concetto di densità.", "checked": false },
+            { "label": "Risolvere problemi applicando la legge di Stevin per la pressione idrostatica e il principio di Pascal per la trasmissione della pressione.", "checked": false },
+            { "label": "Spiegare il principio dei vasi comunicanti e descrivere il funzionamento di strumenti per la misura della pressione (es. manometro, barometro).", "checked": false },
+            { "label": "Calcolare la spinta di Archimede e utilizzarla per prevedere e spiegare il galleggiamento o l'affondamento dei corpi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Interpretare e risolvere problemi sui moti unidimensionali",
+        "contenuti": [
+            { "label": "Utilizzare sistemi di riferimento, traiettorie, posizioni e spostamenti per descrivere il moto di un corpo.", "checked": false },
+            { "label": "Calcolare e interpretare la velocità media e istantanea da dati e grafici.", "checked": false },
+            { "label": "Risolvere problemi e interpretare grafici relativi al moto rettilineo uniforme.", "checked": false },
+            { "label": "Calcolare e interpretare l'accelerazione media e istantanea da dati e grafici.", "checked": false },
+            { "label": "Risolvere problemi e interpretare grafici relativi al moto rettilineo uniformemente accelerato.", "checked": false },
+            { "label": "Applicare le leggi del moto uniformemente accelerato per analizzare la caduta libera dei gravi e il lancio verticale.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Interpretare e risolvere problemi sui moti bidimensionali",
+        "contenuti": [
+            { "label": "Descrivere lo spostamento, la velocità e l'accelerazione come vettori in un piano e operare con essi.", "checked": false },
+            { "label": "Analizzare il moto di un proiettile (moto parabolico) determinando traiettoria, gittata, altezza massima e tempo di volo.", "checked": false },
+            { "label": "Risolvere problemi relativi al moto circolare uniforme, calcolando periodo, frequenza, velocità tangenziale, velocità angolare e accelerazione centripeta.", "checked": false },
+            { "label": "Descrivere qualitativamente il moto armonico semplice come proiezione di un moto circolare uniforme e identificarne le grandezze caratteristiche.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Applicare i principi della dinamica",
+        "contenuti": [
+            { "label": "Enunciare e applicare il primo principio della dinamica (principio d'inerzia) per interpretare lo stato di quiete o moto rettilineo uniforme.", "checked": true },
+            { "label": "Utilizzare il secondo principio della dinamica (F=ma) per calcolare forze, masse o accelerazioni in diversi contesti.", "checked": true },
+            { "label": "Identificare e applicare il terzo principio della dinamica (principio di azione e reazione) nell'analisi delle interazioni tra corpi.", "checked": true },
+            { "label": "Analizzare dinamicamente il moto dei corpi in caduta, considerando la forza peso e l'eventuale resistenza dell'aria.", "checked": true },
+            { "label": "Applicare i principi della dinamica per analizzare il moto circolare uniforme, identificando la forza centripeta.", "checked": true },
+            { "label": "Descrivere le caratteristiche dei moti oscillatori semplici (es. pendolo, sistema massa-molla) e identificare la forza di richiamo.", "checked": true },
+            { "label": "Riconoscere e descrivere l'effetto delle forze apparenti in sistemi di riferimento non inerziali.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Comprendere e applicare i concetti di lavoro ed energia",
+        "contenuti": [
+            { "label": "Definire e calcolare il lavoro compiuto da una forza costante e da una forza variabile (graficamente).", "checked": true },
+            { "label": "Enunciare e applicare il teorema dell'energia cinetica per mettere in relazione il lavoro totale con la variazione di energia cinetica.", "checked": true },
+            { "label": "Distinguere tra forze conservative e non conservative, definire l'energia potenziale (gravitazionale ed elastica) e applicare il principio di conservazione dell'energia meccanica.", "checked": true },
+            { "label": "Analizzare il ruolo delle forze non conservative (come l'attrito) nella variazione dell'energia meccanica totale di un sistema.", "checked": true },
+            { "label": "Definire e calcolare la potenza media e istantanea sviluppata da una forza.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Utilizzare i principi di conservazione della quantità di moto e del momento angolare",
+        "contenuti": [
+            { "label": "Definire e calcolare la quantità di moto di un corpo e l'impulso di una forza.", "checked": true },
+            { "label": "Applicare il principio di conservazione della quantità di moto per analizzare gli urti (elastici e anelastici) tra corpi.", "checked": true },
+            { "label": "Definire il momento angolare e applicare il principio di conservazione del momento angolare in sistemi isolati.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Comprendere la gravitazione universale",
+        "contenuti": [
+            { "label": "Descrivere l'evoluzione storica dei modelli cosmologici (geocentrico ed eliocentrico) ed enunciare le tre leggi di Keplero sul moto dei pianeti.", "checked": false },
+            { "label": "Comprendere il passaggio concettuale dalle leggi di Keplero alla formulazione della legge di gravitazione universale di Newton.", "checked": false },
+            { "label": "Applicare la legge di gravitazione universale per calcolare la forza gravitazionale tra due masse e interpretare il concetto di campo gravitazionale.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Comprendere i fenomeni termici e le leggi dei gas",
+        "contenuti": [
+            { "label": "Definire la temperatura come misura dell'energia cinetica media delle particelle e descrivere il concetto di equilibrio termico.", "checked": true },
+            { "label": "Descrivere e calcolare gli effetti della dilatazione termica lineare, superficiale e volumica dei solidi e dei liquidi.", "checked": true },
+            { "label": "Definire il calore come trasferimento di energia e utilizzare i concetti di capacità termica e calore specifico per risolvere problemi.", "checked": true },
+            { "label": "Descrivere i cambiamenti di fase (fusione, solidificazione, vaporizzazione, condensazione, sublimazione) e calcolare il calore latente associato.", "checked": true },
+            { "label": "Descrivere i meccanismi di propagazione del calore: conduzione, convezione e irraggiamento.", "checked": true },
+            { "label": "Enunciare e applicare l'equazione di stato dei gas perfetti per mettere in relazione pressione, volume, temperatura e numero di moli.", "checked": true },
+            { "label": "Interpretare e applicare le leggi dei gas perfetti (Boyle, Charles, Gay-Lussac) in trasformazioni isoterme, isobare e isocore.", "checked": true },
+            { "label": "Comprendere i postulati della teoria cinetica dei gas e la sua relazione con le proprietà macroscopiche dei gas.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Applicare i principi della termodinamica",
+        "contenuti": [
+            { "label": "Definire l'energia interna di un sistema termodinamico e metterla in relazione con lo stato microscopico del sistema.", "checked": true },
+            { "label": "Calcolare il lavoro compiuto da o su un sistema termodinamico durante trasformazioni a pressione costante, volume costante e isoterme.", "checked": true },
+            { "label": "Enunciare e applicare il primo principio della termodinamica come principio di conservazione dell'energia.", "checked": true },
+            { "label": "Comprendere l'impossibilità di convertire integralmente il calore in lavoro (secondo principio, enunciato di Kelvin-Planck) e descrivere il funzionamento schematico delle macchine termiche.", "checked": true },
+            { "label": "Descrivere il ciclo di Carnot e calcolarne il rendimento, comprendendone il significato di ciclo reversibile ideale.", "checked": true },
+            { "label": "Comprendere l'enunciato di Clausius del secondo principio, definire l'entropia come misura del disordine e interpretarne l'aumento nei processi irreversibili.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Analizzare le onde meccaniche e il suono",
+        "contenuti": [
+            { "label": "Distinguere tra onde trasversali e longitudinali e fornire esempi di entrambe.", "checked": false },
+            { "label": "Definire e utilizzare le grandezze caratteristiche delle onde periodiche: ampiezza, lunghezza d'onda, periodo, frequenza, velocità di propagazione.", "checked": false },
+            { "label": "Descrivere la natura delle onde sonore, le loro caratteristiche (altezza, intensità, timbro) e la loro propagazione nei mezzi.", "checked": false },
+            { "label": "Spiegare e applicare i fenomeni della riflessione delle onde e dell'effetto Doppler per il suono.", "checked": false },
+            { "label": "Descrivere i fenomeni di interferenza (costruttiva e distruttiva) e diffrazione delle onde.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Comprendere la natura e i fenomeni della luce",
+        "contenuti": [
+            { "label": "Descrivere la luce come onda elettromagnetica e la sua propagazione rettilinea in mezzi omogenei (ottica geometrica).", "checked": false },
+            { "label": "Applicare le leggi della riflessione per determinare la formazione di immagini in uno specchio piano.", "checked": false },
+            { "label": "Descrivere e costruire graficamente la formazione di immagini prodotte da specchi sferici (concavi e convessi).", "checked": false },
+            { "label": "Applicare le leggi della rifrazione (legge di Snell) e descrivere il fenomeno della riflessione totale.", "checked": false },
+            { "label": "Descrivere e costruire graficamente la formazione di immagini prodotte da lenti sottili (convergenti e divergenti) e utilizzare l'equazione dei punti coniugati.", "checked": false },
+            { "label": "Descrivere i fenomeni di interferenza e diffrazione della luce come evidenze della sua natura ondulatoria.", "checked": false }
+        ]
+    }
+]

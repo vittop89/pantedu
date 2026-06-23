@@ -1,0 +1,147 @@
+/* ============================================================ */
+/* Buttons — Phase C.4 modular component.                         */
+/* WCAG 2.5.5 Target Size: min 24x24px (AA), 44x44px (AAA).      */
+/* Riferimenti tokens: css/tokens.css.                            */
+/* ============================================================ */
+
+.fm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fm-space-2);
+    padding: var(--fm-space-2) var(--fm-space-4);
+    font-family: var(--fm-font);
+    font-size: var(--fm-fs-sm);
+    line-height: var(--fm-lh-tight);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    cursor: pointer;
+    user-select: none;
+    min-height: 36px;
+    min-width: 36px;
+    transition: background var(--fm-transition-fast) var(--fm-easing),
+                color var(--fm-transition-fast) var(--fm-easing),
+                border-color var(--fm-transition-fast) var(--fm-easing),
+                box-shadow var(--fm-transition-fast) var(--fm-easing);
+}
+
+.fm-btn:hover {
+    background: var(--fm-c-bg);
+    border-color: var(--fm-c-border-strong);
+}
+
+.fm-btn:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+
+.fm-btn:disabled,
+.fm-btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.fm-btn[aria-busy="true"] {
+    cursor: progress;
+}
+
+/* ── Variants ─────────────────────────────────────────────── */
+
+.fm-btn--primary {
+    background: var(--fm-c-primary);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-primary);
+}
+.fm-btn--primary:hover {
+    background: var(--fm-c-primary-hover);
+    border-color: var(--fm-c-primary-hover);
+}
+
+.fm-btn--danger {
+    background: var(--fm-c-danger);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-danger);
+}
+.fm-btn--danger:hover {
+    background: var(--fm-c-danger-hover);
+    border-color: var(--fm-c-danger-hover);
+}
+
+.fm-btn--success {
+    background: var(--fm-c-success);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-success);
+}
+.fm-btn--success:hover {
+    background: var(--fm-c-success-hover);
+    border-color: var(--fm-c-success-hover);
+}
+
+.fm-btn--ghost {
+    background: transparent;
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border);
+}
+.fm-btn--ghost:hover {
+    background: var(--fm-c-bg);
+}
+
+.fm-btn--link {
+    background: transparent;
+    color: var(--fm-c-link);
+    border-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: var(--fm-space-1) var(--fm-space-2);
+}
+.fm-btn--link:hover {
+    color: var(--fm-c-link-hover);
+    background: transparent;
+}
+
+/* ── Sizes ────────────────────────────────────────────────── */
+
+.fm-btn--sm {
+    padding: var(--fm-space-1) var(--fm-space-3);
+    font-size: var(--fm-fs-xs);
+    min-height: 28px;
+    min-width: 28px;
+}
+
+.fm-btn--lg {
+    padding: var(--fm-space-3) var(--fm-space-6);
+    font-size: var(--fm-fs-md);
+    min-height: 44px;
+}
+
+.fm-btn--block {
+    display: flex;
+    width: 100%;
+}
+
+/* ── Icon button (icon-only, requires aria-label) ─────────── */
+
+.fm-btn--icon {
+    padding: var(--fm-space-2);
+    width: 36px;
+    height: 36px;
+}
+
+.fm-btn--icon.fm-btn--sm {
+    width: 28px;
+    height: 28px;
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .fm-btn {
+        transition: none;
+    }
+}

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <title>fm-risdoc-nota-pt-rich — demo Phase 22.4c</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/risdoc-tokens.css">
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 2em;
+            background: var(--fm-risdoc-panel-bg, #f5f7fa);
+            color: var(--fm-risdoc-text, #1e293b); }
+        h1 { color: var(--fm-risdoc-text-strong, #0f172a); }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1em; max-width: 1400px; }
+        .panel {
+            background: var(--fm-risdoc-card-bg, #fff);
+            color: var(--fm-risdoc-text, #1e293b);
+            border: 1px solid var(--fm-risdoc-border-subtle, #e5e5e5);
+            border-radius: 6px;
+            padding: 1em; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+        }
+        .panel h2 { margin: 0 0 0.8em; font-size: 14px;
+            color: var(--fm-risdoc-text-muted, #666);
+            text-transform: uppercase; letter-spacing: 0.5px; }
+        pre {
+            background: var(--fm-risdoc-code-bg, #1e293b);
+            color: var(--fm-risdoc-code-fg, #e2e8f0);
+            padding: 1em; border-radius: 4px; overflow: auto;
+            font-size: 12px; line-height: 1.5; max-height: 600px;
+        }
+        .context {
+            padding: 0.8em 1em;
+            background: var(--fm-pt-field-bg, #eff6ff);
+            border: 1px solid var(--fm-pt-field-border, #bfdbfe);
+            color: var(--fm-risdoc-text, inherit);
+            border-radius: 4px;
+            margin-bottom: 1em; font-size: 14px;
+        }
+        .context strong { color: var(--fm-pt-field-fg, #1e40af); }
+        code {
+            background: var(--fm-risdoc-code-inline-bg, #f1f5f9);
+            color: var(--fm-risdoc-text, inherit);
+            padding: 1px 5px; border-radius: 3px; font-size: 0.92em;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggle-dark" style="float:right;padding:6px 14px;border:1px solid var(--fm-risdoc-border-subtle,#ccc);background:var(--fm-risdoc-btn-bg,#fff);color:var(--fm-risdoc-btn-fg,#333);border-radius:4px;cursor:pointer;">🌙 Toggle dark</button>
+    <h1>fm-risdoc-nota-pt-rich — integration demo</h1>
+    <p>Phase 22.4c: wrapper PT-aware selezionato da <code>fm-risdoc-template</code> quando un
+       field <code>nota-textarea</code> del schema dichiara un <code>default</code> in formato Portable Text
+       AST. Lazy-load del bundle <code>risdoc-pt-editor</code> via Vite manifest.</p>
+
+    <div class="context">
+        <strong>Scenario:</strong> il field <code>profilo_classe</code> dello schema
+        <code>piano-annuale-docente.json</code> è stato migrato da
+        <code>bin/risdoc-pt-seed.php</code> (Phase 22.4b). Il <code>default</code>
+        contiene 7 blocchi PT che replicano il TeX legacy. Questo componente lo monta
+        nell'editor Rich, mostrando pre-fill + editing completo (toggle checkbox inline,
+        modifica field via modal, edit labels, aggiungi/rimuovi item).
+    </div>
+
+    <div class="grid">
+        <div class="panel">
+            <h2>fm-risdoc-nota-pt-rich (wrapper)</h2>
+            <fm-risdoc-nota-pt-rich id="component"></fm-risdoc-nota-pt-rich>
+        </div>
+        <div class="panel">
+            <h2>fm:value-change events</h2>
+            <pre id="log">Nessun evento ancora — modifica l'editor.</pre>
+        </div>
+    </div>
+
+    <script type="module">
+        // fm-risdoc-nota-pt-rich caricato da /js/ path (serve via LegacyController)
+        await import("/js/components/risdoc/fm-risdoc-nota-pt-rich.js");
+
+        // Section spec replica (subset) del field schema migrato:
+        const section = {
+            type: "nota-textarea",
+            name: "profilo_classe",
+            label: "1.2 Profilo della classe",
+            description: "Osservazioni sul profilo della classe (pre-compilate da template legacy).",
+            default: [
+                {
+                    _type: "block", style: "normal",
+                    children: [
+                        { _type: "span", text: "Gli alunni della classe ", marks: [] },
+                        { _type: "fieldRef", name: "classe" },
+                        { _type: "span", text: " ", marks: [] },
+                        { _type: "fieldRef", name: "sezione" },
+                        { _type: "span", text: " adottano un comportamento", marks: [] },
+                    ],
+                },
+                {
+                    _type: "checkboxGroup",
+                    items: [
+                        { state: "x", label: "corretto" },
+                        { state: "_", label: "adeguato" },
+                        { state: "_", label: "poco corretto non" },
+                    ],
+                },
+                {
+                    _type: "block", style: "normal",
+                    children: [
+                        { _type: "span", text: "permettendo un regolare svolgimento delle lezioni.", marks: [] },
+                    ],
+                },
+                {
+                    _type: "checkboxGroup",
+                    items: [
+                        { state: "x", label: "Una buona parte della" },
+                        { state: "_", label: "Quasi tutta la" },
+                        { state: "_", label: "Tutta la" },
+                    ],
+                },
+                {
+                    _type: "block", style: "normal",
+                    children: [
+                        { _type: "span", text: "classe risponde positivamente agli stimoli, dimostra predisposizione al miglioramento e alla crescita e partecipa attivamente alle lezioni.", marks: [] },
+                    ],
+                },
+            ],
+        };
+
+        const component = document.getElementById("component");
+        component.section = section;
+        component.value = section.default; // preFill da default
+
+        const log = document.getElementById("log");
+        let count = 0;
+        component.addEventListener("fm:value-change", (ev) => {
+            count++;
+            const { name, value } = ev.detail;
+            const header = `[${new Date().toLocaleTimeString()}] fm:value-change #${count} — ${name} (${value.length} blocks)\n`;
+            log.textContent = header + JSON.stringify(value, null, 2);
+        });
+
+        // Phase 23 — toggle dark mode per test visuale end-to-end
+        const darkBtn = document.getElementById("toggle-dark");
+        darkBtn.addEventListener("click", () => {
+            document.body.classList.toggle("fm-dark");
+            darkBtn.textContent = document.body.classList.contains("fm-dark")
+                ? "☀ Toggle light"
+                : "🌙 Toggle dark";
+        });
+    </script>
+</body>
+</html>

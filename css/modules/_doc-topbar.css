@@ -1,0 +1,417 @@
+/* ============================================================
+ * .fm-doc-topbar — topbar DOCUMENTO unificata (ADR-024).
+ *
+ * Sistema BEM UNICO condiviso da:
+ *   - <fm-doc-topbar variant="custom"> (documenti personalizzabili)
+ *   - <fm-doc-topbar variant="risdoc"> (template istituzionali)
+ *
+ * Fonde i due sottosistemi precedenti (.fm-topbar--ptdoc + .fm-risdoc-toolbar*).
+ * Tema ADATTIVO via CSS variables: chiaro di default, scuro su body/html.fm-dark
+ * (coerente con ADR-023). Contrasti tarati WCAG 2.2 AA (testo ≥4.5:1, accenti
+ * con label bianca su sfondi scuri AA-compliant).
+ *
+ * NON tocca .fm-topbar (topbar studio esercizi/verifiche): blocco distinto.
+ * ============================================================ */
+
+/* fm-pt-document è un custom element → display:inline di default, che rende
+   inaffidabile il position:sticky del topbar figlio. Forzo block così la topbar
+   sticky si ancora correttamente in cima allo scroll. */
+fm-pt-document { display: block; }
+/* 2026-05-27 — CENTRALIZZAZIONE: normalizzazione del wrapper `.fm-risdoc-view
+   --unified` portata nel bundle (prima era inline SOLO in TemplateViewController
+   → il custom, che ora usa lo stesso wrapper, restava senza → topbar inset/2
+   righe). Flex column + azzeramento padding/margin: stessa impaginazione per
+   modelli E custom (entrambi body.fm-studio-risdoc + .fm-risdoc-view--unified). */
+.fm-risdoc-view--unified {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+}
+/* 2026-05-27 — FIX LARGHEZZA: il doc custom tiene la classe .fm-pt-custom-page
+   (serve alle regole body:has che nascondono il chrome legacy) MA quella classe
+   ha max-width:880 (legacy) → il wrapper restava 880 left-align mentre il modello
+   (solo .fm-risdoc-view--unified) fa 1000 con .ptdoc 900 CENTRATO. Annullo il
+   constraint quando è il wrapper unificato → fills container → .ptdoc centra a
+   900 IDENTICO al modello. */
+.fm-pt-custom-page.fm-risdoc-view--unified {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+/* NB: fm-doc-topbar è display:contents (vedi più sotto "Wrapper componente"):
+   serve perché il custom element non faccia da containing block dello sticky. */
+
+/* La topbar è position:sticky ma `body.exercise-context { overflow:hidden }`
+   (studio esercizi) rendeva il body un contenitore che scrolla → lo sticky non
+   si ancorava al viewport. Sulle pagine con un documento PT (custom o modello
+   unificato) ripristina lo scroll normale del body così lo sticky funziona.
+   Scoping via :has → NON tocca lo studio esercizi (no fm-pt-document). */
+body:has(fm-pt-document) { overflow: visible !important; }
+
+.fm-doc-topbar {
+    /* ── Theme tokens — LIGHT default ── */
+    --dtb-bg-from:      #f8fafc;
+    --dtb-bg-to:        #eef2f7;
+    --dtb-border:       rgba(15, 23, 42, .10);
+    --dtb-shadow-in:    rgba(255, 255, 255, .6);
+    --dtb-shadow-out:   0 2px 8px rgba(15, 23, 42, .06);
+    --dtb-text:         #1e293b;
+    --dtb-text-muted:   #475569;
+    --dtb-text-soft:    #64748b;
+    --dtb-surface:      rgba(15, 23, 42, .05);
+    --dtb-surface-hover: rgba(15, 23, 42, .09);
+    --dtb-divider:      rgba(15, 23, 42, .12);
+    --dtb-code-bg:      rgba(15, 23, 42, .06);
+    --dtb-code-fg:      #334155;
+    --dtb-msg-bg:       rgba(15, 23, 42, .05);
+    --dtb-msg-fg:       #475569;
+    /* Accenti WCAG AA (label bianca): primary 5.1:1, save 4.9:1, ecc. */
+    --dtb-accent:       #2563eb;
+    --dtb-accent-hover: #1d4ed8;
+    --dtb-save:         #047857;
+    --dtb-save-hover:   #065f46;
+    --dtb-warning-bg:   #b45309;
+    --dtb-warning-hover: #92400e;
+    --dtb-zip:          #b45309;
+    --dtb-zip-hover:    #92400e;
+    --dtb-vscode:       #005ba1;
+    --dtb-vscode-hover: #024b82;
+    --dtb-overleaf:     #166534;
+    --dtb-overleaf-hover: #14532d;
+    --dtb-chip-instance: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+    --dtb-chip-admin:    linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    background: linear-gradient(180deg, var(--dtb-bg-from) 0%, var(--dtb-bg-to) 100%);
+    color: var(--dtb-text);
+    border-bottom: 1px solid var(--dtb-border);
+    box-shadow: 0 1px 0 var(--dtb-shadow-in) inset, var(--dtb-shadow-out);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: 0 0 16px;
+}
+
+/* Dark theme (body.fm-dark globale o html.fm-dark pre-paint standalone). */
+body.fm-dark .fm-doc-topbar,
+html.fm-dark .fm-doc-topbar {
+    --dtb-bg-from:      #0f1729;
+    --dtb-bg-to:        #131c33;
+    --dtb-border:       rgba(255, 255, 255, .08);
+    --dtb-shadow-in:    rgba(255, 255, 255, .04);
+    --dtb-shadow-out:   0 2px 8px rgba(0, 0, 0, .25);
+    --dtb-text:         #e2e8f0;
+    --dtb-text-muted:   #cbd5e1;
+    --dtb-text-soft:    #94a3b8;
+    --dtb-surface:      rgba(255, 255, 255, .07);
+    --dtb-surface-hover: rgba(255, 255, 255, .13);
+    --dtb-divider:      rgba(255, 255, 255, .12);
+    --dtb-code-bg:      rgba(255, 255, 255, .07);
+    --dtb-code-fg:      #cbd5e1;
+    --dtb-msg-bg:       rgba(0, 0, 0, .25);
+    --dtb-msg-fg:       #cbd5e1;
+    /* In dark gli accenti possono schiarire (testo scuro o bianco AA su scuro). */
+    --dtb-accent:       #3b82f6;
+    --dtb-accent-hover: #2563eb;
+    --dtb-save:         #10b981;
+    --dtb-save-hover:   #059669;
+}
+
+/* ── Zone (variant custom) ── */
+.fm-doc-topbar__zone {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.fm-doc-topbar__zone--meta {
+    flex: 0 1 auto;
+    min-width: 0;
+    align-items: baseline;
+    gap: 8px;
+}
+.fm-doc-topbar__zone--target { flex: 1 1 auto; }
+
+/* Gruppo AZIONI (custom): Salva + Anteprima + navigator "Sezioni", ancorato a
+   destra. zone--target (flex:1) cresce e lo spinge in coda; il navigator interno
+   non deve ri-spingersi con il suo margin-left:auto → resta adiacente. */
+.fm-doc-topbar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.fm-doc-topbar__actions #header-controls-container { margin-left: 0; }
+
+/* ── Meta (doctype + titolo + sub) ── */
+.fm-doc-topbar__doctype {
+    flex: 0 0 auto;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.6875rem;
+    color: var(--dtb-text-soft);
+}
+.fm-doc-topbar__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dtb-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 28ch;
+}
+.fm-doc-topbar__title--editable {
+    cursor: text;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: background .12s, border-color .12s;
+}
+.fm-doc-topbar__title--editable:hover {
+    background: var(--dtb-surface);
+    border-color: var(--dtb-divider);
+}
+.fm-doc-topbar__title--editable:focus,
+.fm-doc-topbar__title--editable:focus-visible {
+    outline: none;
+    background: var(--dtb-surface-hover);
+    border-color: var(--dtb-accent);
+    overflow: visible;
+    text-overflow: clip;
+    max-width: 40ch;
+}
+.fm-doc-topbar__sub {
+    font-size: 10px;
+    color: var(--dtb-text-soft);
+    background: var(--dtb-code-bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: ui-monospace, Consolas, monospace;
+    flex-shrink: 0;
+}
+.fm-doc-topbar__sub:empty { display: none; }
+
+/* ── Chip (ISTANZA / ADMIN) ── */
+.fm-doc-topbar__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px 0 12px;
+    height: 30px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2), 0 0 0 1px rgba(255,255,255,.06) inset;
+}
+.fm-doc-topbar__chip--instance { background: var(--dtb-chip-instance); }
+.fm-doc-topbar__chip--admin    { background: var(--dtb-chip-admin); }
+.fm-doc-topbar__chip code {
+    background: rgba(0,0,0,.25);
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    line-height: 1.4;
+    font-family: ui-monospace, "Cascadia Code", monospace;
+}
+.fm-doc-topbar__pill {
+    background: rgba(255,255,255,.22);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+.fm-doc-topbar__pill--review { background: rgba(245, 158, 11, .9); color: #1c1410; }
+
+/* ── Bottoni (theme-aware via CSS vars del blocco) ── */
+.fm-doc-topbar__btn {
+    background: var(--dtb-surface);
+    color: var(--dtb-text);
+    border: 1px solid var(--dtb-border);
+    padding: 0 12px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-sizing: border-box;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+.fm-doc-topbar__btn:hover:not(:disabled) {
+    background: var(--dtb-surface-hover);
+    border-color: var(--dtb-divider);
+}
+.fm-doc-topbar__btn:active:not(:disabled) { transform: translateY(1px); }
+.fm-doc-topbar__btn:disabled { opacity: .45; cursor: wait; }
+.fm-doc-topbar__btn:focus-visible {
+    outline: 2px solid var(--dtb-accent);
+    outline-offset: 2px;
+}
+/* Bottoni nested nei chip (es. "Vai a baseline"): più piccoli, chiari su gradient. */
+.fm-doc-topbar__chip .fm-doc-topbar__btn {
+    height: 22px;
+    padding: 0 8px;
+    font-size: 11px;
+    background: rgba(255,255,255,.18);
+    border-color: rgba(255,255,255,.24);
+    color: #fff;
+}
+.fm-doc-topbar__chip .fm-doc-topbar__btn:hover:not(:disabled) {
+    background: rgba(255,255,255,.30);
+    border-color: rgba(255,255,255,.4);
+}
+
+/* Varianti accentate (WCAG AA: label bianca su sfondo scuro). */
+.fm-doc-topbar__btn--primary { background: var(--dtb-accent); border-color: var(--dtb-accent); color: #fff; }
+.fm-doc-topbar__btn--primary:hover:not(:disabled) { background: var(--dtb-accent-hover); border-color: var(--dtb-accent-hover); }
+.fm-doc-topbar__btn--save { background: var(--dtb-save); border-color: var(--dtb-save); color: #fff; font-weight: 600; }
+.fm-doc-topbar__btn--save:hover:not(:disabled) { background: var(--dtb-save-hover); border-color: var(--dtb-save-hover); }
+.fm-doc-topbar__btn--secondary { /* neutro = base */ }
+.fm-doc-topbar__btn--warning { background: var(--dtb-warning-bg); border-color: var(--dtb-warning-bg); color: #fff; font-weight: 600; }
+.fm-doc-topbar__btn--warning:hover:not(:disabled) { background: var(--dtb-warning-hover); border-color: var(--dtb-warning-hover); }
+.fm-doc-topbar__btn--ghost { background: transparent; border-color: var(--dtb-divider); }
+.fm-doc-topbar__btn--ghost:hover:not(:disabled) { background: var(--dtb-surface); border-color: var(--dtb-text-soft); }
+.fm-doc-topbar__btn--zip { background: var(--dtb-zip); border-color: var(--dtb-zip); color: #fff; }
+.fm-doc-topbar__btn--zip:hover:not(:disabled) { background: var(--dtb-zip-hover); border-color: var(--dtb-zip-hover); }
+.fm-doc-topbar__btn--vscode { background: var(--dtb-vscode); border-color: var(--dtb-vscode); color: #fff; }
+.fm-doc-topbar__btn--vscode:hover:not(:disabled) { background: var(--dtb-vscode-hover); border-color: var(--dtb-vscode-hover); }
+.fm-doc-topbar__btn--overleaf { background: var(--dtb-overleaf); border-color: var(--dtb-overleaf); color: #fff; }
+.fm-doc-topbar__btn--overleaf:hover:not(:disabled) { background: var(--dtb-overleaf-hover); border-color: var(--dtb-overleaf-hover); }
+.fm-doc-topbar__btn--accent { background: var(--dtb-vscode); border-color: var(--dtb-vscode); color: #fff; }
+.fm-doc-topbar__btn--accent:hover:not(:disabled) { background: var(--dtb-vscode-hover); border-color: var(--dtb-vscode-hover); }
+.fm-doc-topbar__btn--icon { padding: 0 8px; justify-content: center; }
+.fm-doc-topbar__btn--logo { padding: 0 10px; }
+
+.fm-doc-topbar__logo { height: 18px; width: auto; display: block; }
+.fm-doc-topbar__ico { line-height: 1; }
+.fm-doc-topbar__lbl { line-height: 1; }
+.fm-doc-topbar__sep {
+    width: 1px;
+    align-self: stretch;
+    margin: 4px 4px;
+    background: var(--dtb-divider);
+}
+
+/* ── Message banner (errori/feedback) ── */
+.fm-doc-topbar__msg {
+    flex-basis: 100%;
+    padding: 6px 12px;
+    background: var(--dtb-msg-bg);
+    border: 1px solid var(--dtb-border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--dtb-msg-fg);
+}
+.fm-doc-topbar__msg:empty { display: none; }
+
+/* ── Section navigator (risdoc) — vive in coda, allineato a destra ── */
+#header-controls-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    margin-left: auto;
+}
+#section-navigator {
+    position: relative;
+    background: var(--dtb-surface);
+    color: var(--dtb-text);
+    border: 1px solid var(--dtb-border);
+    border-radius: 8px;
+    padding: 0 12px;
+    height: 30px;
+    box-sizing: border-box;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s ease, border-color .15s ease;
+}
+#section-navigator:hover { background: var(--dtb-surface-hover); border-color: var(--dtb-divider); }
+#section-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 260px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: var(--dtb-bg-from);
+    color: var(--dtb-text);
+    border: 1px solid var(--dtb-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .15), 0 2px 6px rgba(0, 0, 0, .08);
+    font-size: 12px;
+    z-index: 200;
+}
+body.fm-dark #section-dropdown,
+html.fm-dark #section-dropdown {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .04);
+}
+#section-dropdown.show { display: block; }
+#section-dropdown .section-item {
+    display: block;
+    padding: 9px 14px;
+    color: var(--dtb-text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--dtb-border);
+    cursor: pointer;
+    transition: background .12s ease;
+    line-height: 1.3;
+    font-size: 12px;
+    font-weight: 500;
+}
+#section-dropdown .section-item:last-child { border-bottom: 0; }
+#section-dropdown .section-item:hover { background: var(--dtb-surface-hover); }
+#section-dropdown .section-item.is-active {
+    background: var(--dtb-surface-hover);
+    color: var(--dtb-accent);
+    font-weight: 700;
+}
+
+/* ── Wrapper componente ── */
+/* display:contents (non block): il custom element NON deve generare un box,
+   altrimenti diventa il containing block del div.fm-doc-topbar sticky (alto
+   solo ~76px) e lo sticky non ha range → la topbar scrolla via. Con contents
+   il containing block dello sticky è fm-pt-document (alto tutto il doc). */
+fm-doc-topbar { display: contents; }
+fm-doc-topbar:not(:defined) { visibility: hidden; }
+
+/* ── Pagine PT custom: nascondi topbar studio + upbar legacy, flush top ── */
+body:has(.fm-pt-custom-page) #fm-topbar { display: none !important; }
+body:has(.fm-pt-custom-page) #SelBtnCopy,
+body:has(.fm-pt-custom-page) #upbar-toggle-container { display: none !important; }
+body:has(.fm-pt-custom-page) #fm-content,
+body:has(.fm-pt-custom-page) main#fm-content,
+body:has(.fm-pt-custom-page) .fm-pagestyle,
+body:has(.fm-pt-custom-page) > main {
+    margin-top: 0 !important;
+    min-height: 100vh;
+}
+
+/* ── Print: nascondi la topbar ── */
+@media print {
+    .fm-doc-topbar { display: none; }
+}

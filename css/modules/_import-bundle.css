@@ -1,0 +1,204 @@
+/* ============================================================ */
+/* Import bundle — Phase Roadmap Sprint 27 (extracted layout.css).*/
+/*                                                                */
+/* Bottone Import + modal dialog per recupero recovery key dei    */
+/* dati cifrati teacher (G22.S20). Operazione potenzialmente     */
+/* distruttiva — accent ambra warning.                            */
+/* ============================================================ */
+
+/* Import button: il bottone ora riusa il design system .fm-sync-btn
+ * (.fm-sync-btn--import in css/modules/_sync-bar.css) — icon-only quadrato,
+ * coerente con i pulsanti Sync. Le vecchie regole .fm-import-btn /
+ * .fm-import-label sono state rimosse (legacy). Qui resta solo il modal. */
+
+/* Modal */
+.fm-import-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fm-z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-import-backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--fm-c-overlay);
+}
+
+.fm-import-dialog {
+    position: relative;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-radius: var(--fm-radius-lg);
+    box-shadow: var(--fm-shadow-lg);
+    max-width: 40rem;
+    width: 92%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: var(--fm-space-6) var(--fm-space-6);
+}
+
+body.fm-dark .fm-import-dialog {
+    background: #1f2937;
+    color: #f3f4f6;
+}
+
+/* Forza color chiaro su tutti gli elementi nel dialog dark (override
+   regole globali p/label/strong/em/li/summary/details). */
+body.fm-dark .fm-import-dialog,
+body.fm-dark .fm-import-dialog p,
+body.fm-dark .fm-import-dialog label,
+body.fm-dark .fm-import-dialog strong,
+body.fm-dark .fm-import-dialog em,
+body.fm-dark .fm-import-dialog li,
+body.fm-dark .fm-import-dialog summary,
+body.fm-dark .fm-import-dialog details {
+    color: #f3f4f6;
+}
+
+.fm-import-dialog h2 {
+    margin: 0 0 var(--fm-space-3);
+    font-size: var(--fm-fs-lg);
+    color: var(--fm-c-warning);
+}
+
+.fm-import-body p {
+    margin: var(--fm-space-2) 0;
+    line-height: 1.45;
+}
+
+.fm-import-body label {
+    display: block;
+    margin: var(--fm-space-4) 0;
+}
+
+.fm-import-body textarea,
+.fm-import-body select,
+.fm-rk-code {
+    width: 100%;
+    padding: var(--fm-space-1) var(--fm-space-2);
+    font-family: var(--fm-font-mono);
+    font-size: var(--fm-fs-sm);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    margin-top: var(--fm-space-1);
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.fm-rk-code {
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+body.fm-dark .fm-import-body textarea,
+body.fm-dark .fm-import-body select,
+body.fm-dark .fm-rk-code {
+    background: #0f172a;
+    color: #f3f4f6;
+    border-color: #334155;
+}
+
+body.fm-dark .fm-rk-code:focus {
+    background: #1e293b;
+    outline: 1px solid var(--fm-c-warning);
+    border-color: var(--fm-c-warning);
+}
+
+.fm-import-meta {
+    font-size: var(--fm-fs-sm);
+    line-height: 1.6;
+}
+
+.fm-import-meta li {
+    list-style: none;
+    padding: 2px 0;
+}
+
+.fm-import-summary {
+    font-size: var(--fm-fs-sm);
+    line-height: 1.7;
+}
+
+.fm-import-summary li {
+    list-style: none;
+    padding: 3px 0;
+}
+
+.fm-import-status {
+    margin-top: var(--fm-space-3);
+    font-size: var(--fm-fs-sm);
+    min-height: 1.2em;
+}
+
+.fm-import-pick {
+    padding: var(--fm-space-2) var(--fm-space-4);
+    background: var(--fm-c-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--fm-radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    min-height: var(--fm-target-aa);
+}
+
+.fm-import-pick:hover {
+    background: var(--fm-c-primary-hover);
+}
+
+.fm-import-actions {
+    margin-top: var(--fm-space-6);
+    display: flex;
+    gap: var(--fm-space-2);
+    justify-content: flex-end;
+}
+
+.fm-import-cancel,
+.fm-import-next {
+    padding: var(--fm-space-2) var(--fm-space-4);
+    border-radius: var(--fm-radius-sm);
+    border: 1px solid var(--fm-c-border);
+    cursor: pointer;
+    font-size: var(--fm-fs-sm);
+    min-height: var(--fm-target-aa);
+}
+
+.fm-import-cancel {
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+}
+
+.fm-import-next {
+    background: #d97706;
+    color: #ffffff;
+    border-color: #b45309;
+    font-weight: 600;
+}
+
+.fm-import-next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.fm-import-body details {
+    margin-top: var(--fm-space-2);
+}
+
+.fm-import-body details > ul {
+    margin: var(--fm-space-1) 0;
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-import-body code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 1px var(--fm-space-1);
+    border-radius: 3px;
+}
+
+body.fm-dark .fm-import-body code {
+    background: rgba(255, 255, 255, 0.1);
+}

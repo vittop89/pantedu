@@ -1,0 +1,185 @@
+{
+    "$id": "autorizzazione",
+    "title": "Modulo di Autorizzazione (genitore/tutore)",
+    "category": "ALTRO",
+    "origin": "strcomp",
+    "body_class": "fm-studio-strcomp",
+    "_g23_status": "implemented (form PT web-component: sectionHeader/staticContent/textField/select/formCheckbox). Body materializzato nel seed.",
+    "body_pt_seed_ref": "schemas/risdoc/_pt/seeds/autorizzazione.pt.json",
+    "_coverage_note": "Form di autorizzazione (anagrafica genitore/studente + dichiarazioni checkbox + informativa GDPR + firma/PDF). I section type info-field, form-checkbox, privacy-block e signature-block sono GIÀ supportati dai converter in js/modules/risdoc/pt/section-to-pt.js (info-field→textField, form-checkbox→formCheckbox, privacy-block→privacyBlockToPt, signature-block→signatureBlockToPt). NB: info-field genera sempre un textField (non rispetta input_type=select); per il campo Classe il body autoritativo è il seed, che usa un blocco select con le opzioni reali 1A–5C. La firma interattiva + generazione PDF (jsPDF) dell'originale non ha un widget runtime: è resa in modo dichiarativo (riquadro firma + istruzioni) via staticContent nel seed.",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Modulo di Autorizzazione",
+            "selectors": []
+        },
+        {
+            "type": "static-content",
+            "name": "intro_accesso",
+            "format": "html",
+            "title": "Accesso alla Sezione ESERCIZI per Studenti minorenni",
+            "body": "<p class=\"intro-text\">Modulo di autorizzazione per l'accesso alla Sezione ESERCIZI.</p>"
+        },
+        {
+            "type": "static-content",
+            "name": "avviso_genitori",
+            "format": "html",
+            "title": "Importante per i Genitori",
+            "body": "<div class=\"important-notice\"><p><strong>La sezione ESERCIZI</strong> del sito contiene esclusivamente gli <strong>svolgimenti di alcuni degli esercizi</strong> presenti nei libri di testo utilizzati a scuola, identificati solo tramite <strong>numero di esercizio e pagina</strong>.</p><p>Non vengono mai riportate le tracce o i testi degli esercizi, nel rispetto del diritto d'autore. L'accesso è riservato esclusivamente ai possessori dei libri di testo.</p><p><strong>Servizio per Minorenni:</strong> Questo modulo di autorizzazione è specificamente destinato agli <u>studenti minorenni</u>. È richiesto il consenso del genitore o tutore legale per l'accesso alla piattaforma didattica.</p><p><strong>Finalità del Modulo:</strong> Senza la compilazione e l'invio di questo modulo di autorizzazione <u>non è possibile ricevere le credenziali per l'accesso alla sezione \"ESERCIZI\"</u>. I dati sensibili raccolti riguardano esclusivamente la gestione e il controllo dell'utilizzo di queste credenziali di accesso.</p><p><strong>Disclaimer:</strong> Il servizio è inteso come ausilio didattico privato per gli acquirenti del libro di testo e <u>non è in alcun modo affiliato, approvato o sponsorizzato dall'autore o dall'editore del libro di testo originale</u>.</p></div>"
+        },
+        {
+            "type": "text-section",
+            "title": "Dati del Genitore/Tutore Legale",
+            "items": [
+                {
+                    "type": "info-field",
+                    "name": "parentName",
+                    "label": "Nome del Genitore/Tutore",
+                    "input_type": "text",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "parentSurname",
+                    "label": "Cognome del Genitore/Tutore",
+                    "input_type": "text",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "parentEmail",
+                    "label": "Email del Genitore",
+                    "input_type": "email",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "parentPhone",
+                    "label": "Telefono del Genitore (facoltativo)",
+                    "input_type": "tel",
+                    "placeholder": "Solo per comunicazioni urgenti"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "title": "Dati dello Studente",
+            "items": [
+                {
+                    "type": "info-field",
+                    "name": "studentName",
+                    "label": "Nome dello Studente",
+                    "input_type": "text",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "studentSurname",
+                    "label": "Cognome dello Studente",
+                    "input_type": "text",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "studentClass",
+                    "label": "Classe",
+                    "input_type": "select",
+                    "required": true,
+                    "_note": "Generazione schema-driven produce un textField (limite info-field). Il body autoritativo è il seed (blocco select con queste opzioni).",
+                    "options": [
+                        { "id": "c1a", "value": "1A", "label": "1A" },
+                        { "id": "c1b", "value": "1B", "label": "1B" },
+                        { "id": "c1c", "value": "1C", "label": "1C" },
+                        { "id": "c2a", "value": "2A", "label": "2A" },
+                        { "id": "c2b", "value": "2B", "label": "2B" },
+                        { "id": "c2c", "value": "2C", "label": "2C" },
+                        { "id": "c3a", "value": "3A", "label": "3A" },
+                        { "id": "c3b", "value": "3B", "label": "3B" },
+                        { "id": "c3c", "value": "3C", "label": "3C" },
+                        { "id": "c4a", "value": "4A", "label": "4A" },
+                        { "id": "c4b", "value": "4B", "label": "4B" },
+                        { "id": "c4c", "value": "4C", "label": "4C" },
+                        { "id": "c5a", "value": "5A", "label": "5A" },
+                        { "id": "c5b", "value": "5B", "label": "5B" },
+                        { "id": "c5c", "value": "5C", "label": "5C" }
+                    ]
+                },
+                {
+                    "type": "info-field",
+                    "name": "studentBirthDate",
+                    "label": "Data di Nascita Studente",
+                    "input_type": "date",
+                    "required": true
+                },
+                {
+                    "type": "info-field",
+                    "name": "schoolName",
+                    "label": "Nome della Scuola",
+                    "input_type": "text",
+                    "placeholder": "Es. Liceo Scientifico di Esempio - Comune Esempio"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "static-content",
+            "name": "dichiarazioni_premessa",
+            "format": "html",
+            "title": "Dichiarazioni e Autorizzazioni",
+            "body": "<div class=\"legal-text\"><p><strong>Il sottoscritto genitore/tutore legale dichiara:</strong></p><ul><li>Di essere in possesso dei libri di testo per i quali si richiede l'accesso agli svolgimenti degli esercizi</li><li>Di essere consapevole che la sezione ESERCIZI contiene esclusivamente svolgimenti numerici, senza testi originali</li><li>Di comprendere che il servizio è un ausilio didattico privato non affiliato con autori/editori</li><li>Di utilizzare i dati di accesso esclusivamente per finalità di sicurezza e supervisione didattica</li><li>Di non condividere le credenziali con terzi non autorizzati</li></ul></div>"
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Dichiarazioni e Autorizzazioni",
+            "name": "dichiarazioni",
+            "items": [
+                {
+                    "type": "form-checkbox",
+                    "name": "bookOwnership",
+                    "label": "Dichiaro di essere in possesso dei libri di testo per i quali richiedo l'accesso agli svolgimenti degli esercizi e di utilizzare le credenziali nel rispetto del diritto d'autore.",
+                    "required": true
+                },
+                {
+                    "type": "form-checkbox",
+                    "name": "privacyConsent",
+                    "label": "Autorizzo il trattamento dei dati personali secondo quanto previsto dal GDPR (UE 2016/679) per la gestione dell'account e per finalità di sicurezza.",
+                    "required": true
+                },
+                {
+                    "type": "form-checkbox",
+                    "name": "responsabilityAcceptance",
+                    "label": "Mi assumo la responsabilità dell'utilizzo delle credenziali e mi impegno a non condividerle con soggetti non autorizzati.",
+                    "required": true
+                },
+                {
+                    "type": "form-checkbox",
+                    "name": "minorConsent",
+                    "label": "In qualità di genitore/tutore legale, fornisco il consenso per l'accesso del minorenne alla piattaforma didattica e per l'utilizzo dei cookies tecnici necessari al funzionamento del servizio.",
+                    "required": true
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "additionalNotes",
+            "label": "Note Aggiuntive",
+            "placeholder": "Eventuali richieste specifiche o comunicazioni..."
+        },
+        {
+            "type": "static-content",
+            "name": "informativa_privacy",
+            "format": "html",
+            "title": "Informativa Privacy (Art. 13 GDPR)",
+            "body": "<div class=\"legal-text\"><p><strong>Prima di procedere, ti informiamo che:</strong></p><ul><li>I dati raccolti verranno utilizzati esclusivamente per la gestione dell'account e per finalità di sicurezza</li><li>Hai diritto di accesso, rettifica, cancellazione, limitazione e portabilità dei tuoi dati</li><li>I dati verranno conservati per il periodo necessario al servizio richiesto</li><li>Non vengono trasferiti dati a terzi o fuori dall'UE</li></ul><p>Per informazioni complete, consulta la <a href=\"/cookies_privacy-policy.html\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a> dove troverai anche le informazioni sul Titolare del Trattamento.</p></div>"
+        },
+        {
+            "type": "static-content",
+            "name": "firma_generazione",
+            "format": "html",
+            "title": "Firma e Generazione del Modulo",
+            "body": "<div class=\"submit-section\"><p><strong>Data di compilazione:</strong> ____________________</p><p>Una volta compilato il modulo, è possibile generare il PDF da firmare. Procedura:</p><ol><li>Genera il modulo PDF tramite l'apposito pulsante (\"Genera Modulo PDF\").</li><li>Apri il file PDF scaricato e stampalo.</li><li>Firmalo nello spazio dedicato (Firma del Genitore/Tutore Legale).</li><li>Scansionalo o fotografalo.</li><li>Invialo via email per richiedere le credenziali di accesso alla sezione ESERCIZI.</li></ol><p class=\"note\">Questo modulo deve essere firmato e inviato via email per richiedere le credenziali di accesso alla sezione ESERCIZI.</p></div>"
+        }
+    ]
+}

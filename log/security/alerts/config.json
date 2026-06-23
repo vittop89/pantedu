@@ -1,0 +1,82 @@
+{
+    "security_alerts": {
+        "excessive_access": {
+            "enabled": true,
+            "description": "Rileva quando un singolo IP\/fingerprint accede più volte alla stessa sezione",
+            "threshold_per_section": 5,
+            "time_window_hours": 24,
+            "risk_levels": {
+                "low": {
+                    "min_accesses": 5,
+                    "max_accesses": 10
+                },
+                "medium": {
+                    "min_accesses": 11,
+                    "max_accesses": 20
+                },
+                "high": {
+                    "min_accesses": 21,
+                    "max_accesses": 999999
+                }
+            }
+        },
+        "credential_sharing": {
+            "enabled": true,
+            "description": "Rileva quando le stesse credenziali vengono utilizzate da molti IP diversi",
+            "min_ips_required": 3,
+            "min_accesses_per_ip": 1,
+            "time_window_hours": 24,
+            "risk_levels": {
+                "low": {
+                    "min_ips": 2,
+                    "max_ips": 3
+                },
+                "medium": {
+                    "min_ips": 4,
+                    "max_ips": 6
+                },
+                "high": {
+                    "min_ips": 7,
+                    "max_ips": 999999
+                }
+            }
+        }
+    },
+    "auto_blocking": {
+        "excessive_access": {
+            "enabled": true,
+            "description": "Blocca automaticamente gli IP che superano le soglie di accesso",
+            "risk_levels": {
+                "low": false,
+                "medium": false,
+                "high": true
+            }
+        },
+        "credential_sharing": {
+            "enabled": true,
+            "description": "Blocca automaticamente le credenziali condivise tra troppi IP",
+            "risk_levels": {
+                "low": false,
+                "medium": false,
+                "high": true
+            }
+        }
+    },
+    "general_settings": {
+        "auto_redirect": {
+            "enabled": true,
+            "description": "Reindirizza automaticamente l'admin agli alert quando ci sono anomalie attive"
+        },
+        "log_retention": {
+            "days": 90,
+            "description": "Numero di giorni per cui mantenere i log di accesso"
+        },
+        "alert_retention": {
+            "days": 30,
+            "description": "Numero di giorni per cui mantenere gli alert visionati\/bloccati"
+        }
+    },
+    "version": "1.0.0",
+    "last_updated": "2025-09-07T22:55:43+02:00",
+    "description": "Configurazione per il sistema di rilevamento anomalie negli accessi."
+}

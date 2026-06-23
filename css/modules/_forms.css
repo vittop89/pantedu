@@ -1,0 +1,158 @@
+/* ============================================================ */
+/* Forms — Phase C.4 modular component.                           */
+/* WCAG 1.3.1 (Info & Relationships), 3.3.2 (Labels or            */
+/* Instructions), 3.3.3 (Error Suggestion), 4.1.2 (Name Role     */
+/* Value).                                                        */
+/* ============================================================ */
+
+/* ── Field wrapper (label + control + help/error) ─────────── */
+
+.fm-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-1);
+    margin-bottom: var(--fm-space-4);
+}
+
+.fm-field > label,
+.fm-field__label {
+    font-weight: 600;
+    color: var(--fm-c-text);
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-field__hint,
+.fm-field > small.fm-muted {
+    color: var(--fm-c-muted);
+    font-size: var(--fm-fs-xs);
+    line-height: var(--fm-lh-base);
+}
+
+.fm-field__error {
+    color: var(--fm-c-danger);
+    font-size: var(--fm-fs-xs);
+    font-weight: 500;
+}
+
+/* ── Required marker ──────────────────────────────────────── */
+
+.fm-req-marker {
+    color: var(--fm-c-danger);
+    font-weight: 700;
+    margin-left: 0.15em;
+}
+
+/* ── Input / Select / Textarea ────────────────────────────── */
+
+.fm-input,
+.fm-select,
+.fm-textarea {
+    display: block;
+    width: 100%;
+    padding: var(--fm-space-2) var(--fm-space-3);
+    font-family: var(--fm-font);
+    font-size: var(--fm-fs-sm);
+    line-height: var(--fm-lh-base);
+    color: var(--fm-c-text);
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    transition: border-color var(--fm-transition-fast) var(--fm-easing),
+                box-shadow var(--fm-transition-fast) var(--fm-easing);
+    min-height: 36px;
+}
+
+.fm-textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: var(--fm-lh-base);
+}
+
+.fm-input:hover,
+.fm-select:hover,
+.fm-textarea:hover {
+    border-color: var(--fm-c-border-strong);
+}
+
+.fm-input:focus,
+.fm-input:focus-visible,
+.fm-select:focus,
+.fm-select:focus-visible,
+.fm-textarea:focus,
+.fm-textarea:focus-visible {
+    outline: none;
+    border-color: var(--fm-c-primary);
+    box-shadow: 0 0 0 3px var(--fm-c-primary-light);
+}
+
+.fm-input[disabled],
+.fm-select[disabled],
+.fm-textarea[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--fm-c-bg);
+}
+
+.fm-input[aria-invalid="true"],
+.fm-select[aria-invalid="true"],
+.fm-textarea[aria-invalid="true"] {
+    border-color: var(--fm-c-danger);
+}
+.fm-input[aria-invalid="true"]:focus,
+.fm-select[aria-invalid="true"]:focus,
+.fm-textarea[aria-invalid="true"]:focus,
+.fm-input[aria-invalid="true"]:focus-visible,
+.fm-select[aria-invalid="true"]:focus-visible,
+.fm-textarea[aria-invalid="true"]:focus-visible {
+    box-shadow: 0 0 0 3px var(--fm-c-danger-light);
+}
+
+/* ── Checkbox / Radio (custom-styled but native semantics) ─── */
+
+.fm-checkbox,
+.fm-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    cursor: pointer;
+    line-height: var(--fm-lh-base);
+}
+
+.fm-checkbox input[type="checkbox"],
+.fm-radio input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--fm-c-primary);
+}
+
+.fm-checkbox input:focus-visible,
+.fm-radio input:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+
+/* ── Fieldset (group radio/checkbox related) ──────────────── */
+
+.fm-fieldset {
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    padding: var(--fm-space-4);
+    margin: 0 0 var(--fm-space-4);
+}
+
+.fm-fieldset > legend {
+    font-weight: 600;
+    color: var(--fm-c-text);
+    padding: 0 var(--fm-space-2);
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .fm-input,
+    .fm-select,
+    .fm-textarea {
+        transition: none;
+    }
+}

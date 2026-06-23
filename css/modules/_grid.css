@@ -1,0 +1,77 @@
+/* ============================================================ */
+/* Grid + Tile modules — Phase Roadmap 3 (extract from shell.css). */
+/*                                                                */
+/* Layout primitives per dashboard/admin tools. Mobile-first,     */
+/* auto-fit grid track con minmax responsive senza media query.   */
+/* ============================================================ */
+
+.fm-grid {
+    display: grid;
+    gap: var(--fm-space-4);
+}
+
+/* Auto-responsive columns via minmax — niente media query needed.
+   minmax(N, 1fr) = ogni colonna min-width N px, divide spazio
+   equamente. Su mobile collassa a 1 colonna naturalmente. */
+.fm-grid--2 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.fm-grid--3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.fm-grid--4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.fm-grid--220 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.fm-grid--280 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.fm-grid--sidebar { grid-template-columns: 280px 1fr; gap: 1rem; min-height: 37.5rem; }
+
+.fm-grid--tight { gap: var(--fm-space-2); }
+.fm-grid--loose { gap: var(--fm-space-6); }
+
+/* Tile — KPI/metric card per dashboard admin */
+.fm-tile {
+    padding: var(--fm-space-4);
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+}
+
+.fm-tile__title,
+.fm-tile h3 {
+    margin: 0 0 var(--fm-space-2);
+    font-size: var(--fm-fs-base);
+    font-weight: 600;
+}
+
+.fm-tile__big,
+.fm-tile .fm-big {
+    font-size: var(--fm-fs-xl);
+    font-weight: 700;
+    color: var(--fm-c-primary);
+    line-height: 1.1;
+}
+
+.fm-tile__muted {
+    color: var(--fm-c-muted);
+    font-size: var(--fm-fs-sm);
+}
+
+/* Tile interactive (cliccabile) — focus + hover */
+.fm-tile--interactive {
+    cursor: pointer;
+    transition: border-color var(--fm-transition-fast) var(--fm-easing),
+                box-shadow var(--fm-transition-fast) var(--fm-easing),
+                transform var(--fm-transition-fast) var(--fm-easing);
+}
+.fm-tile--interactive:hover {
+    border-color: var(--fm-c-primary);
+    box-shadow: var(--fm-shadow-sm);
+}
+.fm-tile--interactive:active {
+    transform: scale(0.99);
+}
+.fm-tile--interactive:focus-visible {
+    outline: var(--fm-focus-width) solid var(--fm-c-focus-ring);
+    outline-offset: var(--fm-focus-offset);
+}
+
+/* Tile semantic variants */
+.fm-tile--success { border-left: 4px solid var(--fm-c-success); }
+.fm-tile--warning { border-left: 4px solid var(--fm-c-warning); }
+.fm-tile--danger  { border-left: 4px solid var(--fm-c-danger); }
+.fm-tile--info    { border-left: 4px solid var(--fm-c-primary); }

@@ -1,0 +1,220 @@
+/* ============================================================ */
+/* Control Panel — Phase Roadmap Sprint 40.                       */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (196 LOC). Visual byte-equivalent.*/
+/* Control panel sync (Drive sync class admin) + btn-syncG family */
+/* + .result/.success/.error result banners.                      */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .control-panel (collapsible blue card)                      */
+/*   - .control-panel-header + :hover                              */
+/*   - .control-panel-title                                        */
+/*   - .control-panel-toggle + .expanded (rotate 180)              */
+/*   - .control-panel-content + .expanded (max-height 500px)       */
+/*   - .control-panel .btn-grid (3x3 grid)                         */
+/*   - .control-panel-class (sticky green sync bar)                */
+/*   - .control-panel-class .btn-grid-panel + btn-syncG-class size */
+/*   - .btn-stop-sync + .visible + :hover (orange)                 */
+/*   - .btn-close-panel + .visible + :hover (slate)                */
+/*   - .btn-syncG (green sync 60x60 box-shadow)                    */
+/*   - .btn-syncG-class (sync class 119x24 mini)                   */
+/*   - .btn-syncG.btn-danger/info/warning/secondary (color variants*/
+/*   - .result + .success + .error (status banners)                */
+/* ============================================================ */
+
+.control-panel {
+    max-width: 600px;
+    margin: 4px 0px;
+    padding: 2px 5px;
+    font-family: Arial, sans-serif;
+    background: #96b3df;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none; /* Nascosto di default */
+}
+
+/* Header del pannello di controllo (cliccabile per espandere/comprimere) */
+.control-panel-header {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.control-panel-header:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.control-panel-title {
+    margin: 0;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.control-panel-toggle {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.control-panel-toggle.expanded {
+    transform: rotate(180deg);
+}
+
+/* Contenuto espandibile del pannello */
+.control-panel-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+}
+
+.control-panel-content.expanded {
+    max-height: 500px; /* Altezza massima sufficiente per il contenuto */
+    opacity: 1;
+}
+
+/* Container dei pulsanti come griglia 3x3 */
+.control-panel .btn-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-items: center;
+}
+.control-panel-class {
+    background-color: #8edf8e;
+    border-bottom: outset;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    display: none; /* Nascosto di default */
+}
+.control-panel-class .btn-grid-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 6px;
+}
+.control-panel-class .btn-grid-panel .btn-syncG-class {
+    width: auto;
+    min-width: 0;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+}
+.btn-stop-sync {
+    background: #ff9800 !important;
+    display: none !important;
+}
+.btn-stop-sync.visible {
+    display: flex !important;
+}
+.btn-stop-sync:hover {
+    background: #e68900 !important;
+}
+.btn-close-panel {
+    background: #607d8b !important;
+    display: none !important;
+}
+.btn-close-panel.visible {
+    display: flex !important;
+}
+.btn-close-panel:hover {
+    background: #455a64 !important;
+}
+
+.btn-syncG {
+    background: #4CAF50;
+    color: white;
+    padding: 0px 15px;
+    width: 60px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-syncG-class {
+    background: #4CAF50;
+    color: white;
+    padding: 0px 0px;
+    width: 119px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    text-align: center;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn-syncG-class:hover {
+    background: #45a049; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.btn-syncG:hover { 
+    background: #45a049; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.btn-syncG.btn-danger { 
+    background: #f44336; 
+}
+.btn-syncG.btn-danger:hover { 
+    background: #d32f2f; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
+.btn-syncG.btn-info { 
+    background: #2196F3; 
+}
+.btn-syncG.btn-info:hover { 
+    background: #1976D2; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+.btn-syncG.btn-warning { 
+    background: #ff9800; 
+}
+.btn-syncG.btn-warning:hover { 
+    background: #f57c00; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+}
+.btn-syncG.btn-secondary { 
+    background: #6c757d; 
+}
+.btn-syncG.btn-secondary:hover { 
+    background: #5a6268; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+.result {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 5px;
+    display: none;
+}
+.success { background: #d4edda; color: #155724; }
+.error { background: #f8d7da; color: #721c24; }

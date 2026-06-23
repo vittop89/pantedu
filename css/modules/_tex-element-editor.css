@@ -1,0 +1,77 @@
+/* ============================================================ */
+/* Estratto da js/entries/tex-element-editor.js (ADR-023 Fase 2 — elimina CSS-in-JS runtime). */
+/* Regole VERBATIM: cascade ora deterministica via @layer.            */
+/* ============================================================ */
+
+.fm-tee-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100015;
+    display: flex; align-items: stretch; justify-content: center;
+    font: 13px/1.4 system-ui, sans-serif;
+}
+.fm-tee-modal {
+    background: #1e1e1e;
+    color: #ddd;
+    width: 95vw; height: 92vh;
+    margin: 2vh auto;
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+.fm-tee-header {
+    background: #2a2a2a;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid #444;
+    flex-wrap: wrap;
+}
+.fm-tee-header h3 { margin: 0; font-size: 15px; color: #fff; }
+.fm-tee-typeswitch { display: flex; gap: 0; border: 1px solid #555; border-radius: 4px; overflow: hidden; }
+.fm-tee-typeswitch button {
+    background: #333; color: #aaa; border: 0; padding: 5px 12px; cursor: pointer; font: 12px system-ui;
+}
+.fm-tee-typeswitch button.active { background: #2a5ac7; color: #fff; }
+.fm-tee-field { display: flex; align-items: center; gap: 6px; }
+.fm-tee-field label { color: #aaa; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+.fm-tee-field input, .fm-tee-field select {
+    background: #2a2a2a; color: #ddd; border: 1px solid #555; border-radius: 4px;
+    padding: 5px 8px; font: 12px Consolas, monospace; min-width: 160px;
+}
+.fm-tee-spacer { flex: 1; }
+.fm-tee-toolbar { display: flex; gap: 6px; }
+.fm-tee-toolbar button {
+    background: #3a3a3a; color: #ddd; border: 1px solid #555; border-radius: 4px;
+    padding: 5px 12px; cursor: pointer; font-size: 12px;
+}
+.fm-tee-toolbar button:hover { background: #4a4a4a; }
+.fm-tee-toolbar button.primary { background: #2a5ac7; color: #fff; border-color: #2a5ac7; }
+.fm-tee-toolbar button.primary:hover { background: #3a6ad7; }
+.fm-tee-toolbar button.danger { background: #c73a3a; color: #fff; border-color: #c73a3a; }
+.fm-tee-override-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 4px 10px; margin-right: 6px; min-width: 56px; box-sizing: border-box;
+    background: #5a3a1a; color: #ffd166; border: 1px solid #ffd166;
+    border-radius: 3px; font: 600 10px/1 system-ui; letter-spacing: 0.5px;
+    text-align: center; white-space: nowrap;
+}
+.fm-tee-body { flex: 1; display: flex; min-height: 0; }
+.fm-tee-editor { flex: 1 1 55%; min-width: 0; border-right: 1px solid #444; overflow: hidden; }
+.fm-tee-editor .cm-editor { height: 100%; font-size: 13px; }
+.fm-tee-editor .cm-scroller { font-family: Consolas, "Courier New", monospace; }
+.fm-tee-preview {
+    flex: 1 1 45%; min-width: 0; background: #fff; color: #000; overflow: auto;
+    padding: 16px; position: relative;
+}
+.fm-tee-preview .preview-status {
+    position: absolute; top: 8px; right: 12px; font-size: 11px; color: #888;
+    background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 3px;
+}
+.fm-tee-preview svg { max-width: 100%; height: auto; }
+.fm-tee-preview .err {
+    color: #b00; background: #fee; padding: 8px; border-radius: 4px;
+    border: 1px solid #fcc; font-family: monospace; font-size: 11px;
+    white-space: pre-wrap; max-height: 60vh; overflow: auto;
+}
+

@@ -1,0 +1,259 @@
+/* ============================================================ */
+/* Admin cards — Phase Roadmap 3 (from admin.css).               */
+/*                                                                */
+/* Variants: sec-card (intro), an-card (analytics KPI),          */
+/* infra-card (infrastructure), pills, bridge-msg.                */
+/* ============================================================ */
+
+/* Security/intro card */
+.fm-sec-card {
+    display: flex;
+    gap: var(--fm-space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--fm-space-4) var(--fm-space-5);
+    margin-bottom: var(--fm-space-4);
+    flex-wrap: wrap;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-left: 4px solid var(--fm-c-primary);
+    border-radius: var(--fm-radius);
+}
+
+.fm-sec-card--waf {
+    border-left-color: var(--fm-c-accent);
+}
+
+.fm-sec-card--warning {
+    border-left-color: var(--fm-c-warning);
+}
+
+.fm-sec-card--danger {
+    border-left-color: var(--fm-c-danger);
+}
+
+/* Analytics KPI grid */
+.fm-an-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--fm-space-2);
+    margin: var(--fm-space-2) 0;
+}
+
+.fm-an-card {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius);
+    padding: var(--fm-space-3) var(--fm-space-4);
+}
+
+.fm-an-card h4 {
+    margin: 0 0 var(--fm-space-1);
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-text-2);
+    font-weight: 600;
+}
+
+.fm-an-card .fm-an-num,
+.fm-an-card__big {
+    font-size: var(--fm-fs-xl);
+    font-weight: 700;
+    color: var(--fm-c-primary);
+}
+
+.fm-an-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fm-fs-sm);
+    margin: var(--fm-space-2) 0;
+    color: var(--fm-c-text);
+}
+
+/* Tabella minimale: solo separatori di riga orizzontali (niente griglia di
+   bordi su ogni cella) → più ordinata e leggera. */
+.fm-an-table th,
+.fm-an-table td {
+    border: 0;
+    border-bottom: 1px solid var(--fm-c-border);
+    padding: var(--fm-space-2) var(--fm-space-3);
+    text-align: start;
+    vertical-align: middle;
+}
+
+.fm-an-table th {
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+    border-bottom: 2px solid var(--fm-c-border-strong, var(--fm-c-border));
+    white-space: nowrap;
+}
+.fm-an-table tbody tr:last-child td { border-bottom: 0; }
+.fm-an-table tbody tr:hover { background: color-mix(in srgb, var(--fm-c-primary) 6%, transparent); }
+.fm-an-table .fm-an-r { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* KPI headline compatti (2 numeri principali). */
+.fm-an-kpis { display: flex; gap: var(--fm-space-3); flex-wrap: wrap; margin: var(--fm-space-2) 0 var(--fm-space-4); }
+.fm-an-kpi {
+    display: flex; flex-direction: column; align-items: flex-start;
+    min-width: 130px; padding: var(--fm-space-2) var(--fm-space-4);
+    background: var(--fm-c-surface); border: 1px solid var(--fm-c-border);
+    border-left: 3px solid var(--fm-c-primary); border-radius: var(--fm-radius);
+}
+.fm-an-kpi__n { font-size: var(--fm-fs-xl); font-weight: 700; color: var(--fm-c-primary); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.fm-an-kpi__l { font-size: var(--fm-fs-xs); color: var(--fm-c-text-2); margin-top: 2px; }
+
+/* Distribuzioni: box compatti affiancati, ciascuno con mini-tabella ordinata. */
+.fm-an-dist { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--fm-space-3); margin: var(--fm-space-2) 0 var(--fm-space-4); }
+.fm-an-distbox { background: var(--fm-c-surface); border: 1px solid var(--fm-c-border); border-radius: var(--fm-radius); padding: var(--fm-space-2) var(--fm-space-3); }
+.fm-an-distbox h4 { margin: 0 0 var(--fm-space-1); font-size: var(--fm-fs-sm); color: var(--fm-c-text-2); font-weight: 600; }
+.fm-an-distbox .fm-an-table { margin: 0; }
+
+.fm-an-flag {
+    background: var(--fm-c-warning-light);
+    color: var(--fm-c-warning);
+    padding: 1px var(--fm-space-1);
+    border-radius: var(--fm-radius-pill);
+    font-size: var(--fm-fs-xs);
+    margin-right: 3px;
+    display: inline-block;
+}
+
+/* Infrastructure grid */
+.fm-infra {
+    max-width: 1080px;
+    margin: var(--fm-space-4) auto;
+    padding: var(--fm-space-4);
+}
+
+.fm-infra h1 {
+    font-size: var(--fm-fs-xl);
+    margin: 0 0 var(--fm-space-2);
+    color: var(--fm-c-text);
+}
+
+/* Sprint B 2026-05-24 — nested grid + card layout (era in admin.css). */
+.fm-infra .fm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--fm-space-4);
+}
+.fm-infra .fm-card {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    padding: var(--fm-space-4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    color: var(--fm-c-text);
+}
+.fm-infra .fm-card h2 {
+    font-size: 1rem;
+    margin: 0 0 var(--fm-space-2);
+    color: var(--fm-c-primary);
+}
+
+.fm-infra dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: var(--fm-space-1);
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-infra dt {
+    color: var(--fm-c-muted);
+}
+
+.fm-infra dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.fm-infra__note {
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-muted);
+    margin-top: var(--fm-space-2);
+}
+
+/* Status pills */
+.fm-pill {
+    display: inline-block;
+    padding: 2px var(--fm-space-2);
+    border-radius: var(--fm-radius-pill);
+    font-size: var(--fm-fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.fm-pill--ok       { background: var(--fm-c-success-light); color: var(--fm-c-success); }
+.fm-pill--warn     { background: var(--fm-c-warning-light); color: var(--fm-c-warning); }
+.fm-pill--high     { background: #fde0c8; color: #8a3a00; }
+.fm-pill--critical { background: var(--fm-c-danger-light); color: var(--fm-c-danger); }
+.fm-pill--info     { background: var(--fm-c-info-light); color: var(--fm-c-primary); }
+
+/* Bridge message (sticky info bar) */
+.fm-bridge-msg {
+    background: var(--fm-c-warning-light);
+    border-left: 3px solid var(--fm-c-warning);
+    padding: var(--fm-space-2) var(--fm-space-3);
+    margin: var(--fm-space-2) 0;
+    font-size: var(--fm-fs-sm);
+    border-radius: var(--fm-radius-sm);
+    color: var(--fm-c-text);
+}
+
+/* ── Sprint B (2026-05-24) — Admin tools grid (dashboard cards)
+ *    estratto VERBATIM da admin.css:75-112. */
+.fm-admin-tools         { margin-top: var(--fm-space-6); }
+.fm-admin-tools__title  { font-size: 1.1rem; margin: 0 0 0.6rem; }
+.fm-admin-tools__grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.fm-admin-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+}
+.fm-admin-tool:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--fm-c-primary);
+}
+.fm-admin-tool--primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    color: #fff;
+    border-color: transparent;
+}
+.fm-admin-tool--primary:hover            { border-color: transparent; }
+.fm-admin-tool__icon                     { font-size: 1.6em; line-height: 1; }
+.fm-admin-tool__label                    { font-weight: 600; font-size: 1.05em; }
+.fm-admin-tool__desc                     { font-size: 0.85em; opacity: 0.75; }
+.fm-admin-tool--primary .fm-admin-tool__desc { opacity: 0.9; }
+
+.fm-admin-kpi        { margin-top: var(--fm-space-6); }
+.fm-admin-kpi__title { font-size: 1.1rem; margin: 0 0 0.6rem; }
+
+/* 2026-05-30 — .fm-section: blocco/sezione admin (usata solo in
+ * /admin/system/deployment: form switch + details "Cosa cambia").
+ * Era PRIVA di definizione → i blocchi restavano nudi sullo sfondo
+ * pagina, incoerenti coi .fm-tile dell'overview e poco leggibili in
+ * dark. Card neutra token-based: --fm-c-surface/-border/-text flippano
+ * automaticamente sotto body.fm-dark (nessuna regola dark extra). */
+.fm-section {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    padding: var(--fm-space-5);
+    color: var(--fm-c-text);
+}
+.fm-section > summary {
+    cursor: pointer;
+    font-size: var(--fm-fs-base);
+}

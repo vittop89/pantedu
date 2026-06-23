@@ -1,0 +1,923 @@
+/* ============================================================ */
+/* Exercise context overrides — Phase Roadmap Sprint 34.          */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (909 LOC). Visual byte-equivalent.*/
+/* G22.S15.bis Fase 5+ — Light mode overrides per pagine          */
+/* /studio/esercizio/* e /verifica/*. + DSA wrapper inline + altri */
+/* container passanti (Backup dropdown menu).                      */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - Light mode forced overrides (body:not(.fm-dark) .fm-exercise-context)*/
+/*   - DSA wrapper inline (.fm-badge-row, .fm-li-inline)              */
+/*   - Backup dropdown menu (.fm-backup-dropdown-*)                */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   G22.S15.bis Fase 5+ — LIGHT MODE OVERRIDES per pagine esercizio/verifica.
+   ══════════════════════════════════════════════════════════════════════
+   Background body.exercise-context = powderblue (chiaro). Molte regole CSS
+   in layout_es.css hanno `color: white` accoppiato a un proprio bg scuro
+   (es. .fm-groupcollex #10139a, .fm-collapsible #5959a9) → quelli funzionano in
+   entrambi i tema. Ma alcuni elementi ereditano dal body senza proprio bg
+   → in light mode il testo diventa invisibile (white su powderblue).
+   Qui forzo colori scuri SOLO per i container "passanti" (titolo, h2,
+   contract-render outside .fm-groupcollex). I .fm-groupcollex mantengono il loro bg+white.
+   Gate su `body:not(.fm-dark)` cosi' il dark theme resta intatto. */
+body:not(.fm-dark).fm-exercise-context .fm-pagestyle,
+body:not(.fm-dark).fm-exercise-context .fm-draggable-container {
+    color: #1a1a1a;
+}
+/* Titoli della verifica/esercizio (esterni ai .fm-groupcollex panel) */
+body:not(.fm-dark).fm-exercise-context .fm-contract-render > .fm-titolo,
+body:not(.fm-dark).fm-exercise-context .fm-contract-render > .fm-titolo h1,
+body:not(.fm-dark).fm-exercise-context .fm-contract-render > .fm-titolo h2,
+body:not(.fm-dark).fm-exercise-context .fm-contract-render > .fm-titolo h3,
+body:not(.fm-dark).fm-exercise-context .fm-contract-render > .fm-titolo p {
+    color: #0b3d5a;
+}
+/* Source citation, descrizione di intestazione */
+body:not(.fm-dark).fm-exercise-context .fm-source-citation,
+body:not(.fm-dark).fm-exercise-context [name="fm-source-citation"] {
+    color: var(--fm-c-text-2);
+}
+/* Header section di tipologie esercizio (es. "Rispondi alle seguenti...")
+   se renderizzato fuori dal .fm-groupcollex */
+body:not(.fm-dark).fm-exercise-context .fm-draggable-container > h1,
+body:not(.fm-dark).fm-exercise-context .fm-draggable-container > h2,
+body:not(.fm-dark).fm-exercise-context .fm-draggable-container > p {
+    color: #1a1a1a;
+}
+/* Sidepage/sidebar items che ereditano white in dark, ma il sidepage in
+   light mode ha bg chiaro */
+body:not(.fm-dark) .fm-sidepage-item,
+body:not(.fm-dark) .fm-sidepage-item * {
+    color: inherit;
+}
+/* Header_page (intestazione docente/classe) testo nero su bg light */
+body:not(.fm-dark).fm-exercise-context #header_page,
+body:not(.fm-dark).fm-exercise-context #header_page * {
+    color: #1a1a1a;
+}
+/* Topbar moderno (#fm-topbar): in dark ha bg scuro+white text. In light
+   il bg powderblue confonde. Forzo bg navy + white text in entrambi cosi'
+   il topbar appare uniforme. */
+body:not(.fm-dark).fm-exercise-context #fm-topbar {
+    background: #1a2a4a;
+    color: #fff;
+}
+
+/* ── Light mode: testo scuro sui container ──
+   color sui container ROOT, NON !important sui descendant. Cosi' i
+   \color{red} di MathJax restano colorati. Le regole body.fm-dark
+   non si applicano in light per cascade naturale. */
+body:not(.fm-dark).fm-exercise-context .fm-collection,
+body:not(.fm-dark).fm-exercise-context .fm-li-inline,
+body:not(.fm-dark).fm-exercise-context .fm-giustsol,
+body:not(.fm-dark).fm-exercise-context .fm-sol,
+body:not(.fm-dark).fm-exercise-context details.fm-sol,
+body:not(.fm-dark).fm-exercise-context .fm-text,
+body:not(.fm-dark).fm-exercise-context .fm-latex {
+    color: #1a1a1a;
+}
+
+/* MathJax CHTML output (mjx-container): forza color base scuro SOLO sul
+   container. NON usare !important sui figli per rispettare i \color{red}
+   inline applicati da MathJax (mjx-mstyle style="color: red"). */
+body:not(.fm-dark).fm-exercise-context mjx-container {
+    color: #1a1a1a;
+}
+
+/* TikZJax/SVG inline rendered con currentColor: rimuovi filter:invert
+   (era applicato in dark) + forza currentColor scuro */
+body:not(.fm-dark).fm-exercise-context .fm-collection svg:not(.fm-geogebra-wrap svg),
+body:not(.fm-dark).fm-exercise-context .fm-editor-preview svg:not(.fm-geogebra-wrap svg),
+body:not(.fm-dark).fm-exercise-context details.fm-sol svg {
+    filter: none !important;
+    color: #1a1a1a !important;
+}
+
+/* ── Sidebar light-mode: testo nero esplicito su bg pastello ──
+   Il pannello .fm-sb-panel + i suoi contenuti (.linkref, ul.fm-db-block,
+   sidepage-item) ereditano color da .sidebar/body. In dark e' c'e' un
+   override esplicito (#e0e0e0 white-ish). In light NESSUNA regola → fallback
+   a inherit che puo' restare faded da render dark. Forziamo nero esplicito. */
+body:not(.fm-dark) .sidebar,
+body:not(.fm-dark) .sidebar *,
+body:not(.fm-dark) .fm-sb-panel,
+body:not(.fm-dark) .fm-sb-panel *,
+body:not(.fm-dark) ul.fm-db-block,
+body:not(.fm-dark) ul.fm-db-block li,
+body:not(.fm-dark) ul.fm-db-block a,
+body:not(.fm-dark) ul.fm-db-block .fm-db-head,
+body:not(.fm-dark) .linkref,
+body:not(.fm-dark) .linkref *,
+body:not(.fm-dark) .fm-sb-cat,
+body:not(.fm-dark) .fm-sb-cat *,
+body:not(.fm-dark) .btn-es_sidebar,
+body:not(.fm-dark) .btn-esAct_sidebar {
+    color: #1a1a1a;
+}
+/* Sezione button (Mappe/Lab/Eser/Verif/BES): hanno bg colorato proprio,
+   testo nero gia' leggibile. Forza nero per sicurezza. */
+body:not(.fm-dark) .fm-sb-sec {
+    color: #1a1a1a;
+}
+/* sel-wrapper ha bg blueviolet — testo bianco resta corretto su questo bg */
+body:not(.fm-dark) .sel-wrapper,
+body:not(.fm-dark) .sel-wrapper * {
+    color: #fff;
+}
+/* Ma le selezioni input dentro sel-wrapper hanno bg bianco → testo nero */
+body:not(.fm-dark) .sel-wrapper select,
+body:not(.fm-dark) .sel-wrapper input {
+    color: #1a1a1a;
+}
+
+/* ── Editor modal & preview pane: light mode ──
+   color base scuro sui container. NON !important sui descendant per non
+   sovrascrivere i \color{} di MathJax (es. \color{red} in soluzioni step). */
+body:not(.fm-dark) .fm-editor-panel,
+body:not(.fm-dark) .fm-editor-preview {
+    color: #1a1a1a;
+}
+body:not(.fm-dark) .fm-editor-preview {
+    background: var(--fm-c-surface-2) !important;
+}
+/* Form inputs/textarea: bg chiaro, testo nero */
+body:not(.fm-dark) .fm-editor-panel input,
+body:not(.fm-dark) .fm-editor-panel select,
+body:not(.fm-dark) .fm-editor-panel textarea {
+    background: var(--fm-c-surface) !important;
+    color: #1a1a1a !important;
+    border-color: var(--fm-c-border) !important;
+}
+/* MathJax/SVG inside preview: forza color base scuro sul container.
+   I figli con \color{red} etc. hanno inline style → mantengono il loro colore. */
+body:not(.fm-dark) .fm-editor-preview mjx-container,
+body:not(.fm-dark) .fm-editor-preview > svg {
+    color: #1a1a1a;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DSA wrapper inline col badge fonte (server-side render).
+   Il `.fm-badge-row` allinea badge + DSA checks (F sopra GF, stacked
+   verticale) sulla stessa baseline orizzontale del `.fm-li-inline`.
+   Visibilità: solo per docenti (`body.fm-teacher-access`) e admin
+   (`body.fm-admin-access`). Studenti hanno il markup ma display:none.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-badge-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+    /* DSA buttons PRIMA del badge (a sinistra): order esplicito sotto. */
+}
+.fm-badge-row .fm-badge {
+    display: inline-block;
+    vertical-align: middle;
+    order: 1;  /* badge a destra dei pulsanti DSA */
+}
+.fm-badge-row .dsa-wrapper-container {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    vertical-align: middle;
+    order: 0;  /* DSA a sinistra del badge */
+}
+/* DSA wrapper come PRIMO child diretto di <li class="fm-li-inline">:
+   inline-flex column, F sopra GF stacked, accanto agli altri inline siblings. */
+.fm-li-inline > .dsa-wrapper-container {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    vertical-align: top;
+    margin-right: 8px;
+}
+
+/* `.fm-li-inline` flex layout: prima riga (DSA + badge) centrata orizzontalmente,
+   le sezioni block (.fm-collection, .fm-sol, .fm-giustsol, .fm-wrapsol-vf) prendono full width
+   e cadono a capo. Il badge contiene già fonte (book/volume) e numero/page
+   come singola immagine MathJax. */
+.fm-li-inline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+.fm-li-inline > .fm-collection,
+.fm-li-inline > .fm-sol,
+.fm-li-inline > .fm-giustsol,
+.fm-li-inline > .fm-wrapsol-vf,
+.fm-li-inline > .fm-editor-panel {
+    flex: 1 1 100%;
+    min-width: 0;
+}
+/* Pulsanti DSA item-level: stessa estetica dei li-buttons. */
+.fm-badge-row .dsa-wrapper-container .fm-dsa-item-btn {
+    /* Eredita stile da .fm-dsa-li-btn (vedi sotto). */
+}
+
+/* G22.S15.bis — Pulsanti DSA F/GF inline PRIMA del marker (1./•) di ogni
+   <li> della traccia. Mutex F/GF, toggle inset/outset. Lo stato è
+   persistito server-side per item (vedi dsa-marks.js fm-dsa-li-btn handler).
+   Marker numerico/bullet emesso esplicito da PHP come .fm-dsa-li-num
+   per ordine flex: [pulsanti] [numero] [contenuto]. */
+.fm-dsa-li-list {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+    /* G27.dsa.fix — Constants per il layout DSA list. Le rule progressive
+       per nesting depth (1..5) sotto sono enumerated esplicitamente perche'
+       il pattern `--depth: calc(var(--depth) + 1)` veniva trattato come
+       cyclic dependency da Chromium → --depth restava 0 ovunque.
+       G27.dsa.tighten — marker-base ridotto da 40→28 e indent-step da
+       28→24 per avvicinare i marker (A./a)/I)) ai buttons F/GF. */
+    --buttons-w: 60px;
+    --gap: 6px;
+    --marker-base: 16px;
+    --indent-step: 20px;
+}
+.fm-dsa-li-list > li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--gap);
+    margin: 4px 0;
+}
+.fm-dsa-li-list > li > .fm-dsa-li-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.fm-dsa-li-list > li > .fm-dsa-li-num {
+    font-weight: 600;
+    color: inherit;
+    flex: 0 0 var(--marker-base);
+    text-align: right;
+    /* G27.dsa.fix — border-box: padding-left dei sub-marker (28/56/84...)
+       NON aumenta la larghezza del flex item. Senza, content-box default
+       sommava padding al flex-basis → box piu' larga del previsto →
+       sub-list nested calcolavano margin-left negativo errato. */
+    box-sizing: border-box;
+}
+
+.fm-dsa-li-buttons {
+    /* G27.dsa.fix — F/GF affiancati orizzontalmente con LARGHEZZA FISSA
+       (60px = 2 × 28px btn + 4px gap). Necessario per allineare TUTTI i
+       buttons (outer + sub + sub-sub) alla stessa colonna X via il
+       calc margin-left negativo del sub-list (vedi rule sotto). */
+    display: inline-flex;
+    flex-direction: row;
+    gap: 2px;
+    flex: 0 0 60px;
+    align-self: flex-start;
+    user-select: none;
+}
+.fm-dsa-li-btn {
+    min-width: 28px;
+    text-align: center;
+}
+.fm-dsa-li-btn {
+    font: 700 10px/1 system-ui;
+    padding: 2px 6px;
+    min-width: 26px;
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text-2);
+    border: 1px outset #aaa;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.fm-dsa-li-btn:hover { background: #e0e0e0; }
+/* Stato attivo (selected): inset border + colore differenziato */
+.fm-dsa-li-btn.fm-dsa-active {
+    border-style: inset;
+    background: #ffe6a3;
+    color: #774400;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+}
+.fm-dsa-li-btn.fm-dsa-li-GF.fm-dsa-active,
+.fm-dsa-li-btn.fm-dsa-item-GF.fm-dsa-active {
+    background: #cfe6ff;
+    color: #114488;
+}
+
+/* G27.dsa.fix + tighten v2 + section-guard + collex-scope —
+   Rule progressive per nesting depth (1..5). Si applicano SOLO:
+   1. Dentro `.fm-collection` (rendering live verifica/esercizio, NON editor preview
+      come .fm-editor-field/.fm-cell-popup-preview, dove le rule shiftavano
+      i sub-list fuori dal viewport)
+   2. Ai sub-list di sezioni question-related (sub, options) — NON
+      solution/justification (quei sub non hanno buttons F/GF da compensare).
+
+   Formula margin-left = -(buttons-w + 2*gap + parent_marker_width)
+     buttons-w=60, gap=6, marker-base=16, indent-step=20
+     depth 1: -(60+12+16) = -88    marker padding 20, flex 36
+     depth 2: -(60+12+36) = -108   marker padding 40, flex 56
+     depth 3: -(60+12+56) = -128   marker padding 60, flex 76
+     depth 4: -(60+12+76) = -148   marker padding 80, flex 96
+     depth 5: -(60+12+96) = -168   marker padding 100, flex 116 */
+
+/* depth 1 */
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"],
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] {
+    padding-left: 0;
+    margin-left: -88px;
+}
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"] > li > .fm-dsa-li-num,
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] > li > .fm-dsa-li-num {
+    padding-left: 20px;
+    flex: 0 0 36px;
+}
+/* depth 2 */
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"],
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] {
+    margin-left: -108px;
+}
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"] > li > .fm-dsa-li-num,
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] > li > .fm-dsa-li-num {
+    padding-left: 40px;
+    flex: 0 0 56px;
+}
+/* depth 3 */
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"],
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] {
+    margin-left: -128px;
+}
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"] > li > .fm-dsa-li-num,
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] > li > .fm-dsa-li-num {
+    padding-left: 60px;
+    flex: 0 0 76px;
+}
+/* depth 4 */
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"],
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] {
+    margin-left: -148px;
+}
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"] > li > .fm-dsa-li-num,
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] > li > .fm-dsa-li-num {
+    padding-left: 80px;
+    flex: 0 0 96px;
+}
+/* depth 5 */
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"],
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] {
+    margin-left: -168px;
+}
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="sub"] > li > .fm-dsa-li-num,
+.fm-collection .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-list[data-dsa-section="options"] > li > .fm-dsa-li-num {
+    padding-left: 100px;
+    flex: 0 0 116px;
+}
+/* Default markers per liste SENZA preset (`:not([data-fm-list-style])`):
+   - ol: 1. / a. / i. (decimal → lower-alpha → lower-roman)
+   - ul: ● / ○ / ■ (disc → circle → square)
+   `list-style-type` ha specificità (0,2,1) sopra il `list-style: none` di
+   `.fm-dsa-li-list` (0,1,0). */
+ol.fm-dsa-li-list:not([data-fm-list-style])                     { list-style-type: decimal; }
+ol.fm-dsa-li-list:not([data-fm-list-style]) > li > ol,
+ol.fm-dsa-li-list:not([data-fm-list-style]) > li > .fm-dsa-li-content > ol             { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list:not([data-fm-list-style]) > li > ol > li > ol,
+ol.fm-dsa-li-list:not([data-fm-list-style]) > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-roman; }
+ul.fm-dsa-li-list:not([data-fm-list-style])                     { list-style-type: disc; }
+ul.fm-dsa-li-list:not([data-fm-list-style]) > li > ul,
+ul.fm-dsa-li-list:not([data-fm-list-style]) > li > .fm-dsa-li-content > ul             { list-style-type: circle; }
+ul.fm-dsa-li-list:not([data-fm-list-style]) > li > ul > li > ul,
+ul.fm-dsa-li-list:not([data-fm-list-style]) > li > .fm-dsa-li-content > ul > li > ul  { list-style-type: square; }
+/* G27.dsa.fix — Sub-list (nested .fm-dsa-li-list): comportamento legacy
+   era display:list-item + buttons/num nascosti (solo outer aveva F/GF).
+   Ora F/GF sono emessi server-side ANCHE per sub (question, options).
+   Restringo l'override list-item solo alle PREVIEW client (fm-editor-*,
+   fm-cell-*-preview), dove il marker resta nativo browser. Nei contesti
+   live (.fm-collection__item, .rm-option) i sub usano flex come l'outer per
+   layout uniforme [F/GF] [marker emesso] [content]. */
+.fm-editor-field .fm-dsa-li-list .fm-dsa-li-list > li,
+.fm-editor-preview .fm-dsa-li-list .fm-dsa-li-list > li,
+.fm-cell-mini-preview .fm-dsa-li-list .fm-dsa-li-list > li,
+.fm-cell-popup-preview .fm-dsa-li-list .fm-dsa-li-list > li {
+    display: list-item;
+    align-items: initial;
+    gap: 0;
+}
+.fm-editor-field .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-editor-field .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-num,
+.fm-editor-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-editor-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-num,
+.fm-cell-mini-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-cell-mini-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-num,
+.fm-cell-popup-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-cell-popup-preview .fm-dsa-li-list .fm-dsa-li-list .fm-dsa-li-num {
+    display: none;
+}
+/* Sub-list type mapping (outer ha custom marker via .fm-dsa-li-num).
+   Mirror di Sanitizer::PRESET_LEVELS: outer / sub1 / sub2 per ogni preset.
+   ── DUE PATH supportati ── (server-render vs editor-cleaned):
+     A) <li> > <ol>                         (editor view, _cleanListForEditor)
+     B) <li> > <span.fm-dsa-li-content> > <ol>  (server view, ContractRenderer)
+   Per ogni livello servono selettori per entrambi i path. */
+
+/* alpha-decimal: A. / 1. / a. */
+.fm-dsa-li-list[data-fm-list-style="alpha-decimal"]      > li > ol,
+.fm-dsa-li-list[data-fm-list-style="alpha-decimal"]      > li > .fm-dsa-li-content > ol             { list-style-type: decimal; }
+.fm-dsa-li-list[data-fm-list-style="alpha-decimal"]      > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="alpha-decimal"]      > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-alpha; }
+/* lower-alpha-roman: a. / i. / 1. */
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"]  > li > ol,
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"]  > li > .fm-dsa-li-content > ol             { list-style-type: lower-roman; }
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"]  > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"]  > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: decimal; }
+/* roman-alpha: I. / A. / 1. */
+.fm-dsa-li-list[data-fm-list-style="roman-alpha"]        > li > ol,
+.fm-dsa-li-list[data-fm-list-style="roman-alpha"]        > li > .fm-dsa-li-content > ol             { list-style-type: upper-alpha; }
+.fm-dsa-li-list[data-fm-list-style="roman-alpha"]        > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="roman-alpha"]        > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: decimal; }
+/* decimal-zero: 0X. / a. / i. */
+.fm-dsa-li-list[data-fm-list-style="decimal-zero"]       > li > ol,
+.fm-dsa-li-list[data-fm-list-style="decimal-zero"]       > li > .fm-dsa-li-content > ol             { list-style-type: lower-alpha; }
+.fm-dsa-li-list[data-fm-list-style="decimal-zero"]       > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="decimal-zero"]       > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-roman; }
+/* paren: 1) / a) / i) */
+.fm-dsa-li-list[data-fm-list-style="paren"]              > li > ol,
+.fm-dsa-li-list[data-fm-list-style="paren"]              > li > .fm-dsa-li-content > ol             { list-style-type: lower-alpha; }
+.fm-dsa-li-list[data-fm-list-style="paren"]              > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="paren"]              > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-roman; }
+/* alpha-paren: A) / 1) / a) */
+.fm-dsa-li-list[data-fm-list-style="alpha-paren"]        > li > ol,
+.fm-dsa-li-list[data-fm-list-style="alpha-paren"]        > li > .fm-dsa-li-content > ol             { list-style-type: decimal; }
+.fm-dsa-li-list[data-fm-list-style="alpha-paren"]        > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="alpha-paren"]        > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-alpha; }
+/* lower-alpha-paren: a) / i) / 1) */
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"]  > li > ol,
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"]  > li > .fm-dsa-li-content > ol             { list-style-type: lower-roman; }
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"]  > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"]  > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: decimal; }
+/* roman-paren: I) / A) / 1) */
+.fm-dsa-li-list[data-fm-list-style="roman-paren"]        > li > ol,
+.fm-dsa-li-list[data-fm-list-style="roman-paren"]        > li > .fm-dsa-li-content > ol             { list-style-type: upper-alpha; }
+.fm-dsa-li-list[data-fm-list-style="roman-paren"]        > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="roman-paren"]        > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: decimal; }
+/* decimal-zero-paren: 0X) / a) / i) */
+.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] > li > ol,
+.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] > li > .fm-dsa-li-content > ol             { list-style-type: lower-alpha; }
+.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] > li > ol > li > ol,
+.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] > li > .fm-dsa-li-content > ol > li > ol  { list-style-type: lower-roman; }
+/* Bullet (itemize) — 3 livelli simbolici */
+.fm-dsa-li-list[data-fm-list-style="arrow-bullet"]       > li > ul,
+.fm-dsa-li-list[data-fm-list-style="arrow-bullet"]       > li > .fm-dsa-li-content > ul             { list-style-type: square; }
+.fm-dsa-li-list[data-fm-list-style="arrow-bullet"]       > li > ul > li > ul,
+.fm-dsa-li-list[data-fm-list-style="arrow-bullet"]       > li > .fm-dsa-li-content > ul > li > ul  { list-style-type: disc; }
+.fm-dsa-li-list[data-fm-list-style="star-circle"]        > li > ul,
+.fm-dsa-li-list[data-fm-list-style="star-circle"]        > li > .fm-dsa-li-content > ul             { list-style-type: circle; }
+.fm-dsa-li-list[data-fm-list-style="star-circle"]        > li > ul > li > ul,
+.fm-dsa-li-list[data-fm-list-style="star-circle"]        > li > .fm-dsa-li-content > ul > li > ul  { list-style-type: square; }
+
+/* Visibilità: solo docenti e admin vedono pulsanti DSA. Per gli altri
+   il markup è renderizzato ma nascosto (preserva struttura cache). */
+body:not(.fm-teacher-access):not(.fm-admin-access) .fm-badge-row .dsa-wrapper-container,
+body:not(.fm-teacher-access):not(.fm-admin-access) .fm-dsa-li-buttons {
+    display: none !important;
+}
+/* Quando i pulsanti sono nascosti, ripristina list-style nativo per studenti.
+   Solo per liste SENZA preset gerarchico (`:not([data-fm-list-style])`)
+   E che NON sono discendenti di una lista con preset (quei sub sono gestiti
+   dalle regole preset più specifiche). */
+body:not(.fm-teacher-access):not(.fm-admin-access) .fm-dsa-li-list:not([data-fm-list-style]):not(.fm-dsa-li-list[data-fm-list-style] *) {
+    list-style: revert;
+    padding-left: revert;
+}
+body:not(.fm-teacher-access):not(.fm-admin-access) .fm-dsa-li-list:not([data-fm-list-style]):not(.fm-dsa-li-list[data-fm-list-style] *) > li {
+    display: list-item;
+}
+body:not(.fm-teacher-access):not(.fm-admin-access) .fm-dsa-li-list > li > .fm-dsa-li-num {
+    display: none; /* il marker nativo del browser sostituisce il nostro */
+}
+
+/* Dark mode */
+body.fm-dark .fm-badge-row .dsa-wrapper-container label,
+body.fm-dark .fm-dsa-li-list > li > .fm-dsa-li-num {
+    color: #c8c8d0;
+}
+body.fm-dark .fm-dsa-li-btn {
+    background: #2a2a30;
+    color: var(--fm-c-muted);
+    border-color: #555;
+}
+body.fm-dark .fm-dsa-li-btn:hover { background: #3a3a40; }
+body.fm-dark .fm-dsa-li-btn.fm-dsa-active {
+    background: #6a4a10;
+    color: #ffd380;
+}
+body.fm-dark .fm-dsa-li-btn.fm-dsa-li-GF.fm-dsa-active,
+body.fm-dark .fm-dsa-li-btn.fm-dsa-item-GF.fm-dsa-active {
+    background: #1a3a6a;
+    color: #88c4ff;
+}
+
+
+/* ========================================================================
+   List snippet select (TeX editor toolbar)
+   `<select class="fm-list-snippet-select">` in topbar editor: scelta utente
+   inserisce template `\begin{enumerate}[label=\arabic*)]` nel textarea.
+   Stile dark-aware.
+   ======================================================================== */
+.fm-list-snippet-select {
+    padding: 4px 6px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 3px;
+    cursor: pointer;
+    font: 12px/1.2 system-ui;
+}
+.fm-list-snippet-select:hover { border-color: #888; }
+.fm-list-snippet-select:focus-visible {
+    outline: 2px solid #4a90e2;
+    outline-offset: 1px;
+}
+body.fm-dark .fm-list-snippet-select {
+    background: #2a2a30;
+    color: #ddd;
+    border-color: #555;
+}
+body.fm-dark .fm-list-snippet-select:hover { border-color: #888; background: #34343c; }
+body.fm-dark .fm-list-snippet-select option {
+    background: #1e1e22;
+    color: #ddd;
+}
+
+/* ========================================================================
+   Editor wysiwyg: dentro `.fm-editor-field` (contenteditable), le liste
+   `.fm-dsa-li-list` devono mostrare marker NATIVI (1./•/A./a./1)) per dare
+   feedback visivo. Override delle regole DSA pulsanti F/GF (che hanno
+   senso solo nei .fm-collection live, non nell'editor sorgente).
+   ======================================================================== */
+.fm-editor-field .fm-dsa-li-list,
+.fm-editor-preview .fm-dsa-li-list,
+.fm-cell-mini-preview .fm-dsa-li-list,
+.fm-cell-popup-preview .fm-dsa-li-list {
+    /* NB: usare longhand `list-style-type` invece di shorthand `list-style`:
+       shorthand resetterebbe anche list-style-image/position e (in alcuni
+       browser) si applica diversamente rispetto alle preset rules sotto. */
+    padding-left: 28px;          /* indent per marker */
+    margin: 6px 0;
+}
+/* G27.dsa.fix — Per .rm-option (server rendering con .fm-dsa-li-num
+   esplicito), NIENTE padding-left/margin sul container outer: i sub-list
+   usano margin-left negativo per allineare i buttons F/GF alla colonna
+   sx, e il padding-left del wrapper interferirebbe (shift +28 non compensato).
+   IMPORTANTE: usare `>` per matchare SOLO l'outer-list della cella (figlia
+   diretta di .fm-cell-content), NON i sub-list nested (che devono mantenere
+   margin-left: -112/-140/... applicato dalle rule depth-progressive). */
+.rm-option .fm-cell-content > .fm-dsa-li-list {
+    padding-left: 0;
+    margin: 6px 0;
+}
+/* G27.dsa.fix — distinguo:
+   - PREVIEW CLIENT (fm-editor-*, fm-cell-*-preview): display:list-item
+     mantenuto perche' il rendering JS NON emette .fm-dsa-li-num esplicito,
+     marker = native browser via list-style-type. NO pulsanti F/GF in preview.
+   - SERVER RENDERING (.rm-option): display:flex per layout uniforme
+     [F/GF] [marker emesso da PHP] [content], analogo all'outer list. */
+.fm-editor-field .fm-dsa-li-list > li,
+.fm-editor-preview .fm-dsa-li-list > li,
+.fm-cell-mini-preview .fm-dsa-li-list > li,
+.fm-cell-popup-preview .fm-dsa-li-list > li {
+    display: list-item;          /* annulla flex inherited (marker visibile) */
+    align-items: initial;
+    gap: 0;
+    margin: 2px 0;
+    min-height: 1.4em;
+}
+.rm-option .fm-dsa-li-list > li {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 2px 0;
+    min-height: 1.4em;
+}
+/* ─── Stili gerarchici tipo Google Docs ─────────────────────────────────
+   Il marker di ogni livello di annidamento è diverso. Stili predefiniti
+   selezionabili dal dropdown List, applicati via attributo
+   `data-fm-list-style` sull'<ol>/<ul> outer.
+*/
+/* Default <ul>: ●→○→■ (cycle) */
+.fm-editor-field ul.fm-dsa-li-list                { list-style-type: disc; }
+/* Fallback list-style per liste SENZA `data-fm-list-style` (legacy/default).
+   Avvolti in `:where()` per neutralizzare la specificità (`.fm-editor-field`
+   diventa zero) → le regole preset `[data-fm-list-style="X"]` (più sotto)
+   vincono per cascade, anche se hanno minor specificità testuale. */
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ul.fm-dsa-li-list             { list-style-type: disc; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ul.fm-dsa-li-list ul          { list-style-type: circle; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ul.fm-dsa-li-list ul ul       { list-style-type: square; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ul.fm-dsa-li-list ul ul ul    { list-style-type: disc; }
+
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list             { list-style-type: decimal; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list ol          { list-style-type: lower-alpha; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list ol ol       { list-style-type: lower-roman; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list ol ol ol    { list-style-type: decimal; }
+
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list[type="1"]   { list-style-type: decimal; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list[type="A"]   { list-style-type: upper-alpha; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list[type="a"]   { list-style-type: lower-alpha; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list[type="I"]   { list-style-type: upper-roman; }
+:where(.fm-editor-field, .fm-cell-mini-preview, .fm-cell-popup-preview, .rm-option) ol.fm-dsa-li-list[type="i"]   { list-style-type: lower-roman; }
+
+/* ── Stili PRESET gerarchici (Google Docs-like) ───────────────────────────
+   Applicati via data-fm-list-style="<NAME>" sulla outer <ol>/<ul>. */
+
+/* IMPORTANTE: i selettori dei preset usano `ol.fm-dsa-li-list[data-fm-list-style]`
+   per VINCERE in specificità sulla regola base
+   `.fm-editor-field ol.fm-dsa-li-list { list-style-type: decimal }` (0,2,1).
+   Aggiungere `[data-fm-list-style]` porta a (0,3,1) → preset vince. */
+
+/* alpha-decimal: A. → 1. → a. → i. */
+ol.fm-dsa-li-list[data-fm-list-style="alpha-decimal"]              { list-style-type: upper-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-decimal"] ol            { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-decimal"] ol ol         { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-decimal"] ol ol ol      { list-style-type: lower-roman; }
+
+/* roman-alpha: I. → A. → 1. → a. */
+ol.fm-dsa-li-list[data-fm-list-style="roman-alpha"]                { list-style-type: upper-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-alpha"] ol              { list-style-type: upper-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-alpha"] ol ol           { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-alpha"] ol ol ol        { list-style-type: lower-alpha; }
+
+/* decimal-zero: 01. → a. → i. (decimal-leading-zero) */
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero"]               { list-style-type: decimal-leading-zero; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero"] ol             { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero"] ol ol          { list-style-type: lower-roman; }
+
+/* lower-alpha-roman: a. → i. → 1. */
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"]          { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"] ol        { list-style-type: lower-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-roman"] ol ol     { list-style-type: decimal; }
+
+/* paren: 1) → a) → i) (custom ::marker con suffisso paren) */
+ol.fm-dsa-li-list[data-fm-list-style="paren"]                      { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="paren"] ol                    { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="paren"] ol ol                 { list-style-type: lower-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="paren"] > li::marker          { content: counter(list-item) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="paren"] ol > li::marker       { content: counter(list-item, lower-alpha) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="paren"] ol ol > li::marker    { content: counter(list-item, lower-roman) ") "; }
+
+/* alpha-paren: A) → 1) → a) */
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"]                { list-style-type: upper-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"] ol              { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"] ol ol           { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"] > li::marker    { content: counter(list-item, upper-alpha) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"] ol > li::marker { content: counter(list-item) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="alpha-paren"] ol ol > li::marker { content: counter(list-item, lower-alpha) ") "; }
+
+/* lower-alpha-paren: a) → i) → 1) */
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"]          { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"] ol        { list-style-type: lower-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"] ol ol     { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"] > li::marker    { content: counter(list-item, lower-alpha) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"] ol > li::marker { content: counter(list-item, lower-roman) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="lower-alpha-paren"] ol ol > li::marker { content: counter(list-item) ") "; }
+
+/* roman-paren: I) → A) → 1) */
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"]                { list-style-type: upper-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"] ol              { list-style-type: upper-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"] ol ol           { list-style-type: decimal; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"] > li::marker    { content: counter(list-item, upper-roman) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"] ol > li::marker { content: counter(list-item, upper-alpha) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="roman-paren"] ol ol > li::marker { content: counter(list-item) ") "; }
+
+/* decimal-zero-paren: 01) → a) → i) */
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"]         { list-style-type: decimal-leading-zero; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] ol       { list-style-type: lower-alpha; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] ol ol    { list-style-type: lower-roman; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] > li::marker    { content: counter(list-item, decimal-leading-zero) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] ol > li::marker { content: counter(list-item, lower-alpha) ") "; }
+ol.fm-dsa-li-list[data-fm-list-style="decimal-zero-paren"] ol ol > li::marker { content: counter(list-item, lower-roman) ") "; }
+
+/* arrow-bullet: ➤→♦→● (ul) */
+ul.fm-dsa-li-list[data-fm-list-style="arrow-bullet"] > li::marker     { content: "➤  "; }
+ul.fm-dsa-li-list[data-fm-list-style="arrow-bullet"] ul > li::marker  { content: "♦  "; }
+ul.fm-dsa-li-list[data-fm-list-style="arrow-bullet"] ul ul > li::marker { content: "●  "; }
+
+/* star-circle: ★→○→■ (ul) */
+ul.fm-dsa-li-list[data-fm-list-style="star-circle"] > li::marker      { content: "★  "; }
+ul.fm-dsa-li-list[data-fm-list-style="star-circle"] ul > li::marker   { content: "○  "; }
+ul.fm-dsa-li-list[data-fm-list-style="star-circle"] ul ul > li::marker { content: "■  "; }
+/* Nascondi pulsanti F/GF + marker custom dentro l'editor (sono UI per .fm-collection live).
+   Anche nelle preview cell (mini + popup) per evitare doppio marker quando il
+   server-rendered HTML viene incollato nella cella. */
+.fm-editor-field .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-editor-field .fm-dsa-li-list .fm-dsa-li-num,
+.fm-cell-mini-preview .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-cell-mini-preview .fm-dsa-li-list .fm-dsa-li-num,
+.fm-cell-popup-preview .fm-dsa-li-list .fm-dsa-li-buttons,
+.fm-cell-popup-preview .fm-dsa-li-list .fm-dsa-li-num {
+    display: none;
+}
+/* Placeholder visibile per <li> vuoti: zero-width-space non funziona
+   come placeholder, mostriamo un trattino opaco solo se :empty */
+.fm-editor-field .fm-dsa-li-list > li:empty::before {
+    content: "(vuoto)";
+    color: var(--fm-c-muted);
+    font-style: italic;
+    opacity: 0.5;
+}
+/* Dark theme adjustments */
+body.fm-dark .fm-editor-field {
+    background: #1e1e22;
+    color: #e0e0e0;
+    border-color: #555;
+}
+body.fm-dark .fm-editor-field .fm-dsa-li-list > li:empty::before {
+    color: var(--fm-c-muted);
+}
+body.fm-dark .fm-editor-preview {
+    background: #1e1e22;
+    color: #e0e0e0;
+    border-color: #555;
+}
+/* Dark mode per mini preview in-cell (popup ha già regole a riga ~2187). */
+body.fm-dark .fm-cell-mini-preview {
+    background: #1e1e22 !important;
+    color: #e0e0e0 !important;
+    border-color: #4a4a7a !important;
+}
+body.fm-dark .fm-cell-mini-preview mjx-container,
+body.fm-dark .fm-cell-mini-preview mjx-container * { color: #e0e0e8; }
+
+/* ========================================================================
+   Find & Replace dialog (VS Code-like) — light + dark theme
+   ======================================================================== */
+.fm-fr-dialog {
+    position: fixed; top: 80px; right: 20px;
+    background: var(--fm-c-surface); color: #222;
+    border: 1px solid var(--fm-c-border); border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    z-index: 10000; padding: 0;
+    min-width: 380px; max-width: 480px;
+    font: 13px/1.4 system-ui;
+}
+.fm-fr-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; background: #f3f3f7; border-bottom: 1px solid var(--fm-c-border);
+    border-radius: 6px 6px 0 0;
+}
+.fm-fr-title { font-weight: 600; font-size: 0.8125rem; }
+.fm-fr-close {
+    background: transparent; border: none; font-size: 1.125rem;
+    line-height: 1; cursor: pointer; color: inherit; padding: 0 4px;
+}
+.fm-fr-close:hover { background: rgba(0,0,0,.06); border-radius: 3px; }
+.fm-fr-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.fm-fr-row { display: flex; gap: 4px; align-items: center; }
+.fm-fr-row input[type="text"] {
+    flex: 1 1 auto; padding: 5px 8px;
+    border: 1px solid var(--fm-c-border); border-radius: 3px;
+    background: var(--fm-c-surface); color: #222; font: 12px/1.3 Consolas, monospace;
+}
+.fm-fr-row input[type="text"]:focus { outline: 2px solid #4a90e2; outline-offset: -1px; }
+.fm-fr-opt {
+    flex: 0 0 auto; padding: 4px 8px;
+    background: transparent; border: 1px solid transparent; border-radius: 3px;
+    cursor: pointer; font: 11px/1 system-ui; color: var(--fm-c-text-2);
+    min-width: 26px; height: 24px;
+}
+.fm-fr-opt:hover { background: rgba(0,0,0,.06); }
+.fm-fr-opt.fm-fr-active {
+    background: rgba(74,144,226,.15); color: #2a5ac7; border-color: #4a90e2;
+}
+.fm-fr-btn {
+    flex: 0 0 auto; padding: 4px 8px;
+    background: transparent; border: 1px solid transparent; border-radius: 3px;
+    cursor: pointer; font-size: 0.8125rem; color: var(--fm-c-text-2); min-width: 26px; height: 24px;
+}
+.fm-fr-btn:hover { background: rgba(0,0,0,.06); }
+.fm-fr-status {
+    font-size: 0.6875rem; color: var(--fm-c-text-2); min-height: 14px; padding-left: 2px;
+}
+.fm-fr-status.fm-fr-no-result { color: #c33; }
+
+body.fm-dark .fm-fr-dialog {
+    background: #1e1e22; color: #e0e0e0; border-color: #444;
+}
+body.fm-dark .fm-fr-header { background: #2a2a30; border-bottom-color: #444; }
+body.fm-dark .fm-fr-close:hover { background: rgba(255,255,255,.08); }
+body.fm-dark .fm-fr-row input[type="text"] {
+    background: #0f0f12; color: #e0e0e0; border-color: #555;
+}
+body.fm-dark .fm-fr-opt, body.fm-dark .fm-fr-btn { color: var(--fm-c-muted); }
+body.fm-dark .fm-fr-opt:hover, body.fm-dark .fm-fr-btn:hover { background: rgba(255,255,255,.08); }
+body.fm-dark .fm-fr-opt.fm-fr-active { background: rgba(74,144,226,.25); color: #88c4ff; border-color: #4a90e2; }
+body.fm-dark .fm-fr-status { color: var(--fm-c-muted); }
+
+/* ========================================================================
+   Inline "boxes" editor wysiwyg: span.dots e span.fm-add-text-dsa
+   Visivamente distinte (bordo + bg) per indicare al docente che è un
+   contenuto strutturato (non testo normale). Click fuori per uscire.
+   ======================================================================== */
+.fm-editor-field span.dots,
+.fm-editor-field span.fm-add-text-dsa {
+    display: inline-block;
+    padding: 1px 6px;
+    margin: 0 2px;
+    border: 1px dashed #888;
+    border-radius: 3px;
+    min-width: 1em;
+    background: rgba(255, 200, 0, 0.08);
+    color: inherit;
+    font-style: italic;
+}
+.fm-editor-field span.dots {
+    background: rgba(74, 144, 226, 0.12);
+    border-color: #4a90e2;
+}
+.fm-editor-field span.fm-add-text-dsa {
+    background: rgba(255, 100, 100, 0.12);
+    border-color: #c25;
+}
+.fm-editor-field span.dots:focus-within,
+.fm-editor-field span.fm-add-text-dsa:focus-within {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+}
+.fm-editor-field span.dots:empty::before { content: "…"; opacity: 0.6; }
+body.fm-dark .fm-editor-field span.dots         { background: rgba(74, 144, 226, 0.18); }
+body.fm-dark .fm-editor-field span.fm-add-text-dsa   { background: rgba(255, 100, 100, 0.18); }
+
+/* Find & Replace: highlight match nel campo editor */
+.fm-editor-field mark.fm-fr-hit {
+    background: rgba(255, 220, 0, 0.55);
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+}
+.fm-editor-field mark.fm-fr-hit-active {
+    background: rgba(255, 165, 0, 0.85);
+    outline: 1px solid #d97700;
+}
+body.fm-dark .fm-editor-field mark.fm-fr-hit {
+    background: rgba(200, 165, 50, 0.45);
+    color: #fff;
+}
+body.fm-dark .fm-editor-field mark.fm-fr-hit-active {
+    background: rgba(225, 145, 0, 0.75);
+    color: #fff;
+    outline: 1px solid #ffb86b;
+}
+
+/* ========================================================================
+   Backup dropdown menu (⏪ ▾) — visibile in dark + light, position relative
+   per dropdown rispetto al pulsante.
+   ======================================================================== */
+.fm-backup-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.fm-backup-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 2px;
+    min-width: 280px;
+    max-width: 480px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    z-index: 10000;
+    padding: 4px 0;
+}
+.fm-backup-dropdown-menu.fm-backup-dropdown-menu--open {
+    display: block;
+}
+.fm-backup-dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 6px 12px;
+    border: none;
+    border-bottom: 1px solid var(--fm-c-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: 12px/1.4 system-ui;
+}
+.fm-backup-dropdown-item:hover { background: rgba(0,0,0,.06); }
+.fm-backup-dropdown-item small { color: var(--fm-c-text-2); font-size: 0.6875rem; display: block; margin-top: 2px; }
+.fm-backup-dropdown-item strong { color: inherit; }
+.fm-backup-dropdown-empty {
+    padding: 10px 14px;
+    font: italic 12px system-ui;
+    color: var(--fm-c-muted);
+}
+body.fm-dark .fm-backup-dropdown-menu {
+    background: #1e1e22;
+    color: #e0e0e0;
+    border-color: #444;
+    box-shadow: 0 6px 20px rgba(0,0,0,.45);
+}
+body.fm-dark .fm-backup-dropdown-item { border-bottom-color: #333; }
+body.fm-dark .fm-backup-dropdown-item:hover { background: rgba(255,255,255,.08); }
+body.fm-dark .fm-backup-dropdown-item small { color: var(--fm-c-muted); }
+body.fm-dark .fm-backup-dropdown-empty { color: var(--fm-c-muted); }

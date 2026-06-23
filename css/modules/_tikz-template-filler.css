@@ -1,0 +1,63 @@
+/* ============================================================ */
+/* Estratto da js/entries/tikz-template-filler.js (ADR-023 Fase 2 — elimina CSS-in-JS runtime). */
+/* Regole VERBATIM: cascade ora deterministica via @layer.            */
+/* ============================================================ */
+
+
+.fm-tplf-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100020; display: flex; align-items: stretch; }
+.fm-tplf { background: #1e1e1e; color: #ddd; width: 95vw; height: 92vh; margin: 4vh auto; border-radius: 8px; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,0,0.6); overflow: hidden; font: 13px/1.4 system-ui, sans-serif; }
+.fm-tplf-header { background: #2a2a2a; color: #fff; padding: 10px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #444; }
+.fm-tplf-header h3 { margin: 0; font-size: 15px; flex: 1; color: #fff; }
+.fm-tplf-toolbar { display: flex; gap: 6px; }
+.fm-tplf-toolbar button { background: #3a3a3a; color: #ddd; border: 1px solid #555; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+.fm-tplf-toolbar button:hover { background: #4a4a4a; }
+.fm-tplf-toolbar button.primary { background: #2a5ac7; color: #fff; border-color: #2a5ac7; font-weight: 600; }
+.fm-tplf-toolbar button.primary:hover { background: #3a6ad7; }
+.fm-tplf-toolbar button.danger { background: #c73a3a; border-color: #c73a3a; color: #fff; }
+.fm-tplf-toolbar button.danger:hover { background: #d75050; }
+.fm-tplf-override-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 4px 10px; margin-right: 6px; min-width: 56px; box-sizing: border-box;
+    background: #5a3a1a; color: #ffd166; border: 1px solid #ffd166;
+    border-radius: 3px; font: 600 10px/1 system-ui; letter-spacing: 0.5px;
+    text-align: center; white-space: nowrap;
+}
+.fm-tplf-body { flex: 1; display: flex; min-height: 0; }
+.fm-tplf-form { flex: 1 1 55%; min-width: 0; overflow-y: auto; padding: 12px 16px; border-right: 1px solid #444; background: #1e1e1e; }
+.fm-tplf-preview { flex: 1 1 45%; min-width: 0; background: #fff; color: #000; overflow: auto; padding: 16px; position: relative; }
+.fm-tplf-preview .preview-status { position: absolute; top: 8px; right: 12px; font-size: 11px; color: #888; background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 3px; }
+.fm-tplf-preview svg { max-width: 100%; height: auto; }
+.fm-tplf-preview .err { color: #b00; background: #fee; padding: 8px; border-radius: 4px; border: 1px solid #fcc; font-family: monospace; font-size: 11px; white-space: pre-wrap; max-height: 50vh; overflow: auto; }
+.fm-tplf-section { margin-bottom: 14px; padding: 10px 12px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 6px; }
+.fm-tplf-section h4 { margin: 0 0 8px 0; font-size: 12px; color: #4a8cf7; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.fm-tplf-grid { display: grid; grid-template-columns: 160px 1fr; gap: 6px 12px; align-items: center; }
+.fm-tplf-grid label { color: #aaa; font-size: 12px; }
+.fm-tplf-grid input, .fm-tplf-grid textarea { padding: 4px 6px; background: #1a1a1a; color: #ddd; border: 1px solid #444; border-radius: 3px; font: 12px/1.4 Consolas, monospace; }
+.fm-tplf-grid input:focus, .fm-tplf-grid textarea:focus { outline: none; border-color: #4a8cf7; box-shadow: 0 0 0 2px rgba(74,140,247,0.2); }
+.fm-tplf-tabs { display: flex; gap: 4px; border-bottom: 2px solid #2a5ac7; margin-bottom: 8px; flex-wrap: wrap; }
+.fm-tplf-tabs button { padding: 6px 12px; border: 1px solid #444; background: #2a2a2a; color: #aaa; border-bottom: none; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 12px; }
+.fm-tplf-tabs button:hover { background: #353535; color: #ddd; }
+.fm-tplf-tabs button.active { background: #2a5ac7; color: #fff; border-color: #2a5ac7; }
+.fm-tplf-tabs button.add { background: #2a8643; color: #fff; border-color: #2a8643; }
+.fm-tplf-tabs button.add:hover { background: #34a853; }
+.fm-tplf-tabs button.del { background: transparent; color: #d77; border: none; padding: 0 4px; font-size: 14px; margin-left: -8px; cursor: pointer; }
+.fm-tplf-tabs button.del:hover { color: #f88; }
+.fm-tplf-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; background: #1a1a1a; }
+.fm-tplf-table th { background: #353535; color: #ddd; padding: 5px 6px; border: 1px solid #444; text-align: left; font-weight: 600; }
+.fm-tplf-table td { padding: 2px 4px; border: 1px solid #333; background: #1a1a1a; }
+.fm-tplf-table input, .fm-tplf-table textarea { width: 100%; padding: 3px 4px; background: #1a1a1a; color: #ddd; border: 1px solid #444; border-radius: 2px; box-sizing: border-box; font: 12px/1.3 Consolas, monospace; }
+.fm-tplf-table input:focus { outline: none; border-color: #4a8cf7; background: #222; }
+.fm-tplf-table .row-num { background: #2a2a2a; text-align: center; width: 26px; font-weight: 600; color: #aaa; }
+.fm-tplf-table .actions { width: 36px; text-align: center; }
+.fm-tplf-table button { background: transparent; border: none; cursor: pointer; padding: 2px 4px; font-size: 14px; color: #d77; }
+.fm-tplf-table button:hover { color: #f88; }
+.fm-tplf-add-btn { padding: 4px 10px; background: #2a8643; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-top: 6px; }
+.fm-tplf-add-btn:hover { background: #34a853; }
+.fm-tplf-codeview { background: #0f0f0f; color: #b8d8ff; font: 11px/1.4 Consolas, monospace; padding: 10px; border-radius: 4px; max-height: 200px; overflow: auto; white-space: pre; margin-top: 8px; border: 1px solid #444; }
+.fm-tplf-tip { font-size: 11px; color: #aaa; margin: 0 0 8px 0; padding: 0; background: transparent; border: none; border-radius: 3px; }
+.fm-tplf-tip-toggle { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(74,140,247,0.15); color: #4a8cf7; border: 1px solid rgba(74,140,247,0.3); cursor: help; font: bold 12px/1 system-ui; user-select: none; vertical-align: middle; margin-left: 6px; }
+.fm-tplf-tip-toggle:hover { background: rgba(74,140,247,0.25); }
+.fm-tplf-tip-body { display: none; padding: 8px 10px; margin-top: 6px; background: rgba(74,140,247,0.08); border-left: 3px solid #4a8cf7; border-radius: 3px; }
+.fm-tplf-tip-body.open { display: block; }
+.fm-tplf-tip-body code { color: #b8d8ff; background: rgba(255,255,255,0.06); padding: 1px 4px; border-radius: 2px; font: 11px/1.3 Consolas, monospace; }
+

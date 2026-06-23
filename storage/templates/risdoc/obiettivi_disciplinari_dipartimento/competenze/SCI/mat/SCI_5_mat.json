@@ -1,0 +1,19 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare in modo integrato e strategico gli strumenti del calcolo infinitesimale (derivate, integrali, equazioni differenziali) per analizzare, modellizzare e prevedere l'evoluzione di fenomeni complessi, risolvendo problemi di ottimizzazione e interpretando criticamente i risultati.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare i fondamenti logici e i teoremi del calcolo differenziale e integrale, utilizzandoli per costruire argomentazioni rigorose, giustificare le strategie risolutive e comprendere il significato profondo dei concetti matematici.",
+                "checked": true
+            },
+            {
+                "label": "Applicare i modelli delle distribuzioni di probabilità per analizzare, interpretare e fare previsioni su fenomeni aleatori, utilizzando le variabili casuali per quantificare l'incertezza in contesti applicativi.",
+                "checked": true
+            }
+        ]
+    }
+]

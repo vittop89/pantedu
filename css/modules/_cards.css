@@ -1,0 +1,64 @@
+/* ============================================================ */
+/* Cards — Phase C.4 modular component.                           */
+/*                                                                */
+/* NOTA: collisione storica. `.fm-card` esiste in DUE definizioni:*/
+/*   1. shell.css (login/admin shell, popup centered)             */
+/*   2. layout.css (section card inline con margin-bottom)        */
+/*                                                                */
+/* Questo modulo introduce `.fm-card--shell` e `.fm-card--section`*/
+/* come VARIANTI ESPLICITE da preferire in nuovi componenti.      */
+/* Le regole .fm-card legacy continuano a coexistere finche' i    */
+/* call site non migrano al variant esplicito.                    */
+/* ============================================================ */
+
+/* Base card — base condivisa */
+.fm-card--shell,
+.fm-card--section {
+    background: var(--fm-c-surface);
+    border-radius: var(--fm-radius-lg);
+    box-sizing: border-box;
+}
+
+/* Variant: shell (login, signup, error pages) — centrato, popup */
+.fm-card--shell {
+    padding: var(--fm-space-8);
+    box-shadow: var(--fm-shadow-lg);
+    width: min(440px, 92vw);
+}
+
+/* Variant: section (inline content card in admin/dashboard) */
+.fm-card--section {
+    padding: var(--fm-space-5);
+    border: 1px solid var(--fm-c-divider);
+    box-shadow: var(--fm-shadow-sm);
+    margin-bottom: var(--fm-space-4);
+}
+
+.fm-card--section h2 {
+    margin: 0 0 var(--fm-space-2);
+    font-size: var(--fm-fs-md);
+    color: var(--fm-c-text);
+}
+
+.fm-card--section h3 {
+    margin: var(--fm-space-4) 0 var(--fm-space-2);
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-text-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Wide modifier per layout admin/dashboard */
+.fm-card--wide {
+    width: min(1600px, 96vw);
+    padding: var(--fm-space-6);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .fm-card--shell,
+    .fm-card--section {
+        animation: none !important;
+    }
+}

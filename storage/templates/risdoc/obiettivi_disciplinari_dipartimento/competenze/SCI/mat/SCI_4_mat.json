@@ -1,0 +1,23 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Padroneggiare il linguaggio e gli strumenti della goniometria e della trigonometria per analizzare, modellizzare e risolvere problemi relativi a fenomeni periodici e a configurazioni geometriche piane e spaziali.",
+                "checked": true
+            },
+            {
+                "label": "Utilizzare le strutture algebriche (numeri complessi, vettori, matrici) per rappresentare e interpretare le trasformazioni geometriche, risolvere sistemi di equazioni e modellizzare problemi in diversi contesti scientifici e tecnologici.",
+                "checked": true
+            },
+            {
+                "label": "Analizzare e rappresentare le relazioni tra oggetti nello spazio tridimensionale, integrando in modo autonomo e flessibile l'approccio sintetico della geometria euclidea con gli strumenti della geometria analitica.",
+                "checked": true
+            },
+            {
+                "label": "Applicare i modelli del calcolo combinatorio e della probabilità per analizzare, quantificare e interpretare situazioni di incertezza, formalizzando e risolvendo problemi complessi e valutando criticamente l'affidabilità dei risultati.",
+                "checked": true
+            }
+        ]
+    }
+]

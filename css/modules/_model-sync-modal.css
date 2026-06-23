@@ -1,0 +1,319 @@
+/* ============================================================
+   Model-sync merge preview modal (ADR-026 model-sync).
+   Block: .fm-mm  (Model Merge)
+   Aperto dinamicamente da fm-pt-document._openMergePreviewModal.
+   Dark-aware via token --fm-c-surface / --fm-c-text / --fm-c-border.
+   ============================================================ */
+
+.fm-mm {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fm-z-modal-bg, 9000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fm-c-overlay, rgba(15, 23, 42, 0.55));
+    padding: var(--fm-space-5, 20px);
+}
+
+.fm-mm__dialog {
+    background: var(--fm-c-surface, #fff);
+    color: var(--fm-c-text, #111);
+    max-width: 680px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--fm-radius-lg, 8px);
+    box-shadow: var(--fm-shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.25));
+    overflow: hidden;
+    border: 1px solid var(--fm-c-border, #e5e7eb);
+}
+
+/* Variante wide per la modalità confronto visivo (2 colonne side-by-side). */
+.fm-mm__dialog--wide {
+    max-width: min(1280px, 96vw);
+    max-height: 92vh;
+}
+
+.fm-mm__header {
+    padding: var(--fm-space-3, 12px) var(--fm-space-4, 16px);
+    border-bottom: 1px solid var(--fm-c-border, #e5e7eb);
+}
+
+.fm-mm__title {
+    margin: 0;
+    font-size: var(--fm-fs-md, 16px);
+    color: var(--fm-c-text);
+}
+
+.fm-mm__summary {
+    margin: var(--fm-space-2, 6px) 0 0;
+    font-size: var(--fm-fs-xs, 12px);
+    color: var(--fm-c-text-muted, var(--fm-c-text));
+    opacity: 0.75;
+}
+
+/* Banner informativo (modalità additiva). Tonalità warning, dark-aware. */
+.fm-mm__banner {
+    margin-top: var(--fm-space-3, 12px);
+    padding: var(--fm-space-2, 8px) var(--fm-space-3, 12px);
+    border-left: 3px solid var(--fm-c-warn, #f59e0b);
+    background: color-mix(in srgb, var(--fm-c-warn, #f59e0b) 12%, transparent);
+    font-size: var(--fm-fs-xs, 12px);
+    line-height: 1.45;
+    color: var(--fm-c-text);
+    border-radius: 0 var(--fm-radius-sm, 4px) var(--fm-radius-sm, 4px) 0;
+}
+
+.fm-mm__banner strong { color: var(--fm-c-warn, #f59e0b); }
+
+.fm-mm__list {
+    margin: 0;
+    padding: var(--fm-space-2, 8px) var(--fm-space-3, 12px);
+    list-style: none;
+    overflow: auto;
+    flex: 1;
+}
+
+.fm-mm__empty {
+    padding: var(--fm-space-3, 12px);
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.fm-mm__item {
+    padding: var(--fm-space-2, 6px) var(--fm-space-2, 8px);
+    border-bottom: 1px solid var(--fm-c-border, #e5e7eb);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2, 8px);
+}
+.fm-mm__item:last-child { border-bottom: 0; }
+
+/* Riga "compatta" della decisione (icona + titolo + bottoni). */
+.fm-mm__row {
+    display: flex;
+    gap: var(--fm-space-2, 8px);
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.fm-mm__icon {
+    font-size: var(--fm-fs-sm, 14px);
+    width: 18px;
+    text-align: center;
+    flex: 0 0 auto;
+    line-height: 1.5;
+}
+
+.fm-mm__body { flex: 1; min-width: 0; }
+
+.fm-mm__label {
+    font-size: var(--fm-fs-sm, 13px);
+    font-weight: 600;
+    color: var(--fm-c-text);
+}
+
+.fm-mm__action-tag {
+    font-size: var(--fm-fs-xxs, 11px);
+    opacity: 0.65;
+    margin-left: var(--fm-space-2, 6px);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.fm-mm__detail {
+    font-size: var(--fm-fs-xs, 12px);
+    opacity: 0.8;
+    margin-top: 2px;
+    color: var(--fm-c-text);
+}
+
+/* ── Action modifiers — colorazione semantica del bordo sinistro ── */
+
+.fm-mm__item--updated  { border-left: 3px solid var(--fm-c-info,    #3b82f6); padding-left: var(--fm-space-2, 8px); }
+.fm-mm__item--added    { border-left: 3px solid var(--fm-c-success, #10b981); padding-left: var(--fm-space-2, 8px); }
+.fm-mm__item--kept,
+.fm-mm__item--kept-teacher-added {
+    border-left: 3px solid var(--fm-c-neutral, #94a3b8); padding-left: var(--fm-space-2, 8px);
+}
+.fm-mm__item--kept-master-differs {
+    border-left: 3px solid var(--fm-c-warn, #f59e0b); padding-left: var(--fm-space-2, 8px);
+}
+.fm-mm__item--conflict { border-left: 3px solid var(--fm-c-warn,    #f59e0b); padding-left: var(--fm-space-2, 8px); }
+.fm-mm__item--dropped  { border-left: 3px solid var(--fm-c-danger,  #ef4444); padding-left: var(--fm-space-2, 8px); opacity: 0.7; }
+.fm-mm__item--unchanged { opacity: 0.55; }
+.fm-mm__item--adopted   { border-left-color: var(--fm-c-info, #3b82f6); background: color-mix(in srgb, var(--fm-c-info, #3b82f6) 6%, transparent); }
+
+.fm-mm__row-btn {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    padding: 4px 8px;
+    font-size: var(--fm-fs-xs, 12px);
+    border: 1px solid var(--fm-c-border, #e5e7eb);
+    background: transparent;
+    color: var(--fm-c-text);
+    border-radius: var(--fm-radius-sm, 4px);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 120ms;
+}
+.fm-mm__row-btn:hover { background: color-mix(in srgb, var(--fm-c-info, #3b82f6) 10%, transparent); }
+.fm-mm__row-btn--toggle { color: var(--fm-c-text-muted, var(--fm-c-text)); opacity: 0.85; }
+.fm-mm__item--adopted .fm-mm__row-btn { color: var(--fm-c-info, #3b82f6); border-color: var(--fm-c-info, #3b82f6); }
+
+/* ── Diff side-by-side (auto-expand su kept-master-differs / added) ── */
+
+.fm-mm__diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--fm-space-2, 8px);
+    margin-top: var(--fm-space-2, 8px);
+    padding-top: var(--fm-space-2, 8px);
+    border-top: 1px dashed var(--fm-c-border, #e5e7eb);
+}
+
+@media (max-width: 720px) {
+    .fm-mm__diff { grid-template-columns: 1fr; } /* stacked su mobile */
+}
+
+.fm-mm__diff-col {
+    background: var(--fm-c-bg, var(--fm-c-surface, #fafafa));
+    border: 1px solid var(--fm-c-border, #e5e7eb);
+    border-radius: var(--fm-radius-sm, 4px);
+    display: flex;
+    flex-direction: column;
+    max-height: 480px;
+    overflow: hidden;
+}
+
+.fm-mm__diff-col--current { border-left: 3px solid var(--fm-c-neutral, #94a3b8); }
+.fm-mm__diff-col--master  { border-left: 3px solid var(--fm-c-info, #3b82f6); }
+
+.fm-mm__diff-head {
+    margin: 0;
+    padding: var(--fm-space-2, 6px) var(--fm-space-3, 10px);
+    font-size: var(--fm-fs-xs, 12px);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--fm-c-border, #e5e7eb) 35%, transparent);
+    border-bottom: 1px solid var(--fm-c-border, #e5e7eb);
+}
+
+.fm-mm__diff-content {
+    padding: var(--fm-space-2, 8px) var(--fm-space-3, 12px);
+    font-size: var(--fm-fs-xs, 12px);
+    line-height: 1.45;
+    overflow: auto;
+    flex: 1;
+    color: var(--fm-c-text);
+}
+
+.fm-mm__diff-content > * { max-width: 100%; }
+.fm-mm__diff-content h1,
+.fm-mm__diff-content h2,
+.fm-mm__diff-content h3 { font-size: var(--fm-fs-sm, 13px); margin: 6px 0 4px; }
+.fm-mm__diff-content p { margin: 2px 0; }
+.fm-mm__diff-content table { border-collapse: collapse; width: 100%; font-size: 11px; }
+.fm-mm__diff-content table td,
+.fm-mm__diff-content table th { border: 1px solid var(--fm-c-border, #e5e7eb); padding: 2px 4px; }
+
+.fm-mm__diff-text {
+    margin: 0;
+    font-family: var(--fm-font-mono, ui-monospace, "SFMono-Regular", Menlo, monospace);
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--fm-c-text);
+}
+
+.fm-mm__diff-empty { opacity: 0.5; }
+
+/* Highlight per blocco: solo presente in 1 colonna. Verde (master = aggiunto)
+   o rosso (current = solo tuo, non nel modello). Sottile per non saturare. */
+.fm-mm__diff-block {
+    padding: 4px 6px;
+    border-radius: var(--fm-radius-sm, 4px);
+    margin: 2px 0;
+}
+.fm-mm__diff-block--only-master {
+    background: color-mix(in srgb, var(--fm-c-success, #10b981) 14%, transparent);
+    border-left: 2px solid var(--fm-c-success, #10b981);
+}
+.fm-mm__diff-block--only-current {
+    background: color-mix(in srgb, var(--fm-c-danger, #ef4444) 12%, transparent);
+    border-left: 2px solid var(--fm-c-danger, #ef4444);
+}
+body.fm-dark .fm-mm__diff-block--only-master  { background: color-mix(in srgb, var(--fm-c-success, #10b981) 22%, transparent); }
+body.fm-dark .fm-mm__diff-block--only-current { background: color-mix(in srgb, var(--fm-c-danger,  #ef4444) 22%, transparent); }
+
+.fm-mm__diff-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    font-size: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.fm-mm__diff-badge--cur { background: color-mix(in srgb, var(--fm-c-danger,  #ef4444) 18%, transparent); color: var(--fm-c-danger, #ef4444); }
+.fm-mm__diff-badge--mst { background: color-mix(in srgb, var(--fm-c-success, #10b981) 18%, transparent); color: var(--fm-c-success, #10b981); }
+
+body.fm-dark .fm-mm__diff-col { background: color-mix(in srgb, var(--fm-c-surface, #1f2937) 80%, transparent); }
+body.fm-dark .fm-mm__diff-head { background: color-mix(in srgb, var(--fm-c-border, #374151) 45%, transparent); }
+
+.fm-mm__footer {
+    padding: var(--fm-space-3, 12px) var(--fm-space-4, 16px);
+    border-top: 1px solid var(--fm-c-border, #e5e7eb);
+    display: flex;
+    gap: var(--fm-space-3, 12px);
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--fm-c-surface-alt, var(--fm-c-surface, #fff));
+}
+
+.fm-mm__footer-counter {
+    font-size: var(--fm-fs-xs, 12px);
+    color: var(--fm-c-text-muted, var(--fm-c-text));
+}
+.fm-mm__counter-num {
+    color: var(--fm-c-info, #3b82f6);
+    font-weight: 700;
+    font-size: var(--fm-fs-sm, 13px);
+}
+
+.fm-mm__footer-actions {
+    display: flex;
+    gap: var(--fm-space-2, 8px);
+    align-items: center;
+}
+
+/* ── Checkbox per riga ────────────────────────────────────── */
+.fm-mm__check {
+    flex: 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4px;
+    cursor: pointer;
+}
+.fm-mm__check--placeholder { cursor: default; }
+.fm-mm__check-box {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--fm-c-info, #3b82f6);
+}
+
+/* Dark mode — fallback puntuali nel caso i token --fm-c-* non siano già
+   ridefiniti dal layer dark di tokens.css. */
+body.fm-dark .fm-mm__dialog {
+    background: var(--fm-c-surface, #1f2937);
+    color:      var(--fm-c-text,    #e5e7eb);
+    border-color: var(--fm-c-border, #374151);
+}
+body.fm-dark .fm-mm__header,
+body.fm-dark .fm-mm__footer { border-color: var(--fm-c-border, #374151); }
+body.fm-dark .fm-mm__item   { border-bottom-color: var(--fm-c-border, #374151); }
+body.fm-dark .fm-mm__banner { background: color-mix(in srgb, var(--fm-c-warn, #f59e0b) 22%, transparent); }

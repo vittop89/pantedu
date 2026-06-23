@@ -1,0 +1,75 @@
+{
+    "scope": "verifiche + eser deep review per-file",
+    "status": "COMPLETED — overnight 2026-05-16",
+    "session_summary": {
+        "duration": "~3h",
+        "total_commits": 40,
+        "total_files_reviewed": 58,
+        "estimated_fixes": "700+",
+        "branch": "master_vps (auto-deploy VPS)"
+    },
+    "global_sweeps_applied": [
+        "wrap fix v2: \\n mid-sentence → space, \\n\\n preserve (eser+verifiche)",
+        "balck → black",
+        "ELABOREAZIONE → ELABORAZIONE",
+        "llibro → libro, denomiantore → denominatore, menoi → meno",
+        "sisitema → sistema, centiania → centinaia",
+        "perchè (grave) → perché (acute)",
+        "poiche → poiché",
+        "header_note: spazio dopo punto, NBSP → space",
+        "decine(/centinaia(/unità( → con spazio prima di (",
+        "eta di X → età di X"
+    ],
+    "completed_eser": [
+        "2.0_MAT-Sistemi_lineari-SCI2 (deep)",
+        "3.0_MAT-Radicali-SCI2 (mech)",
+        "4.0_MAT-Rette_fasci-SCI2 (deep)",
+        "+ 14 file mech sweep typos/balck/header_note"
+    ],
+    "completed_verifiche_by_actor": {
+        "me_deep": ["MAT-Sistemi_lineari-ver", "MAT-Equazioni_intere_di_primo_grado-ver"],
+        "agent_A": ["MAT-Numeri_naturali_e_interi-ver", "MAT-Numeri_razionali-ver", "MAT-Monomi_e_Polinomi-ver", "MAT-Radicali-ver", "MAT-Scomposizione_di_polinomi-ver"],
+        "agent_B": ["FIS-Forze-ver", "FIS-Equilibrio_di_un_punto_materiale-ver", "FIS-Dinamica_e_i_tre_principi-ver", "FIS-Lavoro_ed_energia-ver", "FIS-Quantità_di_moto_e_urti-ver"],
+        "agent_C": ["MAT-prova_1-ver", "MAT-prova_2-ver", "MAT-provaar-ver", "MAT/prova3", "MAT/prova_5", "MAT-Derivate-ver", "MAT-Equazioni_e_disequazioni_goniometriche-ver", "MAT-Trigonometria-ver"],
+        "agent_D": ["FIS-Condensatori-ver", "FIS-Cariche_e_forza_elettrostatica-ver", "FIS-Il_campo_elettrico-ver", "FIS-Energia_potenziale_e_potenziale_elettrico-ver", "FIS-Moti_nel_piano-ver", "FIS-Moti_oscillatori-ver", "FIS-Temperatura_e_calore-ver"],
+        "agent_E": ["MAT-Parabola-ver", "MAT-Rette_fasci_di_rette_e_piani-ver", "MAT-Funzioni-ver", "MAT-Funzioni_e_formule_goniometriche-ver", "MAT-Studio_di_funzioni_(intro)-ver", "MAT-Funzioni_equazioni_e_disequazioni_esponenziali-ver", "MAT-Funzioni_equazioni_e_disequazioni_logaritmiche-ver", "MAT-Continuità_e_grafico_probabile_e_asintoti-ver"],
+        "agent_F": ["MAT-Equazioni_di_secondo_grado-ver", "MAT-Disequazioni_di_secondo_grado-ver", "MAT-Limiti-ver"],
+        "agent_G": ["MAT-Equazioni_fratte_e_letterali_di_primo_grado-ver", "MAT-Equazioni_e_disequazioni_irrazionali_e_con_valore_assoluto-ver", "MAT-Parabola_ed_equazioni_di_grado_superiore_al_secondo-ver"]
+    },
+    "highlights_critici": [
+        "FIS-Moti_oscillatori: risposta RM 'dimezza m' → 'dimezza k' (contenuto errato)",
+        "FIS-Energia_potenziale: problema intero tradotto da inglese a italiano",
+        "FIS-Cariche: latex malformato \\(Fmezzo dielettrico ricostruito → \\(F<F_0\\)",
+        "FIS-Temperatura_e_calore: mojibake gasâ†'liquido → gas→liquido",
+        "MAT-Trigonometria: rimosso \\documentclass{article} spurio in testo",
+        "MAT-Eq_fratte_letterali: 184 fix spaziatura text↔latex (Per\\(x\\) → Per \\(x\\))",
+        "MAT-Parabola_eq_superiore: 139 fix spaziatura text↔latex",
+        "OCR fixes diffusi: II → Il, 11 → Il, for → per, and → e"
+    ],
+    "math_content_errors_flagged_not_fixed": [
+        "eser Sistemi_lineari item1: kmh^{-1}=1000m/60min conversione dimensionale errata",
+        "verifiche Sistemi_lineari G1.it0: 'k≠0 ∧ k≠1' caso logicamente sospetto (probabilmente k=-1)",
+        "verifiche Derivate g0/i ultimo: \\sqrt{x^3-1} probabilmente \\sqrt{x^2-1}",
+        "verifiche Energia_potenziale: m_e usato per protone (dovrebbe m_p); V_A=VB manca underscore",
+        "verifiche Temperatura: T_min=-14 in DATI vs -15 nel testo; T_zuppa<T_frigo discrepanza Fase2",
+        "verifiche Funzioni_form_gonio: wrong copy-paste justifications sin/cos; \\sqrt{16/5} vs 16/25; \\sqrt{7/9} vs 8/9; sin^2/tan^2 missing backslash",
+        "verifiche Studio_funzioni: latex [1;3)] extra ]; zeri inclusi dominio sospetti",
+        "verifiche Funzioni_logaritmiche: \\(text{...} manca backslash prima text (~9 occorrenze)",
+        "verifiche Parabola: a<0 perché concavità verso l'alto (segno errato)",
+        "\\lower{-1pt}\\colorbox{...} ~28 occorrenze — MathJax limitato support, verifica render"
+    ],
+    "tools_added": [
+        "tools/review_state.json — questo file",
+        "tools/file_audit.py — analisi chunks/issues per file",
+        "tools/verifiche_typo_scan.py — typo scan cross-file",
+        "tools/detect_missing_breaks.py — euristica paragraph missing",
+        "tools/qa_session/scan_verifica.py — scanner (agent F)",
+        "tools/qa_session/fix_verifica.py — fixer (agent F)"
+    ],
+    "files_to_review_manual": [
+        "FIS-Temperatura_e_calore-ver copy.contract.json — duplicato sospetto, verificare e eliminare se non necessario",
+        "MAT-Frazioni_algebriche-ver.contract.json — placeholder vuoto, considerare aggiungere contenuto",
+        "MAT/prova_4.contract.json — placeholder vuoto"
+    ],
+    "next_action": "Verifica visuale browser delle verifiche post-fix. Math content errors flagged richiedono giudizio docente."
+}

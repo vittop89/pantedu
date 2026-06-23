@@ -1,0 +1,18 @@
+{
+    "config": { "max_attempts": 5 },
+    "metadata": { "version": "1.0" },
+    "active_users": {
+        "collab1": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "collaborator",
+            "status": "active",
+            "notes": "test collaborator",
+            "created_date": "2026-02-01"
+        },
+        "collab_inactive": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "collaborator",
+            "status": "inactive"
+        }
+    }
+}

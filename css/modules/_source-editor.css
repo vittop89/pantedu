@@ -1,0 +1,160 @@
+/* ============================================================ */
+/* Source editor popover — Phase Roadmap 3 (extracted layout.css). */
+/*                                                                */
+/* Popup compatto per editing fonte (code/title/volume/publisher/  */
+/* authors). NON modale: floating popover beside trigger button.   */
+/* Token-based, dark theme via inheritance da :root[data-theme].  */
+/* ============================================================ */
+
+.fm-source-editor {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius);
+    box-shadow: var(--fm-shadow-lg);
+    font: var(--fm-fs-sm)/1.4 var(--fm-font);
+    color: var(--fm-c-text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 18rem;
+    max-width: 24rem;
+}
+
+.fm-source-editor__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--fm-space-2) var(--fm-space-3);
+    background: linear-gradient(135deg, var(--fm-c-primary), var(--fm-c-primary-hover));
+    color: #ffffff;
+}
+
+.fm-source-editor__title {
+    font-weight: 600;
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-source-editor__close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: var(--fm-fs-lg);
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 var(--fm-space-1);
+    opacity: 0.85;
+    min-height: var(--fm-target-aa);
+    min-width: var(--fm-target-aa);
+}
+
+.fm-source-editor__close:hover { opacity: 1; }
+
+.fm-source-editor__close:focus-visible {
+    outline: var(--fm-focus-width) solid #ffffff;
+    outline-offset: var(--fm-focus-offset);
+}
+
+.fm-source-editor__form {
+    padding: var(--fm-space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2);
+}
+
+.fm-source-editor__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-1);
+}
+
+.fm-source-editor__label {
+    font-size: var(--fm-fs-xs);
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+    letter-spacing: 0.02em;
+}
+
+.fm-source-editor__input {
+    padding: var(--fm-space-1) var(--fm-space-2);
+    font: var(--fm-fs-sm)/1.2 var(--fm-font);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    background: var(--fm-c-surface-2);
+    transition: border-color var(--fm-transition-fast) var(--fm-easing),
+                background var(--fm-transition-fast) var(--fm-easing);
+    min-height: var(--fm-target-aa);
+}
+
+.fm-source-editor__input:focus {
+    outline: none;
+    border-color: var(--fm-c-primary);
+    background: var(--fm-c-surface);
+    box-shadow: 0 0 0 2px var(--fm-c-primary-light);
+}
+
+.fm-source-editor__input[readonly] {
+    background: var(--fm-c-bg);
+    color: var(--fm-c-muted);
+    cursor: not-allowed;
+}
+
+.fm-source-editor__status {
+    min-height: 1rem;
+    font-size: var(--fm-fs-xs);
+    color: var(--fm-c-muted);
+}
+
+.fm-source-editor__status--error {
+    color: var(--fm-c-danger);
+    font-weight: 600;
+}
+
+.fm-source-editor__actions {
+    display: flex;
+    gap: var(--fm-space-2);
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--fm-space-1);
+}
+
+.fm-source-editor__btn {
+    padding: var(--fm-space-1) var(--fm-space-3);
+    border-radius: var(--fm-radius-sm);
+    cursor: pointer;
+    font: var(--fm-fs-xs)/1 var(--fm-font);
+    font-weight: 500;
+    border: 1px solid transparent;
+    min-height: var(--fm-target-aa);
+}
+
+.fm-source-editor__btn--cancel {
+    background: var(--fm-c-bg);
+    border-color: var(--fm-c-border);
+    color: var(--fm-c-text-2);
+}
+.fm-source-editor__btn--cancel:hover { background: var(--fm-c-divider); }
+
+.fm-source-editor__btn--save {
+    background: var(--fm-c-primary);
+    color: #ffffff;
+    border-color: var(--fm-c-primary);
+    font-weight: 600;
+}
+.fm-source-editor__btn--save:hover { background: var(--fm-c-primary-hover); }
+
+.fm-source-editor__btn--delete {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-danger);
+    color: var(--fm-c-danger);
+    margin-right: auto;
+}
+.fm-source-editor__btn--delete:hover {
+    background: var(--fm-c-danger);
+    color: #ffffff;
+}
+
+.fm-source-editor__btn:focus-visible {
+    outline: var(--fm-focus-width) solid var(--fm-c-focus-ring);
+    outline-offset: var(--fm-focus-offset);
+}

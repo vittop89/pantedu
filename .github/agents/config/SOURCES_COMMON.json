@@ -1,0 +1,74 @@
+{
+  "sources": {
+    "mmb_v1_ed3": {
+      "title": "Matematica multimediale.blu",
+      "volume": "Vol.1 Ed.3",
+      "publisher": "ZANICHELLI",
+      "authors": "Massimo Bergamini - Graziella Barozzi"
+    },
+    "mmb_v2_ed3": {
+      "title": "Matematica multimediale.blu",
+      "volume": "Vol.2 Ed.3",
+      "publisher": "ZANICHELLI",
+      "authors": "Massimo Bergamini - Graziella Barozzi"
+    },
+    "mmb_v3_ed3": {
+      "title": "Matematica multimediale.blu",
+      "volume": "Vol.3 Ed.3",
+      "publisher": "ZANICHELLI",
+      "authors": "Massimo Bergamini - Graziella Barozzi"
+    },
+    "mmb_v4_ed3": {
+      "title": "Matematica multimediale.blu",
+      "volume": "Vol.4 Ed.3",
+      "publisher": "ZANICHELLI",
+      "authors": "Massimo Bergamini - Graziella Barozzi"
+    },
+    "mmb_v5_ed3": {
+      "title": "Matematica multimediale.blu",
+      "volume": "Vol.5 Ed.3",
+      "publisher": "ZANICHELLI",
+      "authors": "Massimo Bergamini - Graziella Barozzi"
+    },
+    "pcf_v1_ed1": {
+      "title": "Fisica - Le regole del gioco",
+      "volume": "Vol.1 Ed.1",
+      "publisher": "ZANICHELLI",
+      "authors": "Claudio Romeni"
+    },
+    "pcf_v2_ed1": {
+      "title": "Fisica - Le regole del gioco",
+      "volume": "Vol.2 Ed.1",
+      "publisher": "ZANICHELLI",
+      "authors": "Claudio Romeni"
+    },
+    "pcf_v3_ed1": {
+      "title": "Fisica - Le regole del gioco",
+      "volume": "Vol.3 Ed.1",
+      "publisher": "ZANICHELLI",
+      "authors": "Claudio Romeni"
+    },
+    "cdm_v4_ed1": {
+      "title": "Colori della matematica",
+      "volume": "Vol.4 Ed.1",
+      "publisher": "PETRINI",
+      "authors": "Leonardo Sasso - Claudio Zanone"
+    },
+    "personal": {
+      "title": "Esercizio Personalizzato",
+      "volume": "N/A",
+      "publisher": "PANTEDU",
+      "authors": "Prof. Vittorio"
+    },
+    "unknown": {
+      "title": "Fonte Sconosciuta",
+      "volume": "N/A",
+      "publisher": "N/A",
+      "authors": "N/A"
+    }
+  },
+  "metadata": {
+    "version": "3.0.0",
+    "last_updated": "2026-02-18"
+  }
+}

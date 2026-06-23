@@ -1,0 +1,64 @@
+/* Audit 25.R.31 (L10a) — CSS dashboard docente estratto da <style> inline.
+   Era inline in views/teacher/dashboard.php. */
+        .fm-dash-shell { max-width: 1200px; margin: 0 auto; }
+        .fm-dash-tabs { display:flex; flex-wrap:wrap; gap:4px; border-bottom:1px solid rgba(0,0,0,0.1); margin-bottom:var(--fm-space-6); }
+        .fm-dash-tab {
+            background:transparent; border:0; padding:8px 14px; font-size:0.875rem;
+            color:var(--fm-c-fg-muted,#475569); cursor:pointer; border-bottom:2px solid transparent;
+            font-weight:500; transition:all .15s ease;
+        }
+        .fm-dash-tab:hover { color:var(--fm-c-fg,#0f172a); background:rgba(0,0,0,0.03); }
+        .fm-dash-tab--active {
+            color:var(--fm-c-primary,#2563eb); border-bottom-color:var(--fm-c-primary,#2563eb);
+            font-weight:600;
+        }
+        body.fm-dark .fm-dash-tabs { border-bottom-color:rgba(255,255,255,0.1); }
+        body.fm-dark .fm-dash-tab { color:#94a3b8; }
+        body.fm-dark .fm-dash-tab:hover { color:#e2e8f0; background:rgba(255,255,255,0.04); }
+        body.fm-dark .fm-dash-tab--active { color:#60a5fa; border-bottom-color:#60a5fa; }
+        .fm-dash-panel[hidden] { display:none !important; }
+
+        /* G22.S25 — Panoramica compatta: tiles inline su una riga, no fm-grid grande. */
+        .fm-overview-intro { font-size:0.8125rem; color:var(--fm-c-fg-muted,#64748b); margin:0 0 12px 0; line-height:1.5; }
+        .fm-overview-tiles {
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+            gap:10px; margin-bottom:14px;
+        }
+        .fm-overview-tile {
+            background:rgba(99,102,241,0.06); border-left:3px solid #6366f1;
+            padding:10px 12px; border-radius:4px;
+            display:flex; align-items:center; gap:10px;
+        }
+        body.fm-dark .fm-overview-tile { background:rgba(99,102,241,0.12); }
+        .fm-overview-tile__icon { font-size:1.4rem; line-height:1; }
+        .fm-overview-tile__body { display:flex; flex-direction:column; line-height:1.2; }
+        .fm-overview-tile__num { font-size:1.4rem; font-weight:600; color:var(--fm-c-fg,#0f172a); }
+        body.fm-dark .fm-overview-tile__num { color:#e2e8f0; }
+        .fm-overview-tile__lbl { font-size:0.6875rem; color:var(--fm-c-fg-muted,#64748b); text-transform:uppercase; letter-spacing:.04em; }
+        .fm-overview-tools { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+        .fm-overview-tools .fm-btn { font-size:0.8125rem; }
+
+        /* G22.S25 — Ricerca esercizi card (dark-mode aware via var()). */
+        .fm-ex-filters {
+            display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+            padding:10px; border-radius:6px;
+            background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.18);
+        }
+        body.fm-dark .fm-ex-filters { background:rgba(99,102,241,0.12); border-color:rgba(99,102,241,0.3); }
+        .fm-ex-row {
+            padding:10px 12px; border-radius:6px; margin-bottom:8px;
+            background:var(--fm-c-bg-elev,rgba(255,255,255,0.02));
+            border:1px solid rgba(148,163,184,0.18);
+        }
+        body.fm-dark .fm-ex-row { background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.08); }
+        .fm-ex-row__head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin:4px 0; }
+        .fm-ex-row .fm-ex-title { font-weight:600; color:var(--fm-c-fg,#0f172a); flex:1; min-width:0; }
+        body.fm-dark .fm-ex-row .fm-ex-title { color:#e2e8f0; }
+        .fm-ex-row .fm-ex-meta { font-size:0.75rem; color:var(--fm-c-fg-muted,#64748b); }
+        .fm-ex-badge {
+            display:inline-block; padding:1px 7px; font-size:0.6875rem; border-radius:10px;
+            background:rgba(148,163,184,0.2); margin-right:4px; color:var(--fm-c-fg-muted,#475569);
+        }
+        body.fm-dark .fm-ex-badge { background:rgba(255,255,255,0.08); color:#cbd5e1; }
+        .fm-ex-badge--diff { background:rgba(245,158,11,0.2); color:#b45309; }
+        body.fm-dark .fm-ex-badge--diff { background:rgba(245,158,11,0.25); color:#fbbf24; }

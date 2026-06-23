@@ -1,0 +1,595 @@
+# OpenAPI Overlay — manual annotations for critical endpoints
+#
+# Phase 26 — questo file contiene annotazioni manuali (request body schema +
+# response schema dettagliato) per i 30 endpoint critici di Pantedu.
+#
+# Il generatore `tools/api/generate_openapi.php` produce uno scheletro automatico
+# (`openapi.yaml`) con tutti i 187 endpoint ma senza request/response schema.
+# Questo overlay viene applicato sopra via `tools/api/merge_openapi.php` che
+# fonde i due file in `docs/api/openapi.yaml.full` (spec finale).
+#
+# Strategia: scheletro auto + overlay manuale. Quando aggiungi/togli route:
+#   1. php tools/api/generate_openapi.php > docs/api/openapi.yaml
+#   2. (l'overlay manuale resta intatto)
+#   3. php tools/api/merge_openapi.php > docs/api/openapi.full.yaml
+#
+# Format: stesso schema OpenAPI 3.1, solo paths e components.schemas.
+
+openapi: 3.1.0
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password, _csrf]
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          example: vittorio
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: '••••••••'
+        _csrf:
+          type: string
+          description: CSRF token from GET /auth/csrf
+        redirect:
+          type: string
+          description: Path to redirect after successful login (whitelist /-prefixed only)
+          example: /
+
+    LoginSuccess:
+      type: object
+      properties:
+        ok: { type: boolean, example: true }
+        username: { type: string }
+        role: { type: string, enum: [student, teacher, collaborator, administrator] }
+
+    RegistrationRequest:
+      type: object
+      required: [username, email, password, first_name, last_name, role, accept_tos, _csrf]
+      properties:
+        username: { type: string, maxLength: 50 }
+        email: { type: string, format: email }
+        password: { type: string, format: password, minLength: 8 }
+        first_name: { type: string, maxLength: 100 }
+        last_name: { type: string, maxLength: 100 }
+        role: { type: string, enum: [student, teacher] }
+        institute_id: { type: integer, description: 'Required for student role' }
+        birth_date:
+          type: string
+          format: date
+          description: |
+            Required if role=student. Birth date YYYY-MM-DD.
+            Se età < 14 (Italia D.Lgs. 101/2018), richiede `parent_email`.
+        parent_email:
+          type: string
+          format: email
+          description: |
+            Required if studente minore (< 14 anni). Innesca workflow Art. 8 GDPR
+            con doppio opt-in genitore (token TTL 30g).
+        parent_name:
+          type: string
+          description: Optional, for personalized parent email greeting
+        accept_tos:
+          type: boolean
+          description: Must be true (Art. 7 GDPR)
+        _csrf: { type: string }
+
+    ConsentGrantRequest:
+      type: object
+      required: [consent_type, _csrf]
+      properties:
+        consent_type:
+          type: string
+          enum: [analytics, marketing, parent_8_minor]
+        text_version:
+          type: string
+          description: Version of informativa to consent to (e.g. v2.0)
+        _csrf: { type: string }
+
+    ConsentList:
+      type: object
+      properties:
+        consents:
+          type: array
+          items: { $ref: '#/components/schemas/Consent' }
+
+    DeletionRequestSubmit:
+      type: object
+      required: [_csrf]
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+          description: Optional reason text
+        _csrf: { type: string }
+
+    DeletionRequestSuccess:
+      type: object
+      properties:
+        ok: { type: boolean }
+        request_id: { type: integer }
+        confirm_token_sent_to: { type: string, format: email, description: 'User email — token in email body, not in API response' }
+
+    ParentConsentConfirmRequest:
+      type: object
+      required: [_csrf]
+      properties:
+        action:
+          type: string
+          enum: [confirm, reject]
+        _csrf: { type: string }
+
+    ProfilePatchRequest:
+      type: object
+      properties:
+        first_name: { type: string, maxLength: 100 }
+        last_name: { type: string, maxLength: 100 }
+        email: { type: string, format: email }
+        _csrf: { type: string }
+
+    ExportData:
+      type: object
+      description: |
+        GDPR Art. 20 portability — user data + consents + content + overrides.
+        Returned as JSON download (Content-Disposition: attachment).
+      properties:
+        user: { $ref: '#/components/schemas/User' }
+        consents:
+          type: array
+          items: { $ref: '#/components/schemas/Consent' }
+        teacher_content:
+          type: array
+          items: { $ref: '#/components/schemas/TeacherContent' }
+        risdoc_overrides:
+          type: array
+          items:
+            type: object
+            properties:
+              template_id: { type: integer }
+              instance_key: { type: string }
+              kind: { type: string, enum: [html, tex, css, json, image, texCommon] }
+              relative_path: { type: string }
+              body: { type: string, nullable: true }
+        exported_at: { type: string, format: date-time }
+
+    DpoContactRequest:
+      type: object
+      required: [name, email, subject, message]
+      properties:
+        name: { type: string, maxLength: 100 }
+        email: { type: string, format: email }
+        subject:
+          type: string
+          enum:
+            - access            # Art. 15
+            - rectification     # Art. 16
+            - erasure           # Art. 17
+            - portability       # Art. 20
+            - restriction       # Art. 18
+            - objection         # Art. 21
+            - consent_revoke    # Art. 7 §3
+            - breach_report     # Art. 33-34
+            - other
+        message: { type: string, maxLength: 5000 }
+        url_field:
+          type: string
+          description: 'Honeypot anti-spam — must be empty'
+          example: ''
+
+    TeacherContentList:
+      type: object
+      properties:
+        ok: { type: boolean }
+        count: { type: integer }
+        rows:
+          type: array
+          items: { $ref: '#/components/schemas/TeacherContent' }
+
+    MetricsResponse:
+      type: string
+      description: |
+        Prometheus exposition format text/plain version=0.0.4. Gauge + counter
+        aggregati: users_total, teacher_content_total, consents_active_total,
+        deletion_requests_total, dpo_requests_total, parent_consents_total,
+        crypto_keys_total, crypto_access_24h_total, app_info.
+      example: |
+        # HELP pantedu_app_info Application info
+        # TYPE pantedu_app_info gauge
+        pantedu_app_info{version="25.E"} 1
+        # HELP pantedu_users_total Users by role and status
+        # TYPE pantedu_users_total gauge
+        pantedu_users_total{role="teacher",status="active"} 12
+
+paths:
+  /login:
+    post:
+      tags: [Auth]
+      operationId: authLogin
+      summary: Authenticate user
+      description: |
+        Validate credentials + create session. Rate-limited 10/min/IP.
+        On success: session cookie set + redirect to `?redirect=` (whitelist).
+
+        Side-effects:
+        - `session_regenerate_id(true)` (anti-fixation)
+        - `users.last_login_at` updated
+        - `access_log` row inserted
+
+        On failure: HTTP 302 to `/login?error=<reason>&redirect=<original>`.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '302':
+          description: Redirect to home or `?redirect=` on success, to `/login?error=...` on failure
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '429':
+          description: Rate limit (10/min/IP after 5 failed attempts → +5min lockout)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /auth/csrf:
+    get:
+      tags: [Auth]
+      operationId: authCsrf
+      summary: Get CSRF token
+      description: |
+        Returns current session's CSRF token. Token TTL = `CSRF_TOKEN_LIFETIME`
+        env (default 7200s). Use as `_csrf` form field or `X-CSRF-Token` header.
+      security: []
+      responses:
+        '200':
+          description: Token retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  csrf: { type: string, example: '<INSERIRE_QUI_LA_NUOVA_KEY>' }
+
+  /register:
+    post:
+      tags: [Registration]
+      operationId: authRegister
+      summary: Submit registration request
+      description: |
+        Public signup. Account created with `status='pending_approval'`,
+        admin must approve via /admin/registrations.
+
+        **Phase 25.C7 minori (< 14a Italia D.Lgs. 101/2018):**
+        Se birth_date implica età < 14, account `pending_parent_consent`,
+        `parent_email` obbligatoria, ParentConsentService genera token TTL 30g
+        + email automatica al genitore (se APP_MAIL_FROM configurata).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/RegistrationRequest' }
+      responses:
+        '302':
+          description: Redirect to /register?success=1 on submit OK
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /parent-consent/{token}:
+    parameters:
+      - { name: token, in: path, required: true, schema: { type: string, pattern: '^[a-f0-9]{64}$' } }
+    get:
+      tags: ['GDPR parent consent (Art. 8)']
+      operationId: parentConsentPreview
+      summary: Preview parent consent form
+      description: |
+        Public no-auth (token = parent identity proof). Shows student name +
+        consent text + confirm/reject buttons.
+      security: []
+      responses:
+        '200':
+          description: HTML preview
+          content:
+            text/html:
+              schema: { type: string }
+        '404':
+          description: Token invalid, expired (>30g), or already used
+    post:
+      tags: ['GDPR parent consent (Art. 8)']
+      operationId: parentConsentConfirm
+      summary: Confirm or reject parent consent
+      description: |
+        Single-use token. On confirm: student account activated + log IP/UA hash.
+        On reject: student account deleted (cascade Art. 17 minor).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/ParentConsentConfirmRequest' }
+      responses:
+        '200':
+          description: Confirmation success page
+        '404':
+          description: Token invalid or expired
+
+  /me/consents:
+    get:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meConsentsList
+      summary: List active consents
+      description: GDPR Art. 15 — user può vedere quali consensi ha attivi + revoke history
+      responses:
+        '200':
+          description: List of consents
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ConsentList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/consents/grant:
+    post:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meConsentGrant
+      summary: Grant consent (Art. 7)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/ConsentGrantRequest' }
+      responses:
+        '200':
+          description: Consent granted (idempotent)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /me/consents/revoke:
+    post:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meConsentRevoke
+      summary: Revoke consent (Art. 7 §3)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [consent_type, _csrf]
+              properties:
+                consent_type: { type: string }
+                _csrf: { type: string }
+      responses:
+        '200':
+          description: Revoked (history preserved, no DELETE)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /me/request-deletion:
+    post:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meRequestDeletion
+      summary: Request account deletion (Art. 17)
+      description: |
+        Self-service "right to be forgotten". Workflow:
+        1. POST → status='pending_confirm', email con confirm token (TTL 7g)
+        2. Click email → status='cooling_off', execute_after = NOW + 30g
+        3. Cooling-off cancellabile via POST /me/cancel-deletion
+        4. Cron daily executePending → crypto-shredding + anonymization
+
+        Rate-limited 5/min/user.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/DeletionRequestSubmit' }
+      responses:
+        '200':
+          description: Request created, email sent
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DeletionRequestSuccess' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /me/confirm-deletion:
+    get:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meConfirmDeletion
+      summary: Confirm deletion via email token
+      parameters:
+        - { name: token, in: query, required: true, schema: { type: string } }
+      security: []
+      responses:
+        '200':
+          description: Status moved to cooling_off, execute_after set NOW+30g
+        '404':
+          description: Token invalid or expired
+
+  /me/cancel-deletion:
+    post:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meCancelDeletion
+      summary: Cancel pending deletion (during cooling-off)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [_csrf]
+              properties: { _csrf: { type: string } }
+      responses:
+        '200':
+          description: Status moved to 'cancelled'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /me/deletion-status:
+    get:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meDeletionStatus
+      summary: Get current deletion request status
+      responses:
+        '200':
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active:
+                    oneOf:
+                      - { $ref: '#/components/schemas/DeletionRequest' }
+                      - { type: 'null' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/export-data:
+    get:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meExportData
+      summary: Export user data (Art. 20 portability)
+      description: |
+        Returns JSON download with full user data:
+        - profile + consents + deletion_requests
+        - teacher_content (decifrato se Phase 25.D ciphertext)
+        - risdoc_teacher_overrides
+
+        Rate-limited 3/min/user (heavy operation).
+        Content-Disposition: attachment; filename="pantedu-data-{user_id}-{date}.json"
+      responses:
+        '200':
+          description: JSON download
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ExportData' }
+          headers:
+            Content-Disposition:
+              schema: { type: string, example: 'attachment; filename="pantedu-data-42-2026-04-28.json"' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /me/profile:
+    post:
+      tags: ['GDPR self-service (Art. 7/15-22)']
+      operationId: meProfilePatch
+      summary: Update profile (Art. 16 rectification)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/ProfilePatchRequest' }
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Success' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /dpo-contact:
+    post:
+      tags: ['GDPR DPO contact (Art. 12-22, 37-39)']
+      operationId: dpoContactSubmit
+      summary: Submit DPO contact request
+      description: |
+        Public no-auth form. Antispam: honeypot `url_field` + rate-limit 3/min/IP.
+        Stores in `dpo_requests` table with workflow status (open → acknowledged
+        → responded → closed | spam).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/DpoContactRequest' }
+      responses:
+        '200':
+          description: Request submitted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Success' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /api/teacher/content:
+    get:
+      tags: [Teacher Content]
+      operationId: teacherContentIndex
+      summary: List teacher content (filtered)
+      description: |
+        Returns teacher_content rows with optional filters. ETag conditional
+        GET supportato (Phase 17 + Phase 25.A4 client cache): se If-None-Match
+        matcha la signature corrente (max updated_at + count) ritorna 304.
+      parameters:
+        - { name: type, in: query, schema: { type: string, enum: [esercizio, verifica, lab, mappa, risdoc, bes] } }
+        - { name: subject, in: query, schema: { type: string, example: MAT } }
+        - { name: indirizzo, in: query, schema: { type: string, example: ITIA } }
+        - { name: classe, in: query, schema: { type: string, example: 3A } }
+        - { name: visibility, in: query, schema: { type: string, enum: [draft, published, archived] } }
+        - { name: with_metadata, in: query, schema: { type: integer, enum: [0, 1] } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 500, default: 100 } }
+        - { name: offset, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+        - { name: If-None-Match, in: header, schema: { type: string } }
+      responses:
+        '200':
+          description: Content list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TeacherContentList' }
+          headers:
+            ETag:
+              schema: { type: string, example: '"a1b2c3d4..."' }
+            Cache-Control:
+              schema: { type: string, example: 'private, max-age=30, must-revalidate' }
+        '304':
+          description: Not Modified (ETag match)
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '503':
+          description: Database unavailable
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /metrics:
+    get:
+      tags: [Observability]
+      operationId: metricsShow
+      summary: Prometheus metrics exposition
+      description: |
+        Phase 25.E4.2 — text/plain version=0.0.4. Auth: super_admin session OR
+        Bearer token (env `METRICS_BEARER_TOKEN`). Multi-fallback header
+        extraction: HTTP_AUTHORIZATION, REDIRECT_HTTP_AUTHORIZATION,
+        apache_request_headers, query string `?bearer=` (deprecated, vedi
+        finding API-001).
+
+        9 metriche aggregate (no PII raw).
+      security:
+        - sessionAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Prometheus exposition
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/MetricsResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }

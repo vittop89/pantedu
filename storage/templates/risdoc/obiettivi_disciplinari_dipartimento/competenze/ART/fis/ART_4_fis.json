@@ -1,0 +1,27 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Osservare, descrivere e analizzare fenomeni appartenenti alla realtà naturale e artificiale, riconoscendo le diverse forme di energia e i loro processi di trasformazione, e utilizzando le leggi della meccanica, della termodinamica e dell'elettromagnetismo per interpretarli e modellarli.",
+                "checked": true
+            },
+            {
+                "label": "Applicare i principi di conservazione (dell'energia, della quantità di moto, del momento angolare) come strumenti concettuali unificanti per analizzare e prevedere il comportamento di sistemi fisici in contesti diversi, dagli urti meccanici ai cicli termodinamici.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare e utilizzare in modo critico e flessibile il linguaggio e gli strumenti della matematica (calcolo vettoriale, analisi grafica, modelli funzionali) per formalizzare, risolvere e interpretare problemi di fisica, valutando la coerenza e l'efficacia dei modelli adottati.",
+                "checked": true
+            },
+            {
+                "label": "Progettare e realizzare semplici attività sperimentali, raccogliendo e analizzando criticamente i dati, valutando le incertezze e mettendo in relazione i risultati con le leggi e i modelli teorici di riferimento, comunicando il processo in modo rigoroso.",
+                "checked": false
+            },
+            {
+                "label": "Comprendere e argomentare l'evoluzione storica dei concetti e delle leggi fisiche, riconoscendo il nesso tra lo sviluppo della conoscenza scientifica e il contesto culturale, sociale e tecnologico.",
+                "checked": true
+            }
+        ]
+    }
+]

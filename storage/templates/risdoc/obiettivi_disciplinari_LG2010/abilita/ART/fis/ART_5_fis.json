@@ -1,0 +1,35 @@
+[
+    {
+        "titolo": "Fenomeni Elettrici e Magnetici",
+        "contenuti": [
+            { "label": "Esaminare criticamente il concetto di interazione a distanza (già incontrato con la gravitazione universale).", "checked": true },
+            { "label": "Comprendere la necessità del superamento dell'interazione a distanza e dell’introduzione di interazioni mediate dal campo.", "checked": true },
+            { "label": "Dare una descrizione del campo elettrico in termini di energia e potenziale.", "checked": true },
+            { "label": "Dare una descrizione del campo magnetico.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Elettromagnetismo",
+        "contenuti": [
+            { "label": "Completare lo studio dell’elettromagnetismo con l’induzione elettromagnetica.", "checked": false },
+            { "label": "Comprendere la natura delle onde elettromagnetiche attraverso un’analisi intuitiva dei rapporti fra campi elettrici e magnetici variabili.", "checked": false },
+            { "label": "Comprendere gli effetti delle onde elettromagnetiche.", "checked": false },
+            { "label": "Comprendere le applicazioni delle onde elettromagnetiche nelle varie bande di frequenza.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Dimensione Sperimentale e Approfondimenti",
+        "contenuti": [
+            { "label": "Approfondire la dimensione sperimentale con attività nel laboratorio didattico della scuola.", "checked": false },
+            { "label": "Approfondire la dimensione sperimentale con attività presso laboratori di Università ed enti di ricerca (aderendo a progetti di orientamento).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Percorsi di Fisica del XX Secolo (Auspicalbili)",
+        "contenuti": [
+            { "label": "Affrontare percorsi relativi al microcosmo e/o al macrocosmo.", "checked": false },
+            { "label": "Accostare le problematiche che storicamente hanno portato ai nuovi concetti di spazio e tempo.", "checked": false },
+            { "label": "Accostare le problematiche che storicamente hanno portato ai nuovi concetti di massa ed energia.", "checked": false }
+        ]
+    }
+]

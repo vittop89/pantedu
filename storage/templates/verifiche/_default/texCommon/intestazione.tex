@@ -1,0 +1,27 @@
+% =============================================================================
+% intestazione.tex — Tabella docente/classe/data per il primo riquadro
+% della prima pagina della verifica. Placeholder {{KEY}} sostituiti dal
+% TexBuilder (DOCENTE_NOME, CLASSE_LABEL, INDIRIZZO_LABEL, ISTITUTO_NOME, ANNO).
+% =============================================================================
+\noindent
+\begin{tabularx}{\textwidth}{|p{5.8cm}|p{2.6cm}|p{3.2cm}|p{3.85cm}|}
+\hline
+\textbf{DOCENTE:} {{DOCENTE_NOME}} &
+\textbf{CLASSE:} {{CLASSE_LABEL}} &
+\textbf{L.} {{INDIRIZZO_LABEL}} &
+\textbf{I.I.S.} {{ISTITUTO_NOME}}\\
+\hline
+\textbf{COGNOME:} &
+\multicolumn{2}{l|}{\textbf{NOME:}} &
+\textbf{DATA:}\raisebox{-1mm}{\rule{0.65cm}{0.4pt}}/\raisebox{-1mm}{\rule{0.65cm}{0.4pt}}/{{ANNO}}\\
+\hline
+\textbf{INIZIO:} ore\hspace{3cm}&
+\multicolumn{2}{l|}{\textbf{CONSEGNA:} ore }&
+\textbf{TEMPO:} {{TEMPO_MINUTI}} min\\
+\hline
+\end{tabularx}
+\vspace{0.3cm}
+
+\begin{center}
+    {\large \bfseries {{TITOLO_VERIFICA}} \par}
+\end{center}

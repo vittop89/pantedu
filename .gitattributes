@@ -1,0 +1,15 @@
+# ADR-029 — codice PHP sempre LF nel repo (PSR-12/PHPCS richiede \n).
+# Senza questa regola, autocrlf=true su Windows committa CRLF e il job CI
+# "PHPCS" su Linux fallisce con "End of line character is invalid".
+*.php text eol=lf
+
+# Phase 25.Q.4 — Self-hosted vendor assets: NO line-ending conversion.
+# Hash SRI calcolato sui file originali (LF). Conversione CRLF su Windows
+# romperebbe SRI integrity check sul browser.
+public/vendor/** binary
+
+# Nginx config files: LF obbligatorio (nginx accetta CRLF ma scripts diff/cmp
+# nel deploy.sh confronterebbero con un file CRLF su VPS dopo `cp` da Windows
+# checkout). Forziamo LF ovunque.
+infra/nginx/*.conf text eol=lf
+tools/webhook/*.sh text eol=lf

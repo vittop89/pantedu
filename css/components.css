@@ -1,0 +1,82 @@
+/* ============================================================ */
+/* components.css — entry point for modular CSS components.       */
+/* Phase C.4 — caricato dopo tokens.css + a11y.css, prima del     */
+/* monolite legacy layout.css (cosi' le regole modulari sono      */
+/* override-able dal legacy se serve durante migration).          */
+/*                                                                */
+/* Importato da:                                                  */
+/*   - views/partials/head.php (sidebar layout)                   */
+/*   - views/layout/shell.php (admin/login shell)                 */
+/* ============================================================ */
+
+@import url('/css/modules/_buttons.css');
+@import url('/css/modules/_forms.css');
+@import url('/css/modules/_modals.css');
+@import url('/css/modules/_alerts.css');
+@import url('/css/modules/_cards.css');
+@import url('/css/modules/_breadcrumb.css');
+@import url('/css/modules/_badges.css');
+@import url('/css/modules/_topbar.css');
+@import url('/css/modules/_admin-toolnav.css');
+@import url('/css/modules/_sidebar.css');
+@import url('/css/modules/_editor-toolbar.css');
+@import url('/css/modules/_login-federated.css');
+/* Phase Roadmap 3 — mass-extract */
+@import url('/css/modules/_grid.css');
+@import url('/css/modules/_tables.css');
+@import url('/css/modules/_sidepage.css');
+@import url('/css/modules/_source-editor.css');
+@import url('/css/modules/_print-info.css');
+@import url('/css/modules/_sync-bar.css');
+@import url('/css/modules/_sync-status.css');
+@import url('/css/modules/_verifica-doc.css');
+@import url('/css/modules/_admin-tabs.css');
+@import url('/css/modules/_admin-cards.css');
+@import url('/css/modules/_waf-dashboard.css');
+@import url('/css/modules/_toasts.css');
+@import url('/css/modules/_template-form.css');
+@import url('/css/modules/_import-bundle.css');
+@import url('/css/modules/_topbar-modern.css');
+@import url('/css/modules/_area-docente.css');
+@import url('/css/modules/_exercise-overrides.css');
+@import url('/css/modules/_drive-integration.css');
+@import url('/css/modules/_sidebar-widgets.css');
+@import url('/css/modules/_db-sidepage.css');
+@import url('/css/modules/_dark-mode.css');
+@import url('/css/modules/_legacy-modals.css');
+@import url('/css/modules/_bottom-bar-panel.css');
+@import url('/css/modules/_control-panel.css');
+@import url('/css/modules/_content-layout.css');
+@import url('/css/modules/_upbar-legacy.css');
+@import url('/css/modules/_sidebar-core.css');
+/* Sprint D 2026-05-24 — layout_editor.css extraction */
+@import url('/css/modules/_editor-builder.css');
+/* Sprint E 2026-05-24 — layout_es.css extraction (3921 LOC) */
+@import url('/css/modules/_exercise-legacy.css');
+/* Sprint G 2026-05-24 — admin.css residue extraction (336 LOC) */
+@import url('/css/modules/_admin-legacy.css');
+/* G23 page-doc — block types per pagine informative (glossario, legislazione, ecc.) */
+@import url('/css/modules/_pt-page-doc.css');
+/* G24 — <fm-pt-document> chrome unificato (ADR-022) */
+@import url('/css/modules/_pt-document.css');
+/* ADR-024 — .fm-doc-topbar BEM unica (custom + risdoc), adattiva WCAG */
+@import url('/css/modules/_doc-topbar.css');
+/* Lighthouse perf — 5 FA icons → SVG mask inline. Sostituisce all.min.css ~75KB. */
+@import url('/css/modules/_fm-icons.css');
+/* ADR-023 Fase 2 (2026-05-25) — CSS-in-JS runtime estratto in moduli @layer.
+   Cascade deterministica: niente più <style> iniettati con timing variabile. */
+@import url('/css/modules/_geogebra-editor.css');
+@import url('/css/modules/_tex-element-editor.css');
+@import url('/css/modules/_tikz-blocks-manager.css');
+@import url('/css/modules/_tikz-template-filler.css');
+@import url('/css/modules/_tikz-editor-modal.css');
+@import url('/css/modules/_ver-generation-overlay.css');
+@import url('/css/modules/_verifiche-print-ui.css');
+@import url('/css/modules/_vertitle-autocomplete.css');
+@import url('/css/modules/_mappe-edit-mode.css');
+@import url('/css/modules/_model-sync-modal.css');
+@import url('/css/modules/_latex-shortcuts.css');
+@import url('/css/modules/_category-manager.css');
+@import url('/css/modules/_teacher-dashboard.css');
+/* Phase PDF-Import — pagina /teacher/pdf-import (estrazione esercizi da PDF). */
+@import url('/css/modules/_pdf-import.css');

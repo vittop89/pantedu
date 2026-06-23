@@ -1,0 +1,78 @@
+/* ============================================================ */
+/* Estratto da js/entries/geogebra-editor.js (ADR-023 Fase 2 — elimina CSS-in-JS runtime). */
+/* Regole VERBATIM: cascade ora deterministica via @layer.            */
+/* ============================================================ */
+
+.fm-ggb-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 100012; display: flex; align-items: stretch; justify-content: center;
+    font: 13px/1.4 system-ui, sans-serif;
+}
+.fm-ggb-modal {
+    /* G22.S15.bis Fase 4 — body LIGHT (no dark) per non disturbare il CSS
+     * interno GeoGebra che eredita CSS variables (--surface, ecc.) dal
+     * viewport. Solo l'header mantiene il dark theme app per coerenza UX. */
+    background: #ffffff; color: #1a1a1a;
+    width: 96vw; height: 92vh; margin: 2vh auto;
+    border-radius: 8px; display: flex; flex-direction: column;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5); overflow: hidden;
+    color-scheme: light;
+}
+.fm-ggb-header {
+    background: #2a2a2a; padding: 10px 14px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid #444;
+    flex-wrap: wrap;
+    position: relative; z-index: 2;  /* sopra l'applet GeoGebra */
+}
+.fm-ggb-header h3 { margin: 0; font-size: 15px; flex: 1; color: #fff; display: flex; align-items: center; gap: 8px; }
+.fm-ggb-header h3 img { width: 20px; height: 20px; }
+.fm-ggb-toolbar { display: flex; gap: 6px; }
+.fm-ggb-toolbar button {
+    background: #3a3a3a; color: #ddd; border: 1px solid #555;
+    border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 12px;
+}
+.fm-ggb-toolbar button:hover { background: #4a4a4a; }
+.fm-ggb-toolbar button.primary { background: #2a5ac7; color: #fff; border-color: #2a5ac7; font-weight: 600; }
+.fm-ggb-toolbar button.primary:hover { background: #3a6ad7; }
+.fm-ggb-toolbar button.danger { background: #c73a3a; color: #fff; border-color: #c73a3a; }
+.fm-ggb-body { flex: 1; display: flex; min-height: 0; }
+.fm-ggb-applet {
+    flex: 1 1 60%; min-width: 0; background: #fff;
+    border-right: 1px solid #444; overflow: hidden; position: relative;
+    z-index: 0;
+    /* G22.S15.bis Fase 4 — color-scheme:light per scrollbar/form native */
+    color-scheme: light;
+}
+.fm-ggb-applet > div { width: 100%; height: 100%; }
+/* Cleanup: solo le regole dark che bleed-pano sull'applet vengono
+ * neutralizzate. NON applicare reset universale o si rompe GeoGebra's
+ * own CSS (panel layout, toolbar buttons, ecc.). */
+body.fm-dark .fm-ggb-applet input,
+body.fm-dark .fm-ggb-applet textarea,
+body.fm-dark .fm-ggb-applet [contenteditable],
+body.fm-dark .fm-ggb-applet td,
+body.fm-dark .fm-ggb-applet tr,
+body.fm-dark .fm-ggb-applet table {
+    color: initial !important;
+    background-color: initial !important;
+    border-color: initial !important;
+}
+.fm-ggb-applet .fm-ggb-loading {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    justify-content: center; background: #fafafa; color: #666; font-size: 14px;
+}
+.fm-ggb-preview {
+    flex: 1 1 40%; min-width: 0; background: #fff; color: #000;
+    overflow: auto; padding: 16px; position: relative;
+}
+.fm-ggb-preview .preview-status {
+    position: absolute; top: 8px; right: 12px; font-size: 11px; color: #888;
+    background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 3px;
+}
+.fm-ggb-preview svg { max-width: 100%; height: auto; }
+.fm-ggb-preview .err {
+    color: #b00; background: #fee; padding: 8px; border-radius: 4px;
+    border: 1px solid #fcc; font: 11px monospace; white-space: pre-wrap;
+}
+

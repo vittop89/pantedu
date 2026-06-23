@@ -1,0 +1,287 @@
+/* ============================================================ */
+/* Print Info — Phase Roadmap Sprint 29.                          */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (283 LOC). Visual byte-equivalent.*/
+/* Modal "Carica Print Info" card-based + #savePrintInfoBtn /     */
+/* #loadPrintInfoBtn toolbar buttons.                              */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - #fm-load-printinfo-modal (modal overlay)                    */
+/*   - .fm-load-printinfo (modal container)                        */
+/*   - .fm-load-printinfo-table (records table)                    */
+/*   - .fm-pi-cards / .fm-pi-card (card view per record)           */
+/*   - .fm-pi-card-{head,title,actions,grid,edit} (card parts)     */
+/*   - .fm-pi-tag (status pill)                                    */
+/*   - .fm-pi-edit-grid (inline edit form)                         */
+/*   - Dark theme overrides (body.fm-dark)                         */
+/* ============================================================ */
+
+/* G19.18 — Modal Carica Print Info */
+#fm-load-printinfo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 9100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 20px 20px;
+    opacity: 0;
+    transition: opacity .15s;
+    overflow-y: auto;
+}
+#fm-load-printinfo-modal.fm-modal--visible { opacity: 1; }
+.fm-load-printinfo {
+    background: var(--fm-c-surface);
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    color: var(--fm-c-text);
+    position: relative;
+}
+.fm-load-printinfo h3 { margin: 0 0 8px; font-size: 1.125rem; }
+.fm-load-printinfo .fm-muted { font-size: 0.75rem; color: var(--fm-c-muted); margin-bottom: 12px; }
+.fm-load-printinfo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+.fm-load-printinfo-table th,
+.fm-load-printinfo-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--fm-c-border);
+    text-align: left;
+}
+.fm-load-printinfo-table th {
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+    background: var(--fm-c-surface-2);
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+}
+.fm-load-printinfo-table tr:hover { background: var(--fm-c-surface-2); }
+.fm-load-printinfo-table .fm-btn-primary {
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid #15803d;
+    background: #16a34a;
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.fm-load-printinfo-table .fm-btn-primary:hover { background: #15803d; }
+/* G20.6 — delete-row + delete-all buttons */
+.fm-load-printinfo-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    white-space: nowrap;
+}
+.fm-load-printinfo-table .fm-btn-danger,
+.fm-load-printinfo .fm-btn-danger {
+    height: 26px;
+    padding: 0 10px;
+    background: #dc2626;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.fm-load-printinfo-table .fm-btn-danger:hover,
+.fm-load-printinfo .fm-btn-danger:hover { background: #b91c1c; }
+.fm-load-printinfo .fm-modal-actions { gap: 8px; }
+.fm-load-printinfo .fm-modal-actions .fm-btn-danger { margin-right: auto; }
+
+/* G20.7 — modal Carica Print Info card-based: ogni record e' una card
+ * con tutti i campi salvati visibili (anno, tempo, NOR/DSA/DIS, versione,
+ * studente, flag bes, titolo) e form inline edit on-demand. */
+.fm-pi-cards { display: flex; flex-direction: column; gap: 10px; }
+.fm-pi-card {
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+.fm-pi-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+.fm-pi-card-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    color: var(--fm-c-text);
+    flex-wrap: wrap;
+}
+.fm-pi-tag {
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+.fm-pi-tag--mat { background: #fef3c7; color: #92400e; }
+.fm-pi-card-istituto { color: var(--fm-c-muted); font-size: 0.6875rem; font-style: italic; }
+.fm-pi-card-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.fm-pi-card-actions .fm-btn,
+.fm-pi-card-actions .fm-btn-primary,
+.fm-pi-card-actions .fm-btn-danger {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 5px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 0;
+}
+.fm-pi-card-actions .fm-btn-primary { background: #16a34a; color: #fff; }
+.fm-pi-card-actions .fm-btn-primary:hover { background: #15803d; }
+.fm-pi-card-actions .fm-btn { background: var(--fm-c-surface); color: #0f172a; border: 1px solid #cbd5e1; }
+.fm-pi-card-actions .fm-btn:hover { background: var(--fm-c-surface-2); }
+.fm-pi-card-actions .fm-btn-danger { background: #dc2626; color: #fff; }
+.fm-pi-card-actions .fm-btn-danger:hover { background: #b91c1c; }
+
+/* G20.7 — single-row layout: tutti i campi in linea via flex nowrap;
+ * overflow-x scrollabile se la modal e' troppo stretta. */
+.fm-pi-card-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.6875rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+.fm-pi-card-grid > div {
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: 3px 6px;
+    flex: 0 0 auto;
+    min-width: 22px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.15;
+}
+.fm-pi-card-grid > .fm-pi-card-grid--wide {
+    flex: 1 1 auto;
+    min-width: 100px;
+}
+.fm-pi-card-grid dt {
+    color: var(--fm-c-muted);
+    font-size: 0.5625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 1px;
+}
+.fm-pi-card-grid dd { margin: 0; color: var(--fm-c-text); font-weight: 500; white-space: nowrap; }
+
+.fm-pi-card-edit {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--fm-c-border);
+}
+.fm-pi-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+.fm-pi-edit-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.6875rem;
+    color: var(--fm-c-text-2);
+    font-weight: 500;
+}
+.fm-pi-edit-grid input[type="text"],
+.fm-pi-edit-grid input:not([type]) {
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text);
+    background: var(--fm-c-surface);
+}
+.fm-pi-edit-grid input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+.fm-pi-edit-cb {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 6px !important;
+    background: var(--fm-c-surface-2);
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+.fm-pi-edit-cb input { width: 14px; height: 14px; margin: 0; }
+.fm-pi-edit-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+
+/* Dark theme */
+body.fm-dark .fm-pi-card { background: #1e293b; border-color: #334155; }
+body.fm-dark .fm-pi-card-title { color: #e2e8f0; }
+body.fm-dark .fm-pi-tag { background: #1e3a8a; color: #dbeafe; }
+body.fm-dark .fm-pi-tag--mat { background: #92400e; color: #fef3c7; }
+body.fm-dark .fm-pi-card-istituto { color: var(--fm-c-muted); }
+body.fm-dark .fm-pi-card-grid > div { background: #0f172a; border-color: #334155; }
+body.fm-dark .fm-pi-card-grid dt { color: var(--fm-c-muted); }
+body.fm-dark .fm-pi-card-grid dd { color: #e2e8f0; }
+body.fm-dark .fm-pi-card-edit { border-top-color: #334155; }
+body.fm-dark .fm-pi-edit-grid label { color: #cbd5e1; }
+body.fm-dark .fm-pi-edit-grid input { background: #0f172a; color: #e2e8f0; border-color: #334155; }
+body.fm-dark .fm-pi-edit-cb { background: #0f172a; }
+body.fm-dark .fm-pi-card-actions .fm-btn { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+body.fm-dark .fm-pi-card-actions .fm-btn:hover { background: #334155; }
+
+/* .fm-load-printinfo .fm-modal-close → stile × canonico in _modals.css */
+.fm-load-printinfo .fm-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+.fm-load-printinfo .fm-btn {
+    height: 32px; padding: 0 16px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 5px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+.fm-load-printinfo .fm-btn:hover { background: var(--fm-c-surface-2); }
+body.fm-dark .fm-load-printinfo {
+    background: #1f2330;
+    color: #e2e8f0;
+}
+body.fm-dark .fm-load-printinfo h3 { color: #e2e8f0; }
+body.fm-dark .fm-load-printinfo-table th { background: #0f172a; color: var(--fm-c-muted); }
+body.fm-dark .fm-load-printinfo-table th,
+body.fm-dark .fm-load-printinfo-table td { border-color: #334155; }
+body.fm-dark .fm-load-printinfo-table tr:hover { background: #1e293b; }
+body.fm-dark .fm-load-printinfo .fm-btn {
+    background: #1e293b; color: #e2e8f0; border-color: #334155;
+}
+body.fm-dark .fm-load-printinfo .fm-btn:hover { background: #334155; }
+body.fm-dark .fm-load-printinfo .fm-modal-close { color: var(--fm-c-muted); }
+body.fm-dark .fm-load-printinfo .fm-modal-close:hover { background: #334155; color: #e2e8f0; }

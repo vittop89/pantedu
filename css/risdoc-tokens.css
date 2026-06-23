@@ -1,0 +1,195 @@
+/**
+ * Risdoc design tokens (Phase 23).
+ *
+ * Single source of truth per colori, spacing e stati del dominio risdoc.
+ * Light defaults + dark override via `body.fm-dark`.
+ *
+ * CSS custom properties fluiscono attraverso lo shadow DOM boundary: i
+ * Web Components in shadow root ereditano automaticamente queste vars
+ * senza `:host-context()` hack. Ogni componente risdoc DEVE consumare
+ * via `var(--fm-risdoc-*)` invece di hardcoded colors.
+ *
+ * Caricato da:
+ *   - TemplateViewController (head) per pagine /risdoc/view/*
+ *   - views/layout/shell.php globale (dashboard, home)
+ *   - Demo static pages (importate esplicitamente in <link>)
+ */
+
+:root {
+    /* ── Backgrounds ── */
+    --fm-risdoc-bg:             powderblue;
+    --fm-risdoc-card-bg:        #fff;
+    --fm-risdoc-panel-bg:       #E0F2F7;
+    --fm-risdoc-bg-field:       #f9f9f9;
+    --fm-risdoc-elevated-bg:    #f8fafc;
+    --fm-risdoc-section-head-bg: rgb(219, 228, 240);
+    --fm-risdoc-th-bg:          #e0e0e0;
+    --fm-risdoc-header-bg:      linear-gradient(180deg, powderblue 34%, #1d6293 100%);
+    --fm-risdoc-privacy-head-bg: rgb(255, 228, 225);
+
+    /* ── Foreground ── */
+    --fm-risdoc-text:           #333;
+    --fm-risdoc-text-muted:     #556373; /* WCAG AA: era #64748b 4.12:1 su bg cyan */
+    --fm-risdoc-text-strong:    #1e293b;
+    --fm-risdoc-text-inverse:   #f8fafc;
+    --fm-risdoc-accent:         #005A8D;
+    --fm-risdoc-accent-hover:   #003d66;
+
+    /* ── Borders ── */
+    --fm-risdoc-border:          #A2D2FF;
+    --fm-risdoc-border-subtle:   #e5e5e5;
+    --fm-risdoc-border-focus:    #2a5ac7;
+    --fm-risdoc-section-head-border: #8db070;
+    --fm-risdoc-section-border:  #888;
+    --fm-risdoc-privacy-head-border: #DC143C;
+
+    /* ── Interactive buttons ── */
+    --fm-risdoc-btn-bg:       #fff;
+    --fm-risdoc-btn-fg:       #333;
+    --fm-risdoc-btn-border:   #ddd;
+    --fm-risdoc-btn-hover:    #f0f0f0;
+    --fm-risdoc-btn-active-bg:#2a5ac7;
+    --fm-risdoc-btn-active-fg:#fff;
+    --fm-risdoc-btn-danger-bg:#fee2e2;
+    --fm-risdoc-btn-danger-fg:#b91c1c;
+
+    /* Action buttons "colorful" (add/remove in tabelle UDA, ecc.) */
+    --fm-risdoc-action-danger:       #e57373;
+    --fm-risdoc-action-danger-hover: #f44336;
+    --fm-risdoc-action-success:      #4caf50;
+    --fm-risdoc-action-success-hover:#81c784;
+
+    /* ── PT Editor (Phase 22/23) ── */
+    --fm-risdoc-editor-bg:     #fff;
+    --fm-risdoc-editor-fg:     #1e293b;
+    --fm-risdoc-editor-border: #ccc;
+    --fm-risdoc-toolbar-bg:    #fafafa;
+    --fm-risdoc-toolbar-border:#e5e5e5;
+    --fm-risdoc-code-inline-bg: #f4f4f4;
+
+    /* ── PT Formule (ADR-031) ── */
+    --fm-risdoc-formula-bg:   rgba(59,130,246,.08);
+    --fm-risdoc-formula-fg:   #1d4ed8;
+    --fm-risdoc-input-bg:     #fff;
+
+    /* ── PT Custom blocks ── */
+    --fm-pt-field-bg:     #e0eaff;
+    --fm-pt-field-fg:     #1e40af;
+    --fm-pt-field-border: #93c5fd;
+    --fm-pt-checkbox-bg:      #f8f9fa;
+    --fm-pt-checkbox-border:  #e2e8f0;
+    --fm-pt-checkbox-accent:  #047857; /* WCAG AA: era #10b981 2.53:1 su bianco */
+    --fm-pt-rawtex-bg:     #fef3c7;
+    --fm-pt-rawtex-fg:     #78350f;
+    --fm-pt-rawtex-accent: #d97706;
+
+    /* ── Status / feedback ── */
+    --fm-risdoc-error-bg:     #fee2e2;
+    --fm-risdoc-error-fg:     #b91c1c;
+    --fm-risdoc-error-border: #fca5a5;
+    --fm-risdoc-success-bg:   #d1fae5;
+    --fm-risdoc-success-fg:   #065f46;
+    --fm-risdoc-warning-bg:   #fef3c7;
+    --fm-risdoc-warning-fg:   #92400e;
+
+    /* ── Modal / overlay ── */
+    --fm-risdoc-overlay-bg:    rgba(15, 23, 42, 0.6);
+    --fm-risdoc-modal-bg:      #fff;
+    --fm-risdoc-modal-head-bg: #f8fafc;
+    --fm-risdoc-modal-border:  #e5e5e5;
+
+    /* ── Source mode (CodeMirror) ── */
+    --fm-risdoc-code-bg:      #1e293b;
+    --fm-risdoc-code-fg:      #e2e8f0;
+    --fm-risdoc-code-gutter-bg:#0f172a;
+    --fm-risdoc-code-accent:  #60a5fa;
+}
+
+body.fm-dark {
+    /* ── Backgrounds ── */
+    --fm-risdoc-bg:             #1a2332;
+    --fm-risdoc-card-bg:        #22303f;
+    --fm-risdoc-panel-bg:       #1e2f42;
+    --fm-risdoc-bg-field:       #2a3a4f;
+    --fm-risdoc-elevated-bg:    #273445;
+    --fm-risdoc-section-head-bg: #273445;
+    --fm-risdoc-th-bg:          #263345;
+    --fm-risdoc-header-bg:      linear-gradient(180deg, #1a2332 34%, #0f1a28 100%);
+    --fm-risdoc-privacy-head-bg: #3a1e22;
+
+    /* ── Foreground ── */
+    --fm-risdoc-text:           #e0e0e0;
+    --fm-risdoc-text-muted:     #94a3b8;
+    --fm-risdoc-text-strong:    #f8fafc;
+    --fm-risdoc-text-inverse:   #0f172a;
+    --fm-risdoc-accent:         #7ab0ff; /* WCAG AA: era #5a90e0 (3.9:1 testo su dark) */
+    --fm-risdoc-accent-hover:   #93c5fd;
+
+    /* ── Borders ── */
+    --fm-risdoc-border:          #3a4a5c;
+    --fm-risdoc-border-subtle:   #2a3a4f;
+    --fm-risdoc-border-focus:    #60a5fa;
+    --fm-risdoc-section-head-border: #4a5568;
+    --fm-risdoc-section-border:  #475569;
+    --fm-risdoc-privacy-head-border: #8a2a3a;
+
+    /* ── Interactive ── */
+    --fm-risdoc-btn-bg:       #2a3a4f;
+    --fm-risdoc-btn-fg:       #e0e0e0;
+    --fm-risdoc-btn-border:   #3a4a5c;
+    --fm-risdoc-btn-hover:    #354961;
+    --fm-risdoc-btn-active-bg:#60a5fa;
+    --fm-risdoc-btn-active-fg:#0f172a;
+    --fm-risdoc-btn-danger-bg:#450a0a;
+    --fm-risdoc-btn-danger-fg:#fca5a5;
+
+    --fm-risdoc-action-danger:       #dc2626;
+    --fm-risdoc-action-danger-hover: #ef4444;
+    --fm-risdoc-action-success:      #16a34a;
+    --fm-risdoc-action-success-hover:#22c55e;
+
+    /* ── PT Editor ── */
+    --fm-risdoc-editor-bg:     #22303f;
+    --fm-risdoc-editor-fg:     #e2e8f0;
+    --fm-risdoc-editor-border: #3a4a5c;
+    --fm-risdoc-toolbar-bg:    #1e2f42;
+    --fm-risdoc-toolbar-border:#2a3a4f;
+    --fm-risdoc-code-inline-bg: #0f172a;
+
+    /* ── PT Formule (ADR-031) ── */
+    --fm-risdoc-formula-bg:   rgba(96,165,250,.18);
+    --fm-risdoc-formula-fg:   #93c5fd;
+    --fm-risdoc-input-bg:     #2a3a4f;
+
+    /* ── PT Custom blocks ── */
+    --fm-pt-field-bg:     #1e3a8a;
+    --fm-pt-field-fg:     #bfdbfe;
+    --fm-pt-field-border: #3b82f6;
+    --fm-pt-checkbox-bg:      #1a2234;
+    --fm-pt-checkbox-border:  #2d3748;
+    --fm-pt-checkbox-accent:  #34d399;
+    --fm-pt-rawtex-bg:     #3b2a1a;
+    --fm-pt-rawtex-fg:     #fde68a;
+    --fm-pt-rawtex-accent: #f59e0b;
+
+    /* ── Status ── */
+    --fm-risdoc-error-bg:     #450a0a;
+    --fm-risdoc-error-fg:     #fca5a5;
+    --fm-risdoc-error-border: #7f1d1d;
+    --fm-risdoc-success-bg:   #064e3b;
+    --fm-risdoc-success-fg:   #a7f3d0;
+    --fm-risdoc-warning-bg:   #3b2a1a;
+    --fm-risdoc-warning-fg:   #fde68a;
+
+    /* ── Modal / overlay ── */
+    --fm-risdoc-overlay-bg:    rgba(0, 0, 0, 0.75);
+    --fm-risdoc-modal-bg:      #22303f;
+    --fm-risdoc-modal-head-bg: #1e2f42;
+    --fm-risdoc-modal-border:  #3a4a5c;
+
+    /* ── Source mode ── */
+    --fm-risdoc-code-bg:      #0f172a;
+    --fm-risdoc-code-fg:      #e2e8f0;
+    --fm-risdoc-code-gutter-bg:#0a0f1a;
+    --fm-risdoc-code-accent:  #60a5fa;
+}

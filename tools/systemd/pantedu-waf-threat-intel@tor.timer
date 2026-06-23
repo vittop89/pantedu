@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync Tor exit nodes (giornaliero)
+
+[Timer]
+# Ogni giorno alle 05:00 (dopo gli altri sync giornalieri).
+OnCalendar=*-*-* 05:00:00
+Persistent=true
+RandomizedDelaySec=15min
+AccuracySec=1min
+Unit=pantedu-waf-threat-intel@tor.service
+
+[Install]
+WantedBy=timers.target

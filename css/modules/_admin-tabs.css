@@ -1,0 +1,115 @@
+/* ============================================================ */
+/* Admin tabs + tools-table — Phase Roadmap 3 (from admin.css).  */
+/*                                                                */
+/* Tab pattern WCAG-compliant: role="tablist"/"tab"/"tabpanel"   */
+/* via markup, focus-visible, keyboard nav lasciata al JS.       */
+/* ============================================================ */
+
+.fm-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 0 0 var(--fm-space-3);
+    border-bottom: 1px solid var(--fm-c-border);
+}
+
+.fm-tab {
+    padding: var(--fm-space-2) var(--fm-space-3);
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-bottom: 0;
+    border-radius: var(--fm-radius-sm) var(--fm-radius-sm) 0 0;
+    cursor: pointer;
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-text);
+    /* `font-family: inherit` necessario per <button>.fm-tab — i browser
+     * impongono font system di default sui button. Sprint A3.2. */
+    font-family: inherit;
+    min-height: var(--fm-target-aa);
+    transition: background var(--fm-transition-fast) var(--fm-easing);
+}
+
+.fm-tab:hover {
+    background: var(--fm-c-surface-2);
+}
+
+.fm-tab:focus-visible {
+    outline: var(--fm-focus-width) solid var(--fm-c-focus-ring);
+    outline-offset: -2px;
+}
+
+.fm-tab--active,
+.fm-tab.fm-tab--active {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+    font-weight: 600;
+    color: var(--fm-c-primary);
+    position: relative;
+}
+
+.fm-tab--active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--fm-c-primary);
+}
+
+.fm-tab-badge:empty {
+    display: none;
+}
+
+.fm-tab-badge {
+    display: inline-block;
+    background: var(--fm-c-danger);
+    color: var(--fm-c-text-inverse);
+    border-radius: var(--fm-radius-pill);
+    padding: 1px var(--fm-space-1);
+    font-size: var(--fm-fs-xs);
+    margin-left: var(--fm-space-1);
+    font-weight: 700;
+}
+
+.fm-tab-panel {
+    display: none;
+    padding: var(--fm-space-4) 0;
+}
+
+.fm-tab-panel--active {
+    display: block;
+}
+
+/* Tools table (admin generico) */
+.fm-tools-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--fm-space-2);
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-text);
+}
+
+.fm-tools-table th,
+.fm-tools-table td {
+    border: 1px solid var(--fm-c-border);
+    padding: var(--fm-space-1) var(--fm-space-2);
+    text-align: start;
+    vertical-align: top;
+}
+
+.fm-tools-table th {
+    background: var(--fm-c-bg);
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+}
+
+.fm-tools-table tr:hover {
+    background: var(--fm-c-surface-2);
+}
+
+.fm-row-actions {
+    display: flex;
+    gap: var(--fm-space-1);
+    flex-wrap: wrap;
+}

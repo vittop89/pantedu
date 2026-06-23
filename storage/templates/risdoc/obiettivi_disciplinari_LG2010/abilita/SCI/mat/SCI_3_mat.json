@@ -1,0 +1,31 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Approfondire la conoscenza dei numeri reali, con riguardo alla tematica dei numeri trascendenti e alla problematica dell'infinito matematico.",
+        "checked": true
+      },
+      {
+        "label": "Studiare e applicare le proprietà della circonferenza, del cerchio e dei triangoli, e la nozione di luogo geometrico.",
+        "checked": true
+      },
+      {
+        "label": "Estendere allo spazio alcuni temi della geometria piana per sviluppare l'intuizione geometrica (posizioni reciproche di rette e piani, parallelismo, perpendicolarità, proprietà dei solidi).",
+        "checked": true
+      },
+      {
+        "label": "Trattare semplici esempi di successioni numeriche e progressioni aritmetiche e geometriche.",
+        "checked": true
+      },
+      {
+        "label": "Costruire semplici modelli di crescita o decrescita esponenziale e di andamenti periodici.",
+        "checked": true
+      },
+      {
+        "label": "Analizzare graficamente e analiticamente le principali funzioni e operare su funzioni composte e inverse.",
+        "checked": true
+      }
+    ]
+  }
+]

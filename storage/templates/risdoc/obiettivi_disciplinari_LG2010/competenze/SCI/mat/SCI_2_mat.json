@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "COMPETENZE",
+    "contenuti": [
+      {
+        "label": "Elaborare strategie di risoluzione algoritmica per problemi semplici e di facile modellizzazione.",
+        "checked": true
+      },
+      {
+        "label": "Passare agevolmente da un registro di rappresentazione a un altro (numerico, grafico, funzionale), anche utilizzando strumenti informatici, per risolvere problemi.",
+        "checked": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,349 @@
+/* ════════════════════════════════════════════════════════════
+ * _admin-legacy.css — Admin panel legacy residue (GDPR/Crypto/Backup)
+ *
+ * Sprint G (2026-05-24) VERBATIM extraction da admin.css (-336 LOC).
+ * Selettori principali:
+ *   body.fm-shell .fm-topbar override (vs layout.css fixed exercise topbar)
+ *   .fm-bc-row breadcrumb + responsive
+ *   .fm-toolbar + .fm-btn--xs + .fm-btn--warn
+ *   #fm-bsa-panel inputs/labels (templates badge style)
+ *   .fm-meta-grid (GDPR dt/dd display)
+ *   .fm-empty empty state
+ *   .fm-alert + variants (success/danger/warn/info)
+ *   body.fm-shell input/select/textarea (GDPR forms)
+ *   .fm-status--* (open/new/under_review/responded/closed/etc.)
+ *   .fm-badge--severity-{low,medium,high,critical}
+ *   .fm-badge default + scoped
+ *   details[open] > summary + details > div
+ *   .fm-form-grid + sub-elements + responsive
+ *   .fm-content-search-panel (authority-export wizard)
+ *   .fm-table--expandable + .fm-row-toggle + .fm-row-detail__*
+ *   .fm-collapsible-summary (backup details)
+ *   .fm-info-banner + a
+ *   .fm-monitoring-frame iframe (Grafana embed)
+ *   .fm-card--wide nested .fm-card
+ *
+ * Loader: era admin.css caricato solo su /admin/*. Modulo caricato
+ * sempre via main.bundle.css; selettori .fm-* prefissati non interferiscono.
+ * ════════════════════════════════════════════════════════════ */
+
+/* NOTA Phase 25.G/H:
+   .fm-topbar è la classe del LEGACY exercise topbar in layout.css:3507
+   (position: fixed, top:0, gradient blu, z-index 1500) — applicata
+   senza scope. Per le pagine admin (body.fm-shell) dobbiamo overridare
+   con specificità maggiore così la topbar resta inline nel card. */
+body.fm-shell .fm-topbar {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    z-index: auto;
+    background: transparent;
+    color: inherit;
+    border-bottom: 1px solid var(--fm-c-border);
+    box-shadow: none;
+    padding: 0 0 var(--fm-space-3);
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Phase 25.R.22 — breadcrumb row: breadcrumb (left) + user actions (right) sullo stesso line. */
+.fm-bc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fm-space-4, 1rem);
+    flex-wrap: wrap;
+    margin: 0 0 var(--fm-space-3, .8rem);
+}
+.fm-bc-row .fm-breadcrumb { margin: 0; flex: 1 1 auto; min-width: 0; }
+.fm-bc-row .fm-tb-actions { margin-left: auto; flex-shrink: 0; }
+@media (max-width: 700px) {
+    .fm-bc-row { flex-direction: column; align-items: stretch; }
+    .fm-bc-row .fm-tb-actions { justify-content: flex-start; }
+}
+
+/* ── Admin toolnav: rimosso 2026-05-24 (Sprint A3.1).
+ *    Regole light → css/modules/_admin-toolnav.css (già caricato via main.bundle.css).
+ *    Regole dark + responsive __lbl → consolidate nel modulo + _dark-mode.css.
+ *    Visual baseline identico (E2E screenshot test). */
+
+/* Sprint B 2026-05-24 — rimossi blocchi `.fm-admin-tools/__title/__grid/
+ *   .fm-admin-tool + variants + sub-elements / .fm-admin-kpi`.
+ *   Estratti VERBATIM in css/modules/_admin-cards.css (già live). */
+
+/* ── Tabs (admin tools, analytics) ─────────────────────────── */
+/* Sprint A3.2 2026-05-24 — rimossi blocchi duplicati:
+ *   .fm-tabs/.fm-tab/.fm-tab-badge/.fm-tab-panel → _admin-tabs.css
+ *   .fm-tools-table/.fm-row-actions → _admin-tabs.css
+ * Tokens-based equivalenti già live via main.bundle.css; drift visivo
+ * minimo (~2px padding) accettato per modernizzazione token. */
+.fm-toolbar {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-bottom: .8rem;
+    align-items: center;
+}
+.fm-btn--xs { padding: 2px 8px; font-size: 0.6875rem; }
+
+/* Sprint B 2026-05-24 — rimossi blocchi `.fm-bridge-msg/.fm-sec-card/
+ *   .fm-sec-card--waf/.fm-infra*+.fm-card/.fm-pill+--variants`.
+ *   Tutti già in css/modules/_admin-cards.css (token-based). Drift:
+ *   - .fm-pill--ok/warn/critical adesso usano palette token (più
+ *     centralizzato, lieve hue shift accettato).
+ *   - .fm-pill--high resta hardcoded (#fde0c8) anche in modulo. */
+
+/* ── Templates badge style admin (fm-bsa-panel) ────────────── */
+#fm-bsa-panel p,
+#fm-bsa-panel label,
+#fm-bsa-panel .fm-muted { color: var(--fm-c-text-2, #475569); }
+#fm-bsa-panel input,
+#fm-bsa-panel select {
+    background: var(--fm-c-surface, #fff);
+    color: var(--fm-c-text, #1f2937);
+    border-color: var(--fm-c-border, #cbd5e1);
+}
+#fm-bsa-panel input::placeholder,
+#fm-bsa-panel select::placeholder { color: var(--fm-c-muted, #94a3b8); }
+
+/* ═══════════════════════════════════════════════════════════
+ * DARK MODE OVERRIDES (body.fm-dark)
+ * ═══════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════
+ * Phase 25.R.4.1 + R.5.3 — Admin GDPR/Crypto pages dark theme.
+ *
+ * Pages: data_requests_*, data_breach_*, subprocessors_*, crypto_status,
+ * takedown_index/show. Sostituisce gli inline styles hardcoded.
+ * ════════════════════════════════════════════════════════════ */
+
+/* Meta grid (dettagli read-only su /admin/data-requests/{id}, /admin/data-breach/{id}, takedown_show) */
+.fm-meta-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: .5em 1em;
+    padding: 1em;
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    color: var(--fm-c-text);
+}
+.fm-meta-grid dt { font-weight: 600; color: var(--fm-c-text-2); }
+.fm-meta-grid dd { margin: 0; }
+.fm-meta-grid pre { font-family: inherit; font-size: .95em; color: var(--fm-c-text); }
+
+/* Toolbar filtri tabs */
+.fm-toolbar .fm-btn--ghost.fm-is-active {
+    background: var(--fm-c-primary);
+    color: #fff;
+    border-color: var(--fm-c-primary);
+}
+
+/* Empty states */
+.fm-empty {
+    text-align: center;
+    padding: 3em 1em;
+    color: var(--fm-c-muted);
+    background: var(--fm-c-surface);
+    border: 1px dashed var(--fm-c-border);
+    border-radius: 8px;
+}
+
+/* Alerts inline (success / danger / warn / info) — replace inline styles */
+.fm-alert            { padding: .8em 1em; border-radius: 6px; margin-bottom: 1rem; }
+.fm-alert--success   { background: #d1e7dd; color: #0f5132; }
+.fm-alert--danger,
+.fm-alert--error     { background: #f8d7da; color: #842029; }
+.fm-alert--warn      { background: #fff3cd; color: #664d03; }
+.fm-alert--info      { background: #cff4fc; color: #055160; }
+
+/* Form fields nelle pagine admin GDPR/Crypto: input/select/textarea */
+body.fm-shell input[type="text"],
+body.fm-shell input[type="email"],
+body.fm-shell input[type="url"],
+body.fm-shell input[type="number"],
+body.fm-shell input[type="datetime-local"],
+body.fm-shell input[type="date"],
+body.fm-shell select,
+body.fm-shell textarea {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    padding: .5em;
+    font-family: inherit;
+    font-size: 1em;
+}
+
+/* Status badges per data_requests / data_breach / takedown */
+.fm-status--new { background: #d1e7dd; color: #0f5132; }
+
+.fm-status--spam          { background: #f8d7da; color: #842029; }
+
+/* Severity badges per data_breach */
+
+/* Subject badges per data_requests (Art. 15-22 etichette) */
+.fm-badge { padding: .15em .55em; border-radius: 4px; font-size: .85em; background: var(--fm-c-bg); color: var(--fm-c-text-2); }
+
+/* fm-card secondaria (form GDPR) usata inline con margin-top */
+
+/* Sprint A5b 2026-05-24 — .fm-btn--danger rimosso (duplicato in
+ * _buttons.css). .fm-btn--warn rimane in admin.css (no equivalente
+ * modulo BEM ancora). Body.fm-dark per warn pure (modulo _dark-mode
+ * non lo gestisce). */
+.fm-btn--warn   { background: var(--fm-c-warning); color: #fff; border: 1px solid var(--fm-c-warning); }
+.fm-btn--warn:hover   { background: #b45309; border-color: #b45309; }
+
+/* Details / summary (collassabile in crypto_status) */
+details[open] > summary { margin-bottom: .5em; }
+details > div { background: var(--fm-c-bg); color: var(--fm-c-text); }
+
+/* Form grid 2-col (crypto_status registra evento, ecc.).
+   Label height variabile (alcuni testi su 2 righe, altri singola riga):
+   align-items:end allinea gli input sulla stessa baseline. Le label
+   espandono verso l'alto invece di lasciare gli input sfalsati. */
+.fm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2em;
+    row-gap: 1.2em;
+    align-items: end;
+    /* Phase 25.R follow-up — respiro orizzontale rispetto al bordo del
+       .fm-card container, sia a sinistra che a destra. Evita che gli
+       input/select tocchino visivamente il bordo della card parent. */
+    padding-right: .5em;
+}
+/* Box-sizing uniforme su tutti i controlli del form grid: evita disallineamento
+   pixel-perfect tra select (con freccia interna) e input/textarea. */
+.fm-form-grid input,
+.fm-form-grid select,
+.fm-form-grid textarea {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+}
+.fm-form-grid > label {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
+    margin: 0;
+    font-weight: 500;
+}
+.fm-form-grid > label > span.fm-form-label-text {
+    /* spinge il control in fondo: la text occupa lo spazio rimanente sopra,
+       così label brevi e lunghe si allineano */
+    flex: 1 0 auto;
+    line-height: 1.3;
+    /* Phase 25.R.24 — min-height per uniformare visual baseline label/control */
+    min-height: 2.6em;
+    display: flex;
+    align-items: flex-end;
+}
+.fm-form-grid > .fm-form-fullrow,
+.fm-form-grid > label.fm-form-fullrow { grid-column: 1 / -1; }
+.fm-form-grid > .fm-form-actions { grid-column: 1 / -1; display: flex; gap: .6em; flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+    .fm-form-grid { grid-template-columns: 1fr; }
+}
+
+/* Phase 25.R.24 — Content search panel nel wizard authority-export */
+.fm-content-search-panel {
+    background: rgba(59, 130, 246, 0.06);
+    border: 1px solid var(--fm-c-border, #d9dee6);
+    border-radius: 8px;
+    padding: .8rem;
+    margin-top: .4rem;
+}
+
+/* Expandable table rows (es. /admin/crypto-status eventi)
+   Light: bg-elev grigio chiaro; Dark: scuro pieno coerente con body */
+.fm-table--expandable .fm-row-toggle {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: var(--fm-c-muted);
+    padding: 0 .4em;
+    line-height: 1;
+}
+.fm-table--expandable .fm-row-toggle:hover { color: var(--fm-c-primary); }
+.fm-row-detail__cell {
+    padding: 1em 1.5em !important;
+    background: var(--fm-c-bg);
+    border-bottom: 2px solid var(--fm-c-border);
+    color: var(--fm-c-text);
+}
+.fm-row-detail__grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .5em 1.2em;
+    margin: 0;
+}
+.fm-row-detail__grid dt {
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+}
+.fm-row-detail__grid dd {
+    margin: 0;
+    color: var(--fm-c-text);
+    word-break: break-word;
+}
+.fm-row-detail__pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    font-family: inherit;
+    font-size: .95em;
+    color: var(--fm-c-text);
+}
+
+/* Collapsible summary (used in /admin/backup) */
+.fm-collapsible-summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: .8em 1em;
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    margin-top: 1rem;
+    color: var(--fm-c-text);
+}
+.fm-collapsible-summary:hover { background: var(--fm-c-border); }
+
+/* Info banner footer (sotto /admin/backup) */
+.fm-info-banner {
+    margin-top: 1.5rem;
+    padding: .8em 1em;
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    color: var(--fm-c-text);
+}
+
+/* /admin/monitoring iframe Grafana */
+.fm-monitoring-frame {
+    padding: 0;
+    overflow: hidden;
+    height: calc(100vh - 280px);
+    min-height: 600px;
+}
+.fm-monitoring-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+/* Phase 25.R follow-up — nested cards (sezione dentro .fm-card--wide
+   di /admin/backup, /admin/crypto-status, ecc.) devono espandersi
+   al 100% del parent invece di restare al 440px default di .fm-card.
+   Shadow ridotta per evitare double-elevation. */
+.fm-card--wide .fm-card,
+.fm-card--wide details > .fm-card {
+    width: 100%;
+    max-width: none;
+    box-shadow: none;
+    border: 1px solid var(--fm-c-border);
+}

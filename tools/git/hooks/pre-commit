@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+# Pre-commit hook (Phase 25.E1+E2) — Pantedu.
+#
+# Esegue checks veloci sui file STAGED per evitare push di:
+#   - secret leak (gitleaks scan dei diff)
+#   - errori ESLint sui .js modificati
+#   - errori PHPStan sui .php modificati (tier 1 — solo errori certi)
+#   - file > 800 LOC nuovi (richiede flag esplicito)
+#
+# Installazione:
+#   ln -sf ../../tools/git/hooks/pre-commit .git/hooks/pre-commit
+#   chmod +x tools/git/hooks/pre-commit
+#
+# Bypass per emergenze (sconsigliato):
+#   git commit --no-verify  # NON usare salvo emergenze documentate
+
+set -e
+
+GIT_ROOT="$(git rev-parse --show-toplevel)"
+cd "$GIT_ROOT"
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+failed=0
+
+log_step()   { echo -e "${BLUE}[pre-commit]${NC} $1"; }
+log_ok()     { echo -e "${GREEN}  ✓${NC} $1"; }
+log_fail()   { echo -e "${RED}  ✗${NC} $1"; failed=1; }
+log_warn()   { echo -e "${YELLOW}  !${NC} $1"; }
+
+# ─────── 1. Gitleaks scan diff ───────
+log_step "Secret scan (gitleaks)"
+if command -v gitleaks &>/dev/null; then
+    if gitleaks protect --staged --redact --no-banner --config .gitleaks.toml; then
+        log_ok "no secret leaked in staged diff"
+    else
+        log_fail "gitleaks ha trovato possibili credenziali. Vedi output sopra."
+        log_fail "se è un falso positivo, aggiungi entry in .gitleaks.toml [allowlist]."
+    fi
+else
+    log_warn "gitleaks non installato (skipped). Install: https://github.com/gitleaks/gitleaks"
+fi
+
+# ─────── 2. ESLint sui .js staged ───────
+staged_js=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^js/(modules|components)/.*\.js$' || true)
+if [ -n "$staged_js" ]; then
+    log_step "ESLint sui file JS staged ($(echo "$staged_js" | wc -l) file)"
+    if command -v npx &>/dev/null && [ -f eslint.config.js ]; then
+        if npx --no-install eslint $staged_js 2>&1; then
+            log_ok "ESLint clean"
+        else
+            log_fail "ESLint errors. Esegui: npm run lint:fix"
+        fi
+    else
+        log_warn "ESLint non installato (skipped). Install: npm install"
+    fi
+fi
+
+# ─────── 3. PHP syntax check sui .php staged ───────
+staged_php=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.php$' || true)
+if [ -n "$staged_php" ]; then
+    log_step "PHP syntax check ($(echo "$staged_php" | wc -l) file)"
+    syntax_errors=0
+    while IFS= read -r f; do
+        if [ -f "$f" ]; then
+            if ! php -l "$f" >/dev/null 2>&1; then
+                log_fail "Parse error in $f"
+                php -l "$f" 2>&1 | tail -3
+                syntax_errors=$((syntax_errors + 1))
+            fi
+        fi
+    done <<< "$staged_php"
+    if [ $syntax_errors -eq 0 ]; then
+        log_ok "no PHP parse error"
+    fi
+fi
+
+# ─────── 4. LOC limit per file nuovi ───────
+new_files=$(git diff --cached --name-only --diff-filter=A | grep -E '\.(php|js)$' || true)
+if [ -n "$new_files" ]; then
+    log_step "Check LOC nuovi file (limite 800)"
+    over_limit=0
+    while IFS= read -r f; do
+        if [ -f "$f" ]; then
+            loc=$(wc -l < "$f" | tr -d ' ')
+            if [ "$loc" -gt 800 ]; then
+                log_fail "$f ha $loc LOC (limite 800). Considera di splittare."
+                over_limit=$((over_limit + 1))
+            fi
+        fi
+    done <<< "$new_files"
+    if [ $over_limit -eq 0 ]; then
+        log_ok "tutti i nuovi file < 800 LOC"
+    fi
+fi
+
+# ─────── 5. .env / secrets non staged ───────
+log_step "Check no .env / secrets staged"
+forbidden=$(git diff --cached --name-only | grep -E '(^\.env$|\.env\.(local|prod|production)$|^secrets/|\.pem$|\.key$|id_rsa$|id_ed25519$)' || true)
+if [ -n "$forbidden" ]; then
+    log_fail "File proibiti staged:"
+    echo "$forbidden" | sed 's/^/    /'
+    log_fail "Rimuovi con: git reset HEAD <file>"
+else
+    log_ok "no env/secret staged"
+fi
+
+# ─────── Esito ───────
+echo ""
+if [ $failed -eq 0 ]; then
+    echo -e "${GREEN}[pre-commit] OK${NC}"
+    exit 0
+else
+    echo -e "${RED}[pre-commit] BLOCCATO${NC}"
+    echo "Fix gli errori sopra OPPURE bypassa con git commit --no-verify (sconsigliato)."
+    exit 1
+fi

@@ -1,0 +1,75 @@
+[
+    {
+        "titolo": "LA MATEMATICA PER COMPRENDERE LA FISICA",
+        "contenuti": [
+            { "label": "Impostare e risolvere proporzioni e problemi che coinvolgono il calcolo di percentuali in contesti fisici.", "checked": true },
+            { "label": "Riconoscere una relazione di proporzionalità diretta tra due grandezze fisiche, scriverne la formula (y=kx) e interpretarne il grafico.", "checked": true },
+            { "label": "Analizzare e rappresentare una relazione di dipendenza lineare (y=mx+q), interpretando il significato fisico del coefficiente angolare e dell'intercetta.", "checked": true },
+            { "label": "Riconoscere una relazione di proporzionalità inversa tra due grandezze fisiche, scriverne la formula (y=k/x) e interpretarne il grafico.", "checked": true },
+            { "label": "Riconoscere una relazione di proporzionalità quadratica diretta (y=kx²) e interpretarne il grafico come un ramo di parabola.", "checked": true },
+            { "label": "Applicare i principi di equivalenza per risolvere equazioni di primo grado, isolando la grandezza fisica incognita in una formula.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LE GRANDEZZE FISICHE",
+        "contenuti": [
+            { "label": "Descrivere le fasi del metodo scientifico-sperimentale.", "checked": true },
+            { "label": "Distinguere tra grandezze fisiche fondamentali e derivate, utilizzando le corrette unità di misura del Sistema Internazionale.", "checked": true },
+            { "label": "Scrivere una misura in notazione scientifica e determinarne l'ordine di grandezza.", "checked": true },
+            { "label": "Eseguire conversioni tra multipli e sottomultipli delle unità di misura (equivalenze).", "checked": true },
+            { "label": "Definire e calcolare una grandezza derivata come la densità.", "checked": true },
+            { "label": "Utilizzare l'analisi dimensionale per verificare la coerenza di una formula fisica.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LE MISURE E GLI ERRORI",
+        "contenuti": [
+            { "label": "Descrivere le caratteristiche di uno strumento di misura (portata, sensibilità, precisione).", "checked": true },
+            { "label": "Distinguere tra errori casuali e sistematici e identificare le possibili cause.", "checked": true },
+            { "label": "Calcolare il valore medio, l'errore assoluto e l'errore relativo a partire da una serie di misure.", "checked": true },
+            { "label": "Scrivere il risultato di una misura con il numero corretto di cifre significative, applicando le regole di arrotondamento.", "checked": true },
+            { "label": "Calcolare l'errore su una grandezza derivata, applicando le regole di propagazione degli errori per somme e prodotti.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "I VETTORI E LE FORZE",
+        "contenuti": [
+            { "label": "Distinguere tra grandezze scalari e vettoriali e rappresentare graficamente un vettore.", "checked": true },
+            { "label": "Eseguire operazioni di somma, differenza e prodotto di un vettore per uno scalare (metodo grafico e analitico).", "checked": true },
+            { "label": "Scomporre un vettore nelle sue componenti lungo assi cartesiani.", "checked": true },
+            { "label": "Calcolare il prodotto scalare e il prodotto vettoriale tra due vettori.", "checked": true },
+            { "label": "Definire la forza come grandezza vettoriale e calcolare la forza risultante di un sistema di forze.", "checked": true },
+            { "label": "Distinguere tra massa e forza peso e applicare la formula F=mg.", "checked": true },
+            { "label": "Applicare la legge di Hooke per calcolare la forza elastica.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "L'EQUILIBRIO DEI CORPI",
+        "contenuti": [
+            { "label": "Enunciare e applicare la condizione di equilibrio per un punto materiale (forza risultante nulla).", "checked": true },
+            { "label": "Risolvere problemi di equilibrio su un piano inclinato, scomponendo le forze.", "checked": true },
+            { "label": "Distinguere tra attrito statico e dinamico, applicando le relative formule per risolvere problemi di equilibrio.", "checked": true },
+            { "label": "Calcolare il momento di una forza rispetto a un polo e il momento di una coppia di forze.", "checked": true },
+            { "label": "Enunciare e applicare le condizioni di equilibrio per un corpo rigido (equilibrio traslazionale e rotazionale).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "L'EQUILIBRIO DEI FLUIDI",
+        "contenuti": [
+            { "label": "Definire la pressione e calcolarla in diverse situazioni.", "checked": true },
+            { "label": "Enunciare il principio di Pascal e descriverne le applicazioni pratiche (es. torchio idraulico).", "checked": true },
+            { "label": "Applicare la legge di Stevino per calcolare la variazione di pressione con la profondità in un fluido.", "checked": true },
+            { "label": "Enunciare il principio di Archimede e utilizzarlo per calcolare la spinta idrostatica e determinare le condizioni di galleggiamento.", "checked": true },
+            { "label": "Descrivere il concetto di pressione atmosferica e il suo effetto.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "IL MOTO RETTILINEO UNIFORME",
+        "contenuti": [
+            { "label": "Definire e calcolare la velocità media di un corpo in movimento.", "checked": true },
+            { "label": "Descrivere le caratteristiche del moto rettilineo uniforme (velocità costante, traiettoria rettilinea).", "checked": true },
+            { "label": "Scrivere e utilizzare la legge oraria del moto rettilineo uniforme per risolvere problemi.", "checked": true },
+            { "label": "Rappresentare e interpretare i grafici spazio-tempo e velocità-tempo del moto rettilineo uniforme, collegando la pendenza del grafico s-t alla velocità.", "checked": true }
+        ]
+    }
+]

@@ -1,0 +1,947 @@
+{
+    "$id": "piano-annuale-docente",
+    "title": "Piano annuale del Docente",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Piano annuale del Docente",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore"
+            ]
+        },
+        {
+            "type": "text-section",
+            "title": "1. ANALISI DELLA SITUAZIONE DI PARTENZA",
+            "items": [
+                {
+                    "type": "dynamic-table",
+                    "name": "studenti_table",
+                    "title": "1.1 Studenti",
+                    "columns": [
+                        "STUDENTI",
+                        "N."
+                    ],
+                    "rows": [
+                        {
+                            "label": "TOTALE",
+                            "field": "total-students",
+                            "input": "number"
+                        },
+                        {
+                            "label": "DIVERSAMENTE ABILI - TOTALE",
+                            "input": "number"
+                        },
+                        {
+                            "label": "CON DSA CON PDP - TOTALE",
+                            "input": "number"
+                        },
+                        {
+                            "label": "CON BES - TOTALI",
+                            "input": "number"
+                        },
+                        {
+                            "label": "con BES e PDP",
+                            "input": "number"
+                        }
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "profilo_classe",
+                    "label": "1.2 Profilo della classe",
+                    "placeholder": "Osservazioni sul profilo della classe...",
+                    "tex_source": {
+                        "file": "MODELLI/tex/0.0_DOC-Piano_annuale_(docente)-MODELLI.tex",
+                        "section": "OSSERVAZIONI"
+                    },
+                    "default": [
+                        {
+                            "_type": "block",
+                            "style": "normal",
+                            "children": [
+                                {
+                                    "_type": "span",
+                                    "text": "Gli alunni della classe ",
+                                    "marks": []
+                                },
+                                {
+                                    "_type": "fieldRef",
+                                    "name": "classe"
+                                },
+                                {
+                                    "_type": "span",
+                                    "text": " ",
+                                    "marks": []
+                                },
+                                {
+                                    "_type": "fieldRef",
+                                    "name": "sezione"
+                                },
+                                {
+                                    "_type": "span",
+                                    "text": " adottano un comportamento",
+                                    "marks": []
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "checkboxGroup",
+                            "items": [
+                                {
+                                    "state": "x",
+                                    "label": "corretto"
+                                },
+                                {
+                                    "state": "_",
+                                    "label": "adeguato"
+                                },
+                                {
+                                    "state": "_",
+                                    "label": "poco corretto non"
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "block",
+                            "style": "normal",
+                            "children": [
+                                {
+                                    "_type": "span",
+                                    "text": "permettendo un regolare svolgimento delle lezioni.",
+                                    "marks": []
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "checkboxGroup",
+                            "items": [
+                                {
+                                    "state": "x",
+                                    "label": "Una buona parte della"
+                                },
+                                {
+                                    "state": "_",
+                                    "label": "Quasi tutta la"
+                                },
+                                {
+                                    "state": "_",
+                                    "label": "Tutta la"
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "block",
+                            "style": "normal",
+                            "children": [
+                                {
+                                    "_type": "span",
+                                    "text": "classe risponde positivamente agli stimoli,  dimostra predisposizione al miglioramento e alla crescita e partecipa attivamente alle lezioni manifestando eventualmente la necessità di chiarimenti e facendo osservazioni;",
+                                    "marks": []
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "checkboxGroup",
+                            "items": [
+                                {
+                                    "state": "_",
+                                    "label": "pochi"
+                                },
+                                {
+                                    "state": "x",
+                                    "label": "alcuni"
+                                },
+                                {
+                                    "state": "_",
+                                    "label": "molti"
+                                }
+                            ]
+                        },
+                        {
+                            "_type": "block",
+                            "style": "normal",
+                            "children": [
+                                {
+                                    "_type": "span",
+                                    "text": "studenti mostrano più insicurezza, tendono a evitare di intervenire per chiarimenti e pertanto si rende necessario stimolarli.",
+                                    "marks": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "title": "1.3 Livelli di ingresso",
+                    "name": "livelli_ingresso",
+                    "description": "Rilevazione dei livelli di partenza",
+                    "options": [
+                        {
+                            "value": "Conoscenza pregressa",
+                            "label": "Conoscenza pregressa"
+                        },
+                        {
+                            "value": "Test d’ingresso",
+                            "label": "Test d’ingresso"
+                        },
+                        {
+                            "value": "Altro:",
+                            "label": "Altro:"
+                        }
+                    ],
+                    "allow_custom": true,
+                    "custom_placeholder": "Specificare Altro:..."
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "testIngresso_table",
+                    "title": "Esito eventuale test d'ingresso",
+                    "columns": [
+                        "competenze/conoscenze",
+                        "fasce di livello",
+                        "n. studenti",
+                        "percentuale"
+                    ],
+                    "row_group_size": 3,
+                    "default_rows": [
+                        {
+                            "fasce di livello": "nessuna/insufficiente"
+                        },
+                        {
+                            "fasce di livello": "sufficiente"
+                        },
+                        {
+                            "fasce di livello": "discreto/buono"
+                        }
+                    ],
+                    "auto_percentage": true
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "title": "2. ASSE CULTURALE E COMPETENZE",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "competenze_base_dm2007",
+                    "title": "2.1 - Asse culturale di riferimento - Competenze di base",
+                    "description": "Asse dei linguaggi, asse matematico, asse storico-sociale, asse tecnologico-scientifico (DM139-2007)",
+                    "options": [],
+                    "options_source": {
+                        "file": "competenze_DM2007/competenze_DM2007.json"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "competenze_pecup",
+                    "title": "2.2 - Competenze PECUP Licei",
+                    "description": "Profilo Educativo, Culturale e Professionale del Liceale (cfr. DPR 89/2010)",
+                    "options": [],
+                    "options_source": {
+                        "file": "competenze_PECUP/competenze_PECUP.json"
+                    }
+                },
+                {
+                    "type": "text-section",
+                    "title": "2.3 Competenze trasversali di cittadinanza",
+                    "description": "Contenuto presente in LaTeX (educazione civica, convivenza democratica, cittadinanza digitale)"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "3. OBIETTIVI DISCIPLINARI",
+            "name": "obiettivi_disciplinari",
+            "description": "3.1 Articolazione di competenze, abilità e conoscenze (con recupero da classi precedenti/successive)",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "competenze_3_1",
+                    "title": "COMPETENZE",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_dipartimento/competenze"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "abilita_3_1",
+                    "title": "ABILITA",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_dipartimento/abilita"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "conoscenze_3_1",
+                    "title": "CONOSCENZE",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_dipartimento/conoscenze"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "competenze_3_2_min",
+                    "title": "3.2 COMPETENZE minime",
+                    "options": [],
+                    "options_source": {
+                        "file": "obiettivi_disciplinari_dipartimento_minimi/competenze/competenze_minime.json"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "abilita_3_2_min",
+                    "title": "3.2 ABILITA minime",
+                    "options": [],
+                    "options_source": {
+                        "file": "obiettivi_disciplinari_dipartimento_minimi/abilita/abilita_minime.json"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "conoscenze_3_2_min",
+                    "title": "3.2 CONOSCENZE minime",
+                    "options": [],
+                    "options_source": {
+                        "file": "obiettivi_disciplinari_dipartimento_minimi/conoscenze/conoscenze_minime.json"
+                    }
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "dynamic-table",
+            "name": "uda_table",
+            "title": "4. PERCORSO DIDATTICO - Unità di apprendimento",
+            "columns": [
+                "N.",
+                "ARGOMENTI UDA",
+                "ALTRE DISCIPLINE COINVOLTE",
+                "PERIODO",
+                "N.ORE"
+            ],
+            "totals": {
+                "N.ORE": "total-hours"
+            },
+            "uda_source": {
+                "folder": "obiettivi_disciplinari_dipartimento/conoscenze"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "5. STRATEGIE DIDATTICHE",
+            "name": "strategie",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "metodologie_didattiche",
+                    "title": "5.1 Metodologie didattiche",
+                    "options": [
+                        {
+                            "value": "Lezione frontale",
+                            "label": "Lezione frontale"
+                        },
+                        {
+                            "value": "Lezione frontale dialogata",
+                            "label": "Lezione frontale dialogata"
+                        },
+                        {
+                            "value": "Attivita’ di ricerca individuale",
+                            "label": "Attivita’ di ricerca individuale"
+                        },
+                        {
+                            "value": "Attivita’ di ricerca di gruppo",
+                            "label": "Attivita’ di ricerca di gruppo"
+                        },
+                        {
+                            "value": "Analisi e soluzione di problemi",
+                            "label": "Analisi e soluzione di problemi"
+                        },
+                        {
+                            "value": "Studi di caso",
+                            "label": "Studi di caso"
+                        },
+                        {
+                            "value": "Cooperative learning (tipo: ijgsaw…)",
+                            "label": "Cooperative learning (tipo: ijgsaw…)"
+                        },
+                        {
+                            "value": "EAS (Episodi di apprendimento situato)",
+                            "label": "EAS (Episodi di apprendimento situato)"
+                        },
+                        {
+                            "value": "Classe di Bayes",
+                            "label": "Classe di Bayes"
+                        },
+                        {
+                            "value": "Roleplaying",
+                            "label": "Roleplaying"
+                        },
+                        {
+                            "value": "Brain storming",
+                            "label": "Brain storming"
+                        },
+                        {
+                            "value": "Circle time/ discussione guidata",
+                            "label": "Circle time/ discussione guidata"
+                        },
+                        {
+                            "value": "Debriefing (Riflessione metacognitiva)",
+                            "label": "Debriefing (Riflessione metacognitiva)"
+                        },
+                        {
+                            "value": "Debate (Riflessione metacognitiva)",
+                            "label": "Debate (Riflessione metacognitiva)"
+                        },
+                        {
+                            "value": "Lezione frontale",
+                            "label": "Lezione frontale"
+                        },
+                        {
+                            "value": "Lezione dialogata",
+                            "label": "Lezione dialogata"
+                        },
+                        {
+                            "value": "Attività laboratoriali",
+                            "label": "Attività laboratoriali"
+                        },
+                        {
+                            "value": "Esercitazione individuale e/o di gruppo",
+                            "label": "Esercitazione individuale e/o di gruppo"
+                        },
+                        {
+                            "value": "Soluzione di problemi",
+                            "label": "Soluzione di problemi"
+                        },
+                        {
+                            "value": "Realizzazione di progetti",
+                            "label": "Realizzazione di progetti"
+                        },
+                        {
+                            "value": "Altro",
+                            "label": "Altro"
+                        }
+                    ],
+                    "allow_custom": true
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "strumenti_didattici",
+                    "title": "5.2 Strumenti didattici",
+                    "options": [
+                        {
+                            "value": "libro di testo",
+                            "label": "libro di testo"
+                        },
+                        {
+                            "value": "saggistica",
+                            "label": "saggistica"
+                        },
+                        {
+                            "value": "letteratura",
+                            "label": "letteratura"
+                        },
+                        {
+                            "value": "dispense a cura dell'insegnante",
+                            "label": "dispense a cura dell'insegnante"
+                        },
+                        {
+                            "value": "dizionari",
+                            "label": "dizionari"
+                        },
+                        {
+                            "value": "atlanti",
+                            "label": "atlanti"
+                        },
+                        {
+                            "value": "film/video",
+                            "label": "film/video"
+                        },
+                        {
+                            "value": "file audio",
+                            "label": "file audio"
+                        },
+                        {
+                            "value": "LIM",
+                            "label": "LIM"
+                        },
+                        {
+                            "value": "personal computer",
+                            "label": "personal computer"
+                        },
+                        {
+                            "value": "tablet",
+                            "label": "tablet"
+                        },
+                        {
+                            "value": "lettore DVD/CD",
+                            "label": "lettore DVD/CD"
+                        },
+                        {
+                            "value": "lavagna luminosa",
+                            "label": "lavagna luminosa"
+                        },
+                        {
+                            "value": "Strumenti musicali (specificare)",
+                            "label": "Strumenti musicali (specificare)"
+                        },
+                        {
+                            "value": "Altro",
+                            "label": "Altro"
+                        }
+                    ],
+                    "allow_custom": true
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "libro_adozione",
+                    "label": "Libro di testo in adozione",
+                    "placeholder": "Specificare il libro in adozione..."
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "spazi_didattici",
+                    "title": "5.3 Spazi didattici",
+                    "options": [
+                        {
+                            "value": "Aula classe",
+                            "label": "Aula classe"
+                        },
+                        {
+                            "value": "Sala Concerti (aula 1)",
+                            "label": "Sala Concerti (aula 1)"
+                        },
+                        {
+                            "value": "Laboratorio linguistico",
+                            "label": "Laboratorio linguistico"
+                        },
+                        {
+                            "value": "Laboratorio informatica",
+                            "label": "Laboratorio informatica"
+                        },
+                        {
+                            "value": "Laboratorio scienze",
+                            "label": "Laboratorio scienze"
+                        },
+                        {
+                            "value": "Laboratorio fisica",
+                            "label": "Laboratorio fisica"
+                        },
+                        {
+                            "value": "Palestra",
+                            "label": "Palestra"
+                        },
+                        {
+                            "value": "Auditorium",
+                            "label": "Auditorium"
+                        },
+                        {
+                            "value": "Laboratorio Arti visuali",
+                            "label": "Laboratorio Arti visuali"
+                        },
+                        {
+                            "value": "Laboratorio architettura",
+                            "label": "Laboratorio architettura"
+                        },
+                        {
+                            "value": "Laboratorio percussioni",
+                            "label": "Laboratorio percussioni"
+                        },
+                        {
+                            "value": "Laboratorio TEC",
+                            "label": "Laboratorio TEC"
+                        },
+                        {
+                            "value": "Laboratorio modellato",
+                            "label": "Laboratorio modellato"
+                        },
+                        {
+                            "value": "Aula pittura",
+                            "label": "Aula pittura"
+                        },
+                        {
+                            "value": "Aula 3D",
+                            "label": "Aula 3D"
+                        },
+                        {
+                            "value": "Aula Stampante 3D",
+                            "label": "Aula Stampante 3D"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "title": "6. CRITERI E STRUMENTI DI VALUTAZIONE",
+            "items": [
+                {
+                    "type": "dynamic-table",
+                    "name": "type_verifiche_table",
+                    "title": "6.1 Tipologie e numero delle prove di verifica",
+                    "columns": [
+                        "TIPOLOGIA",
+                        "N° minimo (trimestre)",
+                        "N° minimo (pentamestre)",
+                        "N° minimo totale annuale"
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "title": "6.2 Tipologie di verifica",
+                    "name": "tipologie_verifica",
+                    "items": [
+                        {
+                            "type": "checkbox-group",
+                            "name": "prove_strutturate",
+                            "title": "Prove strutturate",
+                            "options": [
+                                {
+                                    "value": "quesiti vero/falso",
+                                    "label": "quesiti vero/falso"
+                                },
+                                {
+                                    "value": "quesiti a scelta multipla",
+                                    "label": "quesiti a scelta multipla"
+                                },
+                                {
+                                    "value": "quesiti a risposta singola",
+                                    "label": "quesiti a risposta singola"
+                                },
+                                {
+                                    "value": "definizione termini",
+                                    "label": "definizione termini"
+                                },
+                                {
+                                    "value": "data la definizione, individuare il termine",
+                                    "label": "data la definizione, individuare il termine"
+                                },
+                                {
+                                    "value": "integrazioni/completamenti",
+                                    "label": "integrazioni/completamenti"
+                                },
+                                {
+                                    "value": "corrispondenze",
+                                    "label": "corrispondenze"
+                                },
+                                {
+                                    "value": "dettato",
+                                    "label": "dettato"
+                                },
+                                {
+                                    "value": "richiesta di formule",
+                                    "label": "richiesta di formule"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox-group",
+                            "name": "prove_semistrutturate",
+                            "title": "Prove semistrutturate",
+                            "options": [
+                                {
+                                    "value": "riassunto",
+                                    "label": "riassunto"
+                                },
+                                {
+                                    "value": "relazione",
+                                    "label": "relazione"
+                                },
+                                {
+                                    "value": "tema",
+                                    "label": "tema"
+                                },
+                                {
+                                    "value": "trattazione sintetica di argomenti",
+                                    "label": "trattazione sintetica di argomenti"
+                                },
+                                {
+                                    "value": "analisi di testi",
+                                    "label": "analisi di testi"
+                                },
+                                {
+                                    "value": "analisi quali/quantitative controllate",
+                                    "label": "analisi quali/quantitative controllate"
+                                },
+                                {
+                                    "value": "quesiti a risposta aperta guidata",
+                                    "label": "quesiti a risposta aperta guidata"
+                                },
+                                {
+                                    "value": "analisi/rielaborazione di un'opera d'arte con utilizzo di schemi",
+                                    "label": "analisi/rielaborazione di un'opera d'arte con utilizzo di schemi"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox-group",
+                            "name": "prove_non_strutturate",
+                            "title": "Prove non strutturate",
+                            "options": [
+                                {
+                                    "value": "interrogazione",
+                                    "label": "interrogazione"
+                                },
+                                {
+                                    "value": "interrogazione semi-strutturata con obiettivi predefiniti",
+                                    "label": "interrogazione semi-strutturata con obiettivi predefiniti"
+                                },
+                                {
+                                    "value": "saggio breve",
+                                    "label": "saggio breve"
+                                },
+                                {
+                                    "value": "articolo di giornale",
+                                    "label": "articolo di giornale"
+                                },
+                                {
+                                    "value": "recensione",
+                                    "label": "recensione"
+                                },
+                                {
+                                    "value": "progetto",
+                                    "label": "progetto"
+                                },
+                                {
+                                    "value": "analisi di casi",
+                                    "label": "analisi di casi"
+                                },
+                                {
+                                    "value": "prova pratica strumento",
+                                    "label": "prova pratica strumento"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox-group",
+                            "name": "prove_traduzione",
+                            "title": "Prove di traduzione ed esercizi",
+                            "options": [
+                                {
+                                    "value": "traduzione da lingua straniera in italiano",
+                                    "label": "traduzione da lingua straniera in italiano"
+                                },
+                                {
+                                    "value": "traduzione in lingua straniera",
+                                    "label": "traduzione in lingua straniera"
+                                },
+                                {
+                                    "value": "esercizi",
+                                    "label": "esercizi"
+                                },
+                                {
+                                    "value": "problema",
+                                    "label": "problema"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "text-section",
+                    "title": "6.3 Griglie di valutazione",
+                    "description": "Si rimanda alla Programmazione didattica del Dipartimento."
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "criteri_valutazione_finale",
+                    "title": "6.4 Criteri della valutazione finale",
+                    "options": [
+                        {
+                            "value": "Livello individuale di acquisizione di conoscenze",
+                            "label": "Livello individuale di acquisizione di conoscenze"
+                        },
+                        {
+                            "value": "Livello individuale di acquisizione di abilità",
+                            "label": "Livello individuale di acquisizione di abilità"
+                        },
+                        {
+                            "value": "Livello individuale di acquisizione di competenze",
+                            "label": "Livello individuale di acquisizione di competenze"
+                        },
+                        {
+                            "value": "Impegno individuale",
+                            "label": "Impegno individuale"
+                        },
+                        {
+                            "value": "Progressi compiuti rispetto al livello di partenza",
+                            "label": "Progressi compiuti rispetto al livello di partenza"
+                        },
+                        {
+                            "value": "Interesse e partecipazione all'attività didattica",
+                            "label": "Interesse e partecipazione all'attività didattica"
+                        },
+                        {
+                            "value": "Situazione debiti del primo periodo didattico (colmati o non colmati)",
+                            "label": "Situazione debiti del primo periodo didattico (colmati o non colmati)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "7. RECUPERO E VALORIZZAZIONE DELLE ECCELLENZE",
+            "name": "recupero_eccellenze",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "recupero_curricolare",
+                    "title": "7.1 Modalità di recupero curricolare",
+                    "options": [
+                        {
+                            "value": "Ripresa delle conoscenze essenziali",
+                            "label": "Ripresa delle conoscenze essenziali"
+                        },
+                        {
+                            "value": "Riproposizione delle conoscenze in forma semplificata",
+                            "label": "Riproposizione delle conoscenze in forma semplificata"
+                        },
+                        {
+                            "value": "Esercitazioni per migliorare il metodo di studio",
+                            "label": "Esercitazioni per migliorare il metodo di studio"
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive in classe",
+                            "label": "Esercitazioni aggiuntive in classe"
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive a casa",
+                            "label": "Esercitazioni aggiuntive a casa"
+                        },
+                        {
+                            "value": "Attività in classe per gruppi di livello",
+                            "label": "Attività in classe per gruppi di livello"
+                        },
+                        {
+                            "value": "Peer Education (educazione tra pari)",
+                            "label": "Peer Education (educazione tra pari)"
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "recupero_extracurricolare",
+                    "title": "7.2 Modalità di recupero extra-curricolare",
+                    "options": [
+                        {
+                            "value": "Ripresa delle conoscenze essenziali",
+                            "label": "Ripresa delle conoscenze essenziali"
+                        },
+                        {
+                            "value": "Riproposizione delle conoscenze in forma semplificata",
+                            "label": "Riproposizione delle conoscenze in forma semplificata"
+                        },
+                        {
+                            "value": "Percorsi graduati per il recupero di abilità",
+                            "label": "Percorsi graduati per il recupero di abilità"
+                        },
+                        {
+                            "value": "Esercitazioni per migliorare il metodo di studio",
+                            "label": "Esercitazioni per migliorare il metodo di studio"
+                        },
+                        {
+                            "value": "Sportello didattico individuale o per piccoli gruppi",
+                            "label": "Sportello didattico individuale o per piccoli gruppi"
+                        },
+                        {
+                            "value": "Corso di recupero per piccoli gruppi omogenei",
+                            "label": "Corso di recupero per piccoli gruppi omogenei"
+                        },
+                        {
+                            "value": "Attività didattiche su piattaforma e-learning",
+                            "label": "Attività didattiche su piattaforma e-learning"
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "valorizzazione_eccellenze",
+                    "title": "7.4 Modalità di valorizzazione delle eccellenze",
+                    "options": [
+                        {
+                            "value": "Corsi di preparazione e partecipazione a gare, olimpiadi e concorsi",
+                            "label": "Corsi di preparazione e partecipazione a gare, olimpiadi e concorsi"
+                        },
+                        {
+                            "value": "Corsi di approfondimento",
+                            "label": "Corsi di approfondimento"
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive in classe",
+                            "label": "Esercitazioni aggiuntive in classe"
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive a casa",
+                            "label": "Esercitazioni aggiuntive a casa"
+                        },
+                        {
+                            "value": "Attività in classe per gruppi di livello",
+                            "label": "Attività in classe per gruppi di livello"
+                        },
+                        {
+                            "value": "Attività didattiche su piattaforma e-learning",
+                            "label": "Attività didattiche su piattaforma e-learning"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "dynamic-table",
+            "name": "civica_table",
+            "title": "8. PERCORSI DI EDUCAZIONE CIVICA",
+            "pt_unified": true,
+            "columns": [
+                "MODULI",
+                "N. ORE"
+            ]
+        },
+        {
+            "type": "dynamic-table",
+            "name": "orienta_table",
+            "title": "9. CURRICOLO ORIENTATIVO",
+            "pt_unified": true,
+            "columns": [
+                "MODULI",
+                "N. ORE"
+            ]
+        },
+        {
+            "type": "dynamic-table",
+            "name": "clil_table",
+            "title": "10. PERCORSI CLIL (CLASSI QUINTE)",
+            "columns": [
+                "MODULO/ARGOMENTO",
+                ""
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "dynamic-table",
+            "name": "progetti_table",
+            "title": "11. PROGETTI, OSSERVAZIONE E PROPOSTE",
+            "columns": [
+                "Argomenti",
+                "PROGETTI / OSSERVAZIONI / PROPOSTE"
+            ],
+            "pt_unified": true
+        }
+    ]
+}

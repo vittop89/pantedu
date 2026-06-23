@@ -1,0 +1,460 @@
+/* Phase PDF-Import — pagina /teacher/pdf-import.
+   BEM (block__element--modifier). Dark-mode automatico: usa SOLO i token globali
+   di tokens.css (dark-aware via prefers-color-scheme / html[data-theme=dark] /
+   body.fm-dark). Nessun override body.fm-dark hardcoded, nessun nuovo token. */
+
+.fm-pdfimport {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.25rem 1rem 4rem;
+    color: var(--fm-c-text);
+}
+/* L'attributo [hidden] deve sempre vincere sui display: flex/grid dei blocchi. */
+.fm-pdfimport [hidden] { display: none !important; }
+
+.fm-pdfimport__header { margin-bottom: 1rem; }
+.fm-pdfimport__headrow { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.fm-pdfimport__headrow .fm-pdfimport__title { flex: 1 1 auto; }
+.fm-pdfimport__title { margin: 0 0 .25rem; font-size: 1.5rem; }
+.fm-pdfimport__sub { margin: 0; color: var(--fm-c-muted); }
+.fm-pdfimport__source {
+    margin-top: .5rem;
+    padding: .4rem .7rem;
+    display: inline-block;
+    border-radius: 8px;
+    background: var(--fm-c-primary-light);
+    color: var(--fm-c-text);
+    font-weight: 600;
+}
+.fm-pdfimport__destinfo { font-weight: 600; color: var(--fm-c-text); }
+.fm-pdfimport__destcodes { display: inline-flex; gap: .5rem; flex-wrap: wrap; }
+
+/* Notice (warn) — colori semantici token, contrasto AA in entrambi i temi */
+.fm-pdfimport__notice {
+    padding: .75rem 1rem;
+    border-radius: 8px;
+    margin: .75rem 0;
+    border: 1px solid var(--fm-c-border);
+}
+.fm-pdfimport__notice--warn {
+    background: var(--fm-c-warning-light);
+    border-color: var(--fm-c-warning);
+    color: var(--fm-c-text);
+}
+
+/* Upload bar */
+.fm-pdfimport__upload {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: .75rem;
+    padding: 1rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    background: var(--fm-c-surface);
+}
+
+.fm-pdfimport__field { display: flex; flex-direction: column; gap: .25rem; }
+.fm-pdfimport__field--file { flex: 1 1 280px; }
+.fm-pdfimport__label { font-size: .8125rem; font-weight: 600; color: var(--fm-c-muted); }
+
+.fm-pdfimport__select,
+.fm-pdfimport__input,
+.fm-pdfimport__file {
+    padding: .45rem .6rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+    min-height: 38px; /* WCAG 2.5.8 target size */
+}
+.fm-pdfimport__select--sm,
+.fm-pdfimport__input--sm { min-height: 32px; padding: .25rem .45rem; }
+.fm-pdfimport__input--sm { width: 9rem; }
+/* Larghezze FISSE per colonna, a prescindere dal contenuto (le fonti/gruppi
+   sono stringhe lunghe → ellissi; la tendina nativa mostra il testo completo).
+   --sm: default stretto (Tipo, valore bulk); --num: minima (Diff);
+   --wide: capped per Origine/Contenitore; --md: select campo bulk (label lunghe). */
+.fm-pdfimport__select--sm,
+.fm-pdfimport__select--num,
+.fm-pdfimport__select--wide,
+.fm-pdfimport__select--md {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.fm-pdfimport__select--sm   { width: 5.5rem; max-width: 5.5rem; }
+.fm-pdfimport__select--num  { width: 4rem;   max-width: 4rem; }
+.fm-pdfimport__select--wide { width: 9.5rem; max-width: 9.5rem; }
+.fm-pdfimport__select--md   { width: 8rem;   max-width: 8rem; }
+.fm-pdfimport__bulkval { display: inline-flex; }
+
+/* Buttons */
+.fm-pdfimport__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem .85rem;
+    min-height: 38px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease, transform 120ms ease;
+}
+.fm-pdfimport__btn:hover { background: var(--fm-c-surface-2); }
+.fm-pdfimport__btn:active { transform: translateY(1px); }
+.fm-pdfimport__btn:focus-visible { outline: 2px solid var(--fm-c-primary); outline-offset: 2px; }
+.fm-pdfimport__btn--primary {
+    background: var(--fm-c-primary);
+    border-color: var(--fm-c-primary);
+    color: var(--fm-c-text-on-primary);
+}
+.fm-pdfimport__btn--primary:hover { background: var(--fm-c-primary-hover); border-color: var(--fm-c-primary-hover); }
+.fm-pdfimport__btn--sm { min-height: 30px; padding: .25rem .55rem; font-size: .8125rem; }
+.fm-pdfimport__btn--ghost { background: transparent; }
+.fm-pdfimport__btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* Status */
+.fm-pdfimport__status {
+    margin: .85rem 0;
+    padding: .6rem .85rem;
+    border-radius: 8px;
+    background: var(--fm-c-info-light);
+    border: 1px solid var(--fm-c-info);
+    color: var(--fm-c-text);
+    font-size: .9rem;
+}
+.fm-pdfimport__status--error {
+    background: var(--fm-c-danger-light);
+    border-color: var(--fm-c-danger);
+    color: var(--fm-c-text);
+}
+
+/* Workspace: tabella | resizer | side viewer (larghezze ridimensionabili). */
+.fm-pdfimport__workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 14px var(--fm-pdfimport-side-w, 340px);
+    gap: 0;
+    margin-top: 1rem;
+    align-items: start;
+}
+/* Splitter trascinabile tra tabella e anteprima PDF. */
+.fm-pdfimport__resizer {
+    width: 6px;
+    margin: 0 4px;
+    align-self: stretch;
+    min-height: 120px;
+    border-radius: 3px;
+    background: var(--fm-c-border);
+    cursor: col-resize;
+    transition: background .15s;
+}
+.fm-pdfimport__resizer:hover,
+.fm-pdfimport__resizer:focus-visible { background: var(--fm-c-primary); outline: none; }
+body.fm-pdfimport-resizing { cursor: col-resize; user-select: none; }
+@media (max-width: 980px) {
+    .fm-pdfimport__workspace { grid-template-columns: 1fr; }
+    .fm-pdfimport__side { order: -1; }
+    .fm-pdfimport__resizer { display: none; }
+}
+
+.fm-pdfimport__bulkbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .75rem;
+    margin-bottom: .5rem;
+    background: var(--fm-c-surface-2);
+    border-radius: 8px;
+}
+.fm-pdfimport__bulkinfo { font-size: .85rem; font-weight: 600; }
+
+.fm-pdfimport__tablewrap { overflow-x: auto; border: 1px solid var(--fm-c-border); border-radius: 10px; }
+.fm-pdfimport__table { width: 100%; border-collapse: collapse; font-size: .875rem; color: var(--fm-c-text); }
+.fm-pdfimport__table th,
+.fm-pdfimport__table td {
+    padding: .45rem .55rem;
+    border-bottom: 1px solid var(--fm-c-border);
+    text-align: left;
+    vertical-align: middle;
+}
+.fm-pdfimport__table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--fm-c-surface-2);
+    z-index: 1;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+.fm-pdfimport__th--sel { width: 2rem; }
+.fm-pdfimport__row--selected td { background: var(--fm-c-primary-light); }
+/* Celle editabili (N°, Argomento): stesso box/altezza dei select --sm così la
+   riga risulta allineata. */
+.fm-pdfimport__cell--edit {
+    cursor: text;
+    min-width: 4rem;
+    min-height: 32px;
+    padding: .25rem .45rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 6px;
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+.fm-pdfimport__cell--edit:focus { outline: 2px solid var(--fm-c-primary); outline-offset: -1px; }
+/* Cella N° stretta. */
+.fm-pdfimport__cell--num { min-width: 2.5rem; width: 3.2rem; }
+/* Anteprima compatta (≈2 righe) + toggle per espandere la singola riga →
+   righe di altezza uniforme. */
+.fm-pdfimport__previewcell { display: flex; align-items: flex-start; gap: .25rem; }
+.fm-pdfimport__preview {
+    max-width: 18rem;
+    color: var(--fm-c-muted);
+    white-space: pre-wrap;
+    max-height: 3.2em;
+    overflow: hidden;
+    flex: 1 1 auto;
+}
+.fm-pdfimport__preview--expanded { max-height: none; }
+.fm-pdfimport__preview-toggle {
+    flex: 0 0 auto;
+    border: 1px solid var(--fm-c-border);
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-radius: 4px;
+    cursor: pointer;
+    width: 1.4rem;
+    height: 1.4rem;
+    line-height: 1;
+    font-size: .8rem;
+}
+.fm-pdfimport__preview-toggle:hover { background: var(--fm-c-surface-2); }
+
+/* Swatch: colori di CONTENUTO (badge esercizio), non del tema → letterali */
+.fm-pdfimport__swatch {
+    display: inline-block; width: 14px; height: 14px; border-radius: 3px;
+    border: 1px solid var(--fm-c-border-strong); vertical-align: middle; cursor: pointer;
+}
+.fm-pdfimport__swatch--red { background: #ef4444; }
+.fm-pdfimport__swatch--blue { background: #3b82f6; }
+.fm-pdfimport__swatch--green { background: #22c55e; }
+.fm-pdfimport__swatch--orange { background: #f59e0b; }
+.fm-pdfimport__swatch--empty { background: transparent; }
+
+.fm-pdfimport__flag {
+    display: inline-block; font-size: .7rem; padding: .05rem .35rem;
+    border-radius: 999px; background: var(--fm-c-warning-light); color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-warning); margin: 0 .15rem .15rem 0;
+}
+
+/* Side viewer */
+.fm-pdfimport__side {
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    padding: .5rem;
+    align-self: start;
+    position: sticky;
+    top: .5rem;
+    background: var(--fm-c-surface);
+}
+.fm-pdfimport__sidenav { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .5rem; }
+.fm-pdfimport__pageinfo { font-size: .85rem; font-weight: 600; }
+.fm-pdfimport__sideimg img { width: 100%; height: auto; border-radius: 6px; display: block; }
+
+/* Insert bar */
+.fm-pdfimport__autochk {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: .75rem;
+    color: var(--fm-c-muted);
+    cursor: pointer;
+    margin-right: -.3rem;
+}
+.fm-pdfimport__insertbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-top: 1rem;
+    padding: .75rem 1rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    background: var(--fm-c-surface);
+}
+
+/* Riga cliccabile → anteprima renderizzata in basso. */
+.fm-pdfimport__table tbody tr { cursor: pointer; }
+.fm-pdfimport__row--active td {
+    background: var(--fm-c-primary-light);
+    box-shadow: inset 3px 0 0 var(--fm-c-primary);
+}
+
+/* Anteprima esercizio renderizzata (LaTeX, come l'esercizio reale). */
+.fm-pdfimport__render {
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    background: var(--fm-c-surface);
+}
+.fm-pdfimport__render-title { margin: 0 0 .75rem; font-size: 1.05rem; color: var(--fm-c-text); }
+.fm-pdfimport__render-hint { font-weight: 400; font-size: .85rem; color: var(--fm-c-muted); }
+.fm-pdfimport__render-body { overflow-x: auto; }
+
+/* Card esercizio (anteprima auto-contenuta — NO css legacy che collassava a 0). */
+.fm-pdfimport-ex {
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    margin-bottom: .85rem;
+    background: var(--fm-c-bg);
+    color: var(--fm-c-text);
+}
+.fm-pdfimport-ex:last-child { margin-bottom: 0; }
+.fm-pdfimport-ex__head {
+    display: flex; align-items: center; gap: .55rem; flex-wrap: wrap;
+    margin-bottom: .55rem; padding-bottom: .5rem;
+    border-bottom: 1px dashed var(--fm-c-border);
+}
+.fm-pdfimport-ex__num {
+    font-weight: 700; min-width: 1.8rem; height: 1.8rem; padding: 0 .45rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px; background: #6b7280; color: #fff;
+}
+.fm-pdfimport-ex--red    .fm-pdfimport-ex__num { background: #dc2626; }
+.fm-pdfimport-ex--blue   .fm-pdfimport-ex__num { background: #2563eb; }
+.fm-pdfimport-ex--green  .fm-pdfimport-ex__num { background: #16a34a; }
+.fm-pdfimport-ex--orange .fm-pdfimport-ex__num { background: #ea580c; }
+.fm-pdfimport-ex__type {
+    font-size: .72rem; font-weight: 600; padding: .08rem .4rem;
+    border: 1px solid var(--fm-c-border); border-radius: 4px; color: var(--fm-c-muted);
+}
+.fm-pdfimport-ex__diff { letter-spacing: 1px; color: var(--fm-c-warning, #d97706); font-size: .8rem; }
+.fm-pdfimport-ex__meta { margin-left: auto; font-size: .8rem; color: var(--fm-c-muted); }
+.fm-pdfimport-ex__intro { font-style: italic; color: var(--fm-c-muted); margin: .2rem 0 .5rem; }
+.fm-pdfimport-ex__q { margin: .2rem 0 .6rem; line-height: 1.55; }
+.fm-pdfimport-ex__opts, .fm-pdfimport-ex__vf { list-style: none; padding-left: 0; margin: .3rem 0; }
+.fm-pdfimport-ex__pts { margin: .3rem 0; padding-left: 1.3rem; }
+.fm-pdfimport-ex__opts li { padding: .22rem .45rem; border-radius: 5px; }
+.fm-pdfimport-ex__opts li.is-correct { background: var(--fm-c-success-light, rgba(22, 163, 74, .18)); font-weight: 600; }
+.fm-pdfimport-ex__lett { font-weight: 700; margin-right: .35rem; }
+.fm-pdfimport-ex__vf li { padding: .2rem 0; }
+.fm-pdfimport-ex__vfmark {
+    display: inline-block; min-width: 1.4rem; text-align: center; font-weight: 700;
+    border: 1px solid var(--fm-c-border); border-radius: 4px; margin-right: .45rem;
+}
+.fm-pdfimport-ex__fig { color: var(--fm-c-muted); font-size: .85rem; }
+.fm-pdfimport-ex__sol { margin-top: .55rem; }
+.fm-pdfimport-ex__sol summary { cursor: pointer; font-weight: 600; color: var(--fm-c-primary); }
+.fm-pdfimport-ex__empty { color: var(--fm-c-muted); }
+
+/* Pagina "Modelli per operazione": una SCHEDA per operazione = modello + prompt. */
+.fm-pdfimport__ops { display: flex; flex-direction: column; gap: .75rem; }
+.fm-pdfimport__opcard {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: .75rem .85rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 10px;
+    background: var(--fm-c-surface);
+}
+.fm-pdfimport__oplabel { font-weight: 700; color: var(--fm-c-text); }
+.fm-pdfimport__oprow {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(200px, 1.6fr) auto;
+    gap: .6rem;
+    align-items: center;
+}
+.fm-pdfimport__promptbox {
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    background: var(--fm-c-bg, #f5f7fb);
+}
+/* Gruppo che raccoglie più prompt (es. le 11 soluzioni): evidenziato + indenta. */
+.fm-pdfimport__promptgroup > .fm-pdfimport__log-body {
+    border-left: 3px solid var(--fm-c-accent, #4f7cff);
+    margin-left: .3rem;
+    padding-left: .6rem;
+}
+.fm-pdfimport__promptbox > summary {
+    cursor: pointer;
+    padding: .4rem .6rem;
+    font-size: .85rem;
+    color: var(--fm-c-muted);
+}
+@media (max-width: 720px) {
+    .fm-pdfimport__oprow { grid-template-columns: 1fr; }
+}
+
+/* Log operazioni LLM (estrazione/argomenti/traduzione/soluzioni). */
+.fm-pdfimport__log {
+    margin-top: .75rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    background: var(--fm-c-surface);
+}
+.fm-pdfimport__log > summary {
+    cursor: pointer;
+    padding: .5rem .85rem;
+    font-weight: 600;
+    color: var(--fm-c-text);
+}
+.fm-pdfimport__log-count { color: var(--fm-c-muted); font-weight: 400; }
+.fm-pdfimport__log-body {
+    max-height: 240px;
+    overflow: auto;
+    padding: .25rem .5rem .6rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .78rem;
+    line-height: 1.45;
+}
+.fm-pdfimport__logrow {
+    padding: .1rem .3rem;
+    border-bottom: 1px solid var(--fm-c-border);
+    color: var(--fm-c-muted);
+    word-break: break-word;
+}
+.fm-pdfimport__logrow:last-child { border-bottom: 0; }
+.fm-pdfimport__logrow.is-ok { color: var(--fm-c-text); }
+.fm-pdfimport__logrow.is-err { color: var(--fm-c-danger, #dc2626); }
+.fm-pdfimport__logrow.is-retry { color: var(--fm-c-warning, #d97706); }
+
+/* Modale chiavi LLM (admin) — blocco a sé */
+.fm-pdfimport-modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--fm-z-modal-bg, 400);
+    padding: 1rem;
+}
+.fm-pdfimport-modal {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    width: min(460px, 100%);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.fm-pdfimport-modal__title { margin: 0; font-size: 1.15rem; }
+.fm-pdfimport-modal__hint { margin: 0 0 .5rem; font-size: .85rem; color: var(--fm-c-muted); }
+.fm-pdfimport-modal__msg { min-height: 1.2em; font-size: .85rem; color: var(--fm-c-muted); }
+.fm-pdfimport-modal__msg--error { color: var(--fm-c-danger); }
+.fm-pdfimport-modal__actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }

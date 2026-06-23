@@ -1,0 +1,388 @@
+{
+    "$id": "relazione-recupero-debiti",
+    "title": "Relazione finale del corso di recupero",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "RELAZIONE FINALE DEL CORSO DI RECUPERO",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore"
+            ]
+        },
+        {
+            "type": "text-section",
+            "title": "1. CONTESTO",
+            "items": [
+                {
+                    "type": "dynamic-table",
+                    "name": "classi_studenti_table",
+                    "title": "1.1 Classi e studenti",
+                    "columns": [
+                        "CLASSE",
+                        "STUDENTI"
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "periodo",
+                    "label": "1.2 Periodo",
+                    "placeholder": "Periodo del corso di recupero (es. dal 01/09/2023 al 30/06/2024)",
+                    "default": "dal 01/09/2023 al 30/06/2024"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "2. ARGOMENTI TRATTATI",
+            "name": "argomenti_trattati",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_corso",
+                    "title": "2.1 Obiettivi del corso",
+                    "description": "Recupero abilità da classi precedente/successiva",
+                    "options": []
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "3. STRATEGIE DIDATTICHE",
+            "name": "strategie_didattiche",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "metodologie_didattiche",
+                    "title": "3.1 Metodologie didattiche",
+                    "options": [
+                        {
+                            "value": "Lezione frontale",
+                            "label": "Lezione frontale"
+                        },
+                        {
+                            "value": "Lezione frontale dialogata",
+                            "label": "Lezione frontale dialogata"
+                        },
+                        {
+                            "value": "Attivita’ di ricerca individuale",
+                            "label": "Attivita’ di ricerca individuale"
+                        },
+                        {
+                            "value": "Attivita’ di ricerca di gruppo",
+                            "label": "Attivita’ di ricerca di gruppo"
+                        },
+                        {
+                            "value": "Analisi e soluzione di problemi",
+                            "label": "Analisi e soluzione di problemi"
+                        },
+                        {
+                            "value": "Studi di caso",
+                            "label": "Studi di caso"
+                        },
+                        {
+                            "value": "Cooperative learning (tipo: ijgsaw…)",
+                            "label": "Cooperative learning (tipo: ijgsaw…)"
+                        },
+                        {
+                            "value": "EAS (Episodi di apprendimento situato)",
+                            "label": "EAS (Episodi di apprendimento situato)"
+                        },
+                        {
+                            "value": "Classe di Bayes",
+                            "label": "Classe di Bayes"
+                        },
+                        {
+                            "value": "Roleplaying",
+                            "label": "Roleplaying"
+                        },
+                        {
+                            "value": "Brain storming",
+                            "label": "Brain storming"
+                        },
+                        {
+                            "value": "Circle time/ discussione guidata",
+                            "label": "Circle time/ discussione guidata"
+                        },
+                        {
+                            "value": "Debriefing (Riflessione metacognitiva)",
+                            "label": "Debriefing (Riflessione metacognitiva)"
+                        },
+                        {
+                            "value": "Debate (Riflessione metacognitiva)",
+                            "label": "Debate (Riflessione metacognitiva)"
+                        },
+                        {
+                            "value": "Lezione frontale",
+                            "label": "Lezione frontale"
+                        },
+                        {
+                            "value": "Lezione dialogata",
+                            "label": "Lezione dialogata"
+                        },
+                        {
+                            "value": "Attività laboratoriali",
+                            "label": "Attività laboratoriali"
+                        },
+                        {
+                            "value": "Esercitazione individuale e/o di gruppo",
+                            "label": "Esercitazione individuale e/o di gruppo"
+                        },
+                        {
+                            "value": "Soluzione di problemi",
+                            "label": "Soluzione di problemi"
+                        },
+                        {
+                            "value": "Realizzazione di progetti",
+                            "label": "Realizzazione di progetti"
+                        },
+                        {
+                            "value": "Altro:",
+                            "label": "Altro:"
+                        }
+                    ],
+                    "allow_custom": true
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "strumenti_didattici",
+                    "title": "3.2 Strumenti didattici",
+                    "options": [
+                        {
+                            "value": "libro di testo",
+                            "label": "libro di testo"
+                        },
+                        {
+                            "value": "saggistica",
+                            "label": "saggistica"
+                        },
+                        {
+                            "value": "letteratura",
+                            "label": "letteratura"
+                        },
+                        {
+                            "value": "dispense a cura dell’insegnante",
+                            "label": "dispense a cura dell’insegnante"
+                        },
+                        {
+                            "value": "dizionari",
+                            "label": "dizionari"
+                        },
+                        {
+                            "value": "atlanti",
+                            "label": "atlanti"
+                        },
+                        {
+                            "value": "film/video",
+                            "label": "film/video"
+                        },
+                        {
+                            "value": "file audio",
+                            "label": "file audio"
+                        },
+                        {
+                            "value": "LIM",
+                            "label": "LIM"
+                        },
+                        {
+                            "value": "personal computer",
+                            "label": "personal computer"
+                        },
+                        {
+                            "value": "tablet",
+                            "label": "tablet"
+                        },
+                        {
+                            "value": "lettore DVD/CD",
+                            "label": "lettore DVD/CD"
+                        },
+                        {
+                            "value": "lavagna luminosa",
+                            "label": "lavagna luminosa"
+                        },
+                        {
+                            "value": "Strumenti musicali (specificare)",
+                            "label": "Strumenti musicali (specificare)"
+                        },
+                        {
+                            "value": "Altro:",
+                            "label": "Altro:"
+                        }
+                    ],
+                    "allow_custom": true
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "libro_adozione",
+                    "label": "Libro di testo in adozione",
+                    "placeholder": "Specificare il testo in adozione..."
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "spazi_didattici",
+                    "title": "3.3 Spazi didattici",
+                    "options": [
+                        {
+                            "value": "Aula classe",
+                            "label": "Aula classe"
+                        },
+                        {
+                            "value": "Sala Concerti (aula 1)",
+                            "label": "Sala Concerti (aula 1)"
+                        },
+                        {
+                            "value": "Laboratorio linguistico",
+                            "label": "Laboratorio linguistico"
+                        },
+                        {
+                            "value": "Laboratorio informatica",
+                            "label": "Laboratorio informatica"
+                        },
+                        {
+                            "value": "Laboratorio scienze",
+                            "label": "Laboratorio scienze"
+                        },
+                        {
+                            "value": "Laboratorio fisica",
+                            "label": "Laboratorio fisica"
+                        },
+                        {
+                            "value": "Palestra",
+                            "label": "Palestra"
+                        },
+                        {
+                            "value": "Auditorium",
+                            "label": "Auditorium"
+                        },
+                        {
+                            "value": "Laboratorio Arti visuali",
+                            "label": "Laboratorio Arti visuali"
+                        },
+                        {
+                            "value": "Laboratorio architettura",
+                            "label": "Laboratorio architettura"
+                        },
+                        {
+                            "value": "Laboratorio percussioni",
+                            "label": "Laboratorio percussioni"
+                        },
+                        {
+                            "value": "Laboratorio TEC",
+                            "label": "Laboratorio TEC"
+                        },
+                        {
+                            "value": "Laboratorio modellato",
+                            "label": "Laboratorio modellato"
+                        },
+                        {
+                            "value": "Aula pittura",
+                            "label": "Aula pittura"
+                        },
+                        {
+                            "value": "Aula 3D",
+                            "label": "Aula 3D"
+                        },
+                        {
+                            "value": "Aula Stampante 3D",
+                            "label": "Aula Stampante 3D"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "4. VALUTAZIONE COMPLESSIVA E CONSIDERAZIONI FINALI",
+            "name": "valutazione_finale",
+            "items": [
+                {
+                    "type": "nota-textarea",
+                    "name": "risultati_raggiunti",
+                    "label": "4.1 Risultati raggiunti",
+                    "placeholder": "Descrivere i risultati raggiunti..."
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "risultati_specifici",
+                    "label": "4.2 Risultati specifici",
+                    "placeholder": "Particolari difficoltà / risultati specifici per studenti...",
+                    "default": "Particolari difficoltà sono state riscontrate per gli studenti delle classi ... specialmente per quanto riguarda le seguenti abilità"
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "abilita_base",
+                    "title": "ABILITÀ/COMPETENZE DISCIPLINARI DI BASE",
+                    "options": []
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "abilita_specifiche",
+                    "title": "ABILITÀ/COMPETENZE DISCIPLINARI SPECIFICHE",
+                    "description": "Recupero abilità da classi precedente/successiva",
+                    "options": [
+                        {
+                            "value": "il recupero dei fatti numerici e delle operazioni aritmetiche di base (calcolo con frazioni, operazioni con i numeri relativi, ordine delle operazioni).",
+                            "label": "il recupero dei fatti numerici e delle operazioni aritmetiche di base (calcolo con frazioni, operazioni con i numeri relativi, ordine delle operazioni)."
+                        },
+                        {
+                            "value": "l'applicazione di procedure risolutive standardizzate, anche quando le regole sono state assimilate a livello teorico.",
+                            "label": "l'applicazione di procedure risolutive standardizzate, anche quando le regole sono state assimilate a livello teorico."
+                        },
+                        {
+                            "value": "il passaggio dal calcolo numerico a quello letterale, con una persistente difficoltà nella gestione dei monomi e dei polinomi come oggetti algebrici.",
+                            "label": "il passaggio dal calcolo numerico a quello letterale, con una persistente difficoltà nella gestione dei monomi e dei polinomi come oggetti algebrici."
+                        },
+                        {
+                            "value": "l'uso corretto e consapevole delle proprietà (es. proprietà delle potenze, proprietà distributiva) come strumento per semplificare i calcoli.",
+                            "label": "l'uso corretto e consapevole delle proprietà (es. proprietà delle potenze, proprietà distributiva) come strumento per semplificare i calcoli."
+                        },
+                        {
+                            "value": "la comprensione e l'analisi del testo dei problemi, isolando i dati significativi e riconoscendo l'obiettivo richiesto.",
+                            "label": "la comprensione e l'analisi del testo dei problemi, isolando i dati significativi e riconoscendo l'obiettivo richiesto."
+                        },
+                        {
+                            "value": "la capacità di tradurre una situazione problematica in un modello matematico (ad esempio, impostare correttamente una proporzione un'equazione o un'espressione risolutiva).",
+                            "label": "la capacità di tradurre una situazione problematica in un modello matematico (ad esempio, impostare correttamente una proporzione un'equazione o un'espressione risolutiva)."
+                        },
+                        {
+                            "value": "la flessibilità cognitiva, ovvero la capacità di scegliere la strategia più efficiente tra diverse possibili per risolvere un problema.",
+                            "label": "la flessibilità cognitiva, ovvero la capacità di scegliere la strategia più efficiente tra diverse possibili per risolvere un problema."
+                        },
+                        {
+                            "value": "l'autonomia nel controllo del procedimento e nella verifica della coerenza dei risultati ottenuti.",
+                            "label": "l'autonomia nel controllo del procedimento e nella verifica della coerenza dei risultati ottenuti."
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "elementi_positivi",
+                    "title": "4.3 Considerazioni finali - elementi positivi",
+                    "options": []
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "elementi_negativi",
+                    "title": "4.3 Considerazioni finali - elementi negativi",
+                    "options": []
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "name": "allegato_note",
+            "description": "Si allega il registro delle presenze degli studenti e delle ore svolte.",
+            "pt_unified": true
+        }
+    ]
+}

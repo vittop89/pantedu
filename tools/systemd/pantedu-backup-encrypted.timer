@@ -1,0 +1,11 @@
+[Unit]
+Description=pantedu — daily encrypted backup timer (02:30)
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+Persistent=true
+RandomizedDelaySec=10min
+Unit=pantedu-backup-encrypted.service
+
+[Install]
+WantedBy=timers.target

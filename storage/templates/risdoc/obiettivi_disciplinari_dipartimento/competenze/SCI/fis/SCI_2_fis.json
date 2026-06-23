@@ -1,0 +1,27 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Analizzare e modellizzare i moti dei corpi (rettilinei, piani, periodici) e le loro cause, applicando in modo integrato e autonomo i principi della dinamica e gli strumenti della cinematica per risolvere problemi complessi.",
+                "checked": true
+            },
+            {
+                "label": "Utilizzare il concetto di energia e i suoi principi di conservazione e trasformazione come strumento unificante per analizzare l'evoluzione dei sistemi fisici, dal moto meccanico ai fenomeni termici, valutando il ruolo delle forze conservative e dissipative nel bilancio energetico.",
+                "checked": true
+            },
+            {
+                "label": "Interpretare i fenomeni termici e ottici applicando i modelli interpretativi appropriati (dal modello microscopico della temperatura al modello a raggi per la luce), per spiegare il funzionamento di sistemi e dispositivi tecnologici.",
+                "checked": true
+            },
+            {
+                "label": "Applicare i principi della fisica per descrivere e prevedere il comportamento di sistemi e apparati, dall'analisi del moto di un proiettile al funzionamento di lenti e specchi, dimostrando capacità di astrazione e di collegamento tra diversi ambiti fenomenologici.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare e utilizzare in modo critico e flessibile il linguaggio matematico e la rappresentazione grafica per modellizzare l'evoluzione di sistemi dinamici, interpretare le relazioni tra le grandezze fisiche e comunicare in modo rigoroso i risultati delle proprie analisi.",
+                "checked": true
+            }
+        ]
+    }
+]

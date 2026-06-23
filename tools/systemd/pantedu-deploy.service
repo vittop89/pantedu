@@ -1,0 +1,44 @@
+# Phase 25.R.21 — Auto-deploy service triggered by pantedu-deploy.path.
+#
+# Eseguito da systemd quando /var/lib/pantedu-deploy/trigger viene
+# modificato (notifica inotify dalla Path unit gemella).
+#
+# Replay protection: legge il delivery UUID dal trigger e lo confronta
+# con /var/lib/pantedu-deploy/last-uuid. Se identico, skip (idempotenza
+# anti-replay). Garantito dal pre-exec script.
+#
+# Type=oneshot: il service è terminato quando lo script ritorna 0.
+# Path unit può triggerare nuovamente solo dopo che service è inactive.
+#
+# Permission boundary: PHP-FPM (www-data) NON ha accesso a questo service.
+# Solo il watcher Path unit (kernel inotify) può triggerarlo.
+
+[Unit]
+Description=Pantedu auto-deploy (triggered by webhook flag file)
+Documentation=https://github.com/vittop89/pantedu/blob/master_vps/tools/webhook/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Hardening minimo. Lo script di deploy fa git operations + reload php-fpm +
+# rsync, serve quasi tutto. ProtectSystem=full sarebbe troppo restrittivo
+# (deploy modifica /var/www/pantedu). Lascio i default ma con timeout
+# e logging.
+TimeoutStartSec=300
+StandardOutput=append:/var/log/pantedu-deploy.log
+StandardError=append:/var/log/pantedu-deploy.log
+
+# Pre-exec: replay protection via delivery UUID.
+# Script separato per evitare hell di escaping bash/systemd inline.
+# Installato da install_auto_deploy.sh in /usr/local/bin/.
+ExecStartPre=/usr/local/bin/pantedu-deploy-trigger.sh
+
+ExecStart=/usr/local/bin/pantedu-deploy.sh
+
+# SuccessExitStatus 1: ExecStartPre exit 1 (replay rilevato) è OK, non
+# considerato fallimento del service.
+SuccessExitStatus=1
+
+[Install]
+WantedBy=multi-user.target

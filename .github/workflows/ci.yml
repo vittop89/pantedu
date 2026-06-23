@@ -1,0 +1,164 @@
+name: CI
+
+# Phase 25.E1 — pipeline di qualità che gira su ogni PR e push.
+# 5 job in parallelo (no dipendenze cross-job): se uno fallisce gli altri
+# completano comunque per dare feedback completo all'autore PR.
+#
+# Nessuno di questi job blocca il deploy (gestito da deploy-production.yml
+# separato). Per richiedere il green CI prima del merge: GitHub branch
+# protection rule sul branch master.
+
+on:
+    pull_request:
+        branches: [master]
+    push:
+        branches: [master, "feat/**", "refactor/**", "fix/**"]
+
+# Cancel run precedenti dello stesso branch quando arriva un nuovo push.
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    # ─────── 1. Lint JS ───────
+    lint-js:
+        name: ESLint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+            - run: npm ci --no-audit --no-fund
+            - run: npm run lint -- --format=stylish
+
+    # ─────── 2. PHPStan ───────
+    static-php:
+        name: PHPStan + PHPCS
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  coverage: none
+                  tools: composer:v2
+            - name: Composer install
+              run: composer install --prefer-dist --no-progress --no-interaction
+            - name: PHPCS (PSR-12)
+              run: composer cs
+              continue-on-error: true   # Phase 25.A pulirà; non blocca per ora
+            - name: PHPStan livello 5
+              run: composer stan
+
+    # ─────── 3. Security audit (deps + semgrep) ───────
+    security:
+        name: Security audit
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+            - run: npm ci --no-audit --no-fund
+            - name: npm audit (production deps)
+              run: npm run audit:js
+              continue-on-error: false
+
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  tools: composer:v2
+            - run: composer install --prefer-dist --no-progress --no-interaction
+            - name: composer audit
+              run: composer audit --locked --no-dev
+              continue-on-error: false
+
+            - name: Semgrep OWASP + project rules
+              uses: returntocorp/semgrep-action@v1
+              with:
+                  config: >-
+                      p/owasp-top-ten
+                      p/php
+                      p/javascript
+                      .semgrep.yml
+              env:
+                  SEMGREP_TIMEOUT: "120"
+
+    # ─────── 4. Build + bundle budget ───────
+    build:
+        name: Build + bundle budget
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+            - run: npm ci --no-audit --no-fund
+            - name: Vite build
+              run: npm run build
+            - name: Bundle size budget
+              run: npm run bundle:budget
+            - name: Upload manifest artifact
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-manifest-${{ github.sha }}
+                  path: public/build/manifest.json
+                  retention-days: 7
+
+    # ─────── 5. PHPUnit (matrix DEPLOYMENT_MODE) ───────
+    # Phase S2 F5 (ADR-017) — esegue la suite Unit in entrambi i modi:
+    # single (S1, default) e institute (S2). Garantisce che le feature
+    # gated dal deployment_mode non regrediscano su nessuno dei due rami.
+    test-php:
+        name: PHPUnit (${{ matrix.deployment_mode }})
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                deployment_mode: [single, institute]
+        env:
+            DEPLOYMENT_MODE: ${{ matrix.deployment_mode }}
+            INSTITUTE_OWNER_EMAIL: ci-dpo@institute.test
+            INSTITUTE_LEGAL_NAME: "CI Institute Test"
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  coverage: xdebug
+                  tools: composer:v2
+            - run: composer install --prefer-dist --no-progress --no-interaction
+            - name: PHPUnit (mode=${{ matrix.deployment_mode }})
+              run: |
+                  vendor/bin/phpunit \
+                      --testsuite=unit \
+                      --coverage-text \
+                      --coverage-clover=coverage-${{ matrix.deployment_mode }}.xml \
+                      --colors=never \
+                      --testdox
+            - name: Upload coverage artifact
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-${{ matrix.deployment_mode }}-${{ github.sha }}
+                  path: coverage-${{ matrix.deployment_mode }}.xml
+                  retention-days: 7
+
+    # ─────── 6. Secret scan ───────
+    secret-scan:
+        name: Secret scanning (gitleaks)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0  # full history per gitleaks
+            - uses: gitleaks/gitleaks-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITLEAKS_CONFIG: .gitleaks.toml

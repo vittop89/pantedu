@@ -1,0 +1,163 @@
+/* ============================================================ */
+/* critical.css — inline above-the-fold styles.                  */
+/*                                                                */
+/* Phase Roadmap 9 — inline questo file in <head> via PHP cosi'  */
+/* il browser puo' renderizzare PRIMA che main.css/layout.css     */
+/* siano scaricati. Su Slow 3G riduce FCP -1.5s.                  */
+/*                                                                */
+/* Target: < 14 KB compressed (limite first packet HTTP/2).      */
+/*                                                                */
+/* Include SOLO:                                                  */
+/*   - Tokens essential (colori brand, spacing base, font stack)  */
+/*   - Skip link (a11y first)                                     */
+/*   - Body base                                                  */
+/*   - Sidebar/topbar shell (sopra-fold)                          */
+/*                                                                */
+/* NON include:                                                   */
+/*   - Form styles (sotto-fold tipico)                            */
+/*   - Editor/admin specific (route-conditional)                  */
+/*   - Animation keyframes (decorative)                           */
+/* ============================================================ */
+
+:root {
+    --fm-c-primary: #0b5fd1;
+    --fm-c-bg: #f5f7fb;
+    --fm-c-surface: #ffffff;
+    --fm-c-text: #1f2937;
+    --fm-c-text-2: #4b5563;
+    --fm-c-border: #d9dee6;
+    --fm-c-focus-ring: #2563eb;
+    --fm-space-2: 0.5rem;
+    --fm-space-3: 0.75rem;
+    --fm-space-4: 1rem;
+    --fm-space-6: 1.5rem;
+    --fm-radius-sm: 4px;
+    --fm-radius: 8px;
+    --fm-font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --fm-fs-base: 1rem;
+    --fm-lh-base: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --fm-c-bg: #0f1218;
+        --fm-c-surface: #1a1f29;
+        --fm-c-text: #e5e7eb;
+        --fm-c-text-2: #b8c0cc;
+        --fm-c-border: #2d3441;
+        --fm-c-focus-ring: #93c5fd;
+    }
+}
+
+* { box-sizing: border-box; }
+
+html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--fm-font);
+    font-size: var(--fm-fs-base);
+    line-height: var(--fm-lh-base);
+    color: var(--fm-c-text);
+    background: var(--fm-c-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Skip link (a11y first paint) */
+.fm-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 9999;
+    padding: 0.75rem 1.25rem;
+    background: #003366;
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid #fff;
+}
+.fm-skip-link:focus,
+.fm-skip-link:focus-visible {
+    top: 0;
+    outline: 3px solid #ffd700;
+    outline-offset: 2px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Shell base (login/admin pages above-the-fold) */
+body.fm-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: var(--fm-space-4);
+}
+
+/* Anti-FOUC modal card (login/register/error): senza queste rule,
+ * il bundle async impiega ~150-300ms a applicare position:fixed +
+ * translate centramento, e l'utente vede la card scivolare da top-left
+ * al centro. Inline qui sopprime il flash.
+ * 2026-05-30 fix: scopato a `body.fm-shell` (era globale .fm-card →
+ * width:440px applicata a TUTTE le .fm-card, incl. le section card delle
+ * content page come /area-docente/profilo → card visibilmente strette.
+ * critical.css è inline su OGNI pagina con FM_CRITICAL_CSS=1, quindi la
+ * regola globale colpiva ovunque. Stesso scope di _shell-legacy.css. */
+body.fm-shell .fm-card {
+    background: var(--fm-c-surface);
+    padding: 2rem;
+    border-radius: var(--fm-radius);
+    box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    width: min(440px, 92vw);
+    box-sizing: border-box;
+}
+body.fm-shell .fm-card--modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+body.fm-shell--modal::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 24, 40, .45);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* Sidebar layout above-fold (teacher dashboard) */
+.sidebar, .fm-sidebar {
+    background: var(--fm-c-surface);
+    border-right: 1px solid var(--fm-c-border);
+}
+
+/* Topbar above-fold */
+.fm-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fm-space-4);
+    padding: var(--fm-space-3) var(--fm-space-4);
+    border-bottom: 1px solid var(--fm-c-border);
+    background: var(--fm-c-surface);
+}
+
+/* Anti-FOUC: hide content until JS-loaded modules render */
+.fm-hydrating { visibility: hidden; }
+.fm-hydrated  { visibility: visible; }
+
+/* Prevent CLS — reserve space for sidebar before JS hydrates */
+@media (min-width: 64em) {
+    body.fm-has-sidebar {
+        padding-left: 280px;
+    }
+}

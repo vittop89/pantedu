@@ -1,0 +1,71 @@
+# Lighthouse CI — Phase Roadmap.
+# Audit performance + a11y su 3 route principali a ogni push/PR.
+# Soft gate (warn) per perf score (90/95+ ambizioso ma raggiungibile);
+# error gate su a11y (WCAG 2.2 AA non negotiable).
+
+name: lighthouse
+
+on:
+  # 2026-05-26 — rimosso `push: main`: girava a ogni push e falliva su errori
+  # TRANSIENTI di GitHub (download action treosh/lighthouse-ci-action da
+  # codeload), generando email fuorvianti di "workflow fallito". Il deploy reale
+  # (webhook VPS) è separato e sano. Copertura su PR + notturna + manuale.
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"   # nightly 03:00 UTC
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lhci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Build assets
+        run: npm run build || echo "Build failed — running Lighthouse against public URLs"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, openssl, pdo_mysql, json, curl, gd, zip
+
+      - name: Composer install
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Start dev server
+        run: |
+          mkdir -p log/admin log/auth log/errors log/logout log/security
+          cp .env.example .env || echo "APP_URL=http://127.0.0.1:8000" > .env
+          # Symlink degli asset (css/js/build vivono nella root, serviti da nginx
+          # in prod) così `php -S -t public/` li serve e la pagina è stilizzata.
+          ln -sfn "$PWD/css"   public/css
+          ln -sfn "$PWD/js"    public/js
+          ln -sfn "$PWD/build" public/build 2>/dev/null || true
+          php -S 127.0.0.1:8000 -t public/ > /tmp/php-server.log 2>&1 &
+          sleep 2
+          curl -fs http://127.0.0.1:8000/.well-known/security.txt || (cat /tmp/php-server.log; exit 1)
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true

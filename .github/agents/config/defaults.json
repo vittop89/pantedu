@@ -1,0 +1,28 @@
+{
+  "version": "3.0.0",
+  "last_updated": "2025-06-28",
+
+  "processing": {
+    "max_parallel_extractions": 4,
+    "reuse_target_topic_colors": true,
+    "allow_guarded_reread_on_checksum_mismatch": true
+  },
+
+  "insertion_policy": {
+    "mode": "by_topic",
+    "if_topic_exists": "append_near_last",
+    "if_topic_missing": "append_end_container",
+    "dedupe_by_exercise_number": true,
+    "skip_if_same_number_exists": true,
+    "validate_container_exists": true
+  },
+
+  "solution_policy": {
+    "require_real_svolgimento_for_type_collect": true,
+    "require_real_giustsol_for_vf_rmulti": true,
+    "always_generate_full_solution": true,
+    "style": "algebraic_steps",
+    "prefer_math_over_words": true,
+    "include_intermediate_steps": true
+  }
+}

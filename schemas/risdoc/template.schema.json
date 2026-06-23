@@ -1,0 +1,85 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://pantedu.local/schemas/risdoc/template.schema.json",
+    "title": "Risdoc Template Meta-Schema",
+    "description": "Validazione degli schemi template risdoc (fase modernizzazione).",
+    "type": "object",
+    "required": ["$id", "title", "category", "sections"],
+    "properties": {
+        "$id":      { "type": "string", "description": "Unique slug, es. 'motivazione-voti'." },
+        "title":    { "type": "string", "description": "Titolo leggibile del template." },
+        "category": { "type": "string", "enum": ["MODELLI", "RISORSE", "STRCOMP", "ALTRO"] },
+        "origin":   { "type": "string", "enum": ["risdoc", "strcomp"], "default": "risdoc" },
+        "body_class": { "type": "string", "description": "Class extra per il body." },
+        "sections": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/section" }
+        },
+        "grade_mappings": {
+            "type": "object",
+            "description": "Mapping voto → valori default per le select dei criteri.",
+            "additionalProperties": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+            }
+        },
+        "tex": {
+            "type": "object",
+            "properties": {
+                "wrapper": { "type": "string" },
+                "placeholders": { "type": "object" }
+            }
+        }
+    },
+    "$defs": {
+        "section": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "header", "grade-selector", "giudizio-group",
+                        "giudizio-item", "text-section", "checkbox-group",
+                        "nota-textarea", "footer-signature", "dynamic-table",
+                        "info-field", "form-checkbox", "static-content",
+                        "glossary-table", "privacy-block", "signature-block",
+                        "accordion", "link-list-pdf", "citation-norma"
+                    ]
+                },
+                "title": { "type": "string" },
+                "name":  { "type": "string", "description": "Identificativo del campo (diventa input name)." },
+                "label": { "type": "string" },
+                "description": { "type": "string" },
+                "selectors": {
+                    "type": "array",
+                    "items": { "type": "string", "enum": ["classe", "sezione", "indirizzo", "disciplina", "professore", "studente"] }
+                },
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            {
+                                "type": "object",
+                                "required": ["id", "value"],
+                                "properties": {
+                                    "id":    { "type": "string" },
+                                    "value": { "type": "string" },
+                                    "label": { "type": "string" }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "items": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/section" }
+                },
+                "placeholder": { "type": "string" },
+                "required":    { "type": "boolean", "default": false }
+            }
+        }
+    }
+}

@@ -1,0 +1,45 @@
+% --- INTESTAZIONE DELLA TABELLA ---
+% Usiamo un gruppo per limitare l'effetto di \renewcommand{\arraystretch}
+{
+    \renewcommand{\arraystretch}{\myarraystretch} % Applica l'arraystretch desiderato alla tabella
+    \noindent % Per evitare indentazione se la tabella è il primo elemento
+    \begin{tabular*}{\linewidth}{
+        % 2. Usa @{\extracolsep{\fill}} per distribuire lo spazio extra tra le colonne
+        | c | @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c |
+    }
+      \hline
+      % --- CELLA SINISTRA (LOGO 1) ---
+      % \cellcolor{logoDarkBlue}
+
+      \begin{minipage}[c][\targetrowheight][c]{0.1\textwidth}
+      % [c]              : Allineamento verticale della minipage (rispetto alla linea di base della cella) = Centro
+      % [\targetrowheight] : Altezza esplicita della minipage
+      % [c]              : Allineamento verticale del contenuto *all'interno* della minipage = Centro
+        \centering
+        % Sostituisci con il tuo logo. 'example-image-a' è un placeholder.
+        % \textheight qui dentro si riferisce all'altezza della minipage (\targetrowheight).
+        % \linewidth si riferisce alla larghezza della minipage (0.1\textwidth del \textwidth esterno).
+        \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{images/stemma_REP.png}
+      \end{minipage} &
+      % --- CELLA CENTRALE (TESTO) ---
+      \begin{minipage}[c][\targetrowheight][c]{0.6\textwidth}
+      % Le opzioni [c][\targetrowheight][c] assicurano che questa minipage abbia l'altezza calcolata
+      % e che il suo contenuto sia centrato verticalmente al suo interno.
+        \centering\small % Applica \centering orizzontale e \small al contenuto
+        \usebox{\middlecellcontentbox} % Inserisce il contenuto pre-misurato
+      \end{minipage} &
+      % --- CELLA DESTRA (LOGO 2) ---
+            % \colorbox{logoDarkBlue}{
+    \cellcolor{logoDarkBlue}{
+      \begin{minipage}[c][\targetrowheight][c]{0.2\textwidth}
+        \centering
+        % Sostituisci con il tuo logo. 'example-image-b' è un placeholder.
+        \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{images/logo_scuola.png}
+      \end{minipage}
+      }
+      \\
+      \hline
+    \end{tabular*}%
+}
+
+\vspace{0.4cm}

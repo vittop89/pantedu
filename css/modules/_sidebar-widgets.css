@@ -1,0 +1,494 @@
+/* ============================================================ */
+/* Sidebar Widgets — Phase Roadmap Sprint 36.                     */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (458 LOC). Visual byte-equivalent.*/
+/* Phase 13/13.5/14/18 widgets sidebar + session banner +         */
+/* admin-banner-badge + darkmode-mini + sel-wrapper-actions.      */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-resource-auth / .fm-resource-form / .fm-resource-grant  */
+/*   - .fm-sb-panel .btn-esAct_sidebar (edit-section pill)         */
+/*   - .fm-db-head .js-edit-section (per-section edit btn)         */
+/*   - .fm-newcat-host / .fm-newcat-btn ("✨ Nuova categoria")     */
+/*   - .fm-section-add / .fm-cat-add (per-sezione add)             */
+/*   - .fm-item-actions (✎🗑👁📥 visible solo edit-mode)            */
+/*   - .fm-item-role / .fm-item-role__btn (D/C/R role chip)        */
+/*   - .fm-darkmode-mini (banner sidebar)                          */
+/*   - .fm-session-banner / .fm-session-user / .fm-session-links   */
+/*   - .sel-wrapper-actions / .fm-sb-dark / .sel-action-link       */
+/*     + variants --danger, --accent                               */
+/*   - .fm-super-badge / .fm-status[data-role="super"]             */
+/*   - .fm-edit-toolbar + __title/__actions/__hint                 */
+/*   - li.fm-risdoc-instance (multi-instance fork)                 */
+/*   - .sel-session-banner.fm-has-notifications                    */
+/*   - .fm-admin-badge / __star / __num + @keyframes fm-badge-pulse*/
+/*   - Dark theme overrides per ogni componente                    */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 13 — Student → resource auth widget (in sidebar).
+   Sostituisce il legacy .selwrapbtn-es "ADMIN RESTRICTED ZONE".
+   ══════════════════════════════════════════════════════════════════ */
+.fm-resource-auth { padding: .5rem; margin: .25rem .5rem; background: #f4f7fc; border: 1px solid #d6e0f0; border-radius: 4px; font-size: 0.75rem; }
+.fm-resource-auth small { display: block; color: var(--fm-c-text-2); margin-bottom: 4px; font-weight: bold; }
+.fm-resource-form { display: grid; gap: 4px; }
+.fm-resource-form input { padding: 4px 6px; border: 1px solid #ccd6e8; border-radius: 3px; font-size: 0.75rem; }
+.fm-resource-form button { padding: 4px 8px; font-size: 0.6875rem; }
+.fm-resource-msg { color: #c02a2a; margin: 4px 0 0; font-size: 0.6875rem; }
+.fm-resource-grant { display: flex; flex-direction: column; gap: 4px; }
+.fm-resource-grant strong { color: #1a4ea8; font-size: 0.8125rem; }
+
+/* Edit-section button: dentro .fm-sb-panel, mostrato solo admin/teacher.
+ * Legacy .btn-esAct_sidebar / .btn-es_sidebar deprecate: il btn ora usa il
+ * design system .fm-btn .fm-btn--xs (vedi .fm-db-head .js-edit-section sotto).
+ * Resta solo il position:relative del panel + l'outline edit-active. */
+.fm-sb-panel { position: relative; }
+.fm-sb-panel[data-edit-active="1"] { outline: 2px dashed #f2ff00; outline-offset: -2px; }
+
+/* Phase 21 — btn edit iniettato in OGNI .fm-db-head (uno per titolo
+ * materia). L'originale direct-child resta come marker auth ma è
+ * nascosto via :has() quando gli head-btn sono presenti. */
+.fm-db-head {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+/* Layout header: matita a SINISTRA, "+" a DESTRA (vicini ai bordi), titolo
+ * al centro. L'ordine DOM è label→✎→+, quindi riposiziono via `order`. */
+.fm-db-head .fm-db-head-label {
+    order: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
+}
+.fm-db-head .js-edit-section { order: -1; }   /* bordo sinistro */
+.fm-db-head .fm-section-add,
+.fm-db-head .fm-cat-add { order: 1; }          /* bordo destro */
+/* WCAG + centralizzazione — il btn edit (✎) usa il design system
+ * .fm-btn .fm-btn--xs in OGNI contesto (direct-child del panel E dentro
+ * .fm-db-head accanto al "+"): stessa size/forma quadrata di .fm-section-add,
+ * focus-ring e dark-mode coerenti. Stile UNICO su .js-edit-section per
+ * evitare le incoerenze (grande quadrato vs piccolo tondo) tra contesti. */
+.js-edit-section {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    flex-shrink: 0;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    cursor: pointer;
+}
+.js-edit-section strong {
+    font-weight: normal !important;
+    letter-spacing: 0 !important;
+}
+/* Edit-mode ON (toggle .btn-esactive): evidenzia in accent warning. Sostituisce
+ * il vecchio .btn-esAct_sidebar.btn-esactive (classe legacy rimossa). */
+.js-edit-section.btn-esactive {
+    background: var(--fm-c-warning, #d97706);
+    border-color: var(--fm-c-warning, #d97706);
+    color: #fff;
+}
+.js-edit-section.btn-esactive:hover {
+    background: var(--fm-c-warning-hover, #b45309);
+    border-color: var(--fm-c-warning-hover, #b45309);
+}
+/* Marker auth direct-child del panel: SEMPRE nascosto (era il doppione — la
+ * matita isolata prima di "Nuova categoria"). È solo un marker di permesso
+ * (querySelector(".js-edit-section") rileva il diritto di edit); i toggle
+ * funzionali sono i CLONI dentro .fm-db-head. Il marker non è cliccabile
+ * (non è dentro un ul.fm-db-block) → niente da perdere nascondendolo.
+ * !important necessario: .fm-btn{display:inline-flex} vive in _shell-legacy.css
+ * → layer(overrides), che batte questo modulo (layer components) a prescindere
+ * dalla specificità. L'!important scavalca l'ordine dei layer. */
+.fm-sb-panel > .js-edit-section { display: none !important; }
+/* Phase 24.48 + 24.49 — bottone "✨ Nuova categoria" in cima al sidepage panel */
+.fm-newcat-host {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    margin-bottom: 4px;
+    background: rgba(0, 0, 0, 0.02);
+}
+.fm-newcat-btn {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.75rem;
+    background: rgba(0, 0, 0, 0.04);
+    color: inherit;
+    border: 1px dashed rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+.fm-newcat-btn:hover { background: rgba(0, 0, 0, 0.08); }
+body.fm-dark .fm-newcat-host {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+}
+body.fm-dark .fm-newcat-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #e0e0e8;
+}
+body.fm-dark .fm-newcat-btn:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* Phase 24.43 + 24.47 — "+ Nuovo" per-sezione (.fm-section-add o
+ * .fm-cat-add per backward-compat): visibile solo nella sezione attiva.
+ * data-edit-active vive sul singolo <ul.fm-db-block>, non sul .fm-sb-panel
+ * intero, così l'edit mode è scoped alla sezione cliccata. */
+.fm-db-head .fm-section-add,
+.fm-db-head .fm-cat-add {
+    display: none;
+    flex-shrink: 0;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    cursor: pointer;
+}
+.fm-db-block[data-edit-active="1"] .fm-db-head .fm-section-add,
+.fm-db-block[data-edit-active="1"] .fm-db-head .fm-cat-add {
+    display: inline-block;
+}
+/* Item actions (✎ 🗑 👁 📥) per-sezione: visibili solo se il block è attivo. */
+.fm-item-actions { display: none; }
+.fm-db-block[data-edit-active="1"] .fm-item-actions {
+    display: inline-flex;
+    gap: 2px;
+    margin-right: 6px;        /* Phase G7 — separa da numarg + link */
+    vertical-align: middle;
+}
+
+/* G22.S12 — D/C/R role chip nei <li[data-origin="risdoc"]> (visibile sempre,
+   non solo in edit-mode: la scelta del ruolo è informazione utente sempre utile). */
+.fm-item-role {
+    display: inline-flex;
+    gap: 1px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--fm-c-surface-2);
+}
+/* 2026-05-27 — Collassato di default: mostra SOLO la lettera assegnata.
+   Si espande (mostra D/C/R) solo quando .fm-item-role--expanded (click in edit). */
+.fm-item-role:not(.fm-item-role--expanded) .fm-item-role__btn:not(.fm-item-role__btn--active) {
+    display: none;
+}
+.fm-item-role--expanded { box-shadow: 0 0 0 2px rgba(59,130,246,.35); }
+.fm-item-role__btn {
+    background: transparent;
+    border: none;
+    padding: 0 5px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--fm-c-muted);
+    cursor: pointer;
+    line-height: 1.5;
+}
+.fm-item-role__btn:hover { background: #e2e8f0; }
+.fm-item-role__btn--active {
+    background: #3b82f6;
+    color: #fff;
+}
+body.fm-dark .fm-item-role { background: #1e293b; border-color: rgba(255,255,255,.15); }
+body.fm-dark .fm-item-role__btn { color: #cbd5e1; }
+body.fm-dark .fm-item-role__btn:hover { background: #334155; }
+body.fm-dark .fm-item-role__btn--active { background: #2563eb; color: #fff; }
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 13.5 — Darkmode mini icon nel banner sidebar.
+   Sostituisce il pulsante grosso DARK/LIGHT dell'upbar legacy.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-darkmode-mini {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    margin-left: 6px;
+    background: transparent;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: .95rem;
+    line-height: 1;
+    vertical-align: middle;
+    opacity: .55;
+    transition: opacity .15s, background .15s, transform .1s;
+}
+.fm-darkmode-mini:hover { opacity: 1; background: rgba(0,0,0,.06); transform: scale(1.04); }
+.fm-darkmode-mini:active { transform: scale(0.95); }
+.fm-darkmode-mini:focus-visible { outline: 2px solid #0a4fad; outline-offset: 2px; opacity: 1; }
+.fm-darkmode-mini .fm-darkmode-icon { font-size: .95rem; line-height: 1; }
+body.fm-dark .fm-darkmode-mini { border-color: rgba(255,255,255,.18); color: #ffd700; opacity: .5; }
+body.fm-dark .fm-darkmode-mini:hover { background: rgba(255,255,255,.08); opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 14 — Session banner AA-safe palette.
+   Sostituisce inline styles in sidebar.php. Contrasto WCAG AA garantito
+   (≥ 4.5:1 testo normale, ≥ 3:1 testo grande/bold).
+   ══════════════════════════════════════════════════════════════════ */
+/* Phase 18 — session banner minimale: una riga flex con user + link
+   separati da spazi, niente chip/pill colorate, contrast AA su bg
+   neutro. Dark mode inverte automatico via body.fm-dark. */
+/* Phase 20 — banner session a 2 righe, entrambe centrate.
+ *   riga 1: 👤 username + badges (super-admin ecc.)
+ *   riga 2: links di navigazione (Area docente / Admin / Analytics / Tools)
+ * Logout sposato in .sel-wrapper-actions accanto al darkmode-btn. */
+.fm-session-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+    margin: 4px;
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    color: inherit;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+.fm-session-banner strong { font-weight: 600; }
+.fm-session-banner .fm-session-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.75rem;
+}
+.fm-session-banner .fm-session-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    /* A11y: gap >= 8px per safe-area diameter 24px tra link e neighbor button. */
+    gap: 8px 10px;
+}
+.fm-session-banner a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.85;
+    white-space: nowrap;
+    /* A11y target-size WCAG 2.2 AA: min 24×24px. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 4px 6px;
+}
+.fm-session-banner a:hover { opacity: 1; text-decoration: underline; }
+.fm-session-banner a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+/* Phase 18 — sel-wrapper-actions: riga sotto i 3 select con
+   Curriculum link + dark toggle centrati. */
+.sel-wrapper-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+/* Darkmode btn: cerchio perfetto. layout_es.css impone `min-width:90px`
+ * per la versione dentro esercizi (pill) — forza unset + dimensione
+ * fissa qui così nella sel-wrapper resta rotondo simmetrico ai pill
+ * Curriculum/Logout ai lati. Classe funzionale `.fm-sb-dark` (lookup
+ * JS via querySelector in bootstrap-compat / student-resource-auth). */
+.sel-wrapper-actions .fm-sb-dark {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.875rem;
+    line-height: 1 !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    transform: none !important;
+    flex-shrink: 0;
+}
+.sel-wrapper-actions .fm-sb-dark:hover { background: rgba(255, 255, 255, 0.22) !important; }
+.sel-wrapper-actions .fm-darkmode-icon { display: inline-block; line-height: 1; font-size: 0.875rem; }
+body.fm-dark .sel-wrapper-actions { border-top-color: rgba(255, 255, 255, 0.1); }
+
+/* Phase 20 — link azione (Login/Registrati/Logout/Curriculum) accanto
+ * al darkmode-btn. Pill coerente + simmetrico: stesse dimensioni ai
+ * lati del cerchio darkmode. Varianti accent:
+ *   --danger  (rosso) → Logout
+ *   --accent  (viola) → Curriculum admin
+ *   default   (neutro) → Login, Registrati */
+.sel-wrapper-actions .sel-action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 0 14px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    opacity: 0.92;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background .15s ease, opacity .15s ease, transform .1s ease;
+    white-space: nowrap;
+}
+.sel-wrapper-actions .sel-action-link:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.18);
+    text-decoration: none;
+}
+.sel-wrapper-actions .sel-action-link:active { transform: scale(0.96); }
+.sel-wrapper-actions .sel-action-link--danger {
+    border-color: rgba(200, 90, 90, 0.5);
+    color: #ffb6b6;
+}
+.sel-wrapper-actions .sel-action-link--danger:hover {
+    background: rgba(200, 90, 90, 0.25);
+    color: #ffd0d0;
+}
+.sel-wrapper-actions .sel-action-link--accent {
+    border-color: rgba(150, 110, 220, 0.5);
+    color: #d9c7ff;
+    background: rgba(120, 80, 200, 0.22);
+}
+.sel-wrapper-actions .sel-action-link--accent:hover {
+    background: rgba(120, 80, 200, 0.4);
+    color: #efe3ff;
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link--danger {
+    border-color: rgba(255, 120, 120, 0.4);
+    color: #ff9090;
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link--danger:hover {
+    background: rgba(255, 80, 80, 0.22);
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link--accent {
+    border-color: rgba(150, 110, 220, 0.45);
+    color: #d9c7ff;
+    background: rgba(90, 60, 160, 0.28);
+}
+body.fm-dark .sel-wrapper-actions .sel-action-link--accent:hover {
+    background: rgba(120, 80, 200, 0.42);
+}
+
+body.fm-dark .fm-session-banner {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+}
+body.fm-dark .fm-session-banner a.fm-link-danger { color: #ff9090; }
+
+/* Phase 14 — badge super-admin tecnico (ortogonale al role). */
+.fm-super-badge {
+    display: inline-block;
+    margin-left: 2px;
+    font-size: .9em;
+    vertical-align: baseline;
+    filter: drop-shadow(0 0 1px rgba(138,16,36,.4));
+}
+.fm-status[data-role="super"],
+.fm-status[data-role="super_admin"] {
+    background: #fbe1e6;
+    color: #8a1024;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .72rem;
+    letter-spacing: .5px;
+    margin-left: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 13.5 — Edit toolbar per-sidepage (section-edit-mode.js).
+   Iniettato dentro .sidepage[data-edit-active=1] da admin/teacher.
+   Sostituisce il legacy "ADMIN RESTRICTED ZONE" + Editor_wrapper.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-edit-toolbar {
+    background: linear-gradient(180deg, #fff8e0 0%, #ffefb0 100%);
+    border: 1px solid #c9a227;
+    border-radius: 4px;
+    margin: 6px 4px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+}
+.fm-edit-toolbar__title { font-weight: bold; color: #7a5c00; margin-bottom: 4px; }
+.fm-edit-toolbar__title code { background: rgba(0,0,0,.08); padding: 1px 4px; border-radius: 2px; }
+.fm-edit-toolbar__actions { display: flex; gap: 4px; flex-wrap: wrap; }
+.fm-edit-toolbar__actions .fm-btn { font-size: 0.6875rem; padding: 2px 6px; }
+.fm-edit-toolbar__hint { color: var(--fm-c-text-2); font-size: 0.625rem; margin: 4px 0 0; line-height: 1.3; }
+
+/* Phase 24.58 — istanze personali (multi-instance fork) sotto al template */
+li.fm-risdoc-instance {
+    padding-left: 24px;
+    background: rgba(14, 165, 233, 0.06);
+    border-left: 2px solid rgba(14, 165, 233, 0.4);
+}
+li.fm-risdoc-instance .fm-numarg {
+    background: rgba(14, 165, 233, 0.18);
+    color: #0c4a6e;
+}
+body.fm-dark li.fm-risdoc-instance {
+    background: rgba(14, 165, 233, 0.1);
+    border-left-color: rgba(14, 165, 233, 0.5);
+}
+body.fm-dark li.fm-risdoc-instance .fm-numarg {
+    background: rgba(14, 165, 233, 0.25);
+    color: #bae6fd;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PHASE 13 — Admin banner badge (admin-banner-badge.js).
+   Iniettato dentro .sel-session-banner quando ci sono notifiche
+   actionable (registrazioni in attesa, login falliti, blocchi).
+   ══════════════════════════════════════════════════════════════════ */
+.sel-session-banner.fm-has-notifications {
+    border-left: 4px solid #d44;
+    padding-left: 6px;
+}
+.fm-admin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: linear-gradient(135deg, #ff5252, #c62828);
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    margin-right: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    animation: fm-badge-pulse 2s ease-in-out infinite;
+}
+.fm-admin-badge:hover { filter: brightness(1.15); }
+.fm-admin-badge__star { font-size: 0.75rem; line-height: 1; }
+.fm-admin-badge__num { font-size: 0.6875rem; line-height: 1; }
+@keyframes fm-badge-pulse {
+    0%, 100% { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+    50%      { box-shadow: 0 1px 8px rgba(255, 0, 0, 0.6); }
+}

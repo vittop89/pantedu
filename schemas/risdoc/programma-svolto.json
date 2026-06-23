@@ -1,0 +1,37 @@
+{
+    "$id": "programma-svolto",
+    "title": "Programma svolto",
+    "category": "RISORSE",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Programma svolto",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore"
+            ]
+        },
+        {
+            "type": "checkbox-group",
+            "name": "programma_svolto",
+            "title": "PROGRAMMA SVOLTO",
+            "description": "Recupero conoscenze da classi precedente/successiva",
+            "options": [],
+            "options_source": {
+                "folder": "programmi_svolti"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "considerazioni",
+            "label": "Considerazioni in merito",
+            "placeholder": "Considerazioni in merito se presenti..."
+        }
+    ]
+}

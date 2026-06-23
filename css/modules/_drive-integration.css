@@ -1,0 +1,283 @@
+/* ============================================================ */
+/* Drive Integration — Phase Roadmap Sprint 35.                   */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (259 LOC). Visual byte-equivalent.*/
+/* Google Drive status pill + Modal create mappa + Drive sync log */
+/* panel + drawio editor + per-item drive icon + dark theme.      */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-drive-pill + [data-state="..."] + .fm-drive-dot         */
+/*   - .fm-item-drive-sync .fm-drive-icon                          */
+/*   - .fm-modal-doc-section (reveal sezioni)                      */
+/*   - .fm-drive-sync-panel (toast/log floating)                   */
+/*   - .fm-drive-sync-{head,counter,cancel,bar,log,line}           */
+/*   - .fm-modal-drawio-edit-wrap + .fm-modal-drawio-edit-info     */
+/*   - .fm-drop-zone + .fm-drop-status                             */
+/*   - .fm-modal-map-drawio                                        */
+/*   - .fm-drawio-overlay + .fm-drawio-iframe + .fm-drawio-close   */
+/*   - Modal cancel + slider dark mode (G7)                        */
+/*   - Dark theme overrides (body.fm-dark)                         */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   Phase G1.a — Google Drive status pill (teacher dashboard).
+   Stati: loading, connected, disconnected, error.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-drive-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #f4f6fb;
+    border: 1px solid #d8dee8;
+    font-size: .9rem;
+    margin-top: var(--fm-space-2, 6px);
+}
+.fm-drive-pill .fm-drive-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #c8c8c8;
+    flex-shrink: 0;
+}
+.fm-drive-pill[data-state="connected"]    .fm-drive-dot { background: #34a853; }
+.fm-drive-pill[data-state="disconnected"] .fm-drive-dot { background: #b0b0b0; }
+.fm-drive-pill[data-state="error"]        .fm-drive-dot { background: #d93025; }
+.fm-drive-pill[data-state="loading"]      .fm-drive-dot { background: #fbbc04; animation: fm-drive-pulse 1.4s ease-in-out infinite; }
+@keyframes fm-drive-pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+.fm-drive-pill .fm-drive-actions { margin-left: 12px; display: inline-flex; gap: 6px; }
+body.fm-dark .fm-drive-pill { background: #1f2330; border-color: #2e3445; color: #cfd8e8; }
+
+/* ─────────── Sync buttons (.fm-sync-bar, .fm-sync-btn-*, .fm-session-*-sync)
+   REMOVED Sprint 30. Estratto VERBATIM in css/modules/_sync-bar.css (166 LOC).
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* G7 → G19.48 — Drive sync icon dimensione standard (overridden da
+   .fm-sync-btn .fm-drive-icon più sopra; questa regola resta solo per
+   il legacy `.fm-item-drive-sync` per-item). */
+.fm-item-drive-sync .fm-drive-icon {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Phase G7 — dark mode fix: fm-modal-cancel + fm-sb-slider washout. */
+body.fm-dark .fm-btn.fm-modal-cancel {
+    background: #2a2a35 !important;
+    color: #d8e0ec !important;
+    border: 1px solid #4a5160 !important;
+}
+body.fm-dark .fm-btn.fm-modal-cancel:hover {
+    background: #3a3a45 !important;
+    border-color: #6a7180 !important;
+}
+body.fm-dark .fm-sb-slider {
+    background-color: #2a2a35 !important;
+    color: #d8e0ec !important;
+    border: 1px solid #4a5160 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Phase G3.b — Modal create mappa: drag-drop file + drawio embed.
+   ══════════════════════════════════════════════════════════════════ */
+/* Phase G3.b/review — sezioni reveal dentro fieldset "Modello documento". */
+.fm-modal-doc-section {
+    margin: 4px 0 8px 24px;
+    padding: 6px 10px;
+    background: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+}
+.fm-modal-doc-section[hidden] { display: none !important; }
+.fm-modal-doc-section.fm-modal-template-pick {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+body.fm-dark .fm-modal-doc-section {
+    background: #1f2330;
+    border-color: #2e3445;
+    color: #cfd8e8;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Phase G7 — Drive sync log panel (floating bottom-right).
+   Visibile solo durante operazioni sync batch.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-drive-sync-panel {
+    /* !important: su body.fm-shell (admin) una regola legacy forzava
+       position:relative → il pannello finiva nel flusso del body invece che
+       ancorato in basso a destra (stesso bug del popover infotip). */
+    position: fixed !important;
+    bottom: 16px;
+    right: 16px;
+    width: 380px;
+    max-height: 60vh;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    z-index: 9998;
+    /* G22.S15.bis Fase 5 — panel come toast/notifica universale.
+     * Sempre display:flex per consentire transition su transform/opacity.
+     * Visibility + pointer-events disabled quando NON attivo. */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 0.75rem;
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .25s ease, opacity .25s ease, visibility 0s linear .25s;
+}
+.fm-drive-sync-panel--active {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform .25s ease, opacity .25s ease, visibility 0s linear 0s;
+}
+.fm-drive-sync-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    background: var(--fm-c-surface-2);
+    border-bottom: 1px solid var(--fm-c-border);
+}
+.fm-drive-sync-head strong { flex: 1; }
+.fm-drive-sync-counter { font-family: monospace; color: var(--fm-c-text-2); }
+.fm-drive-sync-cancel {
+    background: #fef2f2; border: 1px solid #fca5a5; border-radius: 4px;
+    cursor: pointer; padding: 3px 10px;
+    font-size: 0.75rem; font-weight: 600;
+    color: #b91c1c;
+    transition: background .12s ease;
+}
+.fm-drive-sync-cancel:hover { background: #fecaca; }
+.fm-drive-sync-bar {
+    height: 4px; background: #e2e8f0; overflow: hidden;
+}
+.fm-drive-sync-bar-fill {
+    height: 100%; background: #34a853;
+    width: 0%; transition: width .25s ease;
+}
+.fm-drive-sync-log {
+    flex: 1; overflow-y: auto;
+    padding: 8px 12px;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    background: var(--fm-c-surface-2);
+}
+.fm-drive-sync-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fm-drive-sync-line--ok    { color: #166534; }
+.fm-drive-sync-line--error { color: #b91c1c; font-weight: 600; }
+.fm-drive-sync-line--info  { color: var(--fm-c-text-2); }
+
+/* G22.S22 — In modalità notify (toast singolo), il messaggio può andare
+ * a capo: niente ellipsis, parole spezzate se necessario. Per i log
+ * batch (mode session) restano nowrap+ellipsis (lista compatta). */
+.fm-drive-sync-panel--notify .fm-drive-sync-line {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
+    line-height: 1.45;
+    padding: 2px 0;
+}
+.fm-drive-sync-panel--notify { width: 420px; max-width: calc(100vw - 32px); }
+
+body.fm-dark .fm-drive-sync-panel { background: #1f2330; border-color: #2e3445; color: #cfd8e8; }
+body.fm-dark .fm-drive-sync-head { background: #161a24; border-color: #2e3445; }
+body.fm-dark .fm-drive-sync-log { background: #14171f; }
+body.fm-dark .fm-drive-sync-line--ok    { color: #4ade80; }
+body.fm-dark .fm-drive-sync-line--error { color: #ef4444; }
+body.fm-dark .fm-drive-sync-line--info  { color: var(--fm-c-muted); }
+
+/* G22.S15.bis Fase 5 — Mode polimorfico del pannello sync.
+ *   --session: sync long-running con counter + progress bar + "⏸ Stop"
+ *   --notify : toast standalone, niente counter/progress, "✕" close.
+ *
+ * Le 2 label nel cancel button si toggle via classi parent.
+ */
+.fm-drive-sync-panel--notify .fm-drive-sync-counter,
+.fm-drive-sync-panel--notify .fm-drive-sync-bar {
+    display: none;
+}
+.fm-cancel-label-notify { display: none; }
+.fm-cancel-label-session { display: inline; }
+.fm-drive-sync-panel--notify .fm-cancel-label-session { display: none; }
+.fm-drive-sync-panel--notify .fm-cancel-label-notify { display: inline; }
+.fm-drive-sync-panel--notify .fm-drive-sync-cancel {
+    background: var(--fm-c-surface-2);
+    border-color: var(--fm-c-border);
+    color: var(--fm-c-text-2);
+    font-weight: 400;
+    padding: 2px 8px;
+}
+.fm-drive-sync-panel--notify .fm-drive-sync-cancel:hover {
+    background: #e2e8f0;
+}
+body.fm-dark .fm-drive-sync-panel--notify .fm-drive-sync-cancel {
+    background: #2a2f3d;
+    border-color: #3f4554;
+    color: #cfd8e8;
+}
+body.fm-dark .fm-drive-sync-panel--notify .fm-drive-sync-cancel:hover {
+    background: #353c4d;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Phase G7 — riquadro "Apri editor drawio" dentro modal edit mappa.
+   ══════════════════════════════════════════════════════════════════ */
+.fm-modal-drawio-edit-wrap {
+    margin: 6px 0;
+    padding: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+}
+.fm-modal-drawio-edit-info {
+    margin: 0 0 6px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text-2);
+}
+body.fm-dark .fm-modal-drawio-edit-wrap {
+    background: #1e293b;
+    border-color: #334155;
+}
+body.fm-dark .fm-modal-drawio-edit-info {
+    color: #cbd5e1;
+}
+
+.fm-drop-zone {
+    border: 2px dashed #94a3b8;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    background: var(--fm-c-surface-2);
+    transition: border-color .15s, background .15s;
+}
+.fm-drop-zone--over { border-color: #2563eb; background: #eff6ff; }
+.fm-drop-status { word-break: break-all; }
+
+.fm-modal-map-drawio { padding: 8px 10px; background: var(--fm-c-surface-2); border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px; }
+
+.fm-drawio-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+}
+.fm-drawio-iframe { width: 95vw; height: 92vh; border: 0; border-radius: 6px; background: var(--fm-c-surface); }
+.fm-drawio-close {
+    position: absolute; top: 12px; right: 16px;
+    background: var(--fm-c-surface); border: 1px solid #cbd5e1; border-radius: 999px;
+    width: 36px; height: 36px; font-size: 1.125rem; cursor: pointer;
+}
+.fm-drawio-close:hover { background: var(--fm-c-surface-2); }
+
+body.fm-dark .fm-modal-mappa-mode,
+body.fm-dark .fm-modal-map-drawio { background: #1f2330; border-color: #2e3445; color: #cfd8e8; }
+body.fm-dark .fm-drop-zone { background: #1f2330; border-color: #475569; color: #cfd8e8; }
+body.fm-dark .fm-drop-zone--over { border-color: #60a5fa; background: #1e293b; }

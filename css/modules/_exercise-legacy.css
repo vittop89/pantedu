@@ -1,0 +1,3960 @@
+/* ════════════════════════════════════════════════════════════
+ * _exercise-legacy.css — Exercise context legacy styles
+ * 
+ * Sprint E (2026-05-24) VERBATIM extraction da layout_es.css (-3921 LOC).
+ * Selettori principali (scoped a body.exercise-context):
+ *   .fm-upbar + scrollbarUpBar + logout-btn + logout-module
+ *   .fm-check-in + .fm-titolo-quesito (+ embedded variant)
+ *   .fm-collection__item + .fm-collexercise + .fm-groupcollex
+ *   .pt / .input-wrapper-* / .fm-input-pt / .fm-a-bin
+ *   .fm-edit-quesito / .fm-move-quesito / .fm-sync-quesito-btn
+ *   .fm-modifica-btn / .fm-origin-selector / .fm-color-selector
+ *   .fm-tabelle (flex20 + dashed-yellow + RM-grid wrappers)
+ *   :root var(--widthSelection, --heightCollapsible)
+ *   Stickness logic (.fm-problem-editing) + sticky :before/:after
+ *   etc. (vedi git log per dettaglio + visual baseline screenshot)
+ *
+ * Caricato globalmente via main.bundle.css (era unlayered in
+ * head.php prima dello Sprint E). Le rules sono scoped per il
+ * loro body class quindi non interferiscono con altre pagine.
+ * ════════════════════════════════════════════════════════════ */
+
+:root {
+    --widthSelection: 305px;
+    --heightCollapsible: 30px;
+}
+
+/* ========================================================= */
+/* =================== TOAST NOTIFICATIONS ================= */
+/* REMOVED Phase Roadmap Sprint 25 — full extraction to       */
+/* css/modules/_toasts.css (token-based + WCAG reduced motion */
+/* + dark theme variants + .removing exit animation).         */
+/* ========================================================= */
+
+/* Scoped to body.exercise-context so layout_es.css can be loaded globally
+   without polluting home/dashboard layouts. Phase 21 — padding-top
+   spostato su `body.fm-has-upbar` (solo pagine esercizio/verifica), così
+   mappa/risdoc/bes (senza upbar) non riservano i 48px in alto. */
+body.exercise-context {
+    background-color: powderblue;
+    min-width: 555px;
+}
+body.fm-has-upbar {
+    padding-top: 48px;
+}
+
+/* ========================================================= */
+/* ========================= TESTO ========================= */
+/* ========================================================= */
+
+/* 2026-05-31 — il COLOR di h1/p è SCOPED a body.exercise-context. Erano
+ * selettori element NUDI estratti verbatim da layout_es.css: il colore
+ * leakava su OGNI pagina (p{color:black} rendeva nero il testo in dark
+ * mode su /admin/*, risdoc, dashboard — vinceva come regola diretta sul
+ * colore tema ereditato; h1{color:blue} idem). Lo scope ripristina il
+ * contratto dichiarato del file (header: "rules scoped per body class").
+ * I `margin` restano GLOBALI (invariati) per non toccare la geometria
+ * dei paragrafi/heading sulle altre pagine. */
+h1 {
+    margin: 0px;
+}
+p {
+    margin: auto;
+}
+body.exercise-context h1 {
+    color: blue;
+}
+body.exercise-context p {
+    color: black;
+}
+
+.tab {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.ad {
+    border: dotted;
+    margin: 0px 20px 0px 20px;
+    padding: 5px;
+    display: inline-block;
+}
+
+.fm-titolo {
+    margin-bottom: 10px;
+}
+
+/* table{
+  display: flex;
+} */
+
+.fm-row-actions-header {
+    background: linear-gradient(to right, #a095d5, transparent);
+    /* Gradiente da #a095d5 a trasparente */
+}
+
+.VF table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.VF table th {
+    border: 1px solid black;
+}
+
+.VF table td {
+    border: 1px solid black;
+    text-align: left;
+}
+
+/* Phase 24.77 — badge sorgente (.fm-badge.fm-latex): sfondo trasparente.
+   Il base `.fm-badge { background: var(--fm-c-bg) }` (_admin-legacy) gli dava
+   un riquadro biancastro brutto sulla pagina esercizio; il badge ha già il
+   proprio bordo LaTeX → trasparente si fonde con lo sfondo. Solo light: il
+   dark è gestito da `body.fm-dark .fm-badge` (testo chiaro su surface-2). */
+body.exercise-context:not(.fm-dark) .fm-badge.fm-latex {
+    background: transparent;
+}
+/* Phase 24.77 — VF total points editable input. Largezza FISSA compatta:
+   prima era `calc(100% - 29px)` → riempiva il pill e variava con il flex del
+   .selection (troppo largo + si restringeva quando popolato). */
+.fm-vf-total-points-input{
+    width: 40px;
+    flex: 0 0 auto;
+    height: 15px;
+    text-align: center;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 3px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+}
+.fm-vf-total-points-input::-webkit-outer-spin-button,
+.fm-vf-total-points-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+/* .checkboxVF { */
+/* position: absolute; */
+/* margin-left: 140px; */
+/* padding: 0; */
+/* } */
+.fm-tabelle {
+    margin-top: 10px;
+}
+
+.fm-tabelle table,
+.RM table {
+    /* width: 100%; */
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.fm-tabelle table th,
+.RM table th {
+    border: 1px solid black;
+    text-align: left;
+}
+
+.fm-tabelle table td,
+.RM table td {
+    border: 1px solid black;
+    text-align: left;
+}
+
+/* .Aff {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-top: 15px;
+} */
+
+/* ========================================================= */
+/* ====================== TEMA UBPBAR ====================== */
+/* ========================================================= */
+
+.fm-upbar {
+    position: fixed;
+    top: 0px;
+    /* Full viewport (master-style): background si estende a tutta larghezza,
+       ma il contenuto viene spinto a destra della sidebar tramite
+       padding-left dinamico che si adatta a body.fm-sidebar-closed. */
+    left: 0;
+    width: 100vw;
+    padding-left: var(--widthLsidebar);
+    background: #5959a9;
+    height: 74px;
+    z-index: 4;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    transition: padding-left .3s ease;
+    /* overflow: hidden; */
+}
+body.fm-sidebar-closed .fm-upbar {
+    padding-left: 34px;
+}
+
+/* Stato nascosto upbar */
+.fm-upbar.upbar-hidden {
+    top: -90px;
+}
+
+/* Quando l'upbar è nascosta, il toggle rimane visibile (non segue top:-90px) */
+.fm-upbar.upbar-hidden #upbar-toggle-container {
+    position: fixed;
+    top: 10px;
+    left: calc(var(--widthLsidebar) + 5px);
+}
+body.fm-sidebar-closed #upbar-toggle-container,
+body.fm-sidebar-closed .fm-upbar.upbar-hidden #upbar-toggle-container {
+    left: 39px;
+}
+
+/* Contenitore toggle upbar — posizionato dopo la sidebar (refactor).
+   `left` tiene conto di --widthLsidebar (aperta) vs 34px (chiusa). */
+#upbar-toggle-container {
+    position: absolute;
+    top: 10px;
+    left: calc(var(--widthLsidebar) + 5px);
+    transition: left .3s ease;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--fm-c-border);
+    border-radius: 22px;
+    padding: 0.5px 0px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    z-index: 5;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+#upbar-toggle-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Checkbox nascosto */
+#upbar-toggle {
+    display: none;
+}
+
+/* Slider del toggle */
+.fm-upbar-slider {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #7877db;
+    border-radius: 100%;
+    cursor: pointer;
+    text-align: center;
+    place-content: center;
+    line-height: 22px;
+    font-size: 0.8125rem;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+    user-select: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.fm-upbar-slider:hover {
+    transform: scale(1.02);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fm-upbar-slider:active {
+    transform: scale(0.98);
+}
+
+/* .fm-upbar:hover { */
+/* overflow: hidden; */
+/* } */
+
+.fm-scrollbar-up-bar {
+    position: relative;
+    display: flex;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: hidden;
+    /* Margin-left ridotto: upbar ha già padding-left = sidebar, il
+       contenuto parte subito dopo lo spazio del toggle ▼. */
+    margin: 7px 10px 0 45px;
+    gap: 10px;
+    z-index: 4;
+}
+
+.fm-scrollbar-up-bar:hover {
+    overflow-x: scroll;
+    background-color: #6d6dcf;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Personalizzazione Scrollbar per .fm-scrollbar-up-bar */
+.fm-scrollbar-up-bar::-webkit-scrollbar {
+    height: 8px; /* Spessore scrollbar orizzontale (default: 16px) */
+}
+
+.fm-scrollbar-up-bar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Sfondo della traccia */
+    border-radius: 4px;
+}
+
+.fm-scrollbar-up-bar::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #4a4a9a, #6d6dcf); /* Colore del cursore */
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.fm-scrollbar-up-bar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #5a5aaa, #7d7ddf); /* Colore hover */
+}
+
+.fm-scrollbar-up-bar::-webkit-scrollbar-corner {
+    background: transparent; /* Angolo tra scrollbar verticali/orizzontali */
+}
+
+/* .fm-scrollbar-up-bar:hover .dropdown {
+  border: 2px solid white;
+  padding: 0 0 0 10px;
+} */
+
+.fm-upbar-controls-container {
+    display: flex;
+    align-items: baseline;
+    place-self: flex-start;
+    margin-top: 5px;
+}
+
+#wrapper-mods {
+    position: relative;
+    display: grid;
+    align-items: center;
+    width: fit-content;
+    /* top: -7px;
+    margin-left: 17px; */
+    /* display: none; */
+}
+
+.fm-wrapgrid{
+    display: grid;
+    margin-left: 7px;
+    row-gap: 10px;
+    /* align-self: self-end; */
+}
+.fm-wrapgrid-checks{
+    display: grid;
+    margin-left: 7px;
+    /* row-gap: 10px; */
+    /* align-self: self-end; */
+}
+
+.fm-label-btn-drop {
+    display: block;
+    color: white;
+    font-size: 8pt;
+}
+
+/* ========================================================= */
+/* =================== DARK MODE BUTTON =================== */
+/* ========================================================= */
+
+.fm-sb-dark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #2c2c54, #40407a);
+    border: 1px solid #57606f;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 90px;
+    height: 29px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.fm-sb-dark:hover {
+    background: linear-gradient(135deg, #40407a, #5a5aaa);
+    border-color: #747d8c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+.fm-sb-dark:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.fm-sb-dark.active {
+    background: linear-gradient(135deg, #ffa726, #ff9800);
+    border-color: #ff8a65;
+    color: #ffffff;
+    box-shadow: 0 3px 6px rgba(255, 152, 0, 0.4);
+}
+
+.fm-sb-dark.active:hover {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    border-color: #ff7043;
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.5);
+}
+
+.fm-darkmode-icon {
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+}
+
+.fm-sb-dark.active .fm-darkmode-icon {
+    transform: rotate(180deg);
+}
+
+.fm-darkmode-text {
+    font-family: inherit;
+    letter-spacing: 0.5px;
+}
+
+/* ========================================================= */
+/* ================== LOGOUT & ANALYTICS ================== */
+/* ========================================================= */
+
+/* Logout Module - Stile coerente con UpBar */
+.fm-logout-module {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    place-self: flex-start;;
+    margin: 0px;
+    padding: 5px;
+    position: relative;
+    font-family: inherit;
+}
+
+.fm-logout-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 100px;
+    height: auto;
+}
+
+/* Indicatori utente e sezione - layout verticale con stessa larghezza */
+.fm-user-indicator,
+.fm-section-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Stessa larghezza del contenitore */
+    box-sizing: border-box;
+    min-height: 14px;
+}
+
+.fm-user-indicator:before {
+    content: "👤";
+    margin-right: 4px;
+}
+
+.fm-section-indicator:before {
+    content: "📚";
+    margin-right: 4px;
+}
+
+/* Pulsante Logout - stessa larghezza degli indicatori */
+.fm-logout-btn {
+    width: 100% !important; /* Stessa larghezza del contenitore */
+    height: 18px !important;
+    padding: 0px !important;
+    font-size: 0.5625rem !important;
+    font-weight: bold !important;
+    border-style: outset !important;
+    border-width: 2px !important;
+    border-radius: 3px !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    
+    /* Colori base ispirati al tema dell'UpBar */
+    background: linear-gradient(135deg, #ff4444, #cc3333) !important;
+    border-color: #aa2222 !important;
+    color: white !important;
+    
+    /* Effetti visivi */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.2s ease !important;
+    
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.fm-logout-btn:hover {
+    background: linear-gradient(135deg, #ff5555, #dd4444) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 6px rgba(255, 68, 68, 0.4) !important;
+    border-color: #bb3333 !important;
+}
+
+.fm-logout-btn:active {
+    background: linear-gradient(135deg, #dd3333, #bb2222) !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fm-logout-btn:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    background: #888888 !important;
+    border-color: #666666 !important;
+}
+
+/* Analytics Button */
+#analytics-btn {
+    width: 80px;
+    height: 29px;
+    padding: 0px;
+    font-size: 0.5625rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    border: 2px outset #2E7D32;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#analytics-btn:hover {
+    background: linear-gradient(135deg, #66BB6A, #4CAF50);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+}
+
+#analytics-btn:active {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Animazione loading */
+@keyframes logout-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.fm-logout-module .fm-logout-loading {
+    animation: logout-pulse 1s infinite;
+}
+
+/* Responsive per UpBar stretta */
+@media (max-width: 768px) {
+    .fm-logout-section {
+        margin-left: 10px;
+        gap: 7px;
+        min-width: 80px;
+    }
+    
+    .fm-user-indicator,
+    .fm-section-indicator {
+        font-size: 0.625rem;
+        padding: 2px 2px;
+        min-height: 12px;
+    }
+    
+    .fm-logout-btn {
+        height: 17px !important;
+        font-size: 0.625rem !important;
+    }
+}
+
+/* ========================================================= */
+/* ====================== BUTT UBPBAR ====================== */
+/* ========================================================= */
+
+.fm-no-drop,
+.dropdown {
+    /* margin: 0px 10px 10px 10px;
+    padding: 5px; */
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+}
+
+/* Mostra la sezione solo per gli admin */
+body.fm-admin-access .selwrapbtncopy,
+.fm-upbar.fm-admin-access .selwrapbtncopy {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+#multiarg + label {
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+.fm-btn-up-bar,
+.dropdown-button {
+    width: 80px;
+    /* height: 20px; */
+    padding: 0px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.dropdown-button {
+    font-size: 0.625rem;
+}
+
+#btnP{
+font-size: 7pt;
+}
+
+.fm-dropdown-content {
+    position: absolute;
+    top: 92%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    background-color: var(--fm-c-surface-2);
+    min-width: 50px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 12;
+}
+/* Phase 16 — apertura via click (bindDropdownToggle). */
+.fm-dropdown-content.fm-is-open { display: block; }
+
+.fm-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    border: 1px solid #c2bdbd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    background-color: #ddd;
+    color: black;
+    height: 5px;
+}
+
+.fm-dropdown-content a:hover {
+    background-color: #453ae4;
+    color: rgb(225, 233, 236);
+}
+
+.fm-tooltip {
+    position: fixed;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    /* padding: 3px; */
+    margin: 0px;
+    border-radius: 3px;
+    display: none;
+    z-index: 1000;
+    width: 200px;
+    /* Larghezza fissa */
+    height: auto;
+    /* Altezza fissa */
+    word-wrap: break-word;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+.fm-tooltip p {
+    margin: 0;
+    line-height: 1.4;
+    font-size: 0.75rem;
+    color: white;
+}
+
+/* ========================================================= */
+/* ===================== BUTT PROBLEMS ===================== */
+/* ========================================================= */
+/* Stile di base per il pulsante Inserisci */
+/* #inserisciBtn {
+  margin: 10px 0;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#inserisciBtn:hover {
+  background-color: #0056b3;
+} */
+/* .fm-draggable-container {
+  margin-top: 15px;
+} */
+
+/* Stile per il dropdown */
+.dropdown select {
+    margin: 10px 0;
+    width: 200px;
+    border-radius: 5px;
+}
+
+/* 
+.fm-pos-check-es {
+    display: none;
+} */
+
+.fm-groupcollex {
+    display: none;
+    margin-bottom: 2px;
+    width: fit-content;
+    align-items: center;
+    width: 100%;
+    /* cursor: move; */
+    background-color: #10139a;
+    /* min-height: 20px; */
+    position: relative;
+    /* Aggiungi questa linea */
+}
+
+/* .fm-groupcollex {
+  display: none;
+} */
+
+.fm-collapsible {
+    display: flex;
+    position: relative;
+    background-color: #5959a9;
+    color: white;
+    cursor: pointer;
+    height: var(--heightCollapsible);
+    border: none;
+    text-align: left;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Scrollbar orizzontale sottilissima e quasi invisibile per .fm-collapsible */
+.fm-collapsible::-webkit-scrollbar {
+    height: 2px;
+}
+
+.fm-collapsible::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.fm-collapsible::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+}
+
+.fm-collapsible::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.fm-collapsible:before {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+.fm-collapsible > *:not(:before):not(.fm-checkmod):not(.fm-edit-eser) {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* WCAG 2.2 AA (ADR-023) — toggle button interno: sembra il titolo (reset
+   stile button nativo), eredita colore/font del .fm-collapsible. */
+.fm-collapse-toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fm-collapse-toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+.active,
+.fm-collapsible:hover {
+    background-color: #5b92a1;
+}
+
+.fm-collapsible.active:before {
+    content: "\2212";
+}
+
+/* Sticky titolo e collapsible.active nelle sezioni [id^="type_verAll"] (admin-access) */
+/* Solo l'h1 è sticky (non l'intero .fm-titolo che contiene tutti i .fm-groupcollex) */
+body.fm-admin-access [id^="type_verAll"] > .fm-titolo > h1 {
+    position: sticky;
+    z-index: 3;
+    background-color: powderblue;
+    /* top impostato dinamicamente da updateStickyTops() in script_sel-mod.js */
+}
+/* .fm-collapsible.active: position:fixed gestito da JS via scroll listener.
+   z-index elevato per sovrapporsi ai collapsible chiusi di .fm-groupcollex successivi. */
+body.fm-admin-access [id^="type_verAll"] .fm-collapsible.active {
+    z-index: 30;
+}
+
+.selection {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    float: left;
+    background-color: #5959a9;
+    text-align: center;
+    height: var(--heightCollapsible);
+    width: 0px;
+    visibility: hidden;
+}
+
+/* Phase 16 — `.selection` server-rendered inline in ContractRenderer:
+ * il legacy InsertCheckPos la popolava E la settava visibile. Ora che
+ * è inline dal server, il CSS default la nascondeva (width:0 + visibility:
+ * hidden). Override: se è dentro .fm-pos-check-es in body.fm-admin-access, render
+ * visibile con width=--widthSelection + opacity. */
+body.fm-admin-access .fm-pos-check-es > .selection {
+    width: var(--widthSelection);
+    visibility: visible !important;
+    opacity: 1;
+}
+
+/* Phase 16 — .fm-pos-check-es + .fm-collapsible side-by-side (replica pattern
+ * legacy InsertCheckPos): .selection occupa --widthSelection a sinistra,
+ * .fm-collapsible il resto. Senza questa regola .fm-pos-check-es è block → .selection
+ * va su una riga separata sopra il .fm-collapsible. */
+body.fm-admin-access .fm-groupcollex > .fm-pos-check-es {
+    float: left;
+    width: var(--widthSelection);
+    height: var(--heightCollapsible);
+    margin: 0;
+}
+body.fm-admin-access .fm-groupcollex > .fm-collapsible {
+    width: calc(100% - var(--widthSelection) - 8px);
+    margin-left: 0; /* Phase 24.77 — flush con .selection (vedi _topbar-modern G20.7) */
+}
+/* Phase 24.77 — respiro orizzontale costante: il titolo non tocca i bordi,
+   sia a problema chiuso che aperto/pinnato. box-sizing:border-box → non altera
+   la larghezza calcolata dal JS sticky. */
+.fm-collapsible {
+    padding-inline: 8px;
+}
+/* Chiarisci float dopo collapsible per far scendere .content */
+body.fm-admin-access .fm-groupcollex::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* Phase 16 — Editor panel dark mode override.
+ * Il pannello editor usa palette chiara (#fffbe6 sfondo, #b58900 bordo) per
+ * essere visibile in light mode. In dark mode i contrast sarebbero rotti:
+ * overridiamo con palette scura coerente con body.fm-dark. */
+body.fm-dark .fm-editor-panel {
+    background: #2a2025 !important;
+    border-color: #b58900 !important;
+    color: #e0e0e0;
+}
+body.fm-dark .fm-editor-panel span,
+body.fm-dark .fm-editor-panel label span,
+body.fm-dark .fm-editor-panel > div > span { color: #e8c868 !important; }
+body.fm-dark .fm-editor-panel textarea {
+    background: #1a1520 !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+body.fm-dark .fm-editor-panel input[type="text"],
+body.fm-dark .fm-editor-panel input[type="number"] {
+    background: #1a1520 !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+body.fm-dark .fm-editor-panel .fm-editor-preview {
+    background: #15101a !important;
+    color: #f0f0f0 !important;
+    border-color: #88b0d8 !important;
+}
+/* G22.S15 — SVG TikZ in preview pane: scala alla larghezza container
+ * (TikZ originale puo' essere wider del pannello → overflow orizzontale). */
+.fm-editor-preview svg:not(mjx-container svg):not(.fm-badge svg) {
+    max-width: 100%;
+    height: auto;
+}
+/* Metadata grid section: sfondo dark */
+body.fm-dark .fm-editor-panel > div[style*="grid-template-columns"] {
+    background: #1e1825 !important;
+    border-color: #4a5a7a !important;
+}
+/* Tab "QUESITO" / "Preview" headers */
+body.fm-dark .fm-editor-panel > div > div[style*="background:#eee"],
+body.fm-dark .fm-editor-panel > div > div[style*="background: #eee"] {
+    background: #3a2a35 !important;
+    border-color: #555 !important;
+    color: #ccc !important;
+}
+body.fm-dark .fm-editor-panel > div > div[style*="background:#e0f0ff"],
+body.fm-dark .fm-editor-panel > div > div[style*="background: #e0f0ff"] {
+    background: #1a2535 !important;
+    border-color: #5a7a9a !important;
+    color: #a8c0e0 !important;
+}
+
+/* Phase 16 — MathJax formule in dark mode: colore testo default è nero
+ * (inherit da mjx-container) → invisibile su sfondo scuro. Override:
+ * MathJax dark mode: duplicati rimossi. Vedi layout.css ~1380 per la
+ * palette unica (no filter:invert, palette #dcdce0 per leggibilità). */
+
+/* .selectionIN {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+  background-color: #5959a9;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  height: 20px;
+  width: 0px;
+  margin: 0;
+  visibility: hidden;
+} */
+
+.fm-position {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    margin: 0 4px;
+}
+
+/* Phase 24.77 — Posizione: input compatto + stepper custom ▲▼ (step 1).
+   Gli spinner nativi sono poco visibili nella toolbar scura → li nascondiamo
+   e usiamo due bottoni impilati gestiti da checkin-handlers. */
+.fm-def-position-imp {
+    width: 34px;
+    height: 22px;
+    padding: 1px 2px;
+    text-align: center;
+    font-size: 0.8125rem;
+    box-sizing: border-box;
+    border: 1px solid var(--fm-c-border, #c7cdd6);
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+    background: var(--fm-c-surface, #fff);
+    color: var(--fm-c-text, #1e293b);
+    -moz-appearance: textfield;
+}
+.fm-def-position-imp::-webkit-outer-spin-button,
+.fm-def-position-imp::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Stepper custom (BEM block `fm-stepper`): due frecce impilate accanto a un
+   input number. Usato da posizione (input 22px), riordino gruppo e VF total
+   points (input 15px) → altezza adattiva via align-self:stretch + flex:1. */
+.fm-stepper {
+    display: inline-flex;
+    flex-direction: column;
+    align-self: stretch;
+    flex: 0 0 auto;
+    min-height: 15px;
+}
+.fm-stepper__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex: 1 1 0;
+    width: 16px;
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--fm-c-border, #c7cdd6);
+    background: var(--fm-c-surface-2, #eef1f6);
+    color: var(--fm-c-text-2, #475569);
+    font-size: 8px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.fm-stepper__btn--up   { border-radius: 0 3px 0 0; border-bottom: none; }
+.fm-stepper__btn--down { border-radius: 0 0 3px 0; }
+.fm-stepper__btn:hover { background: var(--fm-c-surface, #fff); color: var(--fm-c-text, #1e293b); }
+.fm-stepper__btn:active { background: var(--fm-c-border, #c7cdd6); }
+/* Wrapper inline-flex input+stepper (riordino gruppo `.fm-move-position-problem`). */
+.fm-num-field {
+    display: inline-flex;
+    align-items: stretch;
+    vertical-align: middle;
+}
+.fm-num-field .fm-move-position-problem {
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+}
+/* Nel pill VF (.fm-input-wrapper-pt-tot) input + steppers affiancati compatti. */
+.fm-groupcollex .fm-check .fm-input-wrapper-pt-tot .fm-stepper { min-height: 15px; }
+
+.fm-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-left: 2px solid powderblue;
+    border-right: 2px solid powderblue;
+    height: 20px;
+    padding-right: 2px;
+    /* width: 200px; */
+}
+
+.fm-check-in {
+    /* Phase 16 — .fm-check-in allineato col .fm-collection__item dashed yellow.
+     * NO border-radius (bilanciamento col dashed-border flat). Margin 0.
+     * Titolo_quesito è INSIDE, centrato.
+     */
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background-color: var(--fm-c-surface);
+    min-height: 30px;
+    margin: 0 0 6px 0;
+    padding: 4px 10px;
+    border-radius: 0;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Phase 16 — Sequenza elementi: ABin | pt | origin | color | (titolo centrato) | editQuesito | moveQuesito | sync */
+.fm-check-in > .fm-a-bin              { margin-right: 4px; }
+.fm-check-in > .fm-input-wrapper-pt  { margin-right: 4px; }
+.fm-check-in > .fm-origin-selector,
+.fm-check-in > .fm-color-selector    { flex-shrink: 0; margin-right: 4px; }
+/* titolo_quesito embedded, centrato, altezza fissa 20px senza margini */
+.fm-check-in > .fm-titolo-quesito    {
+    flex: 1 1 auto;
+    text-align: center;
+    background: transparent;
+    margin: 0 !important;
+    padding: 0 8px;
+    border-radius: 0;
+    height: 20px;
+    line-height: 20px;
+    width: auto;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+/* editQuesito + moveQuesito + sync pushed a destra */
+.fm-check-in > .fm-edit-quesito       { gap: 4px; margin-left: auto; }
+.fm-check-in > .fm-move-quesito       { gap: 2px; }
+.fm-check-in > .fm-sync-quesito-btn  { margin-left: 4px; }
+
+/* Phase 16 — .fm-collection__item dashed yellow bilanciato con .fm-check-in */
+body.fm-verifica-mode .fm-collection__item {
+    padding: 0;            /* niente gap interno, .fm-check-in ha già padding */
+    box-sizing: border-box;
+}
+body.fm-verifica-mode .fm-collection__item > .fm-check-in {
+    margin: 0 0 4px 0;      /* attacca al top del dashed border */
+}
+
+/* Phase 16 — sticky header del `.fm-groupcollex` in editor mode.
+ *
+ * Comportamento (replica legacy `script_sel-mod.js updateStickyTops`):
+ * quando un `.fm-collection__item` ha l'editor aperto, il `.fm-groupcollex` riceve
+ * `.fm-problem-editing`. Il solo `.fm-collapsible` (header) sticky al top —
+ * NON l'intero `.fm-groupcollex` — così:
+ *   - il contenuto sottostante (l'editor, gli altri quesiti) scrolla
+ *     normalmente sotto l'header ancorato;
+ *   - l'effetto sticky si esaurisce naturalmente quando il `.fm-groupcollex`
+ *     scorre fuori vista (evita il "non si ferma mai");
+ *   - z-index 3 sta SOTTO `.fm-upbar` e `#scrollbarInfo` (entrambi z:4),
+ *     quindi upbar + infoVer restano visibili.
+ *
+ * Offset top: `--fm-problem-sticky-top` impostata via JS su <html> a
+ * `86 + scrollbarInfo.offsetHeight` (86 = top di #scrollbarInfo). Fallback
+ * 240px se lo script non gira. */
+/* Phase 16 — replica legacy `script_sel-mod.js :: updateStickyTops` (commit
+ * 8a71c7e). Scope: `body.fm-admin-access` con verifiche renderizzate in:
+ *   - sezione `[id^="type_verAll"]` (related-verifiche su /studio/esercizio)
+ *   - wrapper `.fm-contract-wrap[data-kind="verifica"]` (topic page verifica)
+ *
+ * Comportamento:
+ *   - l'h1 del titolo del contract è `position:sticky` sotto upbar+infoVer;
+ *     `top` impostato dinamicamente da JS.
+ *   - i `.fm-collapsible.active` (problem aperti) vengono gestiti da JS con
+ *     `position:fixed` + placeholder `.fm-js-coll-ph` in-flow (non possiamo
+ *     stackare più sticky al medesimo `top`).
+ *
+ * CSS qui: solo `position:sticky` + z-index. La logica di top/stacking è JS. */
+body.fm-admin-access [id^="type_verAll"] > .fm-titolo > h1,
+body.fm-admin-access .fm-contract-wrap[data-kind="verifica"] > .fm-titolo > h1,
+body.fm-admin-access .fm-contract-wrap[data-kind="esercizio"] > .fm-titolo > h1 {
+    position: sticky;
+    z-index: 3;
+    background: powderblue;
+    /* top assegnato da `updateStickyTops()` */
+}
+/* `.fm-collapsible.active` quando JS lo fixa — z-index alto per sovrapporsi
+ * ai collapsible chiusi dei `.fm-groupcollex` successivi. Phase 24.77 — esteso
+ * agli esercizi (data-kind="esercizio"). */
+body.fm-admin-access [id^="type_verAll"] .fm-collapsible.active,
+body.fm-admin-access .fm-contract-wrap[data-kind="verifica"] .fm-collapsible.active,
+body.fm-admin-access .fm-contract-wrap[data-kind="esercizio"] .fm-collapsible.active {
+    z-index: 30;
+}
+/* Placeholder invisibile che riempie il vuoto nel flusso quando il
+ * collapsible diventa `position:fixed`. */
+.fm-js-coll-ph { display: block; visibility: hidden; pointer-events: none; }
+
+/* Separator visivo + spacing consistente tra i gruppi logici */
+.fm-check-in > .fm-a-bin              { margin-right: 4px; }
+.fm-check-in > .fm-input-wrapper-pt  { margin-right: 4px; }
+.fm-check-in > .fm-origin-selector,
+.fm-check-in > .fm-color-selector    { flex-shrink: 0; }
+.fm-check-in > .fm-edit-quesito       { gap: 4px; margin-left: auto; }
+.fm-check-in > .fm-move-quesito       { gap: 2px; }
+.fm-check-in > .fm-sync-quesito-btn  { margin-left: 4px; }
+ .fm-titolo-quesito{
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    place-self: anchor-center;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--fm-c-surface);
+    height: 20px;
+    width: -webkit-fill-available;
+    margin-right: 25px;
+    margin-left: 10px;
+    padding-left: 5px;
+    padding-right: 10px;
+    border-radius: 0px 0px 10px 10px;
+    margin-bottom: 10px;
+ }
+ .fm-titolo-quesito span {
+    margin-right: 12px; /* spazio tra i pallini e il testo */
+    margin-left: 0;
+    flex-shrink: 0;
+    /* puoi aggiungere altre regole per il posizionamento */
+}
+
+.fm-collexercise {
+    display: flex;
+    flex-direction: column;
+}
+
+.fm-collection__item {
+    display: grid;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    /* Aggiungi spazio tra i div */
+    height: fit-content;
+    overflow: auto;
+}
+
+.fm-li-inline {
+    padding: 0;
+    height: fit-content;
+}
+
+.fm-collection {
+    margin: 0;
+}
+
+.labcheck {
+    color: aliceblue;
+}
+
+/* Stile per checkboxAin */
+.fm-checkbox-ain {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #b0e0e6;
+    position: relative;
+    top: 1.7px;
+}
+
+.fm-checkbox-ain:checked {
+    background-color: #2f2fff;
+}
+
+.fm-checkbox-ain:checked::after {
+    background-color: #2f2fff;
+}
+
+.fm-checkbox-bin, .fm-checkbox-rin {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #b0e0e6;
+    position: relative;
+    top: 1.7px;
+    margin-left: 6px;
+}
+
+.fm-checkbox-bin:checked {
+    background-color: #ff5858;
+}
+
+.fm-checkbox-bin:checked::after {
+    background-color: #ff5858;
+}
+
+.fm-labcheck-in {
+    position: relative;
+    top: -2px;
+}
+
+.content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: powderblue;
+    scroll-margin: 20px;
+}
+
+.content:hover {
+    overflow-x: hidden;
+}
+
+.fm-scrollbarhide {
+    overflow: hidden;
+}
+
+.fm-scrollbarhide:hover {
+    overflow-x: scroll;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed #000;
+    color: powderblue;
+    background-color: powderblue;
+    width: 100%;
+}
+
+.fm-checkmod {
+    display: flex;
+    align-items: center;
+    position: static;
+    margin-left: auto;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.fm-wrapcheckgiust {
+    display: flex;
+    align-items: center;
+    width: auto;
+    white-space: nowrap;
+}
+
+.fm-wrap-check-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fm-checkbox-wrapper {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    gap: 2px;
+    margin-right: 10px;
+}
+
+.fm-btn-check-pos {
+    font-size: 0.625rem;
+    padding: 2px 4px;
+    cursor: pointer;
+    background-color: var(--fm-c-surface-2);
+    border: 1px solid var(--fm-c-border);
+    border-radius: 3px;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.fm-btn-check-pos:hover {
+    background-color: #e0e0e0;
+}
+
+.fm-btn-check-pos:active {
+    background-color: #d0d0d0;
+    border-style: inset;
+}
+
+.fm-btn-check-top {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.fm-btn-check-bottom {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.fm-btn-check-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.fm-btn-check-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.fm-checkbox-rm {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+}
+
+.fm-cell-content {
+    display: inline;
+}
+
+/* G23 — RM tipi colonna B/T/N (Button/Text/Number) per .fm-wrap-check-cell.
+   X (checkbox) e V (radio) usano `.fm-checkbox-rm` esistente. */
+.fm-rm-btn {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 3px 10px;
+    font: 12px/1.2 system-ui;
+    border: 1px solid #666;
+    border-radius: 3px;
+    background: var(--fm-c-surface-2);
+    cursor: pointer;
+}
+.fm-rm-btn:hover { background: #e0e0e0; }
+.fm-rm-btn:active { background: #d0d0d0; }
+
+.fm-rm-text,
+.fm-rm-num {
+    grid-column: 2;
+    grid-row: 2;
+    width: 7em;
+    padding: 3px 6px;
+    font: 12px/1.2 system-ui;
+    border: 1px solid #888;
+    border-radius: 3px;
+    background: var(--fm-c-surface);
+}
+.fm-rm-num { width: 5em; text-align: right; }
+
+/* Phase 24.78 — tipo colonna F (Vero/Falso): due caselle V□ F□ affiancate.
+   La V è la checkbox interattiva (.fm-checkbox-rm → flag correct); la F è
+   visiva. La soluzione (correct=true → V, false → F) si evidenzia in verde. */
+.fm-rm-vf {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.fm-rm-vf__opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    cursor: default;
+}
+.fm-rm-vf__opt--v { cursor: pointer; }
+.fm-rm-vf__lbl { font-weight: 700; font-size: 0.8125rem; line-height: 1; }
+.fm-rm-vf__box {
+    display: inline-block;
+    width: 13px; height: 13px;
+    border: 1.5px solid var(--fm-c-border, #888);
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+/* Soluzione: V scelta (checkbox checked) → V verde; altrimenti F verde. */
+.fm-rm-vf:has(.fm-rm-vf__input:checked) .fm-rm-vf__opt--v .fm-rm-vf__lbl { color: #16a34a; }
+.fm-rm-vf:not(:has(.fm-rm-vf__input:checked)) .fm-rm-vf__opt--f .fm-rm-vf__lbl { color: #16a34a; }
+.fm-rm-vf:not(:has(.fm-rm-vf__input:checked)) .fm-rm-vf__opt--f .fm-rm-vf__box {
+    background: #16a34a; border-color: #15803d;
+}
+
+/* Posizioni del checkbox wrapper rispetto al contenuto della cella */
+.fm-wrap-check-cell.fm-pos-top {
+    flex-direction: column;
+    align-items: center;
+}
+
+.fm-wrap-check-cell.pos-bottom {
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.fm-wrap-check-cell.pos-left {
+    flex-direction: row;
+    align-items: center;
+}
+
+.fm-wrap-check-cell.pos-right {
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.fm-sol {
+    /* margin: auto; */
+    margin-top: 10px;
+}
+
+.fm-wrapsol-vf {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+/* G27.vf.left — `.fm-sol` in VF e' div vuoto con `width:-webkit-fill-available`
+ * + padding (regola `.fm-collection,.fm-sol,.fm-testo,.fm-giustsol` sotto). Senza override
+ * il sol vuoto occupa ~50% dello spazio flex e spinge `.fm-giustsol` a meta'
+ * pagina. Forza sol vuoto a width auto + giustsol full width per left-align. */
+.fm-wrapsol-vf > .fm-sol:empty {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0;
+    margin: 0;
+}
+.fm-wrapsol-vf > .fm-giustsol {
+    flex: 1 1 100%;
+    padding-left: 0;
+}
+
+/* Phase 20 — default visibile (coerente con .checkgiust checked di
+ * default). JS UIComp.caricaGiust toggla via attributo [hidden] in
+ * base allo stato del checkbox .checkgiust nel .fm-groupcollex. */
+.fm-giustifica[hidden] { display: none; }
+
+.fm-giustsol {
+    margin-top: 10px;
+}
+
+.fm-collection,
+.fm-sol,
+.fm-testo,
+.fm-giustsol {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: -webkit-fill-available;
+    padding: 0px 18px 0px 7px;
+}
+
+.fm-wrapchecksol {
+    display: flex;
+    align-items: center;
+}
+
+/* .checksol {
+  position: absolute;
+  left: 0px;
+  margin-left: 10px;
+} */
+
+.fm-flex20 {
+    display: flex;
+    align-items: center;
+    gap: 50px
+}
+
+.fm-flex20.fm-tabelle[data-align="vfill"] {
+    flex-direction: column;
+}
+
+.fm-block20 {
+    align-items: center;
+}
+
+.fm-block20 table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.fm-block20 table td,
+.fm-block20 table tbody {
+    width: 50%;
+    /* margin-top: 10px; */
+}
+
+/* .freccia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  margin: 3px;
+  padding: 0;
+  text-align: center;
+} */
+
+/* #passwordInput {
+  position: fixed;
+  top: 30px;
+  right: 0px;
+  z-index: 50;
+} */
+
+/* ========================================================= */
+
+.edit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+}
+
+.fm-modifica-btn {
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5f52f, #e8e52f);
+    margin-left: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #c4c42a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-modifica-btn:hover {
+    background: linear-gradient(135deg, #ffff5a, #f5f52f);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(245, 245, 47, 0.4);
+}
+
+.fm-modifica-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-edit-q {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* A11y (WCAG 2.4.7 Focus Visible) — questi controlli-icona sono
+   <div role="button" tabindex="0"> (operabili da tastiera, vedi
+   checkin-handlers): rendiamo nitido il focus da tastiera. */
+.fm-edit-q:focus-visible,
+.edit[role="button"]:focus-visible {
+    outline: 2px solid #0b5fd1;
+    outline-offset: 2px;
+}
+
+/* Phase 17 — `.fm-edit-q.fm-clone` (cross-file: verifica → esercizi) visibile SOLO
+ * dentro contesto verifica. Mirror del legacy: il check era su
+ * `.DraggableContainer_ver`; in refactor usiamo `[data-kind="verifica"]`
+ * sul `.fm-contract-wrap` + fallback `#type_verAll`. */
+.fm-edit-q.fm-clone { display: none; }
+.fm-contract-wrap[data-kind="verifica"] .fm-edit-q.fm-clone,
+[id^="type_verAll"] .fm-edit-q.fm-clone {
+    display: flex;
+}
+
+/* Phase 16 — .fm-edit-eser container con display:flex inline.
+ * Nel legacy l'attributo inline style="display:flex" era hardcoded in
+ * Elementi_Riservati.html. Il server-rendered ContractRenderer::renderCheckmod
+ * non lo emette → senza regola CSS i bottoni .fm-modifica-btn/.fm-quick-save-btn/
+ * .fm-elimina-btn stackano verticalmente. Questa regola gli dà flex + gap. */
+.fm-checkmod .fm-edit-eser,
+.fm-collapsible .fm-edit-eser {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.fm-single-modifica-btn {
+    background: linear-gradient(135deg, #d9e24b, #c8d140);
+    margin-left: 10px;
+    border: 2px solid #a8b130;
+}
+
+.fm-single-modifica-btn:hover {
+    background: linear-gradient(135deg, #e8f05a, #d9e24b);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(208, 217, 75, 0.4);
+}
+
+.fm-single-modifica-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-single-quick-save-btn {
+    background: linear-gradient(135deg, #FFA726, #FF9800);
+    margin-left: 4px;
+    border: 2px solid #F57C00;
+}
+
+.fm-single-quick-save-btn:hover {
+    background: linear-gradient(135deg, #FFB74D, #FFA726);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(255, 152, 0, 0.4);
+}
+
+.fm-single-quick-save-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-single-quick-save-btn img {
+    scale: 0.015;
+    filter: brightness(0) invert(1);
+    pointer-events: none; /* Permette al click di passare attraverso l'immagine al pulsante */
+}
+
+#modHeaderBtn {
+    border-radius: 50%;
+    background-color: rgb(208, 217, 75, 0.762);
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#saveBtnHeader {
+    border-radius: 50%;
+    background-color: rgb(227, 245, 68);
+    margin-left: 4px;
+    width: 40px;
+    height: 20px;
+    color: var(--fm-c-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #b8b832;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+#saveBtnHeader:hover {
+    background-color: #e5e377;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#saveBtnHeader:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+#saveBtnHeader img {
+    scale: 2.2;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-left: 7px;
+    pointer-events: none; /* Permette al click di passare attraverso l'immagine al pulsante */
+}
+
+.fm-quick-save-btn {
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFA726, #FF9800);
+    margin-left: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #F57C00;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-quick-save-btn:hover {
+    background: linear-gradient(135deg, #FFB74D, #FFA726);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(255, 152, 0, 0.4);
+}
+
+.fm-quick-save-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-quick-save-btn img {
+    scale: 0.015;
+    filter: brightness(0) invert(1);
+    pointer-events: none; /* Permette al click di passare attraverso l'immagine al pulsante */
+}
+
+#saveBtnHeader {
+    /* border-radius: 10%; */
+    /* Rende il div rotondo */
+    /* background-color: rgb(240, 255, 101); */
+    width: 130px;
+    height: 20px;
+    /* color: #000; */
+    /* text-align: center; */
+    /* border: outset; */
+    /* cursor: pointer; */
+}
+
+.fm-elimina-btn {
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff5d5d, #e53935);
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 2px solid #c62828;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-elimina-btn:hover {
+    background: linear-gradient(135deg, #ff7a7a, #ff5d5d);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(255, 93, 93, 0.4);
+}
+
+.fm-elimina-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-add-btn {
+    background: linear-gradient(135deg, #42A5F5, #2196F3);
+    margin-left: 6px;
+    border: 2px solid #1976D2;
+}
+
+.fm-add-btn:hover {
+    background: linear-gradient(135deg, #64B5F6, #42A5F5);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(33, 150, 243, 0.4);
+}
+
+.fm-add-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-add-btn p {
+    margin: 0;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.fm-clone {
+    background: linear-gradient(135deg, #42A5F5, #2196F3);
+    margin-left: 6px;
+    border: 2px solid #1976D2;
+}
+
+.fm-clone:hover {
+    background: linear-gradient(135deg, #64B5F6, #42A5F5);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(33, 150, 243, 0.4);
+}
+
+.fm-clone:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* G19 — `scale: 0.13` rimosso: combinato con width/height:12px (regola
+ * unificata a riga ~1926) rendeva l'icona 1.5px (invisibile). I 12x12 +
+ * object-fit:contain bastano per allineare l'icona alle altre. */
+.fm-clone img {
+    filter: brightness(0) invert(1);
+    pointer-events: none;
+}
+
+.fm-remove-btn {
+    background: linear-gradient(135deg, #ff5d5d, #e53935);
+    margin-right: 4px;
+    margin-left: 6px;
+    border: 2px solid #c62828;
+}
+
+.fm-remove-btn:hover {
+    background: linear-gradient(135deg, #ff7a7a, #ff5d5d);
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(255, 93, 93, 0.4);
+}
+
+.fm-remove-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fm-move-btn {
+    /* Phase 16 — inline dentro `.fm-checkmod` (a destra dei bottoni editEser).
+     * Niente più position:absolute → nessun overlap con .fm-checkmod/.fm-elimina-btn. */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    margin-left: 4px;
+    cursor: move;
+    background: transparent;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+.fm-move-btn:hover { background: rgba(200, 200, 220, 0.2); }
+
+/* Phase 17 — feedback visivo drag-drop problem. */
+.fm-groupcollex.fm-dragging {
+    opacity: 0.5;
+    cursor: move;
+    outline: 2px dashed #2a5ac7;
+    outline-offset: -2px;
+}
+
+.fm-move-position-problem {
+    width: 34px;
+    height: 22px;
+    margin-left: 2px;
+    padding: 0 2px;
+    font: 11px/1 system-ui;
+    text-align: center;
+    border: 1px solid #888;
+    border-radius: 3px;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+.fm-move-position-problem::-webkit-outer-spin-button,
+.fm-move-position-problem::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+body.fm-dark .fm-move-position-problem {
+    background: #1a1a28;
+    color: #c8c8d4;
+    border-color: #555;
+}
+
+/* Phase 20 — ogni SVG ha viewBox/dimensioni intrinseche diverse (es.
+ * save.svg 545x370 vs quicksave.svg 800x800 vs edit.svg 24x24). Un
+ * unico `scale` rendeva una icona bene e le altre sballate. Con
+ * width/height espliciti + object-fit:contain tutte entrano nel
+ * cerchio 20x20 preservando aspect ratio. */
+.fm-modifica-btn img,
+.fm-single-modifica-btn img,
+#modHeaderBtn img,
+.fm-elimina-btn img,
+.fm-add-btn img,
+.fm-clone img,
+.fm-remove-btn img,
+.fm-quick-save-btn img,
+.fm-single-quick-save-btn img {
+    display: block;
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Phase 20 — closeBtn: cerchio rosso con X centrata. Si attiva in edit
+ * mode (.fm-checkmod .fm-edit-eser). L'img legacy (delete.svg) viene nascosta
+ * a favore del glyph ✕ via ::before per coerenza visiva col pattern
+ * chiusura modali. */
+.edit.fm-close-btn,
+.edit.single-closeBtn {
+    position: relative;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6060, #e53030);
+    border: 2px solid #c42a2a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.edit.fm-close-btn:hover,
+.edit.single-closeBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(229, 48, 48, 0.45);
+}
+.edit.fm-close-btn:active,
+.edit.single-closeBtn:active { transform: scale(0.95); }
+.edit.fm-close-btn img,
+.edit.single-closeBtn img { display: none; }
+.edit.fm-close-btn::before,
+.edit.single-closeBtn::before {
+    content: "✕";
+    color: #fff;
+    font: bold 13px/1 system-ui, -apple-system, sans-serif;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.fm-move-btn img {
+    scale: 0.5;
+    pointer-events: none; /* Permette al click di passare attraverso l'immagine al pulsante */
+}
+
+.input-wrapper {
+    /* display: flex; */
+    align-items: center;
+    position: relative;
+    margin-top: 10px;
+}
+
+.fm-a-bin {
+    display: flex;
+    width: 80px;
+}
+
+.input-wrapper-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Allinea a sinistra */
+    width: calc(100% - 310px);
+    /* Assicura che l'elemento riempia la larghezza disponibile */
+    height: 14px;
+}
+
+.fm-titolo-quesito {
+    display: flex;
+    align-items: center;
+    /* width: calc(100% - 198px); */
+    margin-left: 10px;
+}
+
+.fm-collection__item,
+.fm-check-in,
+textarea,
+.pt,
+.fm-labcheck-in,
+.origin,
+.fm-titolo-quesito {
+    transition: background-color 0.4s, color 0.4s;
+}
+
+.input-wrapper-title .input-titolo,
+.input-wrapper-quesito .input-quesito,
+.fm-input-pt {
+    flex: 1;
+    /* Permette all'area di testo di riempire lo spazio rimanente */
+    height: 20px;
+    margin-left: 5px;
+    resize: none;
+    border-radius: 10px;
+    line-height: 1;
+    padding: 0;
+    border: 1px solid var(--fm-c-border);
+    overflow: hidden;
+    align-content: center;
+}
+.input-titolo{
+    padding-left: 5px;
+}
+
+.fm-edit-quesito {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.fm-move-quesito {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 5px;
+    padding: 0 5px;
+}
+
+.fm-move-up-btn,
+.fm-move-down-btn {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5959a9;
+    color: white;
+    border: 1px solid #4848a0;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.fm-move-up-btn:hover,
+.fm-move-down-btn:hover {
+    background-color: #6d6dcf;
+}
+
+.fm-move-up-btn:active,
+.fm-move-down-btn:active {
+    background-color: #4848a0;
+    transform: scale(0.95);
+}
+
+.fm-move-position {
+    width: 30px;
+    height: 20px;
+    padding: 0 2px;
+    text-align: center;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 3px;
+    font-size: 0.6875rem;
+    background-color: white;
+}
+
+.fm-move-position:focus {
+    outline: none;
+    border-color: #5959a9;
+    box-shadow: 0 0 3px rgba(89, 89, 169, 0.5);
+}
+
+/* Rimuove le frecce dai number input in Chrome, Safari, Edge */
+.fm-move-position::-webkit-outer-spin-button,
+.fm-move-position::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Rimuove le frecce dai number input in Firefox */
+.fm-move-position[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.fm-sync-quesito-btn,
+.fm-sync-quesiti-btn {
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.fm-sync-quesito-btn img,
+.fm-sync-quesiti-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.fm-sync-quesito-btn:hover,
+.fm-sync-quesiti-btn:hover {
+    opacity: 0.7;
+}
+
+.fm-sync-quesito-btn:active,
+.fm-sync-quesiti-btn:active {
+    transform: scale(0.95);
+}
+
+.fm-sync-quesito-btn:active {
+    transform: scale(0.95);
+}
+
+.fm-color-selector,
+.fm-origin-selector{
+    margin-left: auto;
+}
+
+.input-wrapper-quesito .input-quesito {
+    width: -webkit-fill-available;
+    justify-items: center;
+    /* margin-left: 10px; */
+    /* position: absolute; */
+    /* left: 120px; */
+    /* right: 100px; */
+}
+
+.fm-color-select option {
+    color: white;
+    font-weight: bold;
+}
+
+.fm-input-wrapper-pt {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 57px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+/* .fm-input-wrapper-pt {
+    height: 20px;
+    margin-left: 10px;
+} */
+
+.fm-input-wrapper-pt-tot {
+    display: flex;
+    align-items: center;
+    /* margin-top: 5px; */
+    padding: 2px 4px;
+    background-color: #dcdbff;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 3px;
+    font-size: 0.6875rem;
+    font-weight: bold;
+         width: 80px;
+}
+
+.fm-pt-tot-a,
+.fm-pt-tot-b {
+    margin: 0;
+    padding-right: 4px;
+    color: var(--fm-c-text);
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+.fm-total-points {
+    color: #007bff;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+.fm-input-pt {
+    width: 45px;
+    text-align: center;
+}
+
+.draggable {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid var(--fm-c-border);
+    margin: 10px;
+    background-color: var(--fm-c-surface-2);
+    cursor: move;
+}
+
+.sortable-placeholder {
+    border: 1px dashed var(--fm-c-border);
+    background-color: var(--fm-c-surface-2);
+    height: 100px;
+    margin: 10px;
+}
+
+#header_pagep {
+    margin: 0;
+}
+
+#header_page {
+    border: outset;
+    padding: 7px;
+    position: relative;
+}
+#header_page p { margin: 4px 0; }
+
+/* Phase 18 — dark mode: bg scuro + testo chiaro + link leggibili */
+body.fm-dark #header_page {
+    background-color: #2a2a3a;
+    color: #e0e0e0;
+    border-color: #555;
+}
+body.fm-dark #header_page .fm-header-body,
+body.fm-dark #header_page .fm-source-citation {
+    color: #e0e0e0;
+}
+body.fm-dark #header_page a { color: #9dc9ff; }
+body.fm-dark #header_page a:hover { color: #bddfff; }
+body.fm-dark #header_page strong, body.fm-dark #header_page b { color: #ffd88a; }
+
+/* Phase 16 — #modHeaderBtn: pulsante "Modifica" in alto a destra del
+ * `#header_page`, iniettato da JS quando body.fm-admin-access. Stile pill
+ * scuro leggibile su sfondo muted. */
+#modHeaderBtn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    height: 24px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    border: 1px solid #2a5ac7;
+    border-radius: 12px;
+    background: #2a5ac7;
+    color: #fff;
+    font: 600 11px/1 system-ui;
+    z-index: 5;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.15s, transform 0.1s;
+}
+#modHeaderBtn:hover { background: #1e4aa0; transform: translateY(-1px); }
+#modHeaderBtn:active { transform: translateY(0); }
+/* WCAG 2.2 AA (ADR-023): lo <span>Modifica</span> iniettato da JS ereditava
+   un colore scuro (#1a1a1a, 2.8:1 sul bg blu). Forza bianco come il bottone. */
+#modHeaderBtn span { color: #fff !important; }
+
+#header_page.fm-header-editing {
+    outline: 2px dashed #2a5ac7;
+    outline-offset: -3px;
+    padding-bottom: 14px;
+}
+
+/* Lista fonti quando >1: una per riga, marker •, indentata. */
+#header_page .fm-source-list {
+    margin: 4px 0 0 0;
+    padding-left: 22px;
+    list-style: disc;
+}
+#header_page .fm-source-list li { margin: 2px 0; }
+
+/* Editor inline (apparent in edit mode) */
+.fm-header-editor {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: rgba(42, 90, 199, 0.06);
+    border: 1px solid #b8c4e0;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font: 13px/1.4 system-ui;
+}
+.fm-header-editor .fm-header-field { display: flex; flex-direction: column; gap: 4px; }
+.fm-header-editor .fm-header-field > span { font-size: 0.6875rem; color: var(--fm-c-text-2); font-weight: 600; }
+.fm-header-editor textarea {
+    width: 100%;
+    padding: 6px 8px;
+    font: 12px/1.4 Consolas, monospace;
+    border: 1px solid #aac;
+    border-radius: 4px;
+    resize: vertical;
+    box-sizing: border-box;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+}
+.fm-header-editor .fm-header-auto {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text);
+}
+.fm-header-editor .fm-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.fm-header-editor .fm-header-actions button {
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font: 600 12px/1 system-ui;
+    border: 1px solid #aaa;
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+}
+.fm-header-editor .fm-header-save {
+    background: #2a5ac7 !important;
+    color: #fff !important;
+    border-color: #2a5ac7 !important;
+}
+.fm-header-editor .fm-header-save:hover { background: #1e4aa0 !important; }
+
+body.fm-dark #modHeaderBtn { border-color: #4a78e0; background: #3a4a7e; }
+body.fm-dark #modHeaderBtn:hover { background: #4a5a9e; }
+body.fm-dark .fm-header-editor {
+    background: rgba(74, 120, 224, 0.08);
+    border-color: #4a4a5a;
+}
+body.fm-dark .fm-header-editor textarea {
+    background: #1e1e2a;
+    color: #d0d0dc;
+    border-color: #555;
+}
+
+/* #classe_page{
+    display: flex;
+}
+#classe_page p{
+    margin: 0; */
+/* display: flex; */
+/* } */
+
+/* ================================== */
+
+.fm-pagestyle{
+    display: contents;
+}
+
+.fm-pagestyle .fm-selector-eser{
+    position: sticky;
+    top: 200px;
+    z-index: 20;
+}
+
+[id^="type_verAll"] .fm-selector-eser {
+    position: sticky;
+    top: 222px;
+    z-index: 20;
+}
+
+/* G19.4 — restyle moderno della .fm-selector-eser + .fm-scelte-verifica-wrapper.
+ *
+ * Token color centrali: --fm-c-* (light/dark via body.fm-dark in layout.css)
+ * con fallback hardcoded per render fuori contesto (admin pages legacy).
+ *
+ * Layout: pillbar orizzontale (gap 8px) con elementi *tutti* 28px height +
+ * box-sizing border-box uniforme — i selects nativi rendono ~32px senza
+ * height esplicita (sproporzione vs button). Border-radius 6px coerente.
+ *
+ * Variabile shared `--fm-elem-h: 28px` per allineare i 7 element types:
+ * select.fm-tipo-esercizio, .fm-sync-quesiti-btn, .fm-dropdown-button-gen,
+ * .fm-half-moon-button, .fm-help-circle, select.fm-tipo-esercizio-ver,
+ * .fm-sync-quesiti-ver-btn, .fm-salva-scelte-btn, .fm-carica-scelte-btn,
+ * .fm-scelte-versioni.
+ */
+.fm-selector-eser {
+    --fm-elem-h: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin-bottom: 15px;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--fm-c-surface, #f8fafc);
+    border: 1px solid var(--fm-c-border, var(--fm-c-border));
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+/* G19.22+fix-flicker — `.fm-selector-eser` viene clonato in #infoVer,
+   poi rilocato in #fm-topbar [data-fm-eser-slot]. Senza guard, l'utente
+   vede l'elemento apparire → scomparire → riapparire. Hide finché
+   `.fm-mounted` non viene aggiunto da topbar-modern.relocateSelectorEser. */
+.fm-selector-eser:not(.fm-mounted) {
+    visibility: hidden;
+}
+.fm-selector-eser > *,
+.fm-selector-eser > .fm-dropdown-gen > * {
+    box-sizing: border-box;
+}
+body.fm-dark .fm-selector-eser {
+    background: #1f2330;
+    border-color: #334155;
+}
+
+/* Wrapper per pulsanti Salva/Carica scelte verifica — restyle G19.4.
+ * G19.5 — `display: inline-flex` SEMPRE (rimosso il `display:none` inline
+ * dal template). Gli `!important` non servono perché ora niente lo nasconde
+ * a monte. Visibility resta gated dal contesto: il wrapper è inside
+ * `#scrollbarInfo` (visibile solo in admin/verifica-mode). */
+.fm-scelte-verifica-wrapper {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 10px;
+    height: var(--fm-elem-h, 28px);
+    margin-left: auto;
+    background: var(--fm-c-surface-2, #eef2ff);
+    border: 1px solid var(--fm-c-border, #c7d2fe);
+    border-radius: 8px;
+}
+body.fm-dark .fm-scelte-verifica-wrapper {
+    background: #1e293b;
+    border-color: #475569;
+}
+
+/* G19.10 — `.fm-scelte-versioni` restyling: layout INLINE (label accanto al
+ * radio, non sotto). Rimosso border + background propri (il container
+ * `.fm-scelte-verifica-wrapper` ha già il proprio bordo) per evitare il
+ * "labels escono dai bordi" segnalato dall'utente.
+ *
+ * Pattern: piccoli pill button-like, "v1" "v2" "v3" inline, radio + label
+ * orizzontali. Molto più compatto e contenuto. */
+.fm-scelte-versioni {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+body.fm-dark .scelta-versione-option { color: #cbd5e1; }
+body.fm-dark .scelta-versione-option:hover {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.fm-scelta-versione-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 11px;
+    height: 11px;
+    margin: 0;
+    border-radius: 50%;
+    border: 2px solid var(--fm-c-border-strong, #94a3b8);
+    background-color: var(--fm-c-surface, #ffffff);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+}
+body.fm-dark .fm-scelta-versione-checkbox {
+    border-color: #64748b;
+    background-color: #0f172a;
+}
+
+.fm-scelta-versione-checkbox:hover {
+    transform: scale(1.1);
+    border-color: var(--fm-c-primary, #2563eb);
+}
+
+.fm-scelta-versione-checkbox:checked {
+    background-color: var(--fm-c-primary, #2563eb);
+    border-color: var(--fm-c-primary, #1d4ed8);
+    box-shadow: 0 0 0 2px var(--fm-c-primary-soft, rgba(37, 99, 235, 0.25));
+}
+body.fm-dark .fm-scelta-versione-checkbox:checked {
+    background-color: #3b82f6;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.fm-scelta-versione-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--fm-c-surface);
+}
+
+.fm-scelte-verifica-wrapper button {
+    height: 22px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1;
+    transition: background-color .15s, border-color .15s, transform .1s;
+}
+.fm-scelte-verifica-wrapper button:active { transform: translateY(1px); }
+
+.fm-salva-scelte-btn {
+    color: #ffffff;
+    background-color: #16a34a;
+    border-color: #15803d;
+}
+.fm-salva-scelte-btn:hover {
+    background-color: #15803d;
+    border-color: #14532d;
+}
+.fm-salva-scelte-btn:disabled {
+    background-color: #d1d5db;
+    border-color: #9ca3af;
+    color: var(--fm-c-muted);
+    cursor: not-allowed;
+}
+body.fm-dark .fm-salva-scelte-btn {
+    background-color: #16a34a;
+    border-color: #166534;
+}
+
+.fm-carica-scelte-btn {
+    color: #ffffff;
+    background-color: #2563eb;
+    border-color: #1d4ed8;
+}
+.fm-carica-scelte-btn:hover {
+    background-color: #1d4ed8;
+    border-color: #1e3a8a;
+}
+.fm-carica-scelte-btn:disabled {
+    background-color: #d1d5db;
+    border-color: #9ca3af;
+    color: var(--fm-c-muted);
+    cursor: not-allowed;
+}
+body.fm-dark .fm-carica-scelte-btn {
+    background-color: #3b82f6;
+    border-color: #2563eb;
+}
+
+/* G19.4/G19.11 — selects uniformati: 28px height + appearance reset.
+ * G19.11 — quando dentro `.fm-eser-group` / `.fm-ver-group`, i select
+ * hanno border-radius solo a sinistra (6px 0 0 6px) per incollarsi al
+ * sync btn (rounded only a destra). Stesso pattern di
+ * `.fm-dropdown-button-gen` + `.fm-half-moon-button`. */
+.fm-selector-eser select.fm-tipo-esercizio,
+.fm-selector-eser select.fm-tipo-esercizio-ver {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: var(--fm-elem-h, 28px);
+    line-height: 1;
+    padding: 0 26px 0 10px;
+    margin: 0;
+    border: 1px solid var(--fm-c-border, var(--fm-c-border));
+    border-radius: 6px;
+    background-color: var(--fm-c-surface, #ffffff);
+    background-image: linear-gradient(45deg, transparent 50%, #64748b 50%),
+                      linear-gradient(135deg, #64748b 50%, transparent 50%);
+    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    color: var(--fm-c-text, #1e293b);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s;
+    vertical-align: middle;
+}
+/* G19.11 — group containers: pill row con select+sync incollati. */
+.fm-selector-eser .fm-eser-group,
+.fm-selector-eser .fm-ver-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+/* Inside group: select arrotondato solo a sinistra. */
+.fm-selector-eser .fm-eser-group > select.fm-tipo-esercizio,
+.fm-selector-eser .fm-ver-group > select.fm-tipo-esercizio-ver {
+    border-radius: 6px 0 0 6px;
+    border-right: none;
+}
+.fm-selector-eser select.fm-tipo-esercizio:hover,
+.fm-selector-eser select.fm-tipo-esercizio-ver:hover {
+    border-color: var(--fm-c-primary, #2563eb);
+}
+.fm-tipo-esercizio     { width: 175px; }
+.fm-tipo-esercizio-ver { width: 195px; margin-left: 0; }
+body.fm-dark .fm-selector-eser select.fm-tipo-esercizio,
+body.fm-dark .fm-selector-eser select.fm-tipo-esercizio-ver {
+    background-color: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+    background-image: linear-gradient(45deg, transparent 50%, #94a3b8 50%),
+                      linear-gradient(135deg, #94a3b8 50%, transparent 50%);
+}
+
+/* G19.11 — `.fm-sync-quesiti-btn` / `.fm-sync-quesiti-ver-btn` ora stile
+ * analogo a `.fm-half-moon-button`: green primary + icon bianca + bordi
+ * raccordati a destra (incollati al select del proprio group).
+ *
+ * Pre-G19.11 erano icon-button neutri (white bg, gray border) con gap
+ * tra select e sync. Ora seguono il pattern pill già usato per
+ * "Seleziona origine + half-moon" → consistenza visiva. */
+.fm-selector-eser .fm-sync-quesiti-btn,
+.fm-selector-eser .fm-sync-quesiti-ver-btn {
+    width: var(--fm-elem-h, 28px);
+    height: var(--fm-elem-h, 28px);
+    padding: 0;
+    border: 1px solid #15803d;
+    border-radius: 0 6px 6px 0;
+    background: #16a34a;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .15s;
+    flex-shrink: 0;
+}
+.fm-selector-eser .fm-sync-quesiti-btn:hover,
+.fm-selector-eser .fm-sync-quesiti-ver-btn:hover {
+    background: #15803d;
+}
+.fm-selector-eser .fm-sync-quesiti-btn img,
+.fm-selector-eser .fm-sync-quesiti-ver-btn img {
+    width: 14px;
+    height: 14px;
+    display: block;
+    /* Inverti colore PNG/SVG → bianco per matchare half-moon */
+    filter: brightness(0) invert(1);
+}
+
+/* G19.4 — `.fm-help-circle` `?` icon: stessa height + stondato. */
+.fm-selector-eser .fm-help-circle {
+    width: var(--fm-elem-h, 28px);
+    height: var(--fm-elem-h, 28px);
+    border-radius: 50%;
+    border: 1px solid var(--fm-c-border, var(--fm-c-border));
+    background: var(--fm-c-surface, #ffffff);
+    color: var(--fm-c-text, #475569);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    cursor: help;
+    flex-shrink: 0;
+    position: relative;
+}
+.fm-selector-eser .fm-help-circle > span {
+    line-height: 1;
+    font-size: 0.8125rem;
+}
+body.fm-dark .fm-selector-eser .fm-help-circle {
+    background: #0f172a;
+    border-color: #334155;
+    color: var(--fm-c-muted);
+}
+
+.fm-dropdown-gen {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+
+/* G19.10 — hover-trigger RIMOSSO: il popup origini ora è esclusivamente
+ * click-toggle (vedi `bindOriginGenDropdown` in upbar-controls.js).
+ * Il vecchio `.fm-dropdown-gen:hover + .fm-dropdown-content-gen { display: block }`
+ * apriva il popup con CSS-only positioning (`left:0`, `top:32px`), quindi
+ * il popup appariva sotto il PRIMO elemento di `.fm-selector-eser` ("+ nuovo
+ * esercizio") invece che sotto "Seleziona origine". Il JS positioning
+ * di G19.9 funzionava solo su CLICK, quindi era bypassato all'hover. */
+
+/* G19.4 — dropdown origini: pannello flottante con item rows uniformi.
+ * G19.10 — `position: fixed` (era `absolute`) per escapare dall'overflow
+ * di `#scrollbarInfo` (`overflow: auto` + `z-index: 1600`) che cliplava il
+ * popup. `left/top` sono ora coordinate VIEWPORT-relative settate via JS
+ * (`positionDropdownContentGen` in upbar-controls.js). z-index alto per
+ * stare sopra `#scrollbarInfo`. */
+.fm-dropdown-content-gen {
+    display: none;
+    position: fixed;
+    background-color: var(--fm-c-surface, #ffffff);
+    border: 1px solid var(--fm-c-border, var(--fm-c-border));
+    border-radius: 6px;
+    width: fit-content;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1700;
+    padding: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.fm-dropdown-content-gen.fm-is-open {
+    display: block;
+}
+body.fm-dark .fm-dropdown-content-gen {
+    background-color: #1f2330;
+    border-color: #334155;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.fm-dropdown-content-gen label {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+}
+.fm-dropdown-content-gen label:hover {
+    background-color: var(--fm-c-primary-soft, #eff6ff);
+}
+body.fm-dark .fm-dropdown-content-gen label:hover {
+    background-color: #1e293b;
+}
+
+.fm-dropdown-content-gen .fm-option-checkbox {
+    margin: 0 6px;
+    cursor: pointer;
+}
+
+.fm-dropdown-content-gen a {
+    color: var(--fm-c-text, #1e293b);
+    padding: 5px 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    border: none;
+    font-size: 0.75rem;
+    font-family: ui-monospace, Consolas, monospace;
+    border-radius: 4px;
+}
+body.fm-dark .fm-dropdown-content-gen a { color: #cbd5e1; }
+
+.fm-dropdown-content-gen a:hover {
+    background-color: transparent;
+}
+
+.fm-dropdown-gen:hover .fm-dropdown-content-gen,
+.fm-dropdown-content-gen:hover {
+    display: block;
+}
+
+.fm-dropdown-button-gen {
+    height: var(--fm-elem-h, 28px);
+    padding: 0 12px;
+    margin: 0;
+    border: 1px solid #15803d;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    background-color: #16a34a;
+    color: white;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color .15s, border-color .15s;
+    line-height: 1;
+}
+.fm-dropdown-button-gen:hover {
+    background-color: #15803d;
+    border-color: #14532d;
+}
+
+.fm-remove-btn,
+.edit-btn {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.fm-remove-btn {
+    color: red;
+}
+
+.edit-btn {
+    color: blue;
+}
+
+/* G19.4 — `+` half-moon button accanto al dropdown-button_gen. Stessa
+ * altezza degli altri elementi (28px) + bordi raccordati a destra. */
+.fm-half-moon-button {
+    width: var(--fm-elem-h, 28px);
+    height: var(--fm-elem-h, 28px);
+    background-color: #16a34a;
+    color: white;
+    border: 1px solid #15803d;
+    border-left: 1px solid rgba(255,255,255,0.25); /* divisore tra i due btn */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 6px 6px 0;
+    margin-left: 0;
+    z-index: 1;
+    font-size: 0.875rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .15s;
+    flex-shrink: 0;
+}
+.fm-half-moon-button:hover { background-color: #15803d; }
+.fm-half-moon-button span {
+    position: static;
+    transform: none;
+    line-height: 1;
+}
+
+#sel-origin {
+    display: none; /* Nascosto di default */
+    background-color: #4CAF50;
+}
+
+/* Mostra #sel-origin solo per gli admin */
+body.fm-admin-access #sel-origin,
+.fm-upbar.fm-admin-access #sel-origin {
+    display: inline-flex;
+}
+
+/* Phase 15 — override legacy `.fm-groupcollex { display: none }`: in exercise
+   context moderno il .fm-groupcollex è sempre visibile (era un vecchio hack
+   legacy che dipendeva da JS che lo mostrava). */
+body.exercise-context .fm-groupcollex { display: block; }
+body.exercise-context .fm-draggable-container { display: block; }
+
+/* Perf (ADR-023) — salta render/paint delle sezioni esercizio fuori dallo
+   schermo (pagina formula-pesante). `content-visibility:auto` non disegna ciò
+   che è off-screen; `contain-intrinsic-size: auto` fa RICORDARE al browser
+   l'altezza reale di OGNI sezione dopo il primo render (collassata o espansa)
+   → niente salti di scroll, gestisce array-LaTeX grandi e formule inline.
+   Sicuro col collapsible: la sezione è già `position:relative` (containing
+   block per gli absolute interni → non si spostano), e collapsible.js legge
+   `scrollHeight` che FORZA il render → max-height sempre corretto. Solo
+   exercise-context: le pagine verifica (openAll) restano intatte.
+   120px = stima iniziale per sezione collassata (solo finché mai renderizzata). */
+body.exercise-context .fm-groupcollex {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 120px;
+}
+
+/* Phase 24.77 — FIX sticky stacking. Quando un problema è APERTO il suo
+   header `.fm-collapsible.active` diventa `position:fixed` (verifica-sticky.js)
+   per impilarsi sotto il titolo durante lo scroll. Ma `content-visibility:auto`
+   implica `contain: layout paint` → la `.fm-groupcollex` diventa containing
+   block dei fixed discendenti, che restano ancorati alla sezione (scrollano via
+   invece di restare in cima): è la regression "prima c'era". Disattiviamo
+   content-visibility per le SOLE sezioni con problema aperto — la perf
+   off-screen resta intatta per tutti i problemi chiusi. */
+body.exercise-context .fm-groupcollex:has(.fm-collapsible.active) {
+    content-visibility: visible;
+    contain: none;
+}
+
+/* ── Studio DB-backed: override legacy .content/.fm-collapsible collapse
+      così i collex-item sono visibili di default, senza dipendere dal
+      toggle JS legacy della collapsible. ── */
+.fm-db-study .fm-db-collexercise {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.fm-db-study .fm-collection__item {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #c9cff0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    display: block;
+}
+.fm-db-study .fm-collection__item .fm-titolo-quesito {
+    font-size: 0.75rem;
+    color: var(--fm-c-text-2);
+    margin-bottom: 6px;
+}
+.fm-db-study .fm-collection__item details.fm-sol {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #fff7d8;
+    border-left: 3px solid #c9a227;
+    border-radius: 4px;
+}
+.fm-db-study .fm-collection__item details.fm-sol summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #7a5c00;
+}
+
+/* Alcune pagine studio non usano le coll-pagine legacy, assicuriamoci
+   che l'.fm-upbar placeholder non occupi altezza fissa su topics list. */
+.fm-db-study #upbar:empty { display: none; }
+
+/* Phase 15 — fm-problem-controls (sostituto moderno di .fm-pos-check-es
+   legacy che era popolato via AJAX Elementi_Riservati.html). Visibile
+   solo in modalità verifica-mode. */
+
+body.fm-verifica-mode .fm-problem-controls {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 2px 8px;
+    margin-right: 8px;
+    background: #f2ff00;
+    border: 1px solid #c4c400;
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+body.fm-dark .fm-problem-controls {
+    background: #3a3a2a;
+    border-color: #666;
+    color: #f0e8b0;
+}
+
+/* ── Modalità verifica (Phase 21: sempre-on per body.fm-admin-access
+       via ensureVerificaMode → body.fm-verifica-mode) ── */
+/* Phase 17 — `.collex-pick` rimosso (feature obsoleta); CSS cancellato. */
+body.fm-verifica-mode .fm-collection__item {
+    outline: 1px dashed #f2ff00;
+    outline-offset: -2px;
+}
+/* Phase 21: .btn-esActive regola orfana (applicata da legacy toggleActive
+   a #btnAct, ora rimosso). Lasciata per compat .btn-esAct_sidebar. */
+
+/* #analytics-btn è static in UpBar_Es.html; mostrato solo per admin */
+#analytics-btn { display: none; }
+body.fm-admin-access #analytics-btn,
+.fm-upbar.fm-admin-access #analytics-btn { display: inline-flex; }
+#analytics-btn {
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #2ea043, #238636);
+    border: 2px solid #1a6729;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    cursor: pointer;
+    height: 32px;
+}
+#analytics-btn:hover { filter: brightness(1.1); }
+
+/* Nascondi controlli admin di default */
+#toggle-checkboxABin-control,
+#select-all-controls {
+    display: none !important;
+}
+
+/* #toggle-visibility-control sempre visibile per tutti */
+#toggle-visibility-control,
+.fm-upbar #toggle-visibility-control,
+body #toggle-visibility-control {
+    display: grid !important;
+    row-gap: 1px;
+}
+
+/* Mostra controlli admin solo per gli admin */
+body.fm-admin-access #toggle-checkboxABin-control,
+.fm-upbar.fm-admin-access #toggle-checkboxABin-control {
+    display: grid !important;
+}
+
+body.fm-admin-access #select-all-controls,
+.fm-upbar.fm-admin-access #select-all-controls {
+    display: grid;
+}
+
+.latex-preview {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid var(--fm-c-border);
+    background-color: var(--fm-c-surface-2);
+}
+
+.fm-help-circle {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #529fff;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.fm-help-message {
+    width: 300px;
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    background-color: #333;
+    font-size: 0.75rem;
+    margin: 0;
+    color: #fff;
+    padding: 10px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 5px;
+    white-space: normal;
+    /* Cambia da nowrap a normal */
+    z-index: 1000;
+    word-wrap: break-word;
+    word-break: break-word;
+    /* Aggiungi questa proprietà */
+    line-height: 1.2;
+}
+
+/* DSA Button Tooltip */
+.fm-dsa-btn {
+    position: relative;
+}
+
+.fm-dsa-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    width: 356px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px 12px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: opacity 0.3s, visibility 0.3s;
+    white-space: normal;
+    word-wrap: break-word;
+    pointer-events: none;
+}
+
+.fm-dsa-btn:hover .fm-dsa-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+#scrollbarInfo{
+    position: sticky;
+    top: 86px;
+    z-index: 4;
+    overflow-x: auto;
+    transition: all 0.4s ease;
+}
+/* Phase 16 — quando `.fm-upbar.upbar-hidden` è attiva (upbar off-screen),
+ * `#scrollbarInfo` sale al top:0 per eliminare il gap vuoto. La classe
+ * `body.fm-upbar-hidden` è impostata da `updateProblemStickyOffset`. */
+body.fm-upbar-hidden #scrollbarInfo {
+    top: 0;
+}
+
+/* Stato nascosto scrollbarInfo - nasconde solo infoVer */
+#scrollbarInfo.fm-scrollbar-info-hidden #infoVer {
+    display: none;
+}
+
+/* Contenitore toggle scrollbarInfo - absolute per default */
+#scrollbarInfo-toggle-container {
+    position: absolute;
+    top: 10px;
+    background: rgba(176, 224, 230, 0.95);
+    border: 2px solid var(--fm-c-border);
+    border-radius: 22px;
+    padding: 0.5px 0px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    transition: opacity 0.3s ease;
+    z-index: 11;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    opacity: 1;
+}
+
+/* Quando scrollbarInfo è nascosto, il toggle diventa fixed e si sposta in alto.
+ * Phase 15 — il left deve rispettare la sidebar: quando aperta (--widthLsidebar)
+ * il toggle va subito a destra, quando body.fm-sidebar-closed lo spingiamo al
+ * bordo del pulsante switch (34px). */
+#scrollbarInfo.fm-scrollbar-info-hidden #scrollbarInfo-toggle-container {
+    position: fixed;
+    top: 46px;
+    left: calc(var(--widthLsidebar) + 5px);
+}
+body.fm-sidebar-closed #scrollbarInfo.fm-scrollbar-info-hidden #scrollbarInfo-toggle-container {
+    left: 39px;
+}
+
+#scrollbarInfo-toggle-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Checkbox nascosto */
+#scrollbarInfo-toggle {
+    display: none;
+}
+
+/* Slider del toggle */
+.fm-scrollbar-info-slider {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #096663;
+    border-radius: 100%;
+    cursor: pointer;
+    text-align: center;
+    place-content: center;
+    line-height: 22px;
+    font-size: 0.8125rem;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+    user-select: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.fm-scrollbar-info-slider:hover {
+    transform: scale(1.02);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fm-scrollbar-info-slider:active {
+    transform: scale(0.98);
+}
+/* Scrollbar orizzontale sottile per #infoVer */
+#scrollbarInfo::-webkit-scrollbar {
+    height: 4px;
+}
+
+#scrollbarInfo::-webkit-scrollbar-track {
+    background: rgba(176, 224, 230, 0.3);
+    border-radius: 2px;
+}
+
+#scrollbarInfo::-webkit-scrollbar-thumb {
+    background: rgba(176, 224, 230, 0.8);
+    border-radius: 2px;
+}
+
+#scrollbarInfo::-webkit-scrollbar-thumb:hover {
+    background: powderblue;
+}
+
+#infoVer {
+    position: sticky;
+    /* position: sticky;
+    top: 96px;
+    z-index: 10; */
+    background: 
+        linear-gradient(to bottom, rgba(176, 224, 230, 0.6), rgba(89, 89, 169, 0) 20%, rgba(89, 89, 169, 0) 80%, rgba(176, 224, 230, 0.6)),
+        linear-gradient(to right, powderblue, #096663 5%, #5959a9 95%, powderblue);
+    /* display: flex; */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* border: outset; */
+    padding: 15px 65px 15px 65px;
+    min-width: 1200px;
+}
+
+#infoVer::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -7px;
+    height: 7px;
+    background: linear-gradient(to top, rgba(176, 224, 230, 0.6), powderblue 111%, rgba(89, 89, 169, 0) 00%, rgba(176, 224, 230, 0.6)), 
+                linear-gradient(to right, powderblue, #096663 5%, #5959a9 95%, powderblue);
+    z-index: 10;
+    opacity: 80%;
+}
+#infoVer::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(176, 224, 230, 0.6), powderblue 111%, rgba(89, 89, 169, 0) 00%, rgba(176, 224, 230, 0.6)), 
+                linear-gradient(to right, powderblue, #096663 5%, #5959a9 95%, powderblue);
+    z-index: 10;
+    opacity: 80%;
+}
+#infoVer p {
+    color: white;
+}
+
+#wrapInfoSchool,
+#wrapInfoVer {
+    display: flex;
+    margin-bottom: 5px;
+    align-items: center;
+}
+#wrapInfoStudent{
+    display: flex;
+    margin-left: 25px;
+    gap: 5px;
+    width: -webkit-fill-available;
+}
+
+#wrapInfoStudent input {
+    padding: 2px 5px;
+    width: 50%;
+}
+
+#wrapInfoSchool{
+    align-items: self-end;
+}
+
+#wrapDSA {
+    /* width: 60px; */
+    display: flex;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 10px;
+    padding: 0px 5px;
+}
+#wrapGriglieMisure{
+    display: flex;
+    background-color: #00a3f8;
+    color: white;
+    border-radius: 10px;
+    padding: 0px 5px;
+    margin-left: 5px;
+    min-width: max-content;
+}
+
+input#DSA {
+    margin-left: 7px;
+}
+
+label[for="Compensa"] {
+    border-right: 4px solid powderblue;
+    padding-right: 10px;
+}
+label[for="griglie"] {
+    border-right: 4px solid powderblue;
+    padding-right: 10px;
+}
+
+#verTitle {
+    margin-left: 5px;
+    width: -webkit-fill-available;
+}
+
+/* #addressSchool,
+#istituto,
+#verTime,
+#verTitle {
+    margin-left: 5px;
+} */
+
+#anno {
+    width: 40px;
+    text-align: center;
+}
+
+#addressSchool {
+    width: 100px;
+}
+#versione,
+#vers,
+#istituto {
+    width: 63px;
+}
+
+#verTime {
+    width: 50px;
+    text-align: center;
+}
+
+#classe, 
+#sezione {
+    /* margin-left: 5px;
+    width: 30px; */
+    text-align: center;
+    width: 30px;
+}
+
+#nPrint,
+#versione {
+    /* margin-left: 25px; */
+    text-align: center;
+}
+
+#SumPtotA,
+#SumPtotB {
+    /* margin-left: 25px; */
+    width: 50px;
+    text-align: center;
+    background-color: #e6f3ff;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #0056b3;
+    padding: 2px;
+}
+
+input::placeholder {
+    color: #ccc;
+    /* Colore sbiadito */
+    font-style: italic;
+    /* Stile corsivo */
+}
+
+#vers,
+#numCopy {
+    /* margin-left: 26px; */
+    font-size: small;
+    /* margin-top: 10px; */
+}
+
+/* #numCopy {
+    margin: 6px 0 0 48px;
+} */
+
+/* #vers {
+    margin: 6px 0 0 60px;
+} */
+
+#SumTot{
+    margin: 6px 0 0 26px;
+}
+
+.fm-wrap-info-basic {
+    display: grid;
+    text-align: center;
+    align-items: center;
+    margin-left: 3px;
+}
+
+.fm-wrap-info-basic p {
+    margin: 0;
+    font-size: small;
+    /* font-weight: bold; */
+    color: var(--fm-c-text);
+}
+
+#savePrintInfoBtn {
+    height: 39px;
+    margin-left: 5px;
+    padding: 0px 3px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: background-color 0.2s ease;
+}
+
+#savePrintInfoBtn:hover {
+    background: #45a049;
+}
+
+#savePrintInfoBtn:active {
+    background: #3d8b40;
+    transform: scale(0.98);
+}
+
+.fm-wrap-info-print
+{
+       margin-left: 5px;
+    width: 40px;
+    text-align: center;
+}
+.fm-input-print{
+    width: 30px;
+    text-align: center;
+}
+.fm-sub-wrap-info-school{
+    margin-left: 25px;
+    text-align: center;
+}
+#SumTotA,
+#SumTotB {
+    width: max-content;
+}
+.fm-add-btn-tables,
+.fm-del-btn-tables {
+    width: 20px;
+    height: 20px;
+    background-color: var(--fm-c-surface-2);
+    color: black;
+    border: 2px outset var(--fm-c-border);
+    border-radius: 5px;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-style 0.1s;
+}
+
+#from0 {
+    left: 235px;
+    top: 13px;
+}
+
+.fm-add-btn-tables {
+    left: 235px;
+}
+
+.fm-del-btn-tables {
+    left: 255px;
+    background-color: #f78080;
+    font-size: medium;
+}
+
+.fm-del-btn-tables:active {
+    border-style: inset;
+    background-color: #e33e3e;
+}
+
+.fm-add-btn-tables:hover {
+    background-color: #e0e0e0;
+}
+
+.fm-add-btn-tables:active {
+    border-style: inset;
+    background-color: #d0d0d0;
+}
+
+/* insertcheckbox-Cell quando è dentro una cella con wrapCheckCell (edit mode) */
+td > .fm-insertcheckbox-cell {
+    position: static;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.fm-check-del-row {
+    place-items: center;
+}
+
+.fm-insertcheckbox-row,
+.fm-insertcheckbox-col {
+    width: 14px;
+    transform: scale(1.5);
+}
+
+td.row-actions {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+td.fm-column-actions {
+    height: 20px;
+    justify-content: center;
+}
+
+.fm-add-del-col {
+    display: flex;
+    gap: 2px;
+}
+
+.fm-input-mixtr,
+.fm-input-mixcol {
+    display: inline-block;
+    text-align: center;
+    border-style: inset;
+    padding: 2px 5px 2px 5px;
+}
+
+.fm-typecell-input {
+    width: 10px;
+    text-align: center;
+}
+
+.fm-typecell-container {
+    display: inline-flex;
+    gap: 3px;
+}
+
+.fm-input-mod-table {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    border: outset;
+    padding: 5px;
+    min-width: 346px;
+    width: fit-content;
+}
+
+.fm-num-table {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.fm-num-table-t {
+    width: 25px;
+    font-weight: bold;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    background: linear-gradient(to right, #a095d5, transparent);
+}
+
+.fm-tabelle-align-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 10px 2px;
+    font-size: 0.8125rem;
+}
+
+.fm-align-toggle {
+    display: flex;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fm-align-btn {
+    padding: 3px 10px;
+    border: none;
+    background: var(--fm-c-surface-2);
+    cursor: pointer;
+    font-size: 0.8125rem;
+    transition: background 0.2s;
+}
+
+.fm-align-btn.active {
+    background: #7877db;
+    color: white;
+}
+
+/* ========================================================= */
+/* ================ TOGGLE SLIDER EXERCISES ================ */
+/* ========================================================= */
+
+/* Scope-ato: colpisce solo gli switch esercizi (quelli che contengono
+   un .slider-toggle); NON il .fm-switch della sidebar globale. */
+.fm-switch:has(> .slider-toggle) {
+    position: relative;
+    display: inline-block;
+    width: 55px;
+    height: 12px;
+}
+
+.fm-switch:has(> .slider-toggle) input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* ========================================================= */
+/* ================ SELECT ALL CHECKBOXES ================== */
+/* ========================================================= */
+
+.fm-checkbox-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: right;
+}
+
+.fm-select-all-checkbox {
+    width: 14px;
+    /* height: 20px; */
+    cursor: pointer;
+    accent-color: #4CAF50;
+}
+
+/* ========================================================= */
+/* ================ VERSIONE TOOLTIP ======================= */
+/* ========================================================= */
+
+#versione-tooltip {
+    /* G19.19 — `position: fixed` (era absolute) per uscire dall'overflow
+     * di `#scrollbarInfo` (overflow:auto, z-index:1600) che cliplava il
+     * tooltip. `top/left` sono ora coordinate VIEWPORT-relative settate
+     * via JS (initializeVersioneTooltip in event-handler.js). z-index
+     * alto per stare sopra `#scrollbarInfo`. */
+    position: fixed;
+    background: var(--fm-c-surface);
+    border: 2px solid #4CAF50;
+    border-radius: 4px;
+    padding: 12px;
+    z-index: 1700;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    display: none;
+    min-width: 300px;
+    max-width: 420px;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#versione-tooltip h4 {
+    margin: 0 0 8px 0;
+    color: #4CAF50;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+#versione-tooltip .fm-ultima-versione {
+    background: var(--fm-c-surface-2);
+    padding: 6px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+#versione-tooltip .fm-esempio {
+    margin: 4px 0;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+#versione-tooltip .fm-esempio:hover {
+    background-color: #e8f5e9;
+}
+
+#versione-tooltip .fm-esempio strong {
+    color: #2196F3;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+#versione-tooltip .loading {
+    color: var(--fm-c-muted);
+    font-style: italic;
+}
+
+/* G19.46 — categorie tooltip (Verifica classica / recupero / prova) */
+#versione-tooltip .fm-versione-cat {
+    margin: 8px 0 4px;
+    padding: 2px 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--fm-c-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--fm-c-border);
+}
+#versione-tooltip .fm-versione-cat:first-of-type { margin-top: 4px; }
+
+/* Dark theme */
+body.fm-dark #versione-tooltip {
+    background: #1f2330;
+    color: #e2e8f0;
+    border-color: #16a34a;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+body.fm-dark #versione-tooltip h4 { color: #86efac; }
+body.fm-dark #versione-tooltip .fm-ultima-versione {
+    background: #0f172a;
+    color: #cbd5e1;
+}
+body.fm-dark #versione-tooltip .fm-esempio:hover { background-color: rgba(22, 163, 74, 0.18); }
+body.fm-dark #versione-tooltip .fm-esempio strong { color: #60a5fa; }
+body.fm-dark #versione-tooltip .fm-versione-cat {
+    color: var(--fm-c-muted);
+    border-bottom-color: #334155;
+}
+
+/* Aumenta l'altezza di #infoVer quando il tooltip è visibile */
+#infoVer.fm-tooltip-expanded {
+    padding-bottom: 320px; /* Spazio sufficiente per il tooltip */
+    transition: padding-bottom 0.3s ease;
+}
+
+/* Nasconde il bordo inferiore ::after quando il tooltip è visibile */
+#infoVer.fm-tooltip-expanded::after {
+    display: none;
+}
+
+/* Aumenta l'altezza di #infoVer quando il dropdown è visibile.
+ * `.fm-origin-open` è impostata da `bindOriginGenDropdown` (click-based).
+ * I selettori `:hover` restano come fallback per navigazione desktop. */
+#infoVer.fm-origin-open,
+#infoVer:has(.fm-dropdown-gen:hover),
+#infoVer:has(.fm-dropdown-content-gen:hover) {
+    padding-bottom: 250px;
+    transition: padding-bottom 0.3s ease;
+}
+
+#infoVer.fm-origin-open::after,
+#infoVer:has(.fm-dropdown-gen:hover)::after,
+#infoVer:has(.fm-dropdown-content-gen:hover)::after {
+    display: none;
+}
+
+#infoVer.fm-tooltip-expanded::after {
+    height: 340px; /* Estende anche il gradient finale */
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ * Phase 24.36 — Studio preview PT-rendered content
+ * Wrapper emesso da PtToHtml render in ContentStudyController.
+ * Styling consistente con risdoc/contract per coerenza visuale.
+ * ─────────────────────────────────────────────────────────────────── */
+.fm-pt-rendered {
+    background: var(--fm-risdoc-card-bg, #fff);
+    border: 1px solid var(--fm-risdoc-border, var(--fm-c-border));
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+/* Phase 24.45 — layout=custom: pagina senza scaffolding #header_page.
+ * Margini più ampi per simulare A4 leggibile. */
+.fm-pt-custom-page {
+    max-width: 880px;
+    margin: 18px auto;
+    padding: 0 16px 32px;
+}
+.fm-pt-custom-page > .fm-pt-rendered {
+    margin-top: 0;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-item-title {
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--fm-risdoc-accent, #2a5ac7);
+    font-size: 1.05em;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-section-header {
+    margin: 14px 0 8px;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+    font-weight: 600;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-section-selectors {
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-weight: 400;
+    font-size: 0.85em;
+}
+/* Modo "all": colonna verticale (un item per riga), ognuno con marker ☑/☐. */
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0;
+}
+/* N colonne (anteprima): display:block + column-count impostato inline (1–5). */
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-checkbox-group.fm-pt-cb--multicol,
+:is(.fm-pt-rendered, .ptdoc__body) ul.fm-pt-cb-list.fm-pt-cb--multicol {
+    display: block;
+    column-gap: 32px;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb--multicol .fm-pt-cb-item,
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb--multicol .fm-pt-cb-group-head,
+:is(.fm-pt-rendered, .ptdoc__body) ul.fm-pt-cb-list.fm-pt-cb--multicol li {
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb--multicol .fm-pt-cb-group-head { break-after: avoid; }
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1.45;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-item .fm-pt-cb-state {
+    font-size: 1.1em;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-list {
+    margin: 6px 0 6px 22px;
+    padding: 0;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-list li { margin: 2px 0; }
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-group-head {
+    width: 100%;
+    margin: 8px 0 2px;
+    font-weight: 700;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cb-inline {
+    display: inline;
+    color: var(--fm-risdoc-accent, #2a5ac7);
+    font-weight: 500;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table {
+    border-collapse: collapse;
+    margin: 10px 0;
+    /* widthMode "auto" (default): adatta al contenuto, mai oltre la pagina. */
+    width: auto;
+    max-width: 100%;
+}
+/* widthMode "full": occupa tutta la larghezza utile; le % del <colgroup>
+   fissano le proporzioni delle colonne (table-layout:fixed). */
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table--full {
+    width: 100%;
+    table-layout: fixed;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table--full th,
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table--full td {
+    overflow-wrap: anywhere;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table th,
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table td {
+    border: 1px solid var(--fm-risdoc-border, var(--fm-c-border));
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table thead th {
+    background: var(--fm-risdoc-bg-field, #f8fafc);
+    font-weight: 600;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table caption {
+    caption-side: bottom;
+    padding-top: 6px;
+    font-style: italic;
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-size: 0.9em;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cell-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: stretch;
+}
+/* Una voce per riga, testo che va a capo dentro la colonna; il simbolo ☑/☐
+   resta a inizio frase (hanging indent), niente più sovrapposizioni. */
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cell-check {
+    display: block;
+    white-space: normal;
+    padding-left: 1.4em;
+    text-indent: -1.4em;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-cell-check-group {
+    width: 100%;
+    font-weight: 600;
+    margin-top: 4px;
+    border-bottom: 1px solid currentColor;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table-note {
+    margin: 4px 0;
+    color: var(--fm-risdoc-text-muted, #64748b);
+    font-size: 0.9em;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-field-missing {
+    color: var(--fm-risdoc-error-fg, #b91c1c);
+    background: var(--fm-risdoc-error-bg, #fee2e2);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-rawtex {
+    background: var(--fm-risdoc-bg-field, #f1f5f9);
+    border-left: 3px solid var(--fm-risdoc-text-muted, #64748b);
+    padding: 6px 10px;
+    overflow-x: auto;
+    font-size: 0.85em;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-select-rendered,
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-textfield-rendered {
+    display: inline-block;
+    margin: 0 2px;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-form-checkbox-rendered {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    margin: 0 6px 0 0;
+}
+/* Widget tabella nell'ANTEPRIMA — classi reali emesse da pt-to-html.js
+   (.pt-text-field / .pt-select / .fm-pt-formula). Prima erano senza stile →
+   larghezza default del browser (~20 caratteri) = input troppo largo nelle
+   celle. I numeri restano stretti; il testo si adatta alla cella. */
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table .pt-text-field {
+    width: auto;
+    min-width: 4em;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    font: inherit;
+    border: 1px solid var(--fm-risdoc-border, #cbd5e1);
+    border-radius: 3px;
+    background: var(--fm-risdoc-bg-field, #f9f9f9);
+    color: inherit;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table .pt-text-field[type="number"],
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table .pt-text-field[type="date"] {
+    width: 6em;
+    min-width: 0;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table .pt-select {
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    font: inherit;
+    border: 1px solid var(--fm-risdoc-border, #cbd5e1);
+    border-radius: 3px;
+    background: var(--fm-risdoc-bg-field, #f9f9f9);
+    color: inherit;
+}
+:is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table .fm-pt-formula {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--fm-risdoc-formula-fg, #1d4ed8);
+}
+
+/* Dark mode adjustments */
+body.fm-dark .fm-pt-rendered {
+    background: var(--fm-risdoc-card-bg-dark, #1e293b);
+    border-color: var(--fm-risdoc-border-dark, #334155);
+    color: var(--fm-risdoc-text-dark, #e2e8f0);
+}
+body.fm-dark :is(.fm-pt-rendered, .ptdoc__body) .fm-pt-table thead th {
+    background: var(--fm-risdoc-bg-field-dark, #0f172a);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   A11y — WCAG 2.2, 2.5.8 Target Size (Minimum, AA)
+   I controlli-icona dell'editor verifiche (operabili da tastiera, vedi
+   ContractRenderer + checkin-handlers) erano 20×20px: portati ad almeno
+   24×24px di area target. Regola in coda al file → vince per source-order
+   sulle definizioni 20px dei singoli controlli (.edit/.fm-modifica-btn/
+   .fm-elimina-btn/.fm-quick-save-btn/.fm-edit-q/move-btn, stessa specificità).
+   L'icona interna resta centrata via flex. ──────────────────────────── */
+.edit,
+.fm-edit-q,
+.fm-move-up-btn,
+.fm-move-down-btn {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+}

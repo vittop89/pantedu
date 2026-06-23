@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "31897d880046773a",
+    "type": "split",
+    "children": [
+      {
+        "id": "00505211f5282339",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1f24eec72aecbd60",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista grafo"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c62d30834288f1e6",
+    "type": "split",
+    "children": [
+      {
+        "id": "75a2efa1f9f9e49f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "140a155c985d6c62",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Esplora risorse"
+            }
+          },
+          {
+            "id": "222e3f7abc70f2ea",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Ricerca"
+            }
+          },
+          {
+            "id": "d11becf32b815a36",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Segnalibri"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "10fe421bdb621102",
+    "type": "split",
+    "children": [
+      {
+        "id": "7665c61d84173a75",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e7512c1b161e9e75",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "_llm-primer.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Riferimenti a _llm-primer"
+            }
+          },
+          {
+            "id": "01dbeb0549283db8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "_llm-primer.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Collegamenti in uscita da _llm-primer"
+            }
+          },
+          {
+            "id": "18c6e011b67f0f4d",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etichette"
+            }
+          },
+          {
+            "id": "c96ba38f9fb30589",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Tutte le proprietà"
+            }
+          },
+          {
+            "id": "ff4ad7245ea71c57",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "_llm-primer.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Struttura di _llm-primer"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Apri selezione rapida": false,
+      "graph:Apri vista grafo": false,
+      "canvas:Crea nuova lavagna": false,
+      "daily-notes:Apri nota del giorno": false,
+      "templates:Inserisci modello": false,
+      "command-palette:Apri riquadro comandi": false,
+      "bases:Crea nuova Base": false
+    }
+  },
+  "active": "1f24eec72aecbd60",
+  "lastOpenFiles": [
+    "_llm-primer.md.tmp.28668.1777455349810",
+    "_llm-primer.md.tmp.28668.1777455295552",
+    "Senza nome.md",
+    "map.md.tmp.28668.1777455219722",
+    "domains/verifiche/verifiche-overview.md",
+    "domains/risdoc/risdoc-overview.md",
+    "domains/mappe/mappe-overview.md",
+    "domains/frontend/frontend-overview.md",
+    "domains/esercizi/esercizi-overview.md",
+    "domains/core/core-overview.md",
+    "domains/auth/auth-overview.md",
+    "domains/admin/admin-overview.md",
+    "changelog/2026-04.md",
+    "changelog",
+    "changelog.md",
+    "js/modules/features/risdoc-editor.js.md",
+    "js/modules/features",
+    "js/modules",
+    "js",
+    "_llm-primer.md",
+    "map.md",
+    "domains/frontend/frontend-overview.md",
+    "database-schema.md"
+  ]
+}

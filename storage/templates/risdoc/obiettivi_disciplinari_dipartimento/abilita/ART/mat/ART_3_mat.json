@@ -1,0 +1,115 @@
+[
+    {
+        "titolo": "Divisibilità tra polinomi",
+        "contenuti": [
+            { "label": "Saper eseguire la divisione di un polinomio per un monomio.", "checked": false },
+            { "label": "Saper eseguire la divisione tra due polinomi con la regola generale.", "checked": false },
+            { "label": "Saper applicare la regola di Ruffini per la divisione di un polinomio per un binomio di primo grado.", "checked": true },
+            { "label": "Saper enunciare e applicare il teorema del resto e il teorema di Ruffini.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Scomposizione di polinomi",
+        "contenuti": [
+            { "label": "Saper scomporre un polinomio mediante raccoglimento a fattor comune totale e parziale.", "checked": true },
+            { "label": "Saper riconoscere e applicare i prodotti notevoli per la scomposizione.", "checked": true },
+            { "label": "Saper scomporre un trinomio caratteristico di secondo grado.", "checked": true },
+            { "label": "Saper utilizzare la regola di Ruffini per la scomposizione di un polinomio.", "checked": true },
+            { "label": "Saper calcolare il M.C.D. e il m.c.m. tra polinomi.", "checked": true },
+            { "label": "Saper applicare la scomposizione in fattori per risolvere equazioni mediante la legge di annullamento del prodotto.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Frazioni algebriche",
+        "contenuti": [
+            { "label": "Saper determinare le condizioni di esistenza e semplificare una frazione algebrica.", "checked": true },
+            { "label": "Saper eseguire addizioni e sottrazioni tra frazioni algebriche.", "checked": true },
+            { "label": "Saper eseguire moltiplicazioni, divisioni e potenze di frazioni algebriche.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Equazioni di primo grado frazionarie e letterali",
+        "contenuti": [
+            { "label": "Saper risolvere equazioni numeriche fratte di primo grado, determinando le condizioni di esistenza.", "checked": true },
+            { "label": "Saper risolvere e discutere equazioni letterali intere e fratte.", "checked": true },
+            { "label": "Saper impostare e risolvere problemi che conducono a equazioni fratte o letterali.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Equazioni e sistemi di secondo grado",
+        "contenuti": [
+            { "label": "Saper risolvere un'equazione di secondo grado completa e incompleta.", "checked": true },
+            { "label": "Saper scomporre un trinomio di secondo grado tramite le soluzioni dell'equazione associata.", "checked": true },
+            { "label": "Saper utilizzare le relazioni tra somma/prodotto delle radici e i coefficienti.", "checked": true },
+            { "label": "Saper discutere e risolvere equazioni parametriche di secondo grado.", "checked": true },
+            { "label": "Saper impostare e risolvere problemi modellizzabili con equazioni di secondo grado.", "checked": false },
+            { "label": "Saper risolvere sistemi di equazioni di secondo grado.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Parabola",
+        "contenuti": [
+            { "label": "Saper ricavare dall'equazione di una parabola le coordinate di vertice e fuoco, e l'equazione di asse e direttrice.", "checked": true },
+            { "label": "Saper determinare la posizione reciproca retta-parabola e le equazioni delle rette tangenti.", "checked": true },
+            { "label": "Saper determinare l'equazione di una parabola date alcune condizioni geometriche.", "checked": true },
+            { "label": "Saper utilizzare le proprietà della parabola (in particolare il vertice) per risolvere problemi di massimo e minimo.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Disequazioni di secondo grado e frazionarie",
+        "contenuti": [
+            { "label": "Saper applicare i principi di equivalenza per risolvere disequazioni di primo grado.", "checked": true },
+            { "label": "Saper risolvere disequazioni di secondo grado intere con metodo algebrico e grafico.", "checked": true },
+            { "label": "Saper risolvere disequazioni fratte studiando il segno del numeratore e del denominatore.", "checked": true },
+            { "label": "Saper risolvere sistemi di disequazioni.", "checked": true },
+            { "label": "Saper impostare e risolvere problemi modellizzabili con disequazioni di secondo grado.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Equazioni, disequazioni e sistemi di grado superiore al secondo",
+        "contenuti": [
+            { "label": "Saper risolvere equazioni monomie, binomie e biquadratiche.", "checked": true },
+            { "label": "Saper risolvere equazioni di grado superiore al secondo scomponendole in fattori.", "checked": true },
+            { "label": "Saper risolvere disequazioni di grado superiore al secondo mediante lo studio del segno.", "checked": true },
+            { "label": "Saper risolvere sistemi di grado superiore al secondo e sistemi simmetrici.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Equazioni e disequazioni irrazionali e con valori assoluti",
+        "contenuti": [
+            { "label": "Saper risolvere equazioni irrazionali, imponendo le corrette condizioni di esistenza e concordanza di segno.", "checked": false },
+            { "label": "Saper risolvere equazioni con uno o più valori assoluti.", "checked": false },
+            { "label": "Saper risolvere le principali tipologie di disequazioni irrazionali.", "checked": false },
+            { "label": "Saper risolvere disequazioni con uno o più valori assoluti.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Circonferenza e poligoni (Geometria Euclidea)",
+        "contenuti": [
+            { "label": "Saper definire e riconoscere un luogo geometrico.", "checked": false },
+            { "label": "Conoscere e applicare i teoremi relativi a corde, angoli al centro e angoli alla circonferenza.", "checked": false },
+            { "label": "Conoscere e applicare i teoremi sulle rette tangenti a una circonferenza.", "checked": false },
+            { "label": "Saper definire e applicare i criteri di inscrivibilità e circoscrittibilità di un poligono.", "checked": false },
+            { "label": "Conoscere le proprietà dei punti notevoli di un triangolo.", "checked": false },
+            { "label": "Saper calcolare la lunghezza della circonferenza e l'area del cerchio e delle loro parti.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Circonferenza nel piano cartesiano",
+        "contenuti": [
+            { "label": "Saper scrivere l'equazione di una circonferenza dati centro e raggio e, viceversa, determinare centro e raggio dall'equazione.", "checked": false },
+            { "label": "Saper determinare la posizione reciproca retta-circonferenza e le equazioni delle rette tangenti.", "checked": false },
+            { "label": "Saper determinare l'equazione di una circonferenza a partire da condizioni geometriche (es. passaggio per 3 punti).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Ellisse, iperbole e complementi sulle coniche",
+        "contenuti": [
+            { "label": "Data l'equazione di un'ellisse, saperne determinare fuochi, vertici e rappresentarla graficamente.", "checked": false },
+            { "label": "Data l'equazione di un'iperbole, saperne determinare fuochi, vertici, asintoti e rappresentarla graficamente.", "checked": false },
+            { "label": "Saper riconoscere e rappresentare un'iperbole equilatera e una funzione omografica.", "checked": false },
+            { "label": "Saper interpretare e risolvere graficamente equazioni e disequazioni irrazionali tramite le coniche.", "checked": false },
+            { "label": "Saper interpretare e risolvere graficamente equazioni e disequazioni con valori assoluti tramite le coniche.", "checked": false }
+        ]
+    }
+]

@@ -1,0 +1,20 @@
+[Unit]
+Description=pantedu — Export waf_logs blocked entries to file (per fail2ban)
+After=network.target mysql.service
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/waf/export_blocked_to_log.php
+TimeoutStartSec=30
+
+# state file in /var/lib/pantedu deve essere writable
+ReadWritePaths=/var/log /var/lib/pantedu
+
+Restart=no
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

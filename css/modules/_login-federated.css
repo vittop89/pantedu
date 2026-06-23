@@ -1,0 +1,120 @@
+/* ============================================================ */
+/* Login federated buttons (SPID + CIE) — Phase D.2 placeholder. */
+/* WCAG: aria-disabled + visible disabled state + tooltip.        */
+/* AgID grafica: blue SPID + gov blue CIE, adattati ai token      */
+/* pantedu per coerenza brand.                                    */
+/*                                                                */
+/* Spec grafica AgID Avviso n.29 v3:                              */
+/* https://docs.italia.it/AgID/documenti-in-consultazione/lg-spid-attribute-authority-docs/it/stabile/regole-tecniche/regole-grafica.html */
+/* ============================================================ */
+
+.fm-login-federated {
+    margin-top: var(--fm-space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2);
+}
+
+/* Divider "oppure" */
+.fm-login-divider {
+    position: relative;
+    text-align: center;
+    margin: var(--fm-space-4) 0 var(--fm-space-2);
+    color: var(--fm-c-muted);
+    font-size: var(--fm-fs-sm);
+}
+
+.fm-login-divider::before,
+.fm-login-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 5em);
+    height: 1px;
+    background: var(--fm-c-divider);
+}
+
+.fm-login-divider::before { left: 0; }
+.fm-login-divider::after  { right: 0; }
+
+.fm-login-divider > span {
+    background: var(--fm-c-surface);
+    padding: 0 var(--fm-space-2);
+    position: relative;
+    /* WCAG 2.2 AA (ADR-023): era grigio ereditato ~#8b909b (3.2:1) → muted (4.6:1). */
+    color: var(--fm-c-muted);
+}
+
+/* Base federated button */
+.fm-btn--federated {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fm-space-2);
+    width: 100%;
+    padding: var(--fm-space-3);
+    font-size: var(--fm-fs-base);
+    font-weight: 600;
+    border-radius: var(--fm-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background var(--fm-transition-fast) var(--fm-easing),
+                box-shadow var(--fm-transition-fast) var(--fm-easing);
+}
+
+.fm-btn--federated .fm-btn-icon {
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+/* SPID variant — AgID blue (#0066cc) */
+.fm-btn--spid {
+    background: #0066cc;
+    color: #ffffff;
+    border-color: #0066cc;
+}
+
+.fm-btn--spid:hover:not([disabled]) {
+    background: #0052a3;
+    border-color: #0052a3;
+}
+
+/* CIE variant — gov blue dark (#1a5490) */
+.fm-btn--cie {
+    background: #1a5490;
+    color: #ffffff;
+    border-color: #1a5490;
+}
+
+.fm-btn--cie:hover:not([disabled]) {
+    background: #143f6b;
+    border-color: #143f6b;
+}
+
+/* Disabled state (current placeholder pre-AgID-SP) */
+.fm-btn--federated[disabled],
+.fm-btn--federated[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+}
+
+.fm-btn--federated:focus-visible {
+    outline: 3px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Hint text below buttons */
+.fm-federated-hint {
+    text-align: center;
+    font-size: var(--fm-fs-xs);
+    margin: var(--fm-space-2) 0 0;
+    line-height: var(--fm-lh-base);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .fm-btn--federated {
+        transition: none;
+    }
+}

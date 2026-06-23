@@ -1,0 +1,31 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare il linguaggio e gli strumenti dell'algebra e della geometria per interpretare, analizzare e rappresentare problemi, anche attraverso la costruzione di modelli algebrici (equazioni, disequazioni, sistemi) e la loro interpretazione nel piano cartesiano.",
+                "checked": false
+            },
+            {
+                "label": "Padroneggiare le procedure del calcolo algebrico (con radicali, polinomi e frazioni algebriche), scegliendo in modo autonomo le strategie risolutive più appropriate e gestendo la complessità delle procedure.",
+                "checked": false
+            },
+            {
+                "label": "Costruire e validare argomentazioni e dimostrazioni in contesti geometrici e algebrici, riconoscendo le relazioni di causa-effetto e applicando correttamente i principi della logica e i teoremi studiati (es. Talete, Euclide, Pitagora).",
+                "checked": false
+            },
+            {
+                "label": "Confrontare e collegare rappresentazioni diverse di un oggetto matematico (numerica, algebrica, grafica, geometrica), utilizzando il piano cartesiano come strumento per unificare e interpretare concetti algebrici e geometrici.",
+                "checked": false
+            },
+            {
+                "label": "Analizzare e formalizzare situazioni di incertezza, utilizzando i concetti e il calcolo della probabilità per valutare e prevedere la frequenza di eventi.",
+                "checked": false
+            },
+            {
+                "label": "Comunicare in modo chiaro e rigoroso i procedimenti risolutivi e le argomentazioni, utilizzando il linguaggio specifico della matematica (simboli, grafici, notazioni) in modo appropriato e coerente.",
+                "checked": false
+            }
+        ]
+    }
+]

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elimina Contenuto Cartella Temp</title>
+    <script>
+        function deleteTempFolder() {
+            fetch('delete_temp.php', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
+        }
+        deleteTempFolder();
+    </script>
+</head>
+<body>
+    <h1>Elimina Contenuto della Cartella Temp</h1>
+    <button onclick="deleteTempFolder()">Elimina Contenuto</button>
+</body>
+</html>

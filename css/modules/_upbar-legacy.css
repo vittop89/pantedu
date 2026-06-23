@@ -1,0 +1,314 @@
+/* ============================================================ */
+/* Upbar Legacy — Phase Roadmap Sprint 42.                        */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (274 LOC). Visual byte-equivalent.*/
+/* Upbar legacy esercizi + exercise input wrappers (numArg/href)  */
+/* + add/del Arg buttons + tool sidebar checkboxes + suggestions  */
+/* + highlight.                                                    */
+/*                                                                */
+/* NB: la upbar legacy e' nascosta da body.fm-topbar-active (vedi  */
+/* _content-layout.css + _topbar-modern.css). Queste regole vivono */
+/* qui per back-compat con pagine senza topbar moderna.            */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-upbar (purple #5959a9 height:54px exercise bar)            */
+/*   - .selwrap + .self + .presenceMessage                         */
+/*   - .selwrapbtn-es (red dotted border container)                */
+/*   - .wrapbtn-es_sidebar + .btn-es_sidebar + .btn-esAct_sidebar  */
+/*   - #btnAct_sidebar + :active                                   */
+/*   - .materia + .documenti                                       */
+/*   - .linkref + scoped .fm-db-block/.fm-sb-panel inline (Phase G7*/
+/*   - .numArg + .argomento                                        */
+/*   - .input-wrapper-num_Arg                                      */
+/*   - .display-toggle                                             */
+/*   - .input-wrapper-linkref + [data-hidden="true"] opacity       */
+/*   - .input-wrapper-href + -hide + .show toggle                  */
+/*   - .input-numArg + .input-argomento (form inputs)              */
+/*   - .h-link-opener (blue underlined link)                       */
+/*   - .input-href + .input-href-hide                              */
+/*   - .addArgBtn + .delArgBtn + .addArgBtn_from0 + .DriveBtn      */
+/*     (23x23 outset border-radius:5px sticky)                     */
+/*   - #from0 + .addArgBtn + .delArgBtn positioning                */
+/*   - hover/active states                                         */
+/*   - .bannerNotReg (margin-left auto)                            */
+/*   - .tool_sidebar (flex container)                              */
+/*   - .checkbox-wrapper-accessFile/saveFile (green/orange pills)  */
+/*   - .saveFile + label[for="saveFile"]                           */
+/*   - .suggestions + .suggestion-item + :hover (autocomplete)     */
+/*   - .highlight (yellow bg + bold)                               */
+/* ============================================================ */
+
+/* Style the button that is used to open and close the collapsible content */
+/* Barra esercizi */
+.fm-upbar {
+    position: absolute;
+    /* min-width: 100% - var(--widthLsidebar); */
+    overflow: hidden;
+    background: #5959a9;
+    height: 54px;
+    /* text-align: top; */
+    float: top;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    /* Phase 20 — contenuto allineato a sinistra (dopo il padding-left
+     * dinamico che compensa la sidebar aperta/chiusa). Così anche con
+     * sidebar chiusa i controlli restano raggruppati a sx senza lasciare
+     * il gap centrale del vecchio justify-content:center. */
+    justify-content: flex-start;
+    z-index: 2;
+}
+.selwrap {
+    padding: 5px;
+    margin: 0px 30px 0px 0px;
+    /* flex: 1; */
+    /* text-align: center; */
+}
+.self {
+    width: 100%;
+    /* text-align: center; */
+}
+.presenceMessage {
+    display: inline-block;
+    margin-left: 10px;
+    color: red;
+    font-weight: bold;
+}
+.selwrapbtn-es {
+    /* position: relative; */
+    z-index: 17;
+    margin: 10px 0px 10px 0px;
+    top: 140px;
+    /* display: flex; */
+    align-items: center;
+    padding: 5px;
+    border: 3px red dotted;
+    width: -webkit-fill-available;
+}
+.wrapbtn-es_sidebar {
+    display: flex;
+     align-items: center;
+    gap: 10px;
+}
+.btn-es_sidebar {
+    border-style: outset;
+    height: 20px;
+}
+.btn-esAct_sidebar {
+    width: 90px;
+    background: #f2ff00;
+    border-color: #a4a632;
+    color: rgb(0, 0, 0);
+}
+#btnAct_sidebar{
+    cursor: pointer;
+    transition: background-color 0.3s, border-style 0.1s;
+}
+#btnAct_sidebar:active {
+    border-style: inset;
+}
+.materia, .documenti{
+    position: relative;
+    display: flex
+}
+.linkref {
+    display: flex;
+    position: relative;
+}
+/* Phase G7 — sidepage links usano .linkref per il click handler SPA
+   ma devono restare INLINE accanto a numarg (no flex break-line). */
+.fm-db-block .linkref,
+.fm-sb-panel .linkref {
+    display: inline;
+}
+.numArg{
+    margin-right: 2px;;
+}
+.argomento {
+    margin-left: 2px;
+}
+.input-wrapper-num_Arg{
+    display: flex;
+    margin-bottom: 2px;
+    margin-left: -35px;
+}
+.display-toggle{
+    cursor: pointer;
+    font-size: 1.3125rem;
+    padding-right: 6px;
+    user-select: none;
+    margin-top: -6px;
+}
+
+/* Stile per opacizzare il wrapper quando l'elemento è nascosto */
+.input-wrapper-linkref[data-hidden="true"] {
+    opacity: 0.4;
+    background-color: rgba(200, 200, 200, 0.3);
+    border-radius: 5px;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* Stile normale per il wrapper */
+.input-wrapper-linkref {
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+.input-wrapper-href {
+    width: -webkit-fill-available;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 6px;
+    margin-left: -33px;
+}
+.input-wrapper-href-hide {
+    width: -webkit-fill-available;
+    display: none; /* Nascosto di default */
+    align-items: flex-end;
+    margin-bottom: 6px;
+    margin-left: -33px;
+}
+.input-wrapper-href-hide.show {
+    display: flex; /* Mostra quando ha la classe 'show' */
+}
+.input-numArg {
+    width: 35px;
+    text-align: center;
+    height: 20px;
+    resize: none;
+    overflow: hidden;
+}
+.input-argomento {
+    width: -webkit-fill-available;
+    height: 20px;
+    /* margin-bottom: 10px; */
+    margin-left: 4px;
+    margin-right: 4px;
+    overflow: hidden;
+    resize: none;
+}
+.h-link-opener {
+    margin: 0px 2px 0px 0px;
+    width: 50px;
+    cursor: pointer;
+    color: #0066cc;
+    text-decoration: underline;
+}
+.input-href-hide,
+.input-href {
+    height: 20px;
+    /* margin-bottom: 10px; */
+    margin-left: 2px;
+    margin-right: 5px;
+    overflow: hidden;
+    resize: none;
+    width: -webkit-fill-available;
+}
+.input-href-hide{
+    width: 217px;
+}
+.addArgBtn, .delArgBtn, .addArgBtn_from0, .DriveBtn {
+    width: 23px;
+    /* Larghezza del pulsante */
+    height: 23px;
+    /* Altezza del pulsante */
+    background-color: #f0f0f0;
+    /* Colore di sfondo bianco grigiolino */
+    color: black;
+    /* Colore del testo */
+    border: 2px outset #ccc;
+    /* Bordo outset */
+    border-radius: 5px;
+    /* Angoli arrotondati (opzionale) */
+    font-size: 1.5rem;
+    /* Dimensione del simbolo */
+    display: flex;
+    /* Utilizza Flexbox */
+    justify-content: center;
+    /* Centra orizzontalmente */
+    align-items: center;
+    /* Centra verticalmente */
+    cursor: pointer;
+    /* Cambia il cursore al passaggio del mouse */
+    transition: background-color 0.3s, border-style 0.1s;
+    /* Transizione per lo sfondo e il bordo */
+    position: sticky;
+}
+.DriveBtn {
+    width: 30px;
+    height: 23px;
+    margin-left: 30px;
+}
+#from0{
+    left: 235px;
+    top: 13px;
+}
+.addArgBtn {
+    left: 229px;
+}
+.delArgBtn {
+    left: 253px;
+    background-color: #f78080;
+    font-size: medium;
+}
+.delArgBtn:active {
+    border-style: inset;
+    /* Bordo inset al clic */
+    background-color: #e33e3e;
+}
+.addArgBtn:hover, .addArgBtn_from0:hover {
+    background-color: #e0e0e0;
+    /* Colore di sfondo al passaggio del mouse */
+}
+.addArgBtn:active, .addArgBtn_from0 {
+    border-style: inset;
+    /* Bordo inset al clic */
+    background-color: #d0d0d0;
+    /* Colore di sfondo al clic */
+}
+.bannerNotReg{
+    margin-left: auto;
+}
+.tool_sidebar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+.checkbox-wrapper-accessFile,
+.checkbox-wrapper-saveFile {
+    padding-right: 5px;
+    border-radius: 20em;
+    height: 21px;
+    display: flex;
+    align-items: flex-end;
+    /* align-items: center; */
+}
+.checkbox-wrapper-saveFile {
+    background-color: orange;
+    margin-right: 5px;
+}
+.checkbox-wrapper-accessFile {
+    color: white;
+    background-color: green;
+}
+.saveFile{
+    background-color: white;
+}
+label[for="saveFile"] {
+    margin-left: 2px;
+}
+.suggestions {
+    position: absolute;
+    border: 1px solid #ccc;
+    background: #fff;
+    z-index: 1000;
+}
+.suggestion-item {
+    padding: 5px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}

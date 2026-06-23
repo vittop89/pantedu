@@ -1,0 +1,80 @@
+{
+    "name": "pantedu/site",
+    "description": "Pantedu didactic platform",
+    "type": "project",
+    "license": "EUPL-1.2",
+    "homepage": "https://pantedu.eu",
+    "authors": [
+        {
+            "name": "Vittorio Pantaleo",
+            "email": "vittorio.pantaleo@pantedu.eu",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "email": "vittorio.pantaleo@pantedu.eu",
+        "issues": "https://github.com/vittop89/pantedu/issues",
+        "security": "https://github.com/vittop89/pantedu/security/policy",
+        "source": "https://github.com/vittop89/pantedu"
+    },
+    "require": {
+        "php": "^8.3",
+        "enshrined/svg-sanitize": "^0.22",
+        "ezyang/htmlpurifier": "^4.17",
+        "geoip2/geoip2": "^3.3",
+        "google/apiclient": "^2.18",
+        "google/apiclient-services": "^0.350",
+        "justinrainbow/json-schema": "^6.8",
+        "psr/log": "^3.0",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "league/openapi-psr7-validator": "^0.22.0",
+        "phpstan/phpstan": "^1.11",
+        "phpunit/phpunit": "^11.0",
+        "squizlabs/php_codesniffer": "^3.10",
+        "symfony/yaml": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --testdox --colors=always",
+        "test:unit": "phpunit --testsuite=Unit --testdox",
+        "stan": "phpstan analyse --memory-limit=512M",
+        "stan:baseline": "phpstan analyse --generate-baseline=phpstan-baseline.neon --memory-limit=1G",
+        "cs": "phpcs --standard=PSR12 --extensions=php --ignore=vendor,storage,public/build --runtime-set ignore_warnings_on_exit 1 app",
+        "cs:fix": "phpcbf --standard=PSR12 --extensions=php --ignore=vendor,storage,public/build app",
+        "openapi:generate": "php tools/api/generate_openapi.php > docs/api/openapi.yaml",
+        "openapi:merge": "php tools/api/merge_openapi.php > docs/api/openapi.full.yaml",
+        "openapi:build": [
+            "@openapi:generate",
+            "@openapi:merge"
+        ],
+        "openapi:validate": "php tools/api/validate_openapi.php",
+        "wiki:check": "php tools/wiki/strip_code_links.php --check",
+        "wiki:fix": "php tools/wiki/strip_code_links.php",
+        "audit": "composer audit --locked",
+        "licenses:php": "composer licenses --no-dev --format=json",
+        "ci": [
+            "@cs",
+            "@stan",
+            "@audit",
+            "@test"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

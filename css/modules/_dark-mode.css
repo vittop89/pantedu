@@ -1,0 +1,943 @@
+/* ============================================================ */
+/* Dark Mode Global — Phase Roadmap Sprint 38.                    */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (624 LOC). Visual byte-equivalent.*/
+/* DARK MODE — toggle globale body.fm-dark + Phase 16 palette     */
+/* unification across editor + admin + sidepage + cell-popup +    */
+/* MathJax + TikZ + GeoGebra + templates editor + multiarg mode.  */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - body.fm-dark base (bg #1e1e1e, color #e0e0e0)               */
+/*   - Sidebar/upbar/content dark palette                          */
+/*   - .fm-pagestyle/.fm-groupcollex/.content/.fm-collapsible/.selection        */
+/*   - .fm-check-in/.fm-titolo-quesito dark (Phase 16 #3a3a4e)            */
+/*   - .fm-titolo-quesito[style*="background-color: ..."]: text       */
+/*     color + desaturation + white→grey override                  */
+/*   - .fm-cell-popup-preview (light + dark)                       */
+/*   - .fm-editor-panel + .fm-rm-layout-section dark + inputs      */
+/*   - rgba(255,255,255,0.3-0.9) inline-style override generale    */
+/*   - .fm-collection__item dark override (rgba whites)                    */
+/*   - body.fm-dark.fm-exercise-context + #scrollbarInfo + #infoVer   */
+/*   - .fm-editor-panel .fm-option-row dark                        */
+/*   - .fm-rm-layout-section palette dark + sub-cards              */
+/*   - #infoVer::before/::after reset (G9.7)                       */
+/*   - .fas.fa-edit.edit-btn hover (light + dark)                  */
+/*   - .fm-geogebra-wrap + svg sizing (light + dark filter:none)   */
+/*   - #fm-tex-action-dialog + #fm-findreplace-dialog dark         */
+/*   - .fm-collection/.fm-giustsol text color dark                           */
+/*   - details.fm-sol dark NEUTRO + summary + table                   */
+/*   - SVG TikZ invert filter (excluding GeoGebra + MathJax + badge*/
+/*   - .fm-rm-table dark                                              */
+/*   - .fm-badge dark (transparent bg)                             */
+/*   - body.fm-dark h1/h2/h3 + .fm-titolo h1                          */
+/*   - MathJax mjx-container dark (color inherit, fill currentColor*/
+/*   - Shell pages (.fm-shell/.fm-card/.fm-tile/.fm-big)           */
+/*   - .fm-tile--alert (light + dark)                              */
+/*   - .fm-big--danger (light + dark)                              */
+/*   - .fm-code (admin tabelle)                                    */
+/*   - #fm-sp-* sidepage tinted dark                               */
+/*   - .fm-table/.fm-tools-table/.fm-an-table dark                 */
+/*   - .fm-input/.fm-label/.fm-muted dark                          */
+/*   - .fm-contract-render.fm-muted (Phase 20 multiarg secondary)  */
+/*   - body.fm-multiarg.fm-verifica-mode hide source contracts     */
+/*   - .fm-multiarg-union::before banner (aggregated topic count)  */
+/*   - .fm-link/a/.fm-tabs/.fm-tab dark                            */
+/*   - .fm-an-card/fieldset/code dark                              */
+/*   - .fm-btn/.fm-btn--primary/ghost/small/danger/accent dark     */
+/*   - .scrollbar .btn dark (sidepage bg-colored)                  */
+/*   - h1-h6/.fm-breadcrumb/.fm-alert--warn/success/error dark     */
+/*   - .fm-tpl-page (teacher templates editor) dark coverage       */
+/*     (.fm-tpl-card/-title/-intro/-field/-opt-content/-item etc.) */
+/*   - #fm-tpl-save/reload/status dark                             */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE — toggle globale via body.fm-dark (gestito da
+   bootstrap-compat.initDarkModeToggleIfNeeded). Copre sidebar +
+   upbar + #fm-content. Valori persistiti in localStorage.
+   ══════════════════════════════════════════════════════════════════ */
+body.fm-dark {
+    /* ADR-023 Fase 1: usa i token dark esistenti (css/tokens.css) invece
+       dei colori ad-hoc legacy. Single source of truth = tokens.css. */
+    background-color: var(--fm-c-bg);
+    color: var(--fm-c-text);
+}
+body.fm-dark .fm-switch               { background-color: var(--fm-c-surface-2); }
+body.fm-dark .sidebar              { background: var(--fm-c-surface); color: var(--fm-c-text); }
+body.fm-dark .sel-wrapper          { background-color: var(--fm-c-surface-2); }
+body.fm-dark .fm-sb-lab            { color: var(--fm-c-text); }
+body.fm-dark .fm-sb-sel            { background: var(--fm-c-surface-2); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .selwrapbtn-es        { background: var(--fm-c-surface); }
+body.fm-dark .fm-sb-sec            { filter: brightness(0.6) saturate(0.85); color: #000; }
+body.fm-dark .fm-sb-panel          { background: var(--fm-c-surface); color: var(--fm-c-text); }
+body.fm-dark .sel-session-banner   { background: var(--fm-c-surface-2) !important; color: var(--fm-c-text) !important; }
+body.fm-dark .sel-session-banner a { color: var(--fm-c-link) !important; }
+body.fm-dark #fm-content           { background: var(--fm-c-bg); color: var(--fm-c-text); }
+body.fm-dark .fm-upbar                { background: var(--fm-c-surface); }
+body.fm-dark .fm-upbar .fm-scrollbar-up-bar { background: transparent; }
+body.fm-dark .selwrapbtncopy       { background: rgba(50, 50, 90, 0.5); border-color: #aaaa22; }
+body.fm-dark .wrapPrintmod label,
+body.fm-dark .fm-label-btn-drop         { color: var(--fm-c-text) !important; }
+body.fm-dark .dropdown-button,
+body.fm-dark .fm-btn-up-bar            { background: var(--fm-c-surface-2); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-sb-dark         { background: #555; color: #ffeb3b; }
+/* Phase 16 — Dark mode palette rivista:
+ * - .fm-pagestyle sfondo più scuro (body-matching) per far contrastare .fm-groupcollex
+ * - .fm-groupcollex leggermente più chiaro del body → visibile come card
+ * - .fm-collapsible con viola medio che fa eco al legacy #5959a9 attenuato
+ * - .selection con sfumatura di viola attenuato
+ * - Testi chiari (non bianco puro) per ridurre glare
+ */
+body.fm-dark .fm-pagestyle              { background: var(--fm-c-bg); color: var(--fm-c-text-2); }
+body.fm-dark .fm-groupcollex                { background: var(--fm-c-surface-2); color: var(--fm-c-text-2); }
+body.fm-dark .content                { background: var(--fm-c-surface); color: var(--fm-c-text-2); }
+/* .fm-collapsible: 3 stati interattivi → lift progressivo con shade slate
+   esistenti (ADR-023: nessun nuovo token; no color-mix per baseline browser).
+   Ordine lightness preservato: base < active < hover. */
+body.fm-dark .fm-collapsible            { background: var(--fm-c-surface-2); color: var(--fm-c-text); }
+body.fm-dark .fm-collapsible.active     { background: var(--fm-c-border); }
+body.fm-dark .fm-collapsible:hover      { background: var(--fm-c-border-strong); }
+body.fm-dark .selection              { background: var(--fm-c-surface-2); color: var(--fm-c-text); }
+/* G20.7 — Phase 16 fm-dark .selection labcheck/pt_totA/B/total-pointsA/B
+ * (testi #262628 dark + bg #dcdbff lavanda) RIMOSSI: in conflitto con la
+ * nuova palette G20.7 che vuole testi BIANCHI su pill semi-trasparenti
+ * bianchi (vedi .fm-groupcollex .fm-check .labcheck / .fm-input-wrapper-pt-tot a riga
+ * ~3549). Lasciamo che le regole G20.7 dominino. */
+
+/* Phase 16 — .fm-check-in + .fm-titolo-quesito palette dark SCURA.
+ * Legacy: bianco #fff. In dark: #3a3a4e (più scuro, coerente con .fm-groupcollex #2d2d42).
+ * Testi chiari invece di scuri. */
+body.fm-dark .fm-check-in                 { background: var(--fm-c-surface-2); color: var(--fm-c-text-2); }
+body.fm-dark .fm-check-in .fm-labcheck-in,
+body.fm-dark .fm-check-in .pt             { color: var(--fm-c-text-2); }
+body.fm-dark .fm-check-in .origin,
+body.fm-dark .fm-check-in .fm-color-select,
+body.fm-dark .fm-check-in .fm-input-pt,
+body.fm-dark .fm-check-in .fm-move-position  { background: var(--fm-c-bg); color: var(--fm-c-text); border-color: var(--fm-c-border); }
+/* A11y: bg #fff base (layout_es.css:1174) restava in dark con text
+ * #c8c8d4 → contrasto 1.65. Forza bg dark coerente con .fm-check-in. */
+body.fm-dark .fm-titolo-quesito          { background-color: var(--fm-c-surface-2); color: var(--fm-c-text); }
+
+/* Phase 16 — .fm-titolo-quesito text color in base al background esplicito.
+ * Match più specifico: usa "background-color:" prefix per non collidere con
+ * "color: white" (text color). */
+.fm-titolo-quesito[style*="background-color: white"],
+.fm-titolo-quesito[style*="background-color:white"] { color: #000 !important; }
+.fm-titolo-quesito[style*="background-color: red"],
+.fm-titolo-quesito[style*="background-color:red"],
+.fm-titolo-quesito[style*="background-color: green"],
+.fm-titolo-quesito[style*="background-color:green"],
+.fm-titolo-quesito[style*="background-color: blue"],
+.fm-titolo-quesito[style*="background-color:blue"],
+.fm-titolo-quesito[style*="background-color: purple"],
+.fm-titolo-quesito[style*="background-color:purple"],
+.fm-titolo-quesito[style*="background-color: orange"],
+.fm-titolo-quesito[style*="background-color:orange"] { color: #fff !important; }
+
+/* Phase 16 — dark mode: colori forti titolo_quesito desaturati + white→grigio. */
+body.fm-dark .fm-titolo-quesito[style*="background-color: red"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:red"],
+body.fm-dark .fm-titolo-quesito[style*="background-color: green"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:green"],
+body.fm-dark .fm-titolo-quesito[style*="background-color: blue"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:blue"],
+body.fm-dark .fm-titolo-quesito[style*="background-color: purple"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:purple"],
+body.fm-dark .fm-titolo-quesito[style*="background-color: orange"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:orange"] {
+    filter: brightness(0.65) saturate(0.7);
+}
+body.fm-dark .fm-titolo-quesito[style*="background-color: white"],
+body.fm-dark .fm-titolo-quesito[style*="background-color:white"] {
+    background: #4a4a5e !important;
+    color: #d8d8dc !important;
+}
+
+/* Phase 16 — popup preview flottante (viewport-fixed, segue il focus cella).
+   pointer-events: auto → permette scrolling con wheel/touchpad. Il blur del
+   textarea ha relatedTarget guard per non chiudere quando il focus passa al
+   popup. */
+.fm-cell-popup-preview {
+    position: fixed;
+    z-index: 9999;
+    background: #fff;
+    border: 2px solid #2a5ac7;
+    border-radius: 6px;
+    padding: 10px 14px;
+    min-width: 280px;
+    max-width: 420px;
+    max-height: 260px;
+    overflow: auto;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    font: 13px/1.4 system-ui;
+    pointer-events: auto;
+    color: #1a1a2a;
+}
+body.fm-dark .fm-cell-popup-preview {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border-strong) !important;
+    color: var(--fm-c-text-2) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+}
+body.fm-dark .fm-cell-popup-preview mjx-container,
+body.fm-dark .fm-cell-popup-preview mjx-container * { color: var(--fm-c-text); }
+
+/* TODO #1 PoC (2026-05-23) — refactor inline style="color:#aaa" → class.
+ * Stato "preview vuota" placeholder italic. */
+.fm-cell-popup-empty { color: #aaa; }
+body.fm-dark .fm-cell-popup-empty { color: var(--fm-c-muted); }
+
+/* =========================================================================
+ * Phase 16 — DARK MODE GLOBAL MUST: nessun chiaro/forte ammesso.
+ * Ogni wrapper editor/layout che usa bianchi, rgba(255,255,255,*), light greys
+ * viene sovrascritto con palette dark coerente.
+ * ========================================================================= */
+body.fm-dark .fm-editor-panel { background: var(--fm-c-surface) !important; border-color: var(--fm-c-border-strong) !important; color: var(--fm-c-text-2) !important; }
+body.fm-dark .fm-editor-panel h4,
+body.fm-dark .fm-editor-panel > div > span,
+body.fm-dark .fm-editor-panel label span { color: var(--fm-c-muted) !important; }
+
+/* fm-rm-layout-section + sottocontenitori .fm-rm-tables-container */
+body.fm-dark .fm-rm-layout-section,
+body.fm-dark .fm-rm-tables-container,
+body.fm-dark .fm-editor-panel [class*="fm-rm"]  {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border) !important;
+    color: var(--fm-c-text-2) !important;
+}
+body.fm-dark .fm-rm-layout-section > div,
+body.fm-dark .fm-rm-tables-container > div {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border) !important;
+}
+body.fm-dark .fm-rm-layout-section h4 { color: var(--fm-c-muted) !important; }
+
+/* Tutti gli input/textarea/select dentro l'editor panel in dark */
+body.fm-dark .fm-editor-panel input,
+body.fm-dark .fm-editor-panel textarea,
+body.fm-dark .fm-editor-panel select {
+    background: var(--fm-c-bg) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border) !important;
+}
+
+/* Selector rgba(255,255,255,*) override generale (inline style) */
+body.fm-dark [style*="rgba(255, 255, 255, 0.9"],
+body.fm-dark [style*="rgba(255,255,255,0.9"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.8"],
+body.fm-dark [style*="rgba(255,255,255,0.8"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.7"],
+body.fm-dark [style*="rgba(255,255,255,0.7"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.6"],
+body.fm-dark [style*="rgba(255,255,255,0.6"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.5"],
+body.fm-dark [style*="rgba(255,255,255,0.5"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.4"],
+body.fm-dark [style*="rgba(255,255,255,0.4"],
+body.fm-dark [style*="rgba(255, 255, 255, 0.3"],
+body.fm-dark [style*="rgba(255,255,255,0.3"] {
+    background: rgba(26, 26, 42, 0.9) !important;
+}
+
+/* Labels + span azioni in editor panel chiari */
+body.fm-dark .fm-editor-panel *[style*="color:#333"],
+body.fm-dark .fm-editor-panel *[style*="color: #333"],
+body.fm-dark .fm-editor-panel *[style*="color:#666"],
+body.fm-dark .fm-editor-panel *[style*="color: #666"] {
+    color: var(--fm-c-text-2) !important;
+}
+
+/* .fm-option-row fallback (se riappare in altri flussi) */
+body.fm-dark .fm-option-row {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border) !important;
+    color: var(--fm-c-text-2) !important;
+}
+
+/* Phase 16 — .fm-collection__item rgba(255,255,255,0.92) light → dark override.
+ * Il legacy applica inline rgba bianchi translucid come card background;
+ * il selector matcha sia source colors che cyclic topic colors. */
+body.fm-dark .fm-collection__item             { background: var(--fm-c-surface) !important; }
+body.fm-dark .fm-collection__item[style*="rgba(255"] {
+    background: var(--fm-c-surface) !important;
+}
+
+/* Phase 16 — body exercise-context in dark mode: powderblue → scuro.
+ * Anche #infoVer palette dark + testi chiari. */
+body.fm-dark.fm-exercise-context,
+body.exercise-context.fm-dark          { background-color: var(--fm-c-bg); }
+body.fm-dark #scrollbarInfo            { background: var(--fm-c-surface); color: var(--fm-c-text-2); }
+body.fm-dark #infoVer                  { background: var(--fm-c-surface-2); color: var(--fm-c-text-2); }
+body.fm-dark #infoVer input[type="text"],
+body.fm-dark #infoVer input[type="number"],
+body.fm-dark #infoVer select,
+body.fm-dark #infoVer textarea         { background: var(--fm-c-bg); color: var(--fm-c-text-2); border-color: var(--fm-c-border-strong); }
+body.fm-dark #infoVer label,
+body.fm-dark #infoVer p                { color: var(--fm-c-text-2); }
+
+/* Phase 16 — edit mode: option-row sfondo bianco inline → override
+ * dark. `.fm-editor-panel .fm-option-row` (nuovo wrapper class). */
+body.fm-dark .fm-editor-panel .fm-option-row {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border) !important;
+    color: var(--fm-c-text-2) !important;
+}
+
+/* Phase 16 — rgba(255,255,255,0.4-0.6) troppo chiari in dark. Override
+ * per tutti i wrapper editor che usano white-translucent (cells cards,
+ * RM layout section sub-cards, width-group). */
+body.fm-dark .fm-rm-layout-section > div[style*="rgba(255, 255, 255"],
+body.fm-dark .fm-rm-layout-section div[style*="rgba(255,255,255"] {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border) !important;
+    color: var(--fm-c-text-2) !important;
+}
+body.fm-dark .fm-rm-layout-section textarea,
+body.fm-dark .fm-rm-layout-section input {
+    background: var(--fm-c-bg) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border) !important;
+}
+body.fm-dark .fm-editor-panel .fm-option-row span,
+body.fm-dark .fm-editor-panel .fm-option-row label { color: var(--fm-c-text-2) !important; }
+
+/* Phase 16 — .fm-rm-layout-section palette dark (legacy light blue #eef4ff). */
+body.fm-dark .fm-rm-layout-section {
+    background: var(--fm-c-surface) !important;
+    border-color: var(--fm-c-border-strong) !important;
+    color: var(--fm-c-text-2) !important;
+}
+body.fm-dark .fm-rm-layout-section > div:first-child,
+body.fm-dark .fm-rm-layout-section span,
+body.fm-dark .fm-rm-layout-section label { color: var(--fm-c-text-2) !important; }
+body.fm-dark .fm-rm-layout-section input,
+body.fm-dark .fm-rm-layout-section select {
+    background: var(--fm-c-bg) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+}
+body.fm-dark .fm-rm-layout-section h4 { color: var(--fm-c-text-2) !important; }
+
+/* G9.7 — RIMOSSI #infoVer ::before / ::after (e #scrollbarInfo equivalents):
+ * gli pseudo-elements legacy creavano gradient ornamentali che non hanno
+ * piu' senso col layout drawer modernizzato. Override hard a none. */
+#infoVer::before,
+#infoVer::after,
+#scrollbarInfo::before,
+#scrollbarInfo::after {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+}
+
+/* Phase 16 — Editor inline "Fonte" — REMOVED Phase Roadmap Sprint 6.
+ * Sostituito da css/modules/_source-editor.css (BEM token-based).
+ * JS (checkin-handlers.js) ora emette classi .fm-source-editor__*. */
+
+/* Icona .fa-edit.edit-btn cliccabile: hover + padding */
+.fas.fa-edit.edit-btn,
+i.fa-edit.edit-btn {
+    cursor: pointer;
+    padding: 2px 4px;
+    margin-left: 6px;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+}
+.fas.fa-edit.edit-btn:hover,
+i.fa-edit.edit-btn:hover { opacity: 1; color: #2a5ac7; }
+
+/* G22.S15.bis Fase 4/5 — Wrapper GeoGebra.
+ *
+ * La dimensione effettiva è controllata dall'utente via il campo
+ * "Larghezza" del modal GeoGebra (60%, 100%, 8cm, ecc.) tramite lo style
+ * inline `max-width:X%; width:X%` su `.fm-geogebra-wrap`.
+ *
+ * viewBox iniettato lato JS (vedi checkin-handlers.js _fixGeoGebraSvgViewBox)
+ * garantisce che l'aspect-ratio sia preservato durante il resize CSS:
+ * SVG con `width:100%; height:auto` scala mantenendo proporzioni naturali.
+ *
+ * Se l'utente non specifica una percentuale → default `max-width: 60%`. */
+.fm-geogebra-wrap {
+    display: inline-block;
+    line-height: 0;
+    vertical-align: top;
+}
+.fm-geogebra-wrap:not([style*="max-width"]) {
+    max-width: 60%;
+}
+.fm-geogebra-wrap svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100%;
+    display: block;
+}
+
+/* ─────────── Editor LaTeX toolbar (.fm-editor-toolbar, .fm-tex-dropdown,
+   .fm-tex-menu, .fm-fmtbtn-active) — REMOVED Sprint 31. Estratto in
+   css/modules/_editor-toolbar.css (148 LOC).
+   ──────────────────────────────────────────────────────────────────── */
+
+/* Dialog TeX action (new/edit/delete) dark */
+body.fm-dark #fm-tex-action-dialog {
+    background: var(--fm-c-surface) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+}
+body.fm-dark #fm-tex-action-dialog input,
+body.fm-dark #fm-tex-action-dialog select,
+body.fm-dark #fm-tex-action-dialog textarea {
+    background: var(--fm-c-bg) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+}
+
+/* Find/replace dialog dark */
+body.fm-dark #fm-findreplace-dialog {
+    background: var(--fm-c-surface) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+}
+body.fm-dark #fm-findreplace-dialog input {
+    background: var(--fm-c-bg) !important;
+    color: var(--fm-c-text-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+}
+
+/* Phase 16 — testo .fm-groupcollex/.fm-collection in dark: il legacy a volte aveva
+ * colori neri inline da MathJax content. Forziamo color inherit. */
+body.fm-dark .fm-collection,
+body.fm-dark .fm-collection div,
+body.fm-dark .fm-collection p,
+body.fm-dark .fm-collection span:not(.fm-badge):not(.fm-badge *),
+body.fm-dark .fm-giustsol,
+body.fm-dark .fm-giustsol div              { color: var(--fm-c-text-2); }
+
+/* Phase 16 — details.fm-sol (legacy background giallo chiaro #fff7d8) →
+ * dark NEUTRO. Palette meno ambra per AA contrast + meno aggressivo. */
+body.fm-dark details.fm-sol,
+body.fm-dark .fm-db-study .fm-collection__item details.fm-sol {
+    background: var(--fm-c-surface) !important;
+    border-left-color: #b88a2a !important;
+    color: var(--fm-c-text-2);
+}
+body.fm-dark details.fm-sol summary,
+body.fm-dark .fm-db-study .fm-collection__item details.fm-sol summary {
+    color: #c0a060 !important;
+}
+body.fm-dark details.fm-sol div,
+body.fm-dark details.fm-sol p,
+body.fm-dark details.fm-sol span:not(.fm-badge):not(.fm-badge *),
+body.fm-dark details.fm-sol mjx-container,
+body.fm-dark details.fm-sol mjx-container * {
+    color: var(--fm-c-text-2);
+}
+
+/* Phase 16 — tabelle dentro .fm-sol/.fm-collection (DATI/INCOGNITE): background
+ * trasparente + border grigio chiaro in dark + testi NEUTRI. */
+body.fm-dark .fm-collection table,
+body.fm-dark .fm-sol table,
+body.fm-dark details.fm-sol table {
+    background: transparent;
+    border-color: var(--fm-c-border-strong);
+}
+body.fm-dark .fm-collection table td,
+body.fm-dark .fm-collection table th,
+body.fm-dark .fm-sol table td,
+body.fm-dark .fm-sol table th,
+body.fm-dark details.fm-sol table td,
+body.fm-dark details.fm-sol table th {
+    border-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text-2);
+}
+
+/* Phase 16 — TikZ SVG in darkmode: lines nere su sfondo scuro = invisibili.
+ * Apply invert filter solo su SVG generati da tikzjax (non mjx-container).
+ * Il MutationObserver tikzjax rende direttamente <svg> (no .fm-badge wrap),
+ * quindi target-are via ancestor .fm-editor-preview oppure via attributo
+ * data-tikz o .fm-groupcollex .fm-collection > svg.
+ *
+ * G22.S15.bis Fase 5 — escluso `.fm-geogebra-wrap svg`: gli SVG GeoGebra
+ * sono già renderizzati con palette adatta al dark (colori vivi su sfondo
+ * trasparente). L'invert li ribaltava rendendo il chart praticamente
+ * invisibile (strokes light gray → strokes scuri su sfondo bianco). */
+body.fm-dark .fm-collection > svg:not(.fm-geogebra-wrap svg),
+body.fm-dark .fm-collection svg:not(mjx-container svg):not(.fm-badge svg):not(.fm-geogebra-wrap svg),
+body.fm-dark .fm-editor-preview svg:not(mjx-container svg):not(.fm-geogebra-wrap svg),
+body.fm-dark details.fm-sol > svg:not(.fm-geogebra-wrap svg),
+body.fm-dark .fm-sol svg:not(mjx-container svg):not(.fm-badge svg):not(.fm-geogebra-wrap svg),
+body.fm-dark .fm-giustsol svg:not(mjx-container svg):not(.fm-badge svg):not(.fm-geogebra-wrap svg) {
+    filter: invert(0.88) hue-rotate(180deg);
+    background: #f0f0f4;
+    border-radius: 4px;
+}
+/* GeoGebra SVG in dark mode: niente filter, sfondo trasparente. */
+body.fm-dark .fm-geogebra-wrap svg {
+    filter: none !important;
+    background: transparent !important;
+}
+
+/* Phase 16 — fm-rm-table: sfondo trasparente in dark, border chiaro. */
+body.fm-dark .fm-rm-table td.rm-option,
+body.fm-dark .fm-rm-table th {
+    background: var(--fm-c-surface-2) !important;
+    border-color: var(--fm-c-border-strong) !important;
+    color: var(--fm-c-text-2);
+}
+body.fm-dark .fm-rm-table td.rm-option.rm-correct {
+    background: #2d3d2d !important;
+    border-color: #6a9a6a !important;
+}
+
+/* Phase 16 — .fm-badge testi scuri ora su sfondo dark: il legacy usa
+ * \small{\text{...}} MathJax che renderizza con color del container. In
+ * dark il container è scuro → testo deve essere chiaro. Sovrascriviamo. */
+body.fm-dark .fm-badge {
+    background: transparent;
+    color: inherit;
+}
+body.fm-dark .fm-badge mjx-container {
+    color: var(--fm-c-text);
+}
+body.fm-dark h1, body.fm-dark h2, body.fm-dark h3 { color: var(--fm-c-link); }
+body.fm-dark .fm-titolo h1              { color: var(--fm-c-link); }
+
+/* Phase 16 — MathJax dark mode SENZA filter:invert (rompeva i \color{red}
+ * espliciti e le formule della preview editor). Override via inherit color
+ * del parent. CHTML eredita color; SVG fill richiede override esplicito. */
+body.fm-dark mjx-container           { color: var(--fm-c-text-2); }
+body.fm-dark mjx-container mjx-math  { color: inherit; }
+body.fm-dark mjx-container svg       { fill: currentColor; }
+body.fm-dark .fm-editor-preview mjx-container { color: var(--fm-c-text); }
+
+/* ── Shell pages (admin/dashboard, /admin/tools, /register, ecc.) ── */
+body.fm-dark.fm-shell                                 { background: var(--fm-c-bg); color: var(--fm-c-text); }
+body.fm-dark .fm-card,
+body.fm-dark .fm-card--wide,
+body.fm-dark .fm-card--modal                          { background: var(--fm-c-surface); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-tile                                 { background: var(--fm-c-surface-2); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-tile h3                              { color: var(--fm-c-text-2); }
+body.fm-dark .fm-big                                  { color: var(--fm-c-link); }
+
+/* Phase 14 — alert tile (pending > 0) con palette AA safe in light+dark. */
+.fm-tile--alert { background: #fff3cd; color: #3a2d00; border-color: #e0c665; }
+.fm-tile--alert h3    { color: #3a2d00; }
+.fm-tile--alert .fm-big { color: #6b4a00; }
+.fm-tile--alert .fm-muted { color: #5a4a1a; }
+body.fm-dark .fm-tile--alert { background: #3a3020; color: #ffe08a; border-color: #6b5a30; }
+body.fm-dark .fm-tile--alert h3    { color: #ffe08a; }
+body.fm-dark .fm-tile--alert .fm-big { color: #ffcc4d; }
+body.fm-dark .fm-tile--alert .fm-muted { color: #cfbc7a; }
+
+.fm-big--danger { color: #c62828; }
+body.fm-dark .fm-big--danger { color: #ff6b6b; }
+.fm-tile--alert .fm-big--danger { color: #8a1024; }
+body.fm-dark .fm-tile--alert .fm-big--danger { color: #ff7a85; }
+/* Phase 14 — fm-code (timestamp, username in tabelle admin): bg chiaro
+   legacy (#f3f4f7) → bg scuro + testo chiaro in darkmode. */
+body.fm-dark .fm-code                                 { background: var(--fm-c-surface); color: var(--fm-c-text-2); }
+
+/* Phase 14 — sidepage legacy (#fm-sp-mappe verde / #fm-sp-lab viola / #fm-sp-eser
+   crema / #fm-sp-verif arancio / #fm-sp-bes rosa / #fm-sp-risdoc fucsia)
+   hanno background-color hardcoded. In darkmode scuriamo mantenendo la
+   tinta identificativa della sezione, con testo chiaro leggibile. */
+body.fm-dark #fm-sp-mappe           { background-color: #1e3a2a; color: #e0f0e5; }
+body.fm-dark #fm-sp-lab          { background-color: #2a2a4a; color: #e0e0f0; }
+body.fm-dark #fm-sp-eser            { background-color: #3a3420; color: #f0e8c8; }
+body.fm-dark #fm-sp-verif           { background-color: #4a3800; color: #ffd88a; }
+body.fm-dark #fm-sp-bes   { background-color: #3a2325; color: #f5cbc8; }
+body.fm-dark #fm-sp-risdoc          { background-color: #3a2335; color: #f0c8e5; }
+body.fm-dark .sidepage li a,
+body.fm-dark .sidepage a      { color: inherit; }
+
+body.fm-dark .fm-table,
+body.fm-dark .fm-tools-table,
+body.fm-dark .fm-an-table                             { color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-table th,
+body.fm-dark .fm-tools-table th,
+body.fm-dark .fm-an-table th                          { background: var(--fm-c-surface-2); color: var(--fm-c-text-2); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-table td,
+body.fm-dark .fm-tools-table td,
+body.fm-dark .fm-an-table td                          { background: var(--fm-c-surface); color: var(--fm-c-text); border-color: var(--fm-c-border); }
+body.fm-dark .fm-table tr:hover,
+body.fm-dark .fm-tools-table tr:hover,
+body.fm-dark .fm-an-table tr:hover td                 { background: var(--fm-c-surface-2); }
+body.fm-dark .fm-input                                { background: var(--fm-c-surface); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-input::placeholder                   { color: var(--fm-c-muted); }
+body.fm-dark .fm-label                                { color: var(--fm-c-text-2); }
+body.fm-dark .fm-muted                                { color: var(--fm-c-muted); }
+
+/* Phase 20 — multiarg secondary contract-render (argomenti aggiunti
+   via body.fm-multiarg). Tono ridotto + separator top. */
+.fm-contract-render.fm-muted,
+.fm-contract-wrap.fm-muted {
+    opacity: 0.9;
+    border-top: 1px dashed rgba(0, 0, 0, 0.18);
+    padding-top: 8px;
+    margin-top: 14px;
+}
+body.fm-dark .fm-contract-render.fm-muted,
+body.fm-dark .fm-contract-wrap.fm-muted {
+    border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Phase 20 — body.fm-verifica-mode + body.fm-multiarg: nasconde
+   .fm-contract-render degli esercizi studente (source topic), lascia
+   visibile solo #type_verAll con verifiche correlate/intersect.
+   Single-arg (verifica-mode solo, no multiarg): comportamento precedente
+   invariato — esercizi primary visible + verifica sotto. */
+body.fm-multiarg.fm-verifica-mode #fm-content > .fm-contract-render,
+body.fm-multiarg.fm-verifica-mode #fm-content > .fm-contract-wrap,
+body.fm-multiarg.fm-verifica-mode #fm-content > .fm-pagestyle {
+    display: none;
+}
+
+/* Phase 20 — #type_verAll in modalità multiarg union: banner discreto
+   che indica "esercizi aggregati da N topic" (dedupe per data-id). */
+.fm-multiarg-union::before {
+    content: "🔀 Esercizi aggregati da " attr(data-multiarg-count) " argomenti selezionati";
+    display: block;
+    padding: 4px 10px;
+    margin-bottom: 8px;
+    font-size: 0.6875rem;
+    font-style: italic;
+    color: #7a5b00;
+    background: rgba(255, 250, 200, 0.5);
+    border-left: 3px solid #b58900;
+    border-radius: 2px;
+}
+body.fm-dark .fm-multiarg-union::before {
+    color: #ffd88a;
+    background: rgba(70, 55, 10, 0.4);
+    border-left-color: #d4a020;
+}
+body.fm-dark .fm-link,
+body.fm-dark a                                        { color: var(--fm-c-link); }
+body.fm-dark .fm-tabs                                 { border-bottom-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-tab                                  { background: var(--fm-c-surface); color: var(--fm-c-text-2); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-tab--active                          { background: var(--fm-c-surface-2); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-an-card                              { background: var(--fm-c-surface); color: var(--fm-c-text); border-color: var(--fm-c-border-strong); }
+body.fm-dark .fm-an-card .fm-an-num                   { color: var(--fm-c-link); }
+body.fm-dark fieldset                                 { border-color: var(--fm-c-border-strong); color: var(--fm-c-text); }
+body.fm-dark code                                     { background: var(--fm-c-surface); color: var(--fm-c-text-2); padding: 1px 4px; border-radius: 2px; }
+
+/* Bottoni white-text generici (sidepage, admin tools) */
+body.fm-dark .fm-btn,
+body.fm-dark .fm-btn--primary,
+body.fm-dark .fm-btn--ghost,
+body.fm-dark .fm-btn--small                           { color: #fff; border-color: #777; }
+body.fm-dark .fm-btn                                  { background: #3a3a44; }
+body.fm-dark .fm-btn:hover:not(:disabled)             { background: #4a4a54; border-color: #888; }
+body.fm-dark .fm-btn:disabled                         { background: #232328; color: #6b6b75; border-color: #3a3a44; cursor: not-allowed; opacity: 0.7; }
+body.fm-dark .fm-btn--ghost                           { background: transparent; }
+body.fm-dark .fm-btn--ghost:hover                     { background: rgba(255,255,255,.08); }
+body.fm-dark .fm-btn--primary                         { background: #1a4ea8; border-color: #2563c0; }
+body.fm-dark .fm-btn--primary:hover:not(:disabled)    { background: #2563c0; }
+body.fm-dark .fm-btn--primary:disabled                { background: #1a3050; color: #6b8bb0; }
+body.fm-dark .fm-btn--danger                          { background: #c62828; color: #fff; border-color: #ef4444; }
+body.fm-dark .fm-btn--danger:hover:not(:disabled)     { background: #d62929; }
+body.fm-dark .fm-btn--accent                          { background: #15803d; color: #fff; border-color: #16a34a; }
+body.fm-dark .fm-btn--accent:hover:not(:disabled)     { background: #16a34a; }
+
+/* Sidepage btn (.fm-sb-sec) hanno sfondo colorato chiaro: assicuriamoci
+   che testo resti leggibile in dark sui colori già scuri. */
+body.fm-dark .scrollbar .btn                          { color: #1a1a1a !important; text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+
+/* Cookie privacy page: text bianco su sfondo bianco era illeggibile */
+body.fm-dark h1, body.fm-dark h2, body.fm-dark h3, body.fm-dark h4,
+body.fm-dark h5, body.fm-dark h6                      { color: var(--fm-c-text-2); }
+body.fm-dark .fm-breadcrumb a                         { color: var(--fm-c-link); }
+body.fm-dark .fm-alert--warn                          { background: var(--fm-c-warning-light); color: var(--fm-c-warning); border-color: var(--fm-c-warning); }
+body.fm-dark .fm-alert--success                       { background: var(--fm-c-success-light); color: var(--fm-c-success); border-color: var(--fm-c-success); }
+body.fm-dark .fm-alert--error                         { background: var(--fm-c-danger-light); color: var(--fm-c-danger); border-color: var(--fm-c-danger); }
+
+/* Phase 20 — dark mode per /teacher/templates (editor modelli esercizi).
+ * Override di stili inline hardcoded nella view (bg #fff, border #ddd,
+ * textarea #ccc). Mantiene contrasto alto + coerenza col resto
+ * dell'admin/dashboard in body.fm-dark. */
+body.fm-dark .fm-tpl-page                       { color: var(--fm-c-text); }
+body.fm-dark .fm-tpl-page h1                    { color: var(--fm-c-text-2); }
+body.fm-dark .fm-tpl-page h2                    { color: var(--fm-c-link) !important; }
+body.fm-dark .fm-tpl-page p                     { color: var(--fm-c-muted); }
+body.fm-dark .fm-tpl-page header a              { background: var(--fm-c-surface) !important; border-color: var(--fm-c-border) !important; color: var(--fm-c-text-2) !important; }
+body.fm-dark .fm-tpl-card                             { background: var(--fm-c-surface) !important; border-color: var(--fm-c-border) !important; box-shadow: 0 1px 3px rgba(0,0,0,.3) !important; }
+body.fm-dark .fm-tpl-card label > span                { color: var(--fm-c-text-2) !important; }
+body.fm-dark .fm-tpl-title,
+body.fm-dark .fm-tpl-intro,
+body.fm-dark .fm-tpl-field,
+body.fm-dark .fm-tpl-opt-content                      { background: var(--fm-c-bg) !important; color: var(--fm-c-text) !important; border-color: var(--fm-c-border) !important; }
+body.fm-dark .fm-tpl-title:focus,
+body.fm-dark .fm-tpl-intro:focus,
+body.fm-dark .fm-tpl-field:focus,
+body.fm-dark .fm-tpl-opt-content:focus,
+body.fm-dark .fm-tpl-title:focus-visible,
+body.fm-dark .fm-tpl-intro:focus-visible,
+body.fm-dark .fm-tpl-field:focus-visible,
+body.fm-dark .fm-tpl-opt-content:focus-visible        { border-color: var(--fm-c-focus-ring) !important; outline: none; box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.45) !important; }
+body.fm-dark .fm-tpl-item                             { background: var(--fm-c-surface-2) !important; border-color: var(--fm-c-border) !important; }
+body.fm-dark .fm-tpl-item > div:first-child span      { color: var(--fm-c-muted) !important; }
+body.fm-dark .fm-tpl-add-collect,
+body.fm-dark .fm-tpl-add-rm,
+body.fm-dark .fm-tpl-add-vf                           { background: var(--fm-c-primary-light) !important; border-color: var(--fm-c-primary) !important; color: var(--fm-c-link) !important; }
+body.fm-dark #fm-tpl-save                             { background: #3a6ad0 !important; color: #fff !important; }
+body.fm-dark #fm-tpl-save:hover                       { background: #2a5ac7 !important; }
+body.fm-dark #fm-tpl-save:disabled                    { background: #3a3a4a !important; color: #8a8a9a !important; cursor: wait; }
+body.fm-dark #fm-tpl-reload                           { background: var(--fm-c-surface) !important; border-color: var(--fm-c-border) !important; color: var(--fm-c-text-2) !important; }
+body.fm-dark #fm-tpl-status                           { background: var(--fm-c-surface) !important; color: var(--fm-c-text-2) !important; border-color: var(--fm-c-border) !important; }
+/* Delete buttons (✕): mantieni rosso accent ma adatta bg + contrasto */
+body.fm-dark .fm-tpl-item > div:first-child button    { background: #2a1a1a !important; border-color: #7a3a3a !important; color: #ff9090 !important; }
+body.fm-dark .fm-tpl-item > div:first-child button:hover { background: #4a1a1a !important; }
+body.fm-dark .fm-tpl-opt button                       { color: #ff9090 !important; }
+
+/* ── fm-admin-toolnav dark mode (Sprint A3.1 2026-05-24).
+ *    Estratte da admin.css:102-103,137-150 dove erano duplicate del
+ *    blocco principale (poi rimosso). _admin-toolnav.css ha la palette
+ *    light, qui le override dark byte-equivalent. */
+body.fm-dark .fm-admin-toolnav__group       { border-left-color: var(--fm-c-border); }
+body.fm-dark .fm-admin-toolnav__group-lbl   { color: var(--fm-c-muted); }
+body.fm-dark .fm-admin-toolnav__btn         { background: var(--fm-c-surface); color: var(--fm-c-text); border-color: var(--fm-c-border); }
+body.fm-dark .fm-admin-toolnav__btn:hover   { background: var(--fm-c-surface-2); border-color: var(--fm-c-primary); }
+body.fm-dark .fm-admin-toolnav__btn.fm-is-active { background: var(--fm-c-primary); color: var(--fm-c-text-on-primary); border-color: var(--fm-c-primary); }
+
+
+/* ════════════════════════════════════════════════════════════════
+ * Sprint B2 (2026-05-24) — DARK MODE EXTRACTION FROM admin.css
+ * Spostati 67 blocchi body.fm-dark da admin.css. Cascade preserved:
+ * specificity body.fm-dark>.selector > selector light, indipendente
+ * dal layer (specificity-based override).
+ * ════════════════════════════════════════════════════════════════ */
+
+body.fm-dark .fm-admin-tool {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-admin-tool:hover { border-color: var(--fm-c-primary); }
+
+body.fm-dark .fm-tab {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text-2);
+    border-color: var(--fm-c-border);
+}
+
+body.fm-dark .fm-tab:hover { background: var(--fm-c-surface-2); }
+
+body.fm-dark .fm-tab.fm-tab--active {
+    background: var(--fm-c-bg);
+    color: var(--fm-c-primary);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark .fm-tools-table {
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-tools-table th {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border);
+}
+
+body.fm-dark .fm-tools-table td { border-color: var(--fm-c-border); }
+
+body.fm-dark .fm-tools-table tr:hover { background: var(--fm-c-surface-2); }
+
+body.fm-dark .fm-sec-card {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border);
+}
+
+body.fm-dark .fm-an-card {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark .fm-an-card h4 { color: var(--fm-c-text-2); }
+
+body.fm-dark .fm-an-card .fm-an-num { color: var(--fm-c-primary); }
+
+body.fm-dark .fm-an-table {
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-an-table th {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border);
+}
+
+body.fm-dark .fm-an-table td { border-color: var(--fm-c-border); }
+
+body.fm-dark .fm-an-flag { background: #78350f; color: #fef3c7; }
+
+body.fm-dark .fm-infra h1 { color: var(--fm-c-text); }
+
+body.fm-dark .fm-infra .fm-card {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-infra .fm-card h2 { color: var(--fm-c-primary); }
+
+body.fm-dark .fm-infra dt { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-infra__note { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-pill--ok       { background: #064e3b; color: #a7f3d0; }
+
+body.fm-dark .fm-pill--warn     { background: #78350f; color: #fde68a; }
+
+body.fm-dark .fm-pill--high     { background: #7c2d12; color: #fed7aa; }
+
+body.fm-dark .fm-pill--critical { background: #7f1d1d; color: #fecaca; }
+
+body.fm-dark #fm-bsa-panel p,
+body.fm-dark #fm-bsa-panel label,
+body.fm-dark #fm-bsa-panel .fm-muted { color: var(--fm-c-text-2); }
+
+body.fm-dark #fm-bsa-panel input,
+body.fm-dark #fm-bsa-panel select {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark #fm-bsa-panel input::placeholder { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-meta-grid {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-meta-grid dt { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-meta-grid pre { color: var(--fm-c-text); }
+
+body.fm-dark .fm-toolbar .fm-btn--ghost.fm-is-active {
+    background: var(--fm-c-primary);
+    color: var(--fm-c-text-on-primary);
+    border-color: var(--fm-c-primary);
+}
+
+body.fm-dark .fm-empty {
+    color: var(--fm-c-muted);
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark .fm-alert--success { background: var(--fm-c-success-light); color: var(--fm-c-success); }
+
+body.fm-dark .fm-alert--danger,
+body.fm-dark .fm-alert--error   { background: var(--fm-c-danger-light); color: var(--fm-c-danger); }
+
+body.fm-dark .fm-alert--warn,
+body.fm-dark .fm-alert--warning { background: var(--fm-c-warning-light); color: var(--fm-c-warning); border-color: var(--fm-c-warning); }
+
+body.fm-dark .fm-alert--info    { background: var(--fm-c-info-light); color: var(--fm-c-info); }
+
+body.fm-dark.fm-shell input[type="text"],
+body.fm-dark.fm-shell input[type="email"],
+body.fm-dark.fm-shell input[type="url"],
+body.fm-dark.fm-shell input[type="number"],
+body.fm-dark.fm-shell input[type="datetime-local"],
+body.fm-dark.fm-shell input[type="date"],
+body.fm-dark.fm-shell select,
+body.fm-dark.fm-shell textarea {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark.fm-shell input::placeholder,
+body.fm-dark.fm-shell textarea::placeholder { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-status--open,
+body.fm-dark .fm-status--new           { background: #064e3b; color: #a7f3d0; }
+
+body.fm-dark .fm-status--acknowledged,
+body.fm-dark .fm-status--under_review,
+body.fm-dark .fm-status--assessing     { background: #78350f; color: #fde68a; }
+
+body.fm-dark .fm-status--responded,
+body.fm-dark .fm-status--actioned,
+body.fm-dark .fm-status--notified_garante,
+body.fm-dark .fm-status--notified_users { background: #1e3a8a; color: #bfdbfe; }
+
+body.fm-dark .fm-status--closed,
+body.fm-dark .fm-status--rejected      { background: #334155; color: #cbd5e1; }
+
+body.fm-dark .fm-status--spam,
+body.fm-dark .fm-status--detected      { background: #7f1d1d; color: #fecaca; }
+
+body.fm-dark .fm-badge--severity-low      { background: #064e3b; color: #a7f3d0; }
+
+body.fm-dark .fm-badge--severity-medium   { background: #78350f; color: #fde68a; }
+
+body.fm-dark .fm-badge--severity-high     { background: #7c2d12; color: #fed7aa; }
+
+body.fm-dark .fm-badge--severity-critical { background: #7f1d1d; color: #fecaca; }
+
+body.fm-dark .fm-badge { background: var(--fm-c-surface-2); color: var(--fm-c-text-2); }
+
+body.fm-dark .fm-card pre { color: var(--fm-c-text); }
+
+body.fm-dark .fm-card h2  { color: var(--fm-c-text); }
+
+body.fm-dark .fm-btn--warn   { background: #92400e; border-color: #92400e; }
+
+body.fm-dark details > div { background: var(--fm-c-surface); color: var(--fm-c-text); }
+
+body.fm-dark .fm-content-search-panel {
+    background: rgba(96, 165, 250, 0.08);
+    border-color: var(--fm-c-border);
+}
+
+body.fm-dark .fm-content-search-panel input,
+body.fm-dark .fm-content-search-panel select {
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border-color: var(--fm-c-border-strong);
+}
+
+body.fm-dark .fm-content-search-panel input::placeholder {
+    color: var(--fm-c-muted);
+}
+
+body.fm-dark .fm-content-search-panel .fm-waf-table tr:nth-child(odd) {
+    background: rgba(255,255,255,.02);
+}
+
+body.fm-dark .fm-row-detail__cell {
+    background: var(--fm-c-surface);
+    border-bottom-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-row-detail__grid dt { color: var(--fm-c-muted); }
+
+body.fm-dark .fm-row-detail__grid dd,
+body.fm-dark .fm-row-detail__pre { color: var(--fm-c-text); }
+
+body.fm-dark .fm-row-detail__grid a { color: var(--fm-c-link); }
+
+body.fm-dark .fm-collapsible-summary {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-collapsible-summary:hover { background: var(--fm-c-surface-2); }
+
+body.fm-dark .fm-info-banner {
+    background: var(--fm-c-surface);
+    border-color: var(--fm-c-border-strong);
+    color: var(--fm-c-text);
+}
+
+body.fm-dark .fm-info-banner a { color: var(--fm-c-link); }
+
+body.fm-dark .fm-card--wide .fm-card,
+body.fm-dark .fm-card--wide details > .fm-card {
+    border-color: var(--fm-c-border-strong);
+}

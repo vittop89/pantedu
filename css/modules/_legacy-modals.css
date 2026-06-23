@@ -1,0 +1,356 @@
+/* ============================================================ */
+/* Legacy Modals — Phase Roadmap Sprint 39.                       */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (311 LOC). Visual byte-equivalent.*/
+/* Legacy modal+banner system: bottom-bar + .fm-modal +           */
+/* fm-cookie-modal + switch_cookies + fm-license-modal +          */
+/* responsive @media (max-width: 768px).                          */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - #bottom-bar (footer fixed) + .bar-content + .bar-content-links*/
+/*   - #bottom-bar a + a:hover                                     */
+/*   - .resource-placeholder (banner placeholder)                  */
+/*   - .fm-modal (legacy modal wrapper position:fixed)             */
+/*   - .fm-modal .fm-modal-body h2/span/p/a                        */
+/*   - .fm-modal-close + #fm-modal-overlay                         */
+/*   - #fm-cookie-modal .fm-cookie-cat/-title/-description         */
+/*   - #fm-cookie-modal .fm-cookie-modal-actions                   */
+/*   - #fm-cookie-modal accept/confirm/reject buttons              */
+/*   - .switch_cookies + .slider_cookies (toggle)                  */
+/*   - @media (max-width: 768px) responsive (.fm-modal, cookies,   */
+/*     #bottom-bar, slider_cookies)                                */
+/*   - #fm-license-modal .license-details (CC license details)     */
+/* ============================================================ */
+
+/* Barra inferiore */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    /* padding: 10px 0; */
+    z-index: 1000; /* Assicura che sia sopra il contenuto */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+}
+#bottom-bar .bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+#bottom-bar .bar-content-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+#bottom-bar a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+#bottom-bar a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+/* Stile per i banner modali */
+.resource-placeholder {
+    border: 1px dashed #ccc;
+    padding: 20px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    min-height: 50px;
+}
+.fm-modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1002;
+    max-width: 90%;
+    width: 650px; /* Aumentato leggermente per il contenuto dei cookie */
+    border-radius: 8px;
+    max-height: 90vh; /* Leggermente più alto per contenuto cookie */
+    overflow-y: auto;
+}
+.fm-modal .fm-modal-body h2 { /* Specificità per h2 dentro .fm-modal-body */
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5em; /* Dimensione titolo modal */
+}
+.fm-modal span { /* Stile generico, potrebbe necessitare affinamento */
+    /* margin-bottom: 15px; Questo potrebbe essere troppo generico */
+    color: #555;
+    font-size: 0.95em;
+}
+.fm-modal p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 10px;
+}
+.fm-modal a {
+    color: var(--fm-c-link);
+    text-decoration: none;
+}
+.fm-modal a:hover {
+    text-decoration: underline;
+}
+.fm-modal-close {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: #6c757d; /* Grigio per coerenza con rifiuta */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+.fm-modal-close:hover {
+    background-color: #545b62;
+}
+/* Overlay per lo sfondo (dal tuo CSS) */
+#fm-modal-overlay { /* Prefix fm- per coerenza (ex #modal-overlay) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Leggermente più scuro */
+    z-index: 1001;
+}
+/* Barra inferiore (dal tuo CSS) */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+}
+#bottom-bar .bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* padding: 5px 20px; */
+}
+#bottom-bar a {
+    color: white;
+    text-decoration: none;
+    /* padding: 8px 12px; */
+    margin-left: 10px; /* Spazio tra i link */
+    transition: background-color 0.3s;
+}
+#bottom-bar a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+/* Stili specifici per il MODAL dei Cookie */
+#fm-cookie-modal .fm-cookie-cat {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fdfdfd;
+}
+#fm-cookie-modal .fm-cookie-cat-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+#fm-cookie-modal .fm-cookie-cat-title label {
+    cursor: pointer;
+}
+#fm-cookie-modal .fm-cookie-cat-title .always-active {
+    font-style: italic;
+    color: var(--fm-c-success); /* Verde per sempre attivi */
+    font-size: 0.9em;
+    font-weight:normal;
+}
+#fm-cookie-modal .fm-cookie-cat-description {
+    font-size: 0.9em;
+    color: #444;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+#fm-cookie-modal .fm-cookie-modal-actions {
+    display: flex;
+    justify-content: space-around; /* Spazio tra i bottoni */
+    gap: 10px;
+    margin-top: 25px;
+    margin-bottom:15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+#fm-cookie-modal .fm-cookie-modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    flex-grow: 1; /* Fa sì che i bottoni occupino spazio simile */
+}
+#fm-cookie-modal #accept-all-cookies-modal {
+    background-color: var(--fm-c-success); /* Verde */
+    color: white;
+}
+#fm-cookie-modal #accept-all-cookies-modal:hover {
+    background-color: #218838;
+}
+#fm-cookie-modal #confirm-choices-cookies-modal {
+    background-color: var(--fm-c-primary); /* Blu */
+    color: white;
+}
+#fm-cookie-modal #confirm-choices-cookies-modal:hover {
+    background-color: #0056b3;
+}
+#fm-cookie-modal #reject-all-cookies-modal {
+    background-color: #b91c1c; /* Rosso scuro — WCAG AA: bianco su #b91c1c = 5.9:1 (#dc3545 era 3.99) */
+    color: white;
+}
+#fm-cookie-modal #reject-all-cookies-modal:hover {
+    background-color: #991b1b;
+}
+
+/* ── WCAG 2.1 AA (1.4.3 contrasto / 1.4.1 uso del colore) — modale cookie ──
+   I colori originali (token blu/verde, testo grigio) non raggiungevano 4.5:1.
+   Override scoped al solo #fm-cookie-modal: scurisce + sottolinea i link. */
+#fm-cookie-modal #confirm-choices-cookies-modal {
+    background-color: #1d4ed8; /* blu scuro: bianco = 5.2:1 */
+}
+#fm-cookie-modal #confirm-choices-cookies-modal:hover {
+    background-color: #1e40af;
+}
+#fm-cookie-modal .fm-cookie-cat-title .always-active {
+    color: #15803d; /* verde scuro: 4.8:1 su bianco (era token più chiaro) */
+}
+#fm-cookie-modal .fm-modal-body a,
+#fm-cookie-modal .fm-cookie-cat-description a,
+#fm-cookie-modal p a {
+    color: #1d4ed8;            /* 5.2:1 su bianco */
+    /* !important: il codebase usa @layer e `.fm-modal a` (text-decoration:none)
+       vince per ordine di layer nonostante la specificità inferiore. */
+    text-decoration: underline !important; /* distinguibile senza solo colore */
+}
+/* Switch styles (invariati dalla versione precedente, ma assicurati siano presenti) */
+.switch_cookies {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+.switch_cookies input { opacity: 0; width: 0; height: 0; }
+.slider_cookies {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+.slider_cookies:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .slider_cookies { background-color: #007bff; } /* Blu per coerenza */
+input:focus + .slider_cookies { box-shadow: 0 0 1px #007bff; }
+input:checked + .slider_cookies:before { transform: translateX(26px); }
+.slider_cookies.round { border-radius: 24px; }
+.slider_cookies.round:before { border-radius: 50%; }
+/* Responsive */
+@media (max-width: 768px) {
+    .fm-modal {
+        width: 95%; /* Più largo su mobile */
+        padding: 10px 15px;
+        font-size: small;
+    }
+    /* #fm-cookie-modal .fm-cookie-modal-actions { */
+        /* flex-direction: column; Bottoni in colonna su mobile */
+        /* flex-direction: column; */
+    /* } */
+    #fm-license-section{
+        text-align: center;
+    }
+    #fm-cookie-modal .fm-cookie-modal-actions button {
+        width: 100%; /* Bottoni a piena larghezza */
+        margin-bottom: 10px;
+    }
+    /* #fm-cookie-modal .fm-cookie-modal-actions button:last-child {
+        margin-bottom: 0;
+    } */
+    #bottom-bar .bar-content {
+        /* flex-direction: column;
+                */
+        display: inline-flex;
+        justify-content: space-between;
+        width: 94%;
+        padding: 0px 20px;
+    }
+    
+    #bottom-bar a {
+        margin-left: 0;
+        /* padding: 0; */
+        /* display: block; Link a blocco intero su mobile */
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .slider_cookies {
+        width: 44px;
+    }
+    .slider_cookies:before {
+        left: 0px;
+    }
+}
+
+/* Stili specifici (opzionali) per il contenuto del modale licenza */
+#fm-license-modal .license-details {
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333; /* Colore testo standard */
+}
+
+#fm-license-modal .license-details b {
+    /* display: block; Fa andare "Copyright:" a capo */
+    margin-bottom: 5px;
+    color: #111; /* Un po' più scuro per il titolo */
+}
+
+#fm-license-modal .license-details a {
+    color: var(--fm-c-link); /* Colore standard per i link */
+    text-decoration: none;
+}
+
+#fm-license-modal .license-details a:hover {
+    text-decoration: underline;
+}
+
+#fm-license-modal .license-details img {
+    height: 1.2em; /* Altezza unificata per le icone CC */
+    margin-left: .2em;
+    vertical-align: -0.2em; /* Aggiustamento fine per l'allineamento verticale */
+    border: none; /* Assicura che non ci siano bordi strani sulle immagini linkate */
+}

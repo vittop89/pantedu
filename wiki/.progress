@@ -1,0 +1,48 @@
+# Wiki Generation Progress
+# Completed: 2026-04-23
+# Branch: plan-b-rollout
+# Status: COMPLETO
+
+## File generati (28 totali)
+
+### Core (14 file)
+- [x] wiki/_llm-primer.md
+- [x] wiki/map.md
+- [x] wiki/domain-map.md
+- [x] wiki/architecture.md
+- [x] wiki/entrypoints.md
+- [x] wiki/routing-and-api.md
+- [x] wiki/database-schema.md
+- [x] wiki/environment-variables.md
+- [x] wiki/security-notes.md
+- [x] wiki/testing.md
+- [x] wiki/dev-workflow.md
+- [x] wiki/glossary.md
+- [x] wiki/user-flows.md
+- [x] wiki/technical-debt.md
+- [x] wiki/changelog.md
+
+### ADR (5 file)
+- [x] wiki/decisions/ADR-001-mvc-php-custom.md
+- [x] wiki/decisions/ADR-002-lit3-web-components.md
+- [x] wiki/decisions/ADR-003-tex-pipeline.md
+- [x] wiki/decisions/ADR-004-csrf-auto-rotate.md
+- [x] wiki/decisions/ADR-005-schema-driven-risdoc.md
+
+### Domains (9 file)
+- [x] wiki/domains/core/core-overview.md
+- [x] wiki/domains/auth/auth-overview.md
+- [x] wiki/domains/risdoc/risdoc-overview.md
+- [x] wiki/domains/risdoc/tex-pipeline.md
+- [x] wiki/domains/esercizi/esercizi-overview.md
+- [x] wiki/domains/verifiche/verifiche-overview.md
+- [x] wiki/domains/mappe/mappe-overview.md
+- [x] wiki/domains/admin/admin-overview.md
+- [x] wiki/domains/frontend/frontend-overview.md
+
+## Lacune identificate
+1. processLegacyTex() non ha test unit — solo E2E
+2. Google Apps Script / mappe: zero test, zero documentazione interna
+3. Vite manifest integration: TODO nel codice
+4. DB_ENABLED=false path: non coperto in E2E
+5. scriptGoogle_sync/ (2276 LOC PHP + 2035 LOC JS): non documentato nel dettaglio

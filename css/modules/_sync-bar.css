@@ -1,0 +1,222 @@
+/* ============================================================ */
+/* Sync bar — Phase Roadmap Sprint 30.                            */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (166 LOC). Visual byte-equivalent.*/
+/* Drive / Local / GitHub sync buttons triplet + Sync-all viola.   */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-sync-bar (container + label "Sync:")                    */
+/*   - .fm-sync-btn (base button stile icon-only 28x28)            */
+/*   - .fm-sync-btn--{drive,local,github,all} (variants colore)    */
+/*   - .fm-session-{drive,local,github}-sync (legacy alias active) */
+/*   - [data-state="syncing"] (animazione warning amber)           */
+/*   - .fm-sync-btn .fm-drive-icon (icon sizing)                   */
+/*   - Dark theme overrides                                        */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   Phase G3.a — Drive sync buttons.
+   G19.48 — refactor: 3-button triplet (Drive / Local / GitHub) preceduto
+   da label "Sync:" dentro `.fm-sync-bar`. Stile icon-only quadrato (no
+   etichetta testuale: la label e' solo nel container).
+   ══════════════════════════════════════════════════════════════════ */
+.fm-sync-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 4px;
+}
+.fm-sync-bar__label {
+    font-size: .82rem;
+    font-weight: 600;
+    opacity: .85;
+    margin-right: 2px;
+}
+
+.fm-sync-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #ffffff;
+    font-size: 0.8125rem;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .15), inset 0 1px 0 rgba(255, 255, 255, .2);
+    transition: background .12s ease, transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.fm-sync-btn:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.fm-sync-btn:active { transform: translateY(1px); }
+.fm-sync-btn[disabled] { opacity: .5; cursor: not-allowed; }
+/* WCAG 2.4.7 — focus visibile per tutti i sync-btn (icon-only). */
+.fm-sync-btn:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring, #fff);
+    outline-offset: 2px;
+}
+
+/* Drive (verde) */
+.fm-sync-btn--drive,
+.fm-session-drive-sync {
+    background: linear-gradient(180deg, #34a853 0%, #2a8f44 100%);
+    border-color: #1f7a36;
+}
+.fm-sync-btn--drive:hover,
+.fm-session-drive-sync:hover {
+    background: linear-gradient(180deg, #3eb95f 0%, #2f9c4a 100%);
+}
+.fm-session-drive-sync[data-state="syncing"] {
+    background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+    border-color: #b45309;
+}
+.fm-session-drive-sync[data-state="syncing"]:hover {
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+    border-color: #b91c1c;
+}
+
+/* Local (blu) */
+.fm-sync-btn--local,
+.fm-session-local-sync {
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #1e3a8a;
+}
+.fm-sync-btn--local:hover,
+.fm-session-local-sync:hover {
+    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+}
+.fm-session-local-sync[data-state="syncing"] {
+    background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+    border-color: #b45309;
+    cursor: wait;
+}
+
+/* GitHub (grigio scuro, placeholder futuro) */
+.fm-sync-btn--github,
+.fm-session-github-sync {
+    background: linear-gradient(180deg, #24292f 0%, #1f2328 100%);
+    border-color: #14171a;
+}
+.fm-sync-btn--github:hover,
+.fm-session-github-sync:hover {
+    background: linear-gradient(180deg, #32383f 0%, #24292f 100%);
+}
+
+/* G22.S15.bis Fase 5 — Sync-all (viola, "fai tutto in una volta") */
+.fm-sync-btn--all,
+.fm-session-sync-all {
+    background: linear-gradient(180deg, #9333ea 0%, #7e22ce 100%);
+    border-color: #6b21a8;
+    color: #ffffff;
+}
+.fm-sync-btn--all:hover,
+.fm-session-sync-all:hover {
+    background: linear-gradient(180deg, #a855f7 0%, #9333ea 100%);
+}
+.fm-session-sync-all[data-state="syncing"] {
+    background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+    border-color: #b45309;
+    cursor: wait;
+}
+body.fm-dark .fm-sync-btn--all,
+body.fm-dark .fm-session-sync-all {
+    background: linear-gradient(180deg, #7e22ce 0%, #6b21a8 100%);
+    border-color: #581c87;
+}
+body.fm-dark .fm-sync-btn--all:hover,
+body.fm-dark .fm-session-sync-all:hover {
+    background: linear-gradient(180deg, #9333ea 0%, #7e22ce 100%);
+}
+
+/* Import bundle (ambra warn). Icon-only quadrato uniforme agli altri sync-btn:
+ * freccia su (upload) = opposto del download locale (--local). Ultimo della
+ * fila, separato dal gruppo sync da un pallino "•" (azione distinta: importa
+ * un bundle esterno). Il colore del pallino segue il tema (banner chiaro/scuro). */
+.fm-sync-btn--import {
+    background: linear-gradient(180deg, var(--fm-c-warning, #d97706) 0%, #d97706 100%);
+    border-color: #b45309;
+    margin-left: 12px;
+    position: relative;
+}
+/* Pallino centrato nello spazio tra il pulsante viola e l'import (= gap 4px
+ * della bar + margin-left 12px). Il box ::before copre tutto quello spazio e
+ * `text-align:center` centra il "•" → equidistante dai due pulsanti. */
+.fm-sync-btn--import::before {
+    content: "•";
+    position: absolute;
+    left: -16px;
+    width: 16px;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, .4);
+    font-size: 1.1rem;
+    line-height: 0;
+    pointer-events: none;
+}
+body.fm-dark .fm-sync-btn--import::before { color: rgba(255, 255, 255, .5); }
+.fm-sync-btn--import:hover {
+    background: linear-gradient(180deg, #fbbf24 0%, var(--fm-c-warning, #d97706) 100%);
+}
+body.fm-dark .fm-sync-btn--import {
+    background: linear-gradient(180deg, #c2780b 0%, #9a5d09 100%);
+    border-color: #92400e;
+}
+body.fm-dark .fm-sync-btn--import:hover {
+    background: linear-gradient(180deg, #e0900d 0%, #b46b0a 100%);
+}
+
+.fm-local-icon, .fm-drive-icon, .fm-github-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+.fm-sync-btn .fm-drive-icon,
+.fm-sync-btn .fm-local-icon,
+.fm-sync-btn .fm-github-icon,
+.fm-sync-btn svg {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    color: inherit;
+}
+/* G22.S15.bis Fase 5 — fm-sync-btn--all icona currentColor (era fill="currentColor"
+ * ma senza color esplicito sul btn diventava bianco/inheritato male in dark) */
+.fm-sync-btn--all svg, .fm-session-sync-all svg {
+    fill: currentColor;
+    color: #ffffff;
+}
+
+body.fm-dark .fm-session-local-sync,
+body.fm-dark .fm-sync-btn--local {
+    background: linear-gradient(180deg, #1d4ed8 0%, #1e3a8a 100%);
+    border-color: #1e3a8a;
+}
+body.fm-dark .fm-session-github-sync,
+body.fm-dark .fm-sync-btn--github {
+    background: linear-gradient(180deg, #1f2328 0%, #14171a 100%);
+    border-color: #0d1014;
+    color: #c9d1d9;
+}
+
+/* Per-item sync btn dentro .fm-item-actions (accanto a ✎🗑👁📥). */
+.fm-item-btn.fm-item-drive-sync { color: #9dd1ff; }
+.fm-item-btn.fm-item-drive-sync[data-state="syncing"] { opacity: .5; cursor: wait; }
+.fm-item-btn.fm-item-drive-sync[data-state="unsynced"]::after {
+    content: "•";
+    color: #f4a261;
+    margin-left: -2px;
+    font-size: 1.2em;
+    vertical-align: super;
+    line-height: 0;
+}
+body.fm-dark .fm-session-drive-sync {
+    background: linear-gradient(180deg, #2d8745 0%, #226d36 100%);
+    border-color: #1a5728;
+}
+body.fm-dark .fm-session-drive-sync:hover {
+    background: linear-gradient(180deg, #379354 0%, #2a7a40 100%);
+}

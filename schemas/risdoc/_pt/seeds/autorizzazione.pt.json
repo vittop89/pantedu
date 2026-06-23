@@ -1,0 +1,658 @@
+[
+  {
+    "_type": "sectionHeader",
+    "title": "Modulo di Autorizzazione",
+    "level": 1,
+    "selectors": []
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Accesso alla Sezione ESERCIZI per Studenti minorenni",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Modulo di autorizzazione per l'accesso alla Sezione ESERCIZI.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Importante per i Genitori",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "La sezione ESERCIZI",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " del sito contiene esclusivamente gli ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "svolgimenti di alcuni degli esercizi",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " presenti nei libri di testo utilizzati a scuola, identificati solo tramite ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "numero di esercizio e pagina",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ".",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Non vengono mai riportate le tracce o i testi degli esercizi, nel rispetto del diritto d'autore. L'accesso è riservato esclusivamente ai possessori dei libri di testo.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Servizio per Minorenni:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Questo modulo di autorizzazione è specificamente destinato agli ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "studenti minorenni",
+        "marks": [
+          "underline"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ". È richiesto il consenso del genitore o tutore legale per l'accesso alla piattaforma didattica.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Finalità del Modulo:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Senza la compilazione e l'invio di questo modulo di autorizzazione ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "non è possibile ricevere le credenziali per l'accesso alla sezione \"ESERCIZI\"",
+        "marks": [
+          "underline"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ". I dati sensibili raccolti riguardano esclusivamente la gestione e il controllo dell'utilizzo di queste credenziali di accesso.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Disclaimer:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Il servizio è inteso come ausilio didattico privato per gli acquirenti del libro di testo e ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "non è in alcun modo affiliato, approvato o sponsorizzato dall'autore o dall'editore del libro di testo originale",
+        "marks": [
+          "underline"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ".",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Dati del Genitore/Tutore Legale",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "textField",
+    "name": "parentName",
+    "label": "Nome del Genitore/Tutore",
+    "kind": "text",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "textField",
+    "name": "parentSurname",
+    "label": "Cognome del Genitore/Tutore",
+    "kind": "text",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "textField",
+    "name": "parentEmail",
+    "label": "Email del Genitore",
+    "kind": "text",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "textField",
+    "name": "parentPhone",
+    "label": "Telefono del Genitore (facoltativo)",
+    "kind": "text",
+    "value": "",
+    "placeholder": "Solo per comunicazioni urgenti"
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Il numero di telefono viene richiesto solo per eventuali comunicazioni urgenti relative al servizio.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Dati dello Studente",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "textField",
+    "name": "studentName",
+    "label": "Nome dello Studente",
+    "kind": "text",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "textField",
+    "name": "studentSurname",
+    "label": "Cognome dello Studente",
+    "kind": "text",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "select",
+    "name": "studentClass",
+    "label": "Classe",
+    "value": "",
+    "options": [
+      {
+        "value": "",
+        "label": "-- Seleziona Classe --"
+      },
+      {
+        "value": "1A",
+        "label": "1A"
+      },
+      {
+        "value": "1B",
+        "label": "1B"
+      },
+      {
+        "value": "1C",
+        "label": "1C"
+      },
+      {
+        "value": "2A",
+        "label": "2A"
+      },
+      {
+        "value": "2B",
+        "label": "2B"
+      },
+      {
+        "value": "2C",
+        "label": "2C"
+      },
+      {
+        "value": "3A",
+        "label": "3A"
+      },
+      {
+        "value": "3B",
+        "label": "3B"
+      },
+      {
+        "value": "3C",
+        "label": "3C"
+      },
+      {
+        "value": "4A",
+        "label": "4A"
+      },
+      {
+        "value": "4B",
+        "label": "4B"
+      },
+      {
+        "value": "4C",
+        "label": "4C"
+      },
+      {
+        "value": "5A",
+        "label": "5A"
+      },
+      {
+        "value": "5B",
+        "label": "5B"
+      },
+      {
+        "value": "5C",
+        "label": "5C"
+      }
+    ]
+  },
+  {
+    "_type": "textField",
+    "name": "studentBirthDate",
+    "label": "Data di Nascita Studente",
+    "kind": "date",
+    "value": "",
+    "placeholder": ""
+  },
+  {
+    "_type": "textField",
+    "name": "schoolName",
+    "label": "Nome della Scuola",
+    "kind": "text",
+    "value": "",
+    "placeholder": "Es. Liceo Scientifico di Esempio - Comune Esempio"
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Dichiarazioni e Autorizzazioni",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Il sottoscritto genitore/tutore legale dichiara:",
+        "marks": [
+          "strong"
+        ]
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Di essere in possesso dei libri di testo per i quali si richiede l'accesso agli svolgimenti degli esercizi",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Di essere consapevole che la sezione ESERCIZI contiene esclusivamente svolgimenti numerici, senza testi originali",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Di comprendere che il servizio è un ausilio didattico privato non affiliato con autori/editori",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Di utilizzare i dati di accesso esclusivamente per finalità di sicurezza e supervisione didattica",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Di non condividere le credenziali con terzi non autorizzati",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "formCheckbox",
+    "name": "bookOwnership",
+    "label": "Dichiaro di essere in possesso dei libri di testo per i quali richiedo l'accesso agli svolgimenti degli esercizi e di utilizzare le credenziali nel rispetto del diritto d'autore.",
+    "checked": false
+  },
+  {
+    "_type": "formCheckbox",
+    "name": "privacyConsent",
+    "label": "Autorizzo il trattamento dei dati personali secondo quanto previsto dal GDPR (UE 2016/679) per la gestione dell'account e per finalità di sicurezza.",
+    "checked": false
+  },
+  {
+    "_type": "formCheckbox",
+    "name": "responsabilityAcceptance",
+    "label": "Mi assumo la responsabilità dell'utilizzo delle credenziali e mi impegno a non condividerle con soggetti non autorizzati.",
+    "checked": false
+  },
+  {
+    "_type": "formCheckbox",
+    "name": "minorConsent",
+    "label": "In qualità di genitore/tutore legale, fornisco il consenso per l'accesso del minorenne alla piattaforma didattica e per l'utilizzo dei cookies tecnici necessari al funzionamento del servizio.",
+    "checked": false
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Note Aggiuntive",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "textField",
+    "name": "additionalNotes",
+    "label": "Note (facoltativo)",
+    "kind": "text",
+    "value": "",
+    "placeholder": "Eventuali richieste specifiche o comunicazioni..."
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Informativa Privacy (Art. 13 GDPR)",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Prima di procedere, ti informiamo che:",
+        "marks": [
+          "strong"
+        ]
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "I dati raccolti verranno utilizzati esclusivamente per la gestione dell'account e per finalità di sicurezza",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Hai diritto di accesso, rettifica, cancellazione, limitazione e portabilità dei tuoi dati",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "I dati verranno conservati per il periodo necessario al servizio richiesto",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Non vengono trasferiti dati a terzi o fuori dall'UE",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Per informazioni complete, consulta la ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "Privacy Policy",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": " dove troverai anche le informazioni sul Titolare del Trattamento.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Firma e Generazione del Modulo",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Data di compilazione:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " ____________________",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Una volta compilato il modulo, è possibile generare il PDF da firmare. Procedura:",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Genera il modulo PDF tramite l'apposito pulsante (\"Genera Modulo PDF\").",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Apri il file PDF scaricato e stampalo.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Firmalo nello spazio dedicato (Firma del Genitore/Tutore Legale).",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Scansionalo o fotografalo.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Invialo via email per richiedere le credenziali di accesso alla sezione ESERCIZI.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Questo modulo deve essere firmato e inviato via email per richiedere le credenziali di accesso alla sezione ESERCIZI.",
+        "marks": []
+      }
+    ]
+  }
+]

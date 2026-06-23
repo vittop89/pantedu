@@ -1,0 +1,45 @@
+/* ============================================================ */
+/* Breadcrumb — Phase C.4 modular component.                      */
+/* WCAG 2.4.5 Multiple Ways: breadcrumb e' un meccanismo standard */
+/* per orientamento. Markup atteso: <nav aria-label="breadcrumb"> */
+/* o ruolo navigation con aria-current="page" sull'ultimo crumb.  */
+/* ============================================================ */
+
+.fm-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    font-size: var(--fm-fs-sm);
+    color: var(--fm-c-muted);
+    margin: 0 0 var(--fm-space-4);
+    flex-wrap: wrap;
+}
+
+.fm-breadcrumb a {
+    color: var(--fm-c-link);
+    text-decoration: none;
+}
+
+.fm-breadcrumb a:hover {
+    text-decoration: underline;
+    color: var(--fm-c-link-hover);
+}
+
+.fm-breadcrumb a:focus-visible {
+    outline: 2px solid var(--fm-c-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--fm-radius-sm);
+}
+
+.fm-bc-sep {
+    color: var(--fm-c-border-strong);
+    user-select: none;
+}
+
+/* Last crumb (no link, aria-current="page" on real markup).
+   Su last item, color piu' forte per signalling. */
+.fm-breadcrumb > span:last-child,
+.fm-breadcrumb [aria-current="page"] {
+    color: var(--fm-c-text);
+    font-weight: 600;
+}

@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "pantedu.content.v1",
+    "title": "Pantedu Content Contract (v1)",
+    "description": "Schema per `.contract.json` archiviati in storage_objects. Validazione shallow (top-level + groups shape). Items + fragments lasciati non tipati per performance (deep validation su dataset grande = troppo lento).",
+    "type": "object",
+    "required": ["$schema", "groups"],
+    "additionalProperties": true,
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "const": "pantedu.content.v1"
+        },
+        "id": { "type": "string" },
+        "kind": {
+            "type": "string",
+            "enum": ["mappa", "esercizio", "lab", "verifica", "bes", "risdoc", "didattica"]
+        },
+        "title":         { "type": "string" },
+        "version":       { "type": "integer", "minimum": 0 },
+        "scope":         { "type": "object" },
+        "source":        { "type": "string" },
+        "original_href": { "type": "string" },
+        "generated_at":  { "type": "string" },
+        "meta":          { "type": ["object", "array"] },
+        "groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["type"],
+                "additionalProperties": true,
+                "properties": {
+                    "kind":  { "type": "string" },
+                    "type":  { "type": "string", "enum": ["Collect", "VF", "RM", "Text", "Mixed"] },
+                    "id":    { "type": "string" },
+                    "title": { "type": "string" },
+                    "intro": { "type": "string" },
+                    "items": { "type": "array" }
+                }
+            }
+        }
+    }
+}

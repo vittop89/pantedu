@@ -1,0 +1,962 @@
+/* ============================================================ */
+/* Area docente — Phase Roadmap Sprint 33.                        */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (803 LOC). Visual byte-equivalent.*/
+/* Nav + page layout per /area_docente/* (G20.1).                  */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-subtabs / .fm-subtab (sub-navigation tabs)              */
+/*   - DSA wrapper inline rendering con badge fonte                */
+/*   - body.exercise-context overrides (light/dark mode)           */
+/*   - Vari container "passanti" che ereditano colori dal body     */
+/*   - Dark theme + light overrides                                */
+/* ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════════
+   G20.1 — Area docente: nav + page layout
+   ══════════════════════════════════════════════════════════════════ */
+/* G22.S15.bis Fase 5 — Sub-tabs di /area-docente/templates: sostituisce
+ * gli inline-style hardcoded che rompevano il dark theme.
+ * Usa CSS variables per integrazione automatica con tema attivo. */
+.fm-subtabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+body.fm-dark .fm-subtabs {
+    border-bottom-color: #3a3f4d;
+}
+.fm-subtab {
+    padding: 10px 18px;
+    text-decoration: none;
+    color: var(--fm-c-muted);
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: color .12s, border-color .12s, background .12s;
+}
+.fm-subtab:hover {
+    color: var(--fm-c-text);
+    background: rgba(59, 130, 246, .06);
+}
+.fm-subtab--active {
+    color: var(--fm-c-text);
+    border-bottom-color: #3b82f6;
+    font-weight: 600;
+}
+body.fm-dark .fm-subtab {
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, .04);
+    border-radius: 6px 6px 0 0;
+}
+body.fm-dark .fm-subtab:hover {
+    color: #f1f5f9;
+    background: rgba(96, 165, 250, .15);
+}
+body.fm-dark .fm-subtab--active {
+    color: #ffffff;
+    background: rgba(96, 165, 250, .22);
+    border-bottom-color: #60a5fa;
+    box-shadow: inset 0 -2px 0 #60a5fa;
+}
+
+/* Drawio libraries list (in templates tab=drawio): bordi/sfondi
+ * dark-aware. Override degli inline-style con !important per evitare
+ * inline override. */
+.fm-drawio-list {
+    font: 12px/1.5 system-ui;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 12px;
+    background: #f9fafb;
+    min-height: 80px;
+}
+body.fm-dark .fm-drawio-list {
+    border-color: #3a3f4d;
+    background: rgba(255, 255, 255, .03);
+    color: #cfd8e8;
+}
+.fm-drawio-list__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+body.fm-dark .fm-drawio-list__item {
+    border-bottom-color: rgba(255, 255, 255, .06);
+}
+.fm-drawio-list__item:last-child {
+    border-bottom: none;
+}
+
+.fm-area-docente-nav {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    color: #e2e8f0;
+    padding: 0;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    border-radius: 8px;
+}
+.fm-area-docente-nav__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.fm-area-docente-nav__title {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: #f1f5f9;
+}
+.fm-area-docente-nav__tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.fm-area-docente-nav__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background .12s ease, color .12s ease;
+    border: 1px solid transparent;
+}
+.fm-area-docente-nav__tab:hover {
+    background: rgba(255,255,255,.06);
+    color: #f8fafc;
+    text-decoration: none;
+}
+.fm-area-docente-nav__tab--active {
+    background: rgba(59,130,246,.18);
+    color: #f8fafc;
+    border-color: rgba(59,130,246,.4);
+}
+.fm-area-docente-nav__icon { font-size: 1.125rem; }
+
+.fm-area-docente-page {
+    max-width: 1400px;
+    margin: 24px auto;
+    padding: 0 22px;
+}
+.fm-area-docente-page h1 {
+    font-size: 1.625rem;
+    margin: 0 0 6px 0;
+    color: var(--fm-c-text);
+}
+.fm-area-docente-page > header {
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.fm-area-docente-page > header p {
+    color: var(--fm-c-muted);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Card sezione */
+.fm-card {
+    background: var(--fm-c-surface);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    margin-bottom: 16px;
+}
+.fm-card h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.125rem;
+    color: var(--fm-c-text);
+}
+.fm-card h3 {
+    margin: 18px 0 6px 0;
+    font-size: 0.875rem;
+    color: var(--fm-c-text-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* Table standard */
+.fm-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+.fm-data-table thead {
+    background: var(--fm-c-surface-2);
+}
+.fm-data-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid #e5e7eb;
+}
+.fm-data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.fm-data-table tbody tr:hover { background: var(--fm-c-surface-2); }
+
+/* Badge attivo per istituto corrente */
+.fm-badge--active {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--fm-c-success-light);
+    color: var(--fm-c-success);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* Layout file-tree editor (riusato da admin templates) */
+.fm-vfiles-layout-area-docente {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 18px;
+    min-height: 600px;
+}
+@media (max-width: 900px) {
+    .fm-vfiles-layout-area-docente {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark mode */
+body.fm-dark .fm-area-docente-page h1 { color: #f1f5f9; }
+body.fm-dark .fm-area-docente-page > header { border-color: #334155; }
+body.fm-dark .fm-area-docente-page > header p { color: var(--fm-c-muted); }
+body.fm-dark .fm-card {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+body.fm-dark .fm-card h2 { color: #f1f5f9; }
+body.fm-dark .fm-card h3 { color: var(--fm-c-muted); }
+body.fm-dark .fm-data-table thead { background: #0f172a; }
+body.fm-dark .fm-data-table th { color: var(--fm-c-muted); border-color: #334155; }
+body.fm-dark .fm-data-table td { border-color: #334155; }
+body.fm-dark .fm-data-table tbody tr:hover { background: #243047; }
+
+/* Helper class — testo monospace muted (codici meccanografici / curriculum).
+   Sostituisce inline color: var(--fm-c-muted)/#94a3b8 per supporto dark theme. */
+.fm-mono-muted { color: var(--fm-c-muted); }
+
+/* /area-docente/profilo — dark theme overrides aggiuntivi.
+   Target: input search istituti, tabella curriculum, form aggiunta,
+   liste pivot. I selettori coprono le classi inline + i tag generati
+   dal template JS (es. <code class="fm-mono-muted">). */
+body.fm-dark .fm-area-docente-page input[type="text"],
+body.fm-dark .fm-area-docente-page input[type="search"] {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+body.fm-dark .fm-area-docente-page input[type="text"]::placeholder {
+    color: var(--fm-c-muted);
+}
+body.fm-dark .fm-curr-table th,
+body.fm-dark .fm-curr-table td { border-color: #334155; color: #cbd5e1; }
+body.fm-dark .fm-curr-table th { background: #0f172a; color: var(--fm-c-muted); }
+body.fm-dark .fm-curr-table input[type="text"] {
+    background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+}
+body.fm-dark .fm-curr-form { background: #0f172a; color: #cbd5e1; border: 1px solid #334155; }
+body.fm-dark .fm-pivot-col h3 { color: var(--fm-c-muted); }
+body.fm-dark .fm-pivot-list { background: #0f172a; }
+body.fm-dark .fm-pivot-list li { color: #cbd5e1; border-color: rgba(255,255,255,0.06); }
+body.fm-dark .fm-pivot-list li:hover { background: rgba(255,255,255,0.06); }
+body.fm-dark .fm-muted { color: var(--fm-c-muted); }
+/* Code muted (codici meccanografici, codici curriculum nelle liste) */
+body.fm-dark .fm-area-docente-page code,
+body.fm-dark .fm-area-docente-page .fm-mono-muted { color: var(--fm-c-muted); }
+
+/* ─────────────────────────────────────────────────────────────────── */
+/* G21.1 — Verifica Preview Modal (TeX↔PDF + SyncTeX + compare).      */
+/* Modal full-screen stile VSCode con editor CodeMirror + PDF.js.     */
+/* ─────────────────────────────────────────────────────────────────── */
+.fm-vp-backdrop {
+    /* Riusa .fm-modal-backdrop ma full-screen senza padding */
+    padding: 0;
+}
+.fm-vp-modal {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    background: #f5f5f7;
+    color: var(--fm-c-text);
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+.fm-vp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--fm-c-surface);
+    border-bottom: 1px solid #d0d0d6;
+    flex-shrink: 0;
+    gap: 10px;
+}
+.fm-vp-title {
+    font-size: 0.875rem;
+    margin: 0;
+    color: var(--fm-c-text);
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fm-vp-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.fm-vp-toolbar .fm-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+.fm-vp-toolbar .fm-modal-close {
+    font-size: 1.375rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0 8px;
+    color: var(--fm-c-text-2);
+}
+.fm-vp-toolbar .fm-modal-close:hover { color: #c00; }
+.fm-vp-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--fm-c-text-2);
+    user-select: none;
+    cursor: pointer;
+}
+.fm-vp-engine {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    border: 1px solid var(--fm-c-border);
+    border-radius: 4px;
+    background: var(--fm-c-surface);
+}
+
+/* Tabs varianti */
+.fm-vp-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 14px;
+    background: #ececf1;
+    border-bottom: 1px solid #d0d0d6;
+    overflow-x: auto;
+    flex-shrink: 0;
+}
+.fm-vp-tab {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    font-size: 0.75rem;
+    color: var(--fm-c-text-2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+.fm-vp-tab:hover {
+    background: #d8d8df;
+    color: var(--fm-c-text);
+}
+.fm-vp-tab--active {
+    background: #f5f5f7;
+    color: #0066cc;
+    border-bottom-color: #0066cc;
+    font-weight: 600;
+}
+
+/* Status bar */
+.fm-vp-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 14px;
+    background: #fafafd;
+    border-bottom: 1px solid #e0e0e6;
+    font-size: 0.6875rem;
+    color: var(--fm-c-text-2);
+    flex-shrink: 0;
+    gap: 12px;
+}
+.fm-vp-status [data-status-info][data-kind="error"] { color: #c00; }
+.fm-vp-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.625rem;
+    margin-left: 4px;
+}
+.fm-vp-badge--warn  { background: #fef3c7; color: #92400e; }
+.fm-vp-badge--error { background: #fee2e2; color: #991b1b; }
+
+/* Body: file-tree (G22.S10) + editor + pdf side-by-side */
+.fm-vp-body {
+    flex: 1;
+    position: relative;            /* ancora il drag-handle del resizer */
+    display: grid;
+    grid-template-columns: var(--fm-vp-sidebar-w, 200px) 1fr 1fr;
+    overflow: hidden;
+    min-height: 0;
+}
+/* Maniglia di ridimensionamento sidebar: posizionata sul confine tra la prima
+   traccia (file) e l'editor. Assoluta in .fm-vp-body così renderFileTree
+   (che resetta innerHTML dell'aside) non la rimuove. */
+.fm-vp-resizer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--fm-vp-sidebar-w, 200px);
+    width: 9px;
+    margin-left: -4px;
+    z-index: 6;
+    cursor: col-resize;
+    background: transparent;
+    touch-action: none;
+}
+.fm-vp-resizer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 4px;
+    width: 1px;
+    background: #d0d0d6;
+    transition: background 0.12s, width 0.12s;
+}
+.fm-vp-resizer:hover::before,
+.fm-vp-resizer:focus-visible::before {
+    width: 3px;
+    left: 3px;
+    background: var(--fm-c-primary, #2f6fed);
+}
+.fm-vp-resizer:focus-visible {
+    outline: 2px solid var(--fm-c-primary, #2f6fed);
+    outline-offset: -2px;
+}
+body.fm-dark .fm-vp-resizer::before { background: #3a3a42; }
+
+/* G22.S10b — File-tree sidebar (gruppi cartelle + legenda + status icons) */
+.fm-vp-filetree {
+    background: #f4f4f8;
+    border-right: 1px solid #d0d0d6;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0;
+    padding: 10px 6px 14px 6px;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+.fm-vp-filetree__legend {
+    margin: 4px 6px 12px 6px;
+    padding: 8px;
+    font-size: 0.6875rem;
+    color: var(--fm-c-text-2);
+    line-height: 1.5;
+    background: #ebebf0;
+    border-radius: 4px;
+}
+/* <summary> = toggle cliccabile dell'espandibile legenda */
+.fm-vp-filetree__legend-title {
+    display: block;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+.fm-vp-filetree__legend[open] .fm-vp-filetree__legend-title {
+    margin-bottom: 6px;
+}
+.fm-vp-filetree__legend-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Colonna singola + wrap → la legenda è COMPLETA all'apertura, niente
+       clipping nella sidebar stretta (prima: grid 2-col + nowrap = tagliata). */
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.fm-vp-filetree__legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    white-space: normal;
+}
+.fm-vp-filetree__legend-glyph {
+    display: inline-flex;
+    justify-content: center;
+    width: 1.1em;
+    flex: none;
+}
+.fm-vp-filetree__group {
+    margin: 12px 6px 4px 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--fm-c-text-2);
+}
+.fm-vp-filetree__group:first-of-type { margin-top: 4px; }
+.fm-vp-filetree__empty {
+    padding: 8px 12px;
+    color: var(--fm-c-muted);
+    font-style: italic;
+}
+.fm-vp-filetree__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    cursor: pointer;
+    user-select: none;
+    color: #2c2c34;
+    border-radius: 3px;
+    border-left: 2px solid transparent;
+    margin: 1px 0;
+}
+.fm-vp-filetree__item:hover { background: #e4e4ea; }
+.fm-vp-filetree__item--active {
+    background: #d8e3f5;
+    border-left-color: #4a90e2;
+    font-weight: 500;
+}
+.fm-vp-filetree__item--missing { opacity: 0.7; font-style: italic; }
+.fm-vp-filetree__name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fm-vp-filetree__dot {
+    color: #d97706;
+    font-size: 0.875rem;
+    line-height: 1;
+    visibility: hidden;
+    flex-shrink: 0;
+}
+.fm-vp-filetree__item--dirty .fm-vp-filetree__dot { visibility: visible; }
+.fm-vp-filetree__status {
+    font-size: 0.6875rem;
+    flex-shrink: 0;
+    color: var(--fm-c-text-2);
+    min-width: 14px;
+    text-align: center;
+}
+
+.fm-vp-editor-breadcrumb {
+    padding: 4px 10px;
+    background: #f8f8fb;
+    border-bottom: 1px solid #d0d0d6;
+    font-size: 0.75rem;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: var(--fm-c-text-2);
+    flex-shrink: 0;
+}
+
+.fm-dark .fm-vp-filetree { background: #1f1f24; border-right-color: #3a3a42; }
+.fm-dark .fm-vp-filetree__legend { background: #2a2a30; color: var(--fm-c-muted); }
+.fm-dark .fm-vp-filetree__group { color: #c4c4ca; }
+.fm-dark .fm-vp-filetree__item { color: #e4e4ea; }
+.fm-dark .fm-vp-filetree__item:hover { background: #2a2a30; }
+.fm-dark .fm-vp-filetree__item--active { background: #2d4060; border-left-color: #6ab0ff; }
+.fm-dark .fm-vp-filetree__status { color: var(--fm-c-muted); }
+.fm-dark .fm-vp-editor-breadcrumb { background: #2a2a30; color: var(--fm-c-muted); border-bottom-color: #3a3a42; }
+
+/* Sidebar — sezione Immagini sotto il filetree TeX (BEM .fm-vp-images__) */
+.fm-vp-filetree__images { margin-top: 10px; }
+.fm-vp-images__hint {
+    margin: 0 10px 6px 10px;
+    font-size: 10px;
+    color: var(--fm-c-muted, #64748b);
+    line-height: 1.4;
+}
+.fm-vp-images__hint code {
+    background: rgba(59, 130, 246, 0.12);
+    padding: 0 3px;
+    border-radius: 2px;
+    font-size: 10px;
+}
+.fm-vp-images__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 0 8px 10px 8px;
+}
+.fm-vp-images__item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px;
+    background: var(--fm-c-surface, #fff);
+    border: 1px solid var(--fm-c-border, #d0d0d6);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 120ms, border-color 120ms;
+}
+.fm-vp-images__item:hover {
+    border-color: var(--fm-c-info, #3b82f6);
+    background: color-mix(in srgb, var(--fm-c-info, #3b82f6) 6%, transparent);
+}
+.fm-vp-images__item--copied {
+    border-color: var(--fm-c-success, #10b981);
+    background: color-mix(in srgb, var(--fm-c-success, #10b981) 12%, transparent);
+}
+.fm-vp-images__item--system { border-left: 2px solid var(--fm-c-info, #3b82f6); }
+.fm-vp-images__item--override { border-left: 2px solid var(--fm-c-success, #10b981); }
+
+.fm-vp-images__item img {
+    width: 100%;
+    height: 48px;
+    object-fit: contain;
+    background: var(--fm-c-surface-alt, #f8fafc);
+    border-radius: 2px;
+}
+.fm-vp-images__path {
+    font-size: 9.5px;
+    color: var(--fm-c-text, #334155);
+    word-break: break-all;
+    line-height: 1.3;
+}
+.fm-vp-images__badge {
+    align-self: flex-start;
+    font-size: 8.5px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.fm-vp-images__badge--system   { background: color-mix(in srgb, var(--fm-c-info,    #3b82f6) 18%, transparent); color: var(--fm-c-info, #3b82f6); }
+.fm-vp-images__badge--override { background: color-mix(in srgb, var(--fm-c-success, #10b981) 18%, transparent); color: var(--fm-c-success, #10b981); }
+
+.fm-dark .fm-vp-images__item {
+    background: #2a2a30;
+    border-color: #3a3a42;
+    color: #e4e4ea;
+}
+.fm-dark .fm-vp-images__item img { background: #1f1f24; }
+.fm-dark .fm-vp-images__path { color: #c4c4ca; }
+.fm-dark .fm-vp-images__hint { color: #9ca3af; }
+.fm-vp-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid #d0d0d6;
+    min-width: 0;
+}
+.fm-vp-pane:last-child { border-right: none; }
+.fm-vp-pane--editor { background: var(--fm-c-surface); }
+.fm-vp-pane--pdf {
+    background: #2c2c34;
+}
+
+/* Editor host */
+.fm-vp-editor-host {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+}
+.fm-vp-editor-host .cm-editor {
+    height: 100%;
+    font-size: 0.8125rem;
+}
+.fm-vp-editor-host .cm-content {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+/* G21.2 v3 — highlight SyncTeX via CodeMirror Decoration .fm-vp-flash */
+.fm-vp-editor-host .cm-line.fm-vp-flash {
+    background-color: #ffeb3b !important;
+    outline: 2px solid #ff6f00;
+    outline-offset: 1px;
+    border-radius: 3px;
+    animation: fm-vp-flash-1s 1s ease-out;
+}
+@keyframes fm-vp-flash-1s {
+    0%   { background-color: #ffeb3b; }
+    50%  { background-color: rgba(255, 235, 59, 0.7); }
+    100% { background-color: rgba(255, 235, 59, 0.4); }
+}
+body.fm-dark .fm-vp-editor-host .cm-line.fm-vp-flash {
+    background-color: #ff9800 !important;
+    color: var(--fm-c-text);
+    outline: 2px solid #fff59d;
+    animation-name: fm-vp-flash-1s-dark;
+}
+@keyframes fm-vp-flash-1s-dark {
+    0%   { background-color: #ff9800; }
+    50%  { background-color: rgba(255, 152, 0, 0.7); }
+    100% { background-color: rgba(255, 152, 0, 0.4); }
+}
+
+/* PDF host */
+.fm-vp-pdf-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #1f1f24;
+    border-bottom: 1px solid #444;
+    color: #ccc;
+    font-size: 0.6875rem;
+    flex-shrink: 0;
+}
+.fm-vp-pdf-toolbar [data-page-info] {
+    min-width: 56px;
+    text-align: center;
+}
+.fm-vp-pdf-toolbar select {
+    background: #2c2c34;
+    color: #ddd;
+    border: 1px solid #555;
+    padding: 2px 4px;
+    font-size: 0.6875rem;
+}
+.fm-vp-pdf-toolbar .fm-btn {
+    background: #3a3a44;
+    color: #ddd;
+    border: 1px solid #555;
+    padding: 2px 6px;
+    font-size: 0.6875rem;
+    cursor: pointer;
+}
+.fm-vp-pdf-toolbar .fm-btn:hover { background: #4a4a54; }
+.fm-vp-pdf-help {
+    margin-left: auto;
+    color: var(--fm-c-muted);
+    font-style: italic;
+    font-size: 0.625rem;
+}
+.fm-vp-pdf-host {
+    flex: 1;
+    overflow: auto;
+    padding: 12px;
+    text-align: center;
+    background: #2c2c34;
+    min-height: 0;
+}
+.fm-vp-pdf-canvas {
+    background: var(--fm-c-surface);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    /* G27.bugfix3 — OVERRIDE esplicito del reset globale `img,…,canvas,svg
+       { max-width:100%; height:auto }` (css/elements.css). Senza questo, il
+       canvas era forzato alla width del container (≈495px) qualunque fosse la
+       sua pixel-size: lo zoom re-renderizzava a maggiore risoluzione (cw cresce
+       833→952→1071) MA la dimensione VISIVA restava invariata. Con max-width:none
+       il canvas usa la propria pixel-size nativa (= viewport PDF.js scale-aware)
+       e lo scroll è gestito dal parent .fm-vp-pdf-host (overflow:auto).
+       Il G27.bugfix precedente toglieva il max-width SOLO da questa regola, ma il
+       reset globale continuava a vincere → niente zoom visivo. */
+    max-width: none;
+    height: auto;
+    cursor: crosshair;
+}
+
+/* Footer log */
+.fm-vp-footer {
+    background: #1f1f24;
+    color: #ccc;
+    border-top: 1px solid #444;
+    flex-shrink: 0;
+    max-height: 200px;
+    overflow: auto;
+}
+.fm-vp-log summary {
+    padding: 4px 14px;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    user-select: none;
+    background: #2c2c34;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.fm-vp-log summary:hover { background: #3a3a44; }
+.fm-vp-log .fm-log-btn {
+    margin-left: auto;
+    background: #444;
+    color: #ddd;
+    border: 1px solid #555;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 0.625rem;
+    cursor: pointer;
+    font-family: system-ui;
+}
+.fm-vp-log .fm-log-btn + .fm-log-btn { margin-left: 4px; }
+.fm-vp-log .fm-log-btn:hover { background: #555; border-color: #777; }
+.fm-vp-log pre {
+    margin: 0;
+    padding: 8px 14px;
+    font-size: 0.6875rem;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    color: #b8b8c0;
+    background: #1f1f24;
+    overflow: auto;
+    max-height: 160px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Dark mode */
+body.fm-dark .fm-vp-modal { background: #14141a; color: #ddd; }
+body.fm-dark .fm-vp-header { background: #1c1c24; border-color: #2c2c34; }
+body.fm-dark .fm-vp-title { color: #eee; }
+body.fm-dark .fm-vp-toolbar .fm-modal-close { color: var(--fm-c-muted); }
+body.fm-dark .fm-vp-engine { background: #2c2c34; color: #ddd; border-color: #444; }
+body.fm-dark .fm-vp-toggle { color: #ccc; }
+/* G21.1 fix dark — bottoni toolbar (Ricompila, Salva TEX, PDF) leggibili */
+body.fm-dark .fm-vp-toolbar .fm-btn {
+    background: #3a3a44;
+    color: #e8e8ed;
+    border: 1px solid #555;
+}
+body.fm-dark .fm-vp-toolbar .fm-btn:hover {
+    background: #4a4a54;
+    color: #fff;
+    border-color: #6a6a74;
+}
+body.fm-dark .fm-vp-toolbar .fm-btn:disabled {
+    background: #2c2c34;
+    color: var(--fm-c-muted);
+    border-color: #3a3a44;
+    cursor: not-allowed;
+}
+body.fm-dark .fm-vp-tabs { background: #1f1f28; border-color: #2c2c34; }
+body.fm-dark .fm-vp-tab { color: var(--fm-c-muted); }
+body.fm-dark .fm-vp-tab:hover { background: #2c2c34; color: #ddd; }
+body.fm-dark .fm-vp-tab--active { background: #14141a; color: #66b3ff; border-bottom-color: #66b3ff; }
+body.fm-dark .fm-vp-status { background: #1c1c24; border-color: #2c2c34; color: var(--fm-c-muted); }
+body.fm-dark .fm-vp-pane { border-color: #2c2c34; }
+body.fm-dark .fm-vp-pane--editor { background: #14141a; }
+body.fm-dark .fm-vp-footer { background: #0f0f14; }
+body.fm-dark .fm-vp-log summary { background: #1c1c24; color: #ccc; }
+body.fm-dark .fm-vp-log summary:hover { background: #2c2c34; }
+body.fm-dark .fm-vp-log pre { background: #0f0f14; color: #b8b8c0; }
+
+/* Responsive: stack su schermi piccoli */
+@media (max-width: 900px) {
+    .fm-vp-body {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr 1fr;
+    }
+    .fm-vp-resizer { display: none; }   /* layout a colonna unica: niente resize orizzontale */
+    .fm-vp-filetree {
+        max-height: 100px;
+    }
+    .fm-vp-filetree__list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    .fm-vp-filetree__item {
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+    }
+    .fm-vp-filetree__item--active {
+        border-left: none;
+        border-bottom-color: #4a90e2;
+    }
+}
+
+
+
+/* G21.4 — Dark theme pre-paint guard: applicato sull <html> dal head script */
+html.fm-dark-pre { background-color: #14141a; color: #ddd; }
+
+/* G22.S15.bis Fase 5+ — Liste in giustification/solution: bulleted styling
+   coerente. Padding-left ridotto per allineamento con il testo.
+   G27.dsa.fix — escludo .fm-dsa-li-list (ha layout flex proprio: padding-left:0,
+   margin:0 — i due rule set facevano 12px verticali extra per livello e 24px
+   padding-left che disallineava i marker rispetto a question/RM). */
+.fm-giustsol ul:not(.fm-dsa-li-list),
+.fm-giustsol ol:not(.fm-dsa-li-list),
+.fm-sol ul:not(.fm-dsa-li-list),
+.fm-sol ol:not(.fm-dsa-li-list) {
+    padding-left: 24px;
+    margin: 6px 0;
+}
+.fm-giustsol ul:not(.fm-dsa-li-list) li,
+.fm-giustsol ol:not(.fm-dsa-li-list) li,
+.fm-sol ul:not(.fm-dsa-li-list) li,
+.fm-sol ol:not(.fm-dsa-li-list) li {
+    margin-bottom: 6px;
+    line-height: 1.45;
+}
+
+/* G22.S15.bis Fase 5+ — Label "SOLUZIONE" / "GIUSTIFICAZIONE" prima del
+   contenuto sol/giustifica. display:inline-block + margin-bottom forza
+   il contenuto sotto il label (richiesta utente: "vai a capo"). */
+.fm-sol-label {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 1px 8px;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.08);
+    color: var(--fm-c-text);
+    text-transform: uppercase;
+}
+/* Contenuto dopo il label va su nuova riga */
+.fm-sol-label::after {
+    content: '';
+    display: block;
+}
+.fm-sol > .fm-sol-label,
+.fm-giustsol > .fm-sol-label,
+.fm-giustsol > div > .fm-sol-label { display: block; }
+body.fm-dark .fm-sol-label {
+    background: rgba(255,255,255,0.1);
+    color: #d4d4dc;
+}
+
+/* ── Dark mode FIX scritte nere ──
+   layout_es.css:172 ha `p { color: black }` (applica sempre).
+   layout_es.css:867,876,3529 hanno selettori specifici con `color: black`.
+   In dark mode il testo nero su bg scuro e' invisibile. Override globale
+   per qualsiasi <p>/elemento testo dentro contenuti esercizio in dark. */
+body.fm-dark.fm-exercise-context p,
+body.fm-dark.fm-exercise-context .fm-collection p,
+body.fm-dark.fm-exercise-context .fm-li-inline p,
+body.fm-dark.fm-exercise-context .fm-giustsol p,
+body.fm-dark.fm-exercise-context .fm-sol p,
+body.fm-dark.fm-exercise-context details.fm-sol p,
+body.fm-dark.fm-exercise-context .fm-draggable-container p,
+body.fm-dark.fm-exercise-context .fm-contract-render p {
+    color: #c8c8d0;
+}
+

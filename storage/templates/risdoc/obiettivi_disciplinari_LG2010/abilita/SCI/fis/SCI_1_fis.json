@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Sviluppare abilità relative alla misura e descrivere i fenomeni osservati con un linguaggio adeguato (incertezze, cifre significative, grafici).",
+        "checked": false
+      },
+      {
+        "label": "Familiarizzare con i concetti di lavoro ed energia, applicando una prima trattazione della legge di conservazione dell'energia meccanica totale.",
+        "checked": false
+      }
+    ]
+  }
+]

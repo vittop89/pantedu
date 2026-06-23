@@ -1,0 +1,64 @@
+{
+  "version": "3.0.0",
+  "description": "Guardrail per l'inserimento esercizi nel PHP target",
+
+  "preflight": {
+    "read_php_target_once": true,
+    "freeze_anchors": true,
+    "never_reread_after_preflight": true,
+    "exception_guarded_reread": "solo se allow_guarded_reread_on_checksum_mismatch=true E checksum mismatch"
+  },
+
+  "anchor_policy": {
+    "source": "preflight_context.insertion_anchors",
+    "immutable_after_freeze": true,
+    "structure": {
+      "anchor_line": "int — riga del file PHP",
+      "anchor_excerpt": "string — 30 chars per match",
+      "container_end_line": "int — riga chiusura container"
+    }
+  },
+
+  "dedup_policy": {
+    "check_by": "exercise_number",
+    "scope": "same_container",
+    "on_duplicate": "skip_with_warning"
+  },
+
+  "container_validation": {
+    "verify_exists_before_insert": true,
+    "on_missing": "CONTAINER_NOT_FOUND (critical)"
+  },
+
+  "topic_insertion": {
+    "existing_topic": "insert_after_frozen_anchor",
+    "new_topic": "append_at_end_of_container",
+    "color": "always background-color: white (frontend manages cycle)"
+  },
+
+  "checksum": {
+    "algorithm": "sha256",
+    "verify_before_step3": true,
+    "on_mismatch": "CONTEXT_STALE (critical)"
+  },
+
+  "subagent_persistence": {
+    "description": "TUTTI i risultati dei subagent devono essere salvati su file — MAI fare affidamento sul return inline",
+    "mandatory": true,
+    "reason": "Il context summarization delle conversazioni lunghe elimina i risultati inline; solo i file su disco sopravvivono",
+    "rules": {
+      "save_all_results_to_file": true,
+      "storage_dir": ".github/agents/_temp_results",
+      "naming_convention": "step{N}_{target}_{batch}.html",
+      "naming_examples": [
+        "step2_rmulti_mixed_52-56.html",
+        "step2_collect_fill_57-58.html",
+        "step2_collect_problems_65-71.html"
+      ],
+      "cleanup_after_step3": true,
+      "never_rely_on_inline_return": true,
+      "subagent_prompt_must_include": "Scrivi il risultato HTML COMPLETO in un file usando create_file, NON restituirlo come messaggio inline"
+    },
+    "on_violation": "RESULT_LOST_RISK (critical)"
+  }
+}

@@ -1,0 +1,123 @@
+# Pantedu root .htaccess — Aruba shared hosting
+# All traffic routed through /public/index.php front controller.
+
+Options -Indexes +FollowSymLinks
+DirectoryIndex public/index.php index.php
+
+# ════════════════════════════════════════════════════════════
+# Blocked files / directories
+# ════════════════════════════════════════════════════════════
+<FilesMatch "(ftp-credentials\.json|sftp\.json|gas-credentials\.json|^\.env|\.htpasswd|composer\.(json|lock))$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^gas-config(-proxy)?\.">
+    Require all denied
+</FilesMatch>
+
+# Block sensitive log artifacts
+<FilesMatch "\.(aux|blg|fls|fdb_latexmk|synctex\.gz|toc|lof|lot|nav|snm|vrb)$">
+    Require all denied
+</FilesMatch>
+
+# ════════════════════════════════════════════════════════════
+# Rewrite all requests to front controller in /public
+# ════════════════════════════════════════════════════════════
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Block hidden/config directories
+    RewriteRule ^\.vscode/     - [F,L]
+    RewriteRule ^\.claude/     - [F,L]
+    RewriteRule ^\.github/     - [F,L]
+    RewriteRule ^\.git/        - [F,L]
+    RewriteRule ^app/          - [F,L]
+    RewriteRule ^routes/       - [F,L]
+    RewriteRule ^vendor/       - [F,L]
+    RewriteRule ^storage/      - [F,L]
+    RewriteRule ^tests/        - [F,L]
+
+    # Don't touch requests already prefixed with /public (e.g. direct assets)
+    RewriteRule ^public/ - [L]
+
+    # G22.S15.bis Fase 5 — drawio webapp self-hosted under public/drawio-app/
+    # Rewrite /drawio-app/* → public/drawio-app/* (static serving, no PHP).
+    RewriteRule ^drawio-app/?(.*)$ public/drawio-app/$1 [L]
+
+    # Phase 25.E17 — native Apache serving per static asset.
+    # Se il file richiesto ESISTE fisicamente nel filesystem (es.
+    # /js/modules/foo.js, /css/layout.css, /img/logo.png, /wasm/...,
+    # /node_modules/lit/index.js, /scriptGoogle_sync/foo.js, ecc.) → Apache
+    # lo serve direttamente, skippando il front controller PHP. Tutti gli
+    # altri request continuano a passare da public/index.php.
+    # Vantaggi: -100ms latency per asset, -CPU usage, ETag/Last-Modified
+    # header gestiti da Apache nativamente, code cleanup massiccio.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_URI} \.(js|mjs|css|svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|otf|wasm|json|map|html|xml|txt|pdf)$
+    RewriteRule ^ - [L]
+
+    # Internal rewrite: every other request → /public/index.php (no URL change)
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>
+
+# ════════════════════════════════════════════════════════════
+# Security headers (Phase 19)
+# ════════════════════════════════════════════════════════════
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+
+    # 2026-06-03 — Content-Security-Policy RIMOSSA da .htaccess (era anche
+    # STALE: citava ancora ajax.googleapis.com/code.jquery.com, CDN jQuery
+    # rimossi). Fonte unica ora = SecurityHeadersMiddleware (PHP), necessaria
+    # per il nonce per-request. Il front controller serve tutte le risposte HTML.
+
+    # Phase 25.B7 — info disclosure mitigation (FND-003 pentest 2026-05-18):
+    # rimuovi header che rivelano versione PHP/Apache esatta. Server header
+    # full version richiede `ServerTokens Prod` (httpd.conf, non gestibile via
+    # .htaccess su Aruba shared); fallback `Header always unset Server` può
+    # essere ignorato da mod_security ma vale la pena tentarlo.
+    Header always unset X-Powered-By
+    Header always unset Server
+</IfModule>
+
+ServerSignature Off
+
+# ════════════════════════════════════════════════════════════
+# Perf 2026-05-24 — static asset cache lifetimes
+# ────────────────────────────────────────────────────────────
+# Lighthouse "uses-long-cache-ttl" segnalava 474KiB su /vendor/quill
+# (4h), /build/assets/*.HASH.* (4h) e /css/main.bundle.css (1w).
+# Vite bundles + main.bundle.css hanno hash/?v=mtime → immutable safe.
+# vendor/quill v1.3.6 è pinned → immutable safe.
+# ════════════════════════════════════════════════════════════
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Hashed Vite bundles + vendor pinned libs → 1 anno immutable
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    # Images (rare turnover, sani per cache lunga)
+    <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg|ico)$">
+        ExpiresDefault "access plus 6 months"
+        Header set Cache-Control "public, max-age=15552000"
+    </FilesMatch>
+</IfModule>
+<IfModule mod_headers.c>
+    # Vite bundles: filename con hash → immutable, 1 anno
+    <FilesMatch "\.[a-zA-Z0-9_-]{6,}\.(js|mjs|css)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    # vendor/ libs pinned per versione (es. quill/1.3.6/)
+    <If "%{REQUEST_URI} =~ m#^/vendor/[^/]+/[0-9]+\.[0-9]+#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    # CSS/JS con cache-bust ?v=<mtime>: 30 giorni (mtime garantisce uniqueness)
+    <FilesMatch "\.(css|js|mjs)$">
+        Header setIfEmpty Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>

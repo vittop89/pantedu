@@ -1,0 +1,28 @@
+/* ════════════════════════════════════════════════════════════
+ * layout_editor.css — EMPTIED 2026-05-24 (Sprint D).
+ *
+ * @deprecated TUTTO il contenuto è stato spostato in
+ *   css/modules/_editor-builder.css (caricato globalmente via
+ *   main.bundle.css → main.css @layer components).
+ *
+ * Selettori migrati VERBATIM byte-equivalent:
+ *   .fm-tex-action-buttons-wrapper
+ *   .add-new-element-{group,btn} + variants
+ *   .delete-element-{group,btn,form} + variants
+ *   .edit-element-{group,btn,form} + variants
+ *   .fm-new-element-form + form-section + form-actions
+ *   .save-/cancel-{new,edit}-element-btn
+ *   .tex-group, .fm-traccia-group, .fm-group-btn, .fm-group-options
+ *   .fm-element-tikz-selector + Title + Groups, .latex-preview-*
+ *   .fm-latex-viewer, .tikz-error-{highlight,messages-block}
+ *   .fm-traccia-element-btn, .fm-tikz-element-btn
+ *   .fm-linkbar, .fm-dsa-btn, .fm-solution, .fm-add-text-dsa
+ *   .dsa-checkbox + container
+ *   .fm-save-backup-btn, .elementBackup* (Title/List/btn)
+ *   .fm-find-replace-btn + Panel + Header + Row + Counter + Highlight
+ *   .fm-find-input, .fm-replace-input, find/replaceNext/Prev/Btn/All
+ *   .fm-find-replace-options + checkbox
+ *   .fm-close-find-replace
+ *
+ * Loader: head.php tiene il <link> per evitare 404 (Phase 6 rimuove).
+ * ════════════════════════════════════════════════════════════ */

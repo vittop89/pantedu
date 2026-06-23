@@ -1,0 +1,168 @@
+/* ============================================================ */
+/* Bottom-bar legal disclosure — BEM fm-bb-menu.                 */
+/*                                                              */
+/* Raggruppa i link legali/trust (ToS, AUP, Privacy, Sicurezza,  */
+/* Segnala, DPO, Accessibilità) della #bottom-bar in un pannello */
+/* a comparsa sopra un singolo trigger.                          */
+/*                                                              */
+/* Apertura:                                                     */
+/*   - click   → JS aggiunge .fm-bb-menu--open + aria-expanded   */
+/*   - mouseover ~2.5s → CSS (transition-delay sullo stato :hover)*/
+/*   - focus-within     → CSS (tastiera, fallback no-JS)         */
+/*                                                              */
+/* Dark theme: pannello su --fm-c-surface/-text/-border (token   */
+/* che flippano via prefers-color-scheme / [data-theme] /        */
+/* body.fm-dark). La barra resta scura in entrambi i temi.       */
+/* ============================================================ */
+
+.fm-bb-menu {
+    position: relative;
+    display: inline-flex;
+}
+
+/* Trigger — eredita lo stile dei link bianchi della barra */
+.fm-bb-menu__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fm-space-1);
+    min-height: var(--fm-target-aa);   /* WCAG 2.5.8 target size */
+    padding: 5px 10px;
+    background: transparent;
+    border: 0;
+    color: inherit;                    /* white, dalla #bottom-bar */
+    font: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+    border-radius: var(--fm-radius-sm);
+    transition: background-color var(--fm-transition) var(--fm-easing);
+}
+.fm-bb-menu__trigger:hover,
+.fm-bb-menu__trigger:focus-visible {
+    background-color: #555;            /* coerente con #bottom-bar a:hover */
+}
+.fm-bb-menu__trigger:focus-visible {
+    outline: var(--fm-focus-width) var(--fm-focus-style) var(--fm-c-focus-ring-d);
+    outline-offset: var(--fm-focus-offset);
+}
+
+.fm-bb-menu__caret {
+    font-size: 0.7em;
+    transition: transform var(--fm-transition) var(--fm-easing);
+}
+.fm-bb-menu:not([data-fm-bb-bound]):hover .fm-bb-menu__caret,
+.fm-bb-menu:focus-within .fm-bb-menu__caret,
+.fm-bb-menu--open .fm-bb-menu__caret {
+    transform: rotate(180deg);
+}
+
+/* Pannello a comparsa — ancorato sopra il trigger (la barra è fixed bottom) */
+.fm-bb-menu__panel {
+    position: absolute;
+    bottom: calc(100% + var(--fm-space-2));
+    right: 0;
+    z-index: var(--fm-z-dropdown);
+    display: flex;
+    flex-direction: column;
+    min-width: 13rem;
+    padding: var(--fm-space-2);
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius);
+    box-shadow: var(--fm-shadow-lg);
+
+    /* Stato chiuso (default) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.25rem);
+    transition:
+        opacity var(--fm-transition) var(--fm-easing),
+        transform var(--fm-transition) var(--fm-easing),
+        visibility var(--fm-transition);
+}
+
+/* Ponte trasparente che copre il gap (--fm-space-2) tra trigger e
+   pannello: senza, spostando il mouse verso l'alto si attraversa lo
+   spazio vuoto, :hover decade e il pannello si richiude (flicker).
+   Il ::before estende l'area hoverabile dell'elemento sul gap. */
+.fm-bb-menu__panel::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(-1 * var(--fm-space-2));
+    height: var(--fm-space-2);
+}
+
+/* Hover-intent FALLBACK no-JS: con JS attivo (data-fm-bb-bound) il
+   timing è gestito da bottom-bar-panel.js con un setTimeout preciso.
+   Senza JS, il transition-delay sullo stato :hover dà comunque un
+   ritardo d'apertura; se il puntatore esce prima, :hover decade e
+   l'apertura ritardata non scatta. */
+.fm-bb-menu:not([data-fm-bb-bound]):hover .fm-bb-menu__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+/* Click (JS) e tastiera (focus-within): apertura immediata.
+   DOPO la regola :hover così transition-delay:0 vince a parità
+   di specificità. */
+.fm-bb-menu:focus-within .fm-bb-menu__panel,
+.fm-bb-menu--open .fm-bb-menu__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+/* Link nel pannello.
+   Scoped sotto #bottom-bar per battere la specificità di
+   `#bottom-bar a` (1,0,1) — altrimenti color:white + margin-left:10px
+   legacy vincerebbero, rendendo il testo invisibile sul surface chiaro. */
+#bottom-bar .fm-bb-menu__link {
+    display: block;
+    padding: var(--fm-space-2) var(--fm-space-3);
+    min-height: var(--fm-target-aa);
+    margin: 0;                         /* annulla il margin-left della barra */
+    color: var(--fm-c-link);
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: var(--fm-radius-sm);
+    transition: background-color var(--fm-transition) var(--fm-easing);
+}
+#bottom-bar .fm-bb-menu__link:hover {
+    background-color: var(--fm-c-primary-light);
+    color: var(--fm-c-link-hover);
+}
+#bottom-bar .fm-bb-menu__link:focus-visible {
+    outline: var(--fm-focus-width) var(--fm-focus-style) var(--fm-c-focus-ring);
+    outline-offset: -2px;
+}
+
+/* WCAG 2.3.3 — reduced motion: niente translate, mantieni il
+   delay di hover-intent (è affordance, non decorazione). */
+@media (prefers-reduced-motion: reduce) {
+    .fm-bb-menu__panel,
+    .fm-bb-menu__caret {
+        transition-duration: 0.01ms;
+        transform: none;
+    }
+    .fm-bb-menu:hover .fm-bb-menu__panel,
+    .fm-bb-menu:focus-within .fm-bb-menu__panel,
+    .fm-bb-menu--open .fm-bb-menu__panel {
+        transform: none;
+    }
+}
+
+/* Mobile: pannello a tutta larghezza ancorato a sinistra per non
+   uscire dal viewport (la barra usa inline-flex sotto 768px). */
+@media (max-width: 768px) {
+    .fm-bb-menu__panel {
+        right: auto;
+        left: 0;
+        min-width: 11rem;
+        max-width: 80vw;
+    }
+}

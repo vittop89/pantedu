@@ -1,0 +1,322 @@
+/* ════════════════════════════════════════════════════════════
+ * _shell-legacy.css — Shell chrome (login/signup/admin pages)
+ *
+ * Sprint F (2026-05-24) VERBATIM extraction da shell.css (-276 LOC).
+ * Selettori principali (scoped body.fm-shell):
+ *   body.fm-shell base + :has(.fm-card--wide) padding + :not(modal)
+ *   body.fm-shell--modal backdrop
+ *   .fm-card + variants (--wide, --modal) + animation @keyframes
+ *   .fm-title/.fm-muted/.fm-label/.fm-input + focus + sm
+ *   .fm-btn + variants (--primary/--danger/--ghost) + focus
+ *   .fm-alert + variants (--error/--warning/--success/--info)
+ *   .fm-status + [data-role] variants
+ *   .fm-grid + --2/--3/--4
+ *   .fm-tile + h3 + .fm-big
+ *   .fm-table + th/td + tr:hover
+ *   .fm-code monospace
+ *   .fm-topbar h1 + .fm-tb-actions
+ *   .fm-link + :hover
+ *   .fm-breadcrumb + a + .fm-bc-sep
+ *   .fm-back link with arrow ::before
+ *   @media (max-width: 640px) responsive
+ * ════════════════════════════════════════════════════════════ */
+
+body.fm-shell {
+    margin: 0;
+    font-family: var(--fm-font);
+    background: linear-gradient(135deg, var(--fm-c-bg) 0%, #e8eef7 100%);
+    color: var(--fm-c-text);
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: var(--fm-space-4);
+    box-sizing: border-box;
+}
+
+/* Phase 25.H — pagine wide (admin dashboard/tools/analytics/WAF/...)
+   devono partire dal TOP, non centrate verticalmente. Senza, contenuti
+   corti generavano padding enormi sopra/sotto. Modern :has() coverage
+   ≥95% (CWS 2025). */
+body.fm-shell:has(.fm-card--wide) {
+    align-items: start;
+    padding-top: var(--fm-space-6);
+}
+
+/* When .fm-shell appears on top of pages that also render a sidebar
+   (login redirect flows, error pages), pin body content above any
+   stacking context from legacy layouts. Skip children che hanno già
+   il loro position (es. .fm-card--modal usa position:fixed). */
+body.fm-shell > *:not(.fm-card--modal) { position: relative; z-index: 10000; }
+
+/* Modal-shell: dim backdrop + centered card. Activate by setting
+   body class="fm-shell fm-shell--modal" on auth/error pages. */
+body.fm-shell--modal::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(16, 24, 40, .45);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* 2026-05-24 fix: scopato `body.fm-shell .fm-card` (era globale .fm-card
+ * → applicava width: 440px anche a teacher dashboard / admin views che
+ * usano .fm-card come section card inline → card visibilmente strette.
+ * shell.css è meant ONLY per login/signup/error pages (body.fm-shell). */
+body.fm-shell .fm-card {
+    background: var(--fm-c-surface);
+    padding: var(--fm-space-8);
+    border-radius: var(--fm-radius-lg);
+    box-shadow: var(--fm-shadow-lg);
+    width: min(440px, 92vw);
+    box-sizing: border-box;
+    animation: fm-card-in .25s ease-out;
+}
+
+/* Sprint A5 2026-05-24 ROLLBACK: shell.css è in @layer overrides,
+ * _cards.css in @layer components → overrides > components, quindi
+ * `.fm-card { width: 440px }` qui sotto BATTE `.fm-card--wide { width: 1600px }`
+ * del modulo (stesso specificity, layer diverso). Restore necessario.  */
+body.fm-shell .fm-card--wide { width: min(1600px, 96vw); padding: var(--fm-space-6); }
+
+/* 2026-05-30 — stesso problema di layer per i .fm-card ANNIDATI dentro
+ * .fm-card--wide (section card inline: filtri, tabelle risultati, ecc.):
+ * `body.fm-shell .fm-card { width: 440px }` (overrides) batte
+ * `.fm-card--wide .fm-card { width: 100% }` (_admin-legacy, components) →
+ * i pannelli interni restavano stretti a 440px. Mirror in overrides con
+ * specificità maggiore (0,3,0 > 0,2,0) → ripristina full-width. */
+body.fm-shell .fm-card--wide .fm-card,
+body.fm-shell .fm-card--wide details > .fm-card { width: 100%; max-width: none; }
+
+/* Modal card variant: pinned center + above dim backdrop.
+   Phase D.2 fix: max-height: 90vh + overflow-y: auto cosi' su viewport
+   piccoli o con contenuto alto (login + SPID/CIE + hint) il card scrolla
+   internamente senza essere tagliato in alto/basso. */
+.fm-card--modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    max-height: 90vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+@keyframes fm-card-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+/* 2026-05-24 fix: specificità body.fm-shell prepend per vincere su
+ * `body.fm-shell .fm-card { animation: fm-card-in }` (spec 21 > spec 10
+ * di `.fm-card--modal`). Senza, modal usava animation fm-card-in che
+ * sovrascriveva transform:translate(-50%,-50%) con translateY(8px)
+ * durante 250ms → card visibile in "basso-destra di centro" finché
+ * animation non completava + SNAP visivo al centro vero. */
+body.fm-shell .fm-card--modal { animation: fm-modal-in .25s ease-out; }
+@keyframes fm-modal-in {
+    /* 2026-05-24 fix: rimosso translate(-50%,-48%) iniziale che causava
+     * salto verticale 2% quando bundle async carica dopo critical CSS
+     * (critical applica posizione finale, bundle ri-triggera animazione
+     * facendo jump visibile). Solo opacity+scale ora, no movement. */
+    from { opacity: 0; transform: translate(-50%, -50%) scale(.98); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.fm-title {
+    margin: 0 0 var(--fm-space-4);
+    font-size: 1.35rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+}
+
+.fm-muted { color: var(--fm-c-muted); font-size: .9rem; }
+
+.fm-label {
+    display: block;
+    margin: var(--fm-space-3) 0 var(--fm-space-1);
+    font-size: .85rem;
+    color: var(--fm-c-text-2);
+    font-weight: 500;
+}
+
+.fm-input {
+    width: 100%;
+    padding: .6rem .7rem;
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: var(--fm-c-surface);
+    color: var(--fm-c-text);
+}
+.fm-input:focus {
+    outline: 2px solid var(--fm-c-primary);
+    outline-offset: 1px;
+    border-color: var(--fm-c-primary);
+}
+.fm-input--sm {
+    padding: .35rem .55rem;
+    font-size: .85rem;
+}
+
+.fm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fm-space-2);
+    padding: .6rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--fm-radius-sm);
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, box-shadow .15s, transform .08s;
+    user-select: none;
+}
+.fm-btn:hover     { box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+.fm-btn:active    { transform: translateY(1px); }
+.fm-btn:focus-visible { outline: 2px solid var(--fm-c-primary); outline-offset: 2px; }
+/* WCAG 2.2 AA (ADR-023): text-on-primary si adatta (bianco light, scuro
+   dark) → contrasto ok sugli accent che diventano chiari in dark mode.
+   Era color:#fff → 2.84:1 su --fm-c-primary #4d9aff in dark. */
+.fm-btn--primary  { background: var(--fm-c-primary); color: var(--fm-c-text-on-primary); }
+.fm-btn--primary:hover { background: var(--fm-c-primary-d); }
+.fm-btn--danger   { background: var(--fm-c-danger);  color: var(--fm-c-text-on-primary); }
+.fm-btn--danger:hover  { background: var(--fm-c-danger-hover); }
+.fm-btn--ghost    { background: transparent; color: var(--fm-c-text-2); border-color: var(--fm-c-border); }
+.fm-btn--ghost:hover { background: var(--fm-c-bg); color: var(--fm-c-text); }
+.fm-btn--full     { width: 100%; margin-top: var(--fm-space-4); }
+.fm-btn--sm       { padding: .35rem .7rem; font-size: .85rem; }
+
+.fm-alert {
+    padding: var(--fm-space-3) var(--fm-space-4);
+    border-radius: var(--fm-radius-sm);
+    margin: var(--fm-space-2) 0;
+    font-size: .9rem;
+    border-left: 4px solid transparent;
+}
+/* Token theme-aware (i --fm-c-*-light si scuriscono in dark): evita i fill
+   hardcoded chiari che restavano crema in dark mode (layer overrides vinceva
+   sul dark-mode modulare). Coerente con _alerts.css. */
+.fm-alert--error,
+.fm-alert--danger   { background: var(--fm-c-danger-light);  color: var(--fm-c-text); border-color: var(--fm-c-danger); }
+.fm-alert--warning  { background: var(--fm-c-warning-light); color: var(--fm-c-text); border-color: var(--fm-c-warning); }
+.fm-alert--success  { background: var(--fm-c-success-light); color: var(--fm-c-text); border-color: var(--fm-c-success); }
+.fm-alert--info     { background: var(--fm-c-info-light);    color: var(--fm-c-text); border-color: var(--fm-c-primary); }
+
+.fm-status {
+    display: inline-block;
+    padding: .15rem var(--fm-space-2);
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+.fm-status[data-role="administrator"],
+.fm-status[data-role="admin"]        { background: #fde8ec; color: var(--fm-c-danger); }
+.fm-status[data-role="collaborator"] { background: #e7f0fb; color: var(--fm-c-primary); }
+.fm-status[data-role="student"]      { background: #e9f6ec; color: var(--fm-c-success); }
+.fm-status[data-role="guest"]        { background: #eef1f6; color: var(--fm-c-muted); }
+
+/* 2026-05-30 — varianti DARK dei role badge topbar. I bg chiari sopra
+ * (e #fbe1e6 del badge super in _sidebar-widgets.css) non avevano override
+ * dark → pill chiare su tema scuro (es. "SUPER-ADMIN" rosa su /admin/*).
+ * Qui (overrides layer) + body.fm-dark (specificità maggiore) → vincono sia
+ * sulle regole chiare sopra sia sul super di _sidebar-widgets (components).
+ * Tinta del ruolo conservata, testo chiaro leggibile (WCAG AA). */
+body.fm-dark .fm-status[data-role="administrator"],
+body.fm-dark .fm-status[data-role="admin"],
+body.fm-dark .fm-status[data-role="super"],
+body.fm-dark .fm-status[data-role="super_admin"] { background: #3a1f25; color: #ff8a96; }
+body.fm-dark .fm-status[data-role="collaborator"] { background: #1c2a3f; color: #8ab4ff; }
+body.fm-dark .fm-status[data-role="student"]      { background: #1c3026; color: #6ee7a8; }
+body.fm-dark .fm-status[data-role="guest"]        { background: var(--fm-c-surface-2); color: var(--fm-c-muted); }
+
+.fm-grid { display: grid; gap: var(--fm-space-4); }
+
+/* Phase 25.R.3.2 — modificatori grid mancanti (dashboard/tools usavano
+   .fm-grid--3 senza regola CSS → fallback display:grid 1 colonna). */
+.fm-grid--3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+
+.fm-tile {
+    padding: var(--fm-space-4);
+    background: var(--fm-c-bg);
+    border: 1px solid var(--fm-c-border);
+    border-radius: var(--fm-radius-sm);
+}
+.fm-tile h3 { margin: 0 0 var(--fm-space-2); font-size: 1rem; }
+.fm-tile .fm-big { font-size: 1.6rem; font-weight: 700; color: var(--fm-c-primary); }
+
+.fm-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.fm-table th, .fm-table td {
+    text-align: left;
+    padding: var(--fm-space-2) var(--fm-space-3);
+    border-bottom: 1px solid var(--fm-c-border);
+}
+.fm-table th { background: var(--fm-c-bg); font-weight: 600; color: var(--fm-c-text-2); }
+.fm-table tr:hover td { background: var(--fm-c-surface-2); }
+
+.fm-code {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .85rem;
+    /* WCAG 2.2 AA (ADR-023): bg/text via token adattivi. Era #f3f4f7 fisso
+       (chiaro) → in dark testo chiaro su bg chiaro = 1.66:1 (override
+       body.fm-dark in layer inferiore non vinceva). */
+    background: var(--fm-c-surface-2);
+    color: var(--fm-c-text);
+    padding: .1em .35em;
+    border-radius: 3px;
+}
+
+.fm-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fm-space-4);
+    margin-bottom: var(--fm-space-6);
+    padding-bottom: var(--fm-space-3);
+    border-bottom: 1px solid var(--fm-c-border);
+    flex-wrap: wrap;
+}
+.fm-topbar h1 { margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: var(--fm-space-2); }
+.fm-tb-actions { display: flex; align-items: center; gap: var(--fm-space-2); flex-wrap: wrap; }
+
+.fm-link { color: var(--fm-c-primary); text-decoration: none; font-weight: 500; }
+.fm-link:hover { text-decoration: underline; }
+
+/* Breadcrumb / back navigation */
+.fm-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    font-size: .85rem;
+    color: var(--fm-c-muted);
+    margin: 0 0 var(--fm-space-4);
+}
+.fm-breadcrumb a { color: var(--fm-c-primary); text-decoration: none; }
+.fm-breadcrumb a:hover { text-decoration: underline; }
+.fm-bc-sep { color: var(--fm-c-border); }
+
+/* Back link */
+
+
+
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .fm-card { padding: var(--fm-space-6); }
+    .fm-card--wide { padding: var(--fm-space-4); }
+    .fm-topbar { flex-direction: column; align-items: stretch; }
+    .fm-topbar h1 { font-size: 1.1rem; }
+    .fm-tb-actions { justify-content: flex-start; }
+}
+
+/* Skip link + main focus rules moved to css/a11y.css (shared between
+   shell + sidebar layouts). */

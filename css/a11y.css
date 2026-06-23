@@ -1,0 +1,262 @@
+/* ============================================================ */
+/* a11y.css — WCAG 2.1 AA + 2.2 AA accessibility shared rules.   */
+/* Caricato da head.php (sidebar layout) + shell.php (admin       */
+/* layout) per garantire skip link, focus visible, screen reader  */
+/* only patterns su tutte le pagine.                              */
+/*                                                                */
+/* Riferimenti normativi:                                         */
+/*   - WCAG 2.1 livello AA: https://www.w3.org/TR/WCAG21/         */
+/*   - WCAG 2.2 AA (Oct 2023): https://www.w3.org/TR/WCAG22/      */
+/*   - AgID Linee Guida accessibilita' (Legge Stanca art. 11)    */
+/*   - Direttiva EU 2016/2102                                     */
+/*   - EN 301 549 v3.2.1                                          */
+/* ============================================================ */
+
+/* ── 2.4.1 Bypass Blocks: skip link "Salta al contenuto" ───── */
+.fm-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 9999;
+    padding: 0.75rem 1.25rem;
+    background: #003366;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    border: 2px solid #ffffff;
+    border-bottom-right-radius: 4px;
+    transition: top 0.15s ease-out;
+}
+.fm-skip-link:focus,
+.fm-skip-link:focus-visible {
+    top: 0;
+    outline: 3px solid #ffd700;
+    outline-offset: 2px;
+}
+/* Quando il main e' target dello skip-link, non aggiungere outline
+   (lo skip-link fornisce gia' affordance visiva).                  */
+main:focus,
+main:target {
+    outline: none;
+}
+
+/* ── 1.4.13 Content on Hover/Focus — visually-hidden helper ── */
+/* Per testo accessibile solo screen reader (es. button-only-icon  */
+/* aria-label fallback, contesto aggiuntivo per link "leggi tutto" */
+/* ambigui, ecc.). Standard CSS pattern.                           */
+.fm-sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ── 2.4.7 Focus Visible — global default per elementi          */
+/* interattivi senza override custom. Sostituisce browser default */
+/* outline (spesso troppo sottile / removed dall'app stylesheet).  */
+:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+/* Dark theme: outline piu' luminoso per contrast 4.5:1.          */
+body.fm-dark :focus-visible {
+    outline-color: #93c5fd;
+}
+
+/* ── 2.3.3 Animation from Interactions — respect reduced motion  */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ── ARIA live region helpers (1.4.13, 4.1.3 Status Messages) ── */
+/* Slot global per annunci screen reader (errori form, toast      */
+/* notification, status update SPA). Posizione visually-hidden    */
+/* per non disturbare layout ma letto da AT.                       */
+[aria-live="polite"],
+[aria-live="assertive"],
+[role="status"],
+[role="alert"] {
+    /* Default visibile; le classi specifiche app overridano */
+}
+
+/* ── 3.3.2 Labels or Instructions — required marker visible        */
+/* Asterisco rosso visibile + testo "(campo obbligatorio)" via       */
+/* .fm-sr-only per screen reader. Usato in .fm-field con label.      */
+.fm-req-marker {
+    color: #b91c1c;
+    font-weight: 700;
+    margin-left: 0.15em;
+}
+body.fm-dark .fm-req-marker {
+    color: #fca5a5;
+}
+
+/* ── Form field standard layout (data_breach + altri form admin)  */
+.fm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+}
+.fm-field > label {
+    font-weight: 600;
+    margin-bottom: 0.25em;
+}
+.fm-field > small.fm-muted {
+    font-size: 0.85em;
+    opacity: 0.75;
+    margin-top: 0.2em;
+}
+
+/* ── Forced colors mode (Windows High Contrast) — Edge/Chromium */
+@media (forced-colors: active) {
+    .fm-skip-link {
+        background: Canvas;
+        color: CanvasText;
+        border: 2px solid CanvasText;
+    }
+    :focus-visible {
+        outline: 3px solid Highlight;
+    }
+}
+
+/* ============================================================ */
+/* WCAG 2.2 AA — new criteria (Oct 2023)                          */
+/* ============================================================ */
+
+/* ── 2.4.11 Focus Not Obscured (Minimum) AA ────────────────────
+   Focused element NON deve essere completamente coperto da
+   contenuto sticky/fixed. Scroll-margin garantisce che browser
+   scrolla in modo da lasciare spazio per la sticky topbar. */
+:focus-visible {
+    scroll-margin-block: 6rem;
+    scroll-margin-inline: 1rem;
+}
+
+/* ── 2.4.13 Focus Appearance AA ────────────────────────────────
+   Outline area minimum: 2 CSS px perimeter sull'elemento.
+   Contrasto outline vs background adiacente ≥ 3:1.
+   La nostra var --fm-focus-* in tokens.css implementa questo. */
+:focus-visible {
+    outline: var(--fm-focus-width, 2px) var(--fm-focus-style, solid) var(--fm-c-focus-ring, #2563eb);
+    outline-offset: var(--fm-focus-offset, 2px);
+}
+
+/* ── 2.5.7 Dragging Movements AA ──────────────────────────────
+   Ogni operazione drag-and-drop deve avere un'alternativa
+   single-pointer (click/tap). UI hint per drag handles. */
+[draggable="true"],
+.fm-drag-handle {
+    /* Cursor differenziato per drag target */
+    cursor: grab;
+}
+[draggable="true"]:active,
+.fm-drag-handle:active {
+    cursor: grabbing;
+}
+/* Drag alternative button visible su touch device */
+@media (hover: none) and (pointer: coarse) {
+    .fm-drag-alternative {
+        display: inline-flex !important;
+    }
+}
+
+/* ── 2.5.8 Target Size (Minimum) AA — 24x24 CSS px ────────────
+   Touch/click target ≥ 24px su tutti i controlli interattivi
+   primari. Eccezioni accettate: inline link in testo, controlli
+   nativi, equivalent already available. */
+button,
+[role="button"],
+a.fm-btn,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="checkbox"],
+[role="radio"],
+[role="switch"],
+[role="tab"] {
+    min-width: var(--fm-target-aa, 1.5rem);
+    min-height: var(--fm-target-aa, 1.5rem);
+}
+
+/* 2.5.8 — link di servizio non-bottone (azioni sidebar, trigger e voci del
+   menu bottombar, link del footer): non hanno classe .fm-btn ma sono target
+   interattivi. Li portiamo ad area ≥24×24px (display inline-flex + padding +
+   min-height) così soddisfano l'eccezione "dimensione" e risolvono anche le
+   segnalazioni di spaziatura insufficiente tra vicini. Verificato via axe
+   (tags wcag22aa) su home/login/accessibility. */
+.sel-action-link,
+.fm-bb-menu__trigger,
+.fm-bb-menu__link,
+#fm-license-section,
+#open-author-modal {
+    /* !important: a11y.css è in @layer(generic), sotto i layer dei moduli che
+       definiscono l'altezza di questi link → senza !important verrebbe
+       sovrascritto (cfr. pattern layer-override del progetto). */
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: var(--fm-target-aa, 1.5rem) !important;
+    padding-block: 3px !important;
+    padding-inline: 5px !important;
+}
+
+/* ── 3.2.6 Consistent Help A (best-practice exposing as AA) ──
+   .fm-help-link sempre visibile/posizionato consistente. Hook
+   classe utilizzabile sui template. */
+.fm-help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fm-space-1);
+}
+
+/* ── 3.3.7 Redundant Entry AA ─────────────────────────────────
+   Hook per UI che riutilizza dati gia' inseriti. Form con
+   autocomplete attributi (vedi spec) — niente CSS necessario,
+   ma marker visivo dello stato. */
+input[autocomplete]:not([autocomplete="off"]):not(:placeholder-shown) {
+    /* Hint visivo che il campo supporta autofill */
+    background-image: linear-gradient(transparent, transparent);
+}
+
+/* ── 3.3.8 Accessible Authentication (Minimum) AA ─────────────
+   No cognitive function test required. CSS-only: il campo
+   password DEVE permettere paste (no JS che disabilita). */
+input[type="password"] {
+    /* Esplicito: paste allowed (default ma documentiamo intent) */
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* ── Reduced transparency support (WCAG 1.4.8) ────────────────
+   Some users hanno OS settings per ridurre transparency. */
+@media (prefers-reduced-transparency: reduce) {
+    .fm-card,
+    .fm-modal,
+    [class*="--modal"]::before {
+        backdrop-filter: none !important;
+        background-color: var(--fm-c-surface) !important;
+    }
+}
+
+/* ── Contrast preference (WCAG 1.4.6 enhanced) ────────────────
+   Some users enable high-contrast mode in OS. */
+@media (prefers-contrast: more) {
+    :focus-visible {
+        outline-width: 3px;
+    }
+    a {
+        text-decoration-thickness: 0.1em;
+    }
+}

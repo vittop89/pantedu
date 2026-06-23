@@ -1,0 +1,1220 @@
+/* ════════════════════════════════════════════════════════════
+ * _editor-builder.css — Editor builder UI (TikZ/Traccia/DSA/
+ * find-replace/backup/element forms) — extracted from layout_editor.css
+ * Sprint D (2026-05-24) VERBATIM byte-equivalent.
+ * 
+ * Selectors: .fm-tex-action-buttons-wrapper, .add/.delete/.edit-element-*,
+ *   .fm-group-btn, .fm-find-replace-panel + all sub-elements, .dsa-checkbox,
+ *   .fm-save-backup-btn, .fm-element-backup-selector, .latex-preview-*, etc.
+ *
+ * Loader: importato via css/components.css → main.bundle.css.
+ * ════════════════════════════════════════════════════════════ */
+
+.fm-tex-action-buttons-wrapper {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    width: 125px;
+    justify-content: space-between;
+}
+
+/* Stili per il form di aggiunta nuovo elemento TikZ/LaTeX */
+
+.fm-add-new-element-group {
+    border-bottom: none;
+    margin-bottom: 5px;
+    display: flex;
+    flex: 1;
+    margin-right: 0;
+}
+
+.fm-add-new-element-btn {
+    background-color: #4CAF50 !important;
+    color: white;
+    font-weight: bold;
+    font-size: 1.125rem !important;
+    padding: 8px 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-add-new-element-btn:hover {
+    background-color: #45a049;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-add-new-element-btn.active {
+    background-color: var(--fm-c-surface) !important;
+    color: #4CAF50 !important;
+    border: 2px solid #4CAF50;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Stili per il form di eliminazione elemento TikZ/LaTeX */
+
+.fm-delete-element-group {
+    border-bottom: none;
+    margin-bottom: 5px;
+    display: flex;
+    flex: 1;
+    margin-right: 0;
+}
+
+.fm-delete-element-btn {
+    background-color: #f44336 !important;
+    color: white;
+    font-weight: bold;
+    font-size: 1.125rem !important;
+    padding: 8px 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-delete-element-btn:hover {
+    background-color: #da190b;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-delete-element-btn.active {
+    background-color: var(--fm-c-surface) !important;
+    color: #f44336 !important;
+    border: 2px solid #f44336;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Stili per il form di modifica elemento TikZ/LaTeX */
+
+.fm-edit-element-group {
+    border-bottom: none;
+    margin-bottom: 5px;
+    display: flex;
+    flex: 1;
+    margin-right: 0;
+}
+
+.fm-edit-element-btn {
+    background-color: #FF9800 !important;
+    color: white;
+    font-weight: bold;
+    font-size: 1.125rem !important;
+    padding: 8px 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-edit-element-btn:hover {
+    background-color: #F57C00;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-edit-element-btn.active {
+    background-color: var(--fm-c-surface) !important;
+    color: #FF9800 !important;
+    border: 2px solid #FF9800;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fm-delete-element-form {
+    background-color: #fff5f5;
+    padding: 15px;
+    border: 2px solid #f44336;
+    border-radius: 8px;
+    max-width: 450px;
+    overflow-y: auto;
+    max-height: 350px;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Posizionamento condizionale per delete-element-form */
+.fm-delete-element-btn.active ~ .fm-delete-element-form {
+    left: 88px;
+}
+
+.fm-delete-element-form.active {
+    display: block !important;
+}
+
+.fm-delete-element-form .fm-form-section {
+    margin-bottom: 12px;
+}
+
+.fm-delete-element-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #c62828;
+    font-size: 0.75rem;
+}
+
+.fm-delete-element-form select {
+    width: 100%;
+    /* padding: 8px; */
+    border: 2px solid var(--fm-c-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.8125rem;
+    transition: border-color 0.3s;
+}
+
+.fm-delete-element-form select:focus,
+.fm-delete-element-form select:focus-visible {
+    outline: none;
+    border-color: #f44336;
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.35);
+}
+
+.fm-delete-element-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+    flex-wrap: wrap;
+}
+
+/* Stili per il form di modifica elemento */
+
+.fm-edit-element-form {
+    background-color: #fff8f0;
+    padding: 15px;
+    border: 2px solid #FF9800;
+    border-radius: 8px;
+    max-width: 550px;
+    /* overflow-y: auto;
+    max-height: 450px; */
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Posizionamento condizionale per edit-element-form */
+.fm-edit-element-btn.active ~ .fm-edit-element-form {
+    left: 46px;
+}
+
+.fm-edit-element-form.active {
+    display: block !important;
+}
+
+.fm-edit-element-form .fm-form-section {
+    margin-bottom: 12px;
+}
+
+.fm-edit-element-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #E65100;
+    font-size: 0.75rem;
+}
+
+.fm-edit-element-form input[type="text"],
+.fm-edit-element-form select,
+.fm-edit-element-form textarea {
+    width: 100%;
+    border: 2px solid var(--fm-c-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.8125rem;
+    transition: border-color 0.3s;
+}
+
+.fm-edit-element-form input[type="text"]:focus,
+.fm-edit-element-form select:focus,
+.fm-edit-element-form textarea:focus,
+.fm-edit-element-form select:focus-visible,
+.fm-edit-element-form textarea:focus-visible {
+    outline: none;
+    border-color: #FF9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.35);
+}
+
+.fm-edit-element-form textarea {
+    resize: vertical;
+    min-height: 120px;
+    max-height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.4;
+}
+
+.fm-edit-element-form .fm-checkbox-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 5px;
+}
+
+.fm-edit-element-form .fm-checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+}
+
+.fm-edit-element-form .fm-checkbox-group input[type="radio"] {
+    width: auto;
+    margin-right: 5px;
+}
+
+.fm-delete-element-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+    flex-wrap: wrap;
+}
+
+.fm-delete-single-element-btn,
+.fm-delete-whole-group-btn {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: normal;
+    line-height: 1.4;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    background-color: #f44336 !important;
+    color: white;
+    flex: 1;
+}
+
+.fm-delete-single-element-btn:hover,
+.fm-delete-whole-group-btn:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.fm-cancel-delete-element-btn {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: normal;
+    line-height: 1.4;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    background-color: #757575 !important;
+    color: white;
+    flex: 1;
+}
+
+.fm-cancel-delete-element-btn:hover {
+    background-color: #616161;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+/* Stili per i pulsanti del form di modifica */
+
+.fm-save-edit-element-btn {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: normal;
+    line-height: 1.4;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    background-color: #FF9800 !important;
+    color: white;
+    flex: 1;
+}
+
+.fm-save-edit-element-btn:hover {
+    background-color: #F57C00;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.fm-cancel-edit-element-btn {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.6875rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: normal;
+    line-height: 1.4;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    background-color: #757575 !important;
+    color: white;
+    flex: 1;
+}
+
+.fm-cancel-edit-element-btn:hover {
+    background-color: #616161;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.fm-edit-element-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+    flex-wrap: wrap;
+}
+
+.fm-new-element-form {
+    background-color: #fffef5;
+    padding: 15px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    max-width: 550px;
+    overflow-y: auto;
+    max-height: 450px;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Posizionamento condizionale per new-element-form */
+.fm-add-new-element-btn.active ~ .fm-new-element-form {
+    left: 130px;
+}
+
+.fm-new-element-form.active {
+    display: block !important;
+}
+
+.fm-new-element-form .fm-form-section {
+    margin-bottom: 12px;
+}
+
+.fm-new-element-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #2c3e50;
+    font-size: 0.75rem;
+}
+
+.fm-new-element-form input[type="text"],
+.fm-new-element-form select,
+.fm-new-element-form textarea {
+    width: 100%;
+    border: 2px solid var(--fm-c-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.8125rem;
+    transition: border-color 0.3s;
+}
+
+.fm-new-element-form input[type="text"]:focus,
+.fm-new-element-form select:focus,
+.fm-new-element-form textarea:focus,
+.fm-new-element-form select:focus-visible,
+.fm-new-element-form textarea:focus-visible {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.35);
+}
+
+.fm-new-element-form textarea {
+    resize: vertical;
+    min-height: 120px;
+    max-height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.4;
+}
+
+.fm-new-element-form .fm-checkbox-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 5px;
+}
+
+.fm-new-element-form .fm-checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+}
+
+.fm-new-element-form .fm-checkbox-group input[type="radio"] {
+    width: auto;
+    margin-right: 5px;
+}
+
+.fm-new-element-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid var(--fm-c-border);
+}
+
+.fm-new-element-form button {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: normal;
+    line-height: 1.4;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+}
+
+.fm-save-new-element-btn {
+    background-color: #2196F3 !important;
+    color: white;
+    flex: 1;
+    min-width: 90px;
+}
+
+.fm-save-new-element-btn:hover {
+    background-color: #0b7dda;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.fm-cancel-new-element-btn {
+    background-color: #f44336 !important;
+    color: white;
+    flex: 1;
+    min-width: 90px;
+}
+
+.fm-cancel-new-element-btn:hover {
+    background-color: #da190b;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+/* Stili per migliorare la visualizzazione generale dei gruppi TikZ */
+.tex-group {
+    border-bottom: 1px solid var(--fm-c-border);
+}
+
+.fm-group-btn {
+    width: 100%;
+    text-align: left;
+    background-color: var(--fm-c-surface-2);
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.fm-group-btn:hover {
+    background-color: #e8e8e8;
+}
+
+.fm-group-btn.active {
+    background-color: #d0d0d0;
+    font-weight: bold;
+}
+
+.fm-group-options {
+    display: none;
+    background-color: var(--fm-c-surface);
+    padding: 10px;
+    border-left: 3px solid #2196F3;
+}
+
+.fm-group-options.active {
+    display: block;
+}
+
+.fm-tikz-element-btn,
+.fm-traccia-element-btn {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px 12px;
+    background-color: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.8125rem;
+    transition: all 0.2s;
+}
+
+.fm-tikz-element-btn:hover,
+.fm-traccia-element-btn:hover {
+    background-color: #e3f2fd;
+    border-color: #2196F3;
+}
+
+.toolbar {
+    display: flex;
+    /* border-bottom: 1px solid #ccc;
+    padding: 5px; */
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    /* padding: 5px;
+    border-bottom: 1px solid var(--fm-c-border); */
+}
+
+.toolbar button,
+.toolbar select {
+    height: 20px;
+}
+.fm-insertcheckbox-cell {
+    width: 14px;
+    transform: scale(1.5);
+    margin-right: 9px;
+    /* position: absolute */
+    top: 2px;
+    left: 169px;
+}
+
+.toolbar button {
+    border-style: outset;
+    border-width: 1px;
+    border-color: #b0c4de; /* azzurro chiaro */
+    background-color: white;
+    cursor: pointer;
+}
+
+.toolbar button:active {
+    border-style: inset;
+}
+
+.fm-editor-wrapper {
+    position: relative;
+    display: flex;
+    width: max-content;
+}
+
+.editor {
+    height: fit-content;
+    width: max-content;
+    /* min-width: 260px; */
+    min-height: 180px;
+    max-width: 600px;
+    overflow-y: auto;
+    resize: both;
+    border: inset;
+    padding: 0 10px;
+    /* margin-top: 10px; */
+    color: black;
+    content-visibility: auto;
+}
+
+/* #listType,
+.fm-element-tikz-selector{
+    width: 45px;
+} */
+.fm-latex-preview-container {
+    /* border: 1px solid #ccc; */
+    position: relative;
+    padding: 0 5px;
+    /* margin-top: 10px; */
+    /* background: rgba(176, 224, 230, 0.837); */
+}
+
+.fm-latex-preview-title,
+.fm-type-wrapper {
+    font-size: small;
+    height: 23px;
+    translate: 0 3px;
+    font-weight: bold;
+    /* position: absolute;
+    right: 0;
+    top: 0.5px; */
+    z-index: 1;
+
+    /* border-bottom: none; */
+    /* border-bottom: 5px solid powderblue; */
+    border-bottom: unset;
+    /* border-bottom-color: powderblue;
+    border-bottom-width: 1000px; */
+    background-color: powderblue;
+    padding: 0px 5px;
+}
+
+.fm-type-wrapper {
+    margin-left: auto;
+    border-top: inset 1px;
+    border-right: inset 1.5px;
+    border-left: inset 1px;
+}
+
+.fm-latex-preview-title {
+    border-top: outset 1px;
+    border-right: outset 1.5px;
+    border-left: outset 1px;
+    width: max-content;
+    /* font-weight: bold; */
+    /* margin-bottom: 5px; */
+    /* text-align: center; */
+    /* padding-top: 2px; */
+}
+
+.fm-latex-viewer {
+    border: outset;
+    padding: 0 10px;
+    /* margin-top: 5px; */
+    color: black;
+    background: powderblue;
+    word-wrap: break-word;
+    /* Va a capo se la parola è troppo lunga */
+    width: 14cm;
+    overflow: visible;
+}
+
+/* Impedisce il wrapping delle formule MathJax nel preview */
+.fm-latex-viewer mjx-container {
+    white-space: nowrap !important;
+    display: inline-block !important;
+    width: max-content !important;
+}
+
+ol.fm-custom-counter {
+    list-style: none;
+    counter-reset: custom-counter;
+    margin-left: 5px;
+    padding: 0px;
+}
+
+ol.fm-custom-counter>li {
+    counter-increment: custom-counter;
+    margin-left: 19px;
+}
+
+ol.fm-custom-counter>li::before {
+    content: counter(custom-counter) ")";
+    margin-right: 4px;
+}
+
+ol.fm-custom-decimal {
+    list-style: decimal;
+    /* margin-left: 5px;
+    padding: 0px; */
+}
+
+ol.fm-custom-upper-alpha {
+    list-style: upper-alpha;
+    /* margin-left: 5px;
+    padding: 0px; */
+}
+
+ol.fm-custom-lower-alpha {
+    list-style: lower-alpha;
+    /* margin-left: 5px;
+    padding: 0px; */
+}
+
+br[data-bogus="false"] {
+    display: none;
+}
+
+.fm-tikz-error-highlight {
+    background-color: #fff352;
+    /* Un giallo brillante */
+    color: black;
+    /* Testo nero per contrasto */
+    border-bottom: 1px dashed red;
+    /* Puoi aggiungere altro, es: */
+    /* padding: 0 2px; */
+    /* border-radius: 2px; */
+}
+
+/* Esempio di classe per il blocco di messaggi di errore */
+.fm-tikz-error-messages-block {
+    border: 1px solid red;
+    color: red;
+    padding: 10px;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 0.9em;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.fm-group-options {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: max-content;
+    min-width: 50px;
+    max-width: 400px;
+    z-index: 100;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    box-shadow: 2px 2px 8px #aaa;
+    padding: 4px;
+}
+
+.fm-group-options.active {
+    background: #fffacd;
+    border: 2px solid #ffcc00;
+}
+
+.fm-element-tikz-selector,
+.fm-element-traccia-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.fm-element-tikz-title,
+.fm-element-traccia-title {
+    cursor: pointer;
+}
+
+.fm-element-tikz-groups,
+.fm-element-traccia-groups {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    box-shadow: 2px 2px 8px #aaa;
+    z-index: 50;
+    padding: 8px;
+    overflow: visible;
+}
+
+.tex-group,
+.fm-traccia-group {
+    position: relative;
+    width: max-content;
+    min-width: 25px;
+    z-index: 1;
+}
+
+.fm-group-btn {
+    width: 125px;
+    cursor: pointer;
+    border-style: outset;
+    border-width: 1px;
+    background-color: white;
+}
+
+.fm-group-btn.active {
+    background-color: #ffffcc;
+    border-color: #ffcc00;
+    font-weight: bold;
+}
+
+.fm-group-options.visible {
+    display: block;
+}
+
+.fm-traccia-element-btn,
+.fm-tikz-element-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 2px 0;
+    cursor: pointer;
+    padding: 4px 8px;
+    background: white;
+    border: 1px solid var(--fm-c-border);
+}
+
+.fm-traccia-element-btn:hover,
+.fm-tikz-element-btn:hover {
+    background: var(--fm-c-surface-2);
+}
+
+.fm-linkbar {
+    /* position: absolute; */
+    /* top: 2px; */
+    /* left: 132px; */
+    /* background: #e0e0e0;
+    border: 1px solid var(--fm-c-border-strong); */
+    cursor: pointer;
+}
+
+.fm-dsa-btn {
+    cursor: pointer;
+    font-size: 0.75rem;
+    background: var(--fm-c-surface-2);
+    font-weight: bold;
+}
+
+.fm-dsa-btn:hover {
+    background: #e0e0e0;
+}
+
+.fm-dsa-btn:active {
+    background: #d0d0d0;
+}
+
+.fm-solution {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.fm-add-text-dsa {
+    font-weight: bold;
+}
+
+/* Stili per checkbox DSA nelle verifiche */
+.fm-dsa-checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.dsa-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #666;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.dsa-checkbox:hover {
+    border-color: #333;
+    background: var(--fm-c-surface-2);
+}
+
+.dsa-checkbox:checked {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.dsa-checkbox:checked::after {
+    content: '✱';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.fm-save-backup-btn {
+    /* position: absolute; */
+    /* top: 2px; */
+    /* left: 156px; */
+    cursor: pointer;
+    font-size: 0.75rem;
+    /* padding: 2px 4px; */
+    background: var(--fm-c-surface-2);
+    /* border: 1px solid #ccc; */
+    /* border-radius: 3px; */
+}
+
+.fm-save-backup-btn:hover {
+    background: #e0e0e0;
+}
+
+.fm-save-backup-btn:active {
+    background: #d0d0d0;
+}
+
+.fm-element-backup-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.fm-element-backup-title {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.6875rem;
+    padding: 2px 6px;
+}
+
+.fm-element-backup-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: var(--fm-c-surface);
+    border: 1px solid var(--fm-c-border);
+    box-shadow: 2px 2px 8px #aaa;
+    z-index: 50;
+    padding: 8px;
+}
+
+.fm-backup-element-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 2px 0;
+    padding: 5px 8px;
+    border: 1px solid var(--fm-c-border);
+    background: white;
+    cursor: pointer;
+    font-size: 0.75rem;
+    height: fit-content !important;
+    min-height: auto;
+}
+
+.fm-backup-element-btn:hover {
+    background: var(--fm-c-surface-2);
+}
+
+.fm-backup-element-btn.fm-current-editor {
+    background: #ffffcc;
+    border: 2px solid #ffcc00;
+    font-weight: bold;
+}
+
+/* Find and Replace Panel Styles */
+.fm-find-replace-btn {
+    cursor: pointer;
+    font-size: 0.875rem;
+    background: var(--fm-c-surface-2);
+    padding: 2px 8px;
+    border-style: outset;
+    border-width: 1px;
+    border-color: #b0c4de;
+}
+
+.fm-find-replace-btn:hover {
+    background: #e0e0e0;
+}
+
+.fm-find-replace-btn:active {
+    background: #d0d0d0;
+    border-style: inset;
+}
+
+.fm-find-replace-panel {
+    position: fixed;
+    top: 10%;
+    right: 20px;
+    min-width: 400px;
+    max-width: 500px;
+    background: var(--fm-c-surface-2);
+    border: 2px solid #2196F3;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.fm-find-replace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #2196F3;
+    color: white;
+    font-weight: bold;
+    font-size: 0.875rem;
+    border-radius: 6px 6px 0 0;
+}
+
+.fm-close-find-replace {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.125rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+.fm-close-find-replace:hover {
+    color: #ffeb3b;
+}
+
+.fm-find-replace-content {
+    padding: 15px;
+}
+
+.fm-find-replace-row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.fm-find-input,
+.fm-replace-input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 2px solid var(--fm-c-border);
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    transition: border-color 0.3s;
+}
+
+.fm-find-input:focus,
+.fm-replace-input:focus,
+.fm-find-input:focus-visible,
+.fm-replace-input:focus-visible {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.35);
+}
+
+.fm-find-next-btn,
+.fm-find-prev-btn,
+.fm-replace-btn,
+.fm-replace-all-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+.fm-find-next-btn,
+.fm-find-prev-btn {
+    background-color: #2196F3 !important;
+    color: white;
+    min-width: 32px;
+    padding: 6px 10px;
+}
+
+.fm-find-next-btn:hover,
+.fm-find-prev-btn:hover {
+    background-color: #0b7dda !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-replace-btn {
+    background-color: #FF9800 !important;
+    color: white;
+}
+
+.fm-replace-btn:hover {
+    background-color: #F57C00 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-replace-all-btn {
+    background-color: #4CAF50 !important;
+    color: white;
+}
+
+.fm-replace-all-btn:hover {
+    background-color: #45a049 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.fm-find-replace-options {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 10px 0 5px 0;
+    border-top: 1px solid var(--fm-c-border);
+    margin-top: 5px;
+    font-size: 0.75rem;
+}
+
+.fm-find-replace-options label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.fm-find-replace-options input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.fm-find-replace-counter {
+    margin-left: auto;
+    font-weight: bold;
+    color: #2196F3;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+/* Highlight styles for search results */
+.fm-find-highlight {
+    background-color: #ffeb3b;
+    color: black;
+    border-radius: 2px;
+    padding: 1px 2px;
+}
+
+.fm-find-highlight-active {
+    background-color: #ff9800;
+    color: white;
+    border-radius: 2px;
+    padding: 1px 2px;
+    box-shadow: 0 0 4px rgba(255, 152, 0, 0.8);
+}

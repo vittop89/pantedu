@@ -1,0 +1,118 @@
+[
+    {
+        "titolo": "NUMERI NATURALI E NUMERI INTERI",
+        "contenuti": [
+            { "label": "Rappresentare, confrontare e ordinare numeri naturali e interi sulla retta numerica.", "checked": true },
+            { "label": "Eseguire le quattro operazioni con numeri naturali e interi e applicarne le proprietà (commutativa, associativa, distributiva).", "checked": true },
+            { "label": "Applicare le proprietà delle potenze con base intera ed esponente naturale per semplificare calcoli.", "checked": true },
+            { "label": "Calcolare multipli, divisori, Massimo Comun Divisore (MCD) e minimo comune multiplo (mcm) di due o più numeri.", "checked": true },
+            { "label": "Risolvere espressioni numeriche complesse con numeri interi, rispettando la priorità delle operazioni e l'uso delle parentesi.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "NUMERI RAZIONALI",
+        "contenuti": [
+            { "label": "Rappresentare numeri razionali (in forma di frazione e decimale) sulla retta, confrontarli e ordinarli.", "checked": true },
+            { "label": "Riconoscere e generare frazioni equivalenti e ridurre una frazione ai minimi termini.", "checked": true },
+            { "label": "Eseguire le quattro operazioni e l'elevamento a potenza con i numeri razionali.", "checked": true },
+            { "label": "Convertire frazioni in numeri decimali e viceversa, riconoscendo numeri decimali finiti, periodici semplici e misti.", "checked": true },
+            { "label": "Impostare e risolvere proporzioni e problemi pratici che coinvolgono l'uso di percentuali.", "checked": true },
+            { "label": "Risolvere espressioni con numeri razionali, applicando correttamente le regole delle operazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "INSIEMI*",
+        "contenuti": [
+            { "label": "Definire un insieme mediante rappresentazione tabulare, caratteristica e di Eulero-Venn e identificare sottoinsiemi.", "checked": true },
+            { "label": "Eseguire le operazioni di unione, intersezione e differenza tra insiemi e rappresentarle graficamente.", "checked": true },
+            { "label": "Definire e calcolare l'insieme complementare e il prodotto cartesiano tra due insiemi.", "checked": true },
+            { "label": "Riconoscere e verificare le proprietà (riflessiva, simmetrica, transitiva) di una relazione d'equivalenza.", "checked": true },
+            { "label": "Riconoscere e verificare le proprietà (antisimmetrica, transitiva) di una relazione d'ordine.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "STATISTICA*",
+        "contenuti": [
+            { "label": "Calcolare la frequenza assoluta, relativa e percentuale di un dato statistico.", "checked": false },
+            { "label": "Costruire e interpretare rappresentazioni grafiche di dati (ortogrammi, areogrammi, istogrammi), scegliendo la più adatta.", "checked": false },
+            { "label": "Calcolare e interpretare il significato degli indici di posizione centrale: media aritmetica, moda e mediana.", "checked": false },
+            { "label": "Calcolare e interpretare semplici indici di dispersione (es. campo di variazione) per valutare la variabilità di un fenomeno.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "RELAZIONI E FUNZIONI",
+        "contenuti": [
+            { "label": "Definire una relazione tra due insiemi e rappresentarla in modi diversi (tabulare, sagittale, cartesiana).", "checked": true },
+            { "label": "Distinguere tra relazioni di equivalenza e relazioni d'ordine.", "checked": true },
+            { "label": "Definire una funzione, distinguere tra funzioni suriettive, iniettive e biiettive, e determinarne dominio, codominio e zeri.", "checked": true },
+            { "label": "Rappresentare una funzione nel piano cartesiano e analizzarne il grafico per dedurne le proprietà.", "checked": true },
+            { "label": "Determinare la funzione composta di due funzioni date e calcolare la funzione inversa (se esiste).", "checked": true },
+            { "label": "Riconoscere, rappresentare e modellizzare situazioni di proporzionalità diretta e inversa.", "checked": true },
+            { "label": "Analizzare e rappresentare graficamente la funzione lineare y=mx+q, interpretando il significato dei parametri m e q.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "MONOMI E POLINOMI",
+        "contenuti": [
+            { "label": "Riconoscere monomi e polinomi, determinarne il grado e classificarli (nullo, omogeneo, ordinato, completo).", "checked": true },
+            { "label": "Eseguire operazioni di addizione, sottrazione, moltiplicazione e divisione tra polinomi.", "checked": true },
+            { "label": "Applicare le regole dei prodotti notevoli per semplificare e velocizzare i calcoli.", "checked": true },
+            { "label": "Valutare un polinomio in un punto e interpretarlo come una funzione polinomiale.", "checked": true },
+            { "label": "Trovare gli zeri di un polinomio, comprendendone il significato algebrico e grafico.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "SCOMPOSIZIONE DI POLINOMI",
+        "contenuti": [
+            { "label": "Applicare il teorema del resto e la regola di Ruffini per la divisione di polinomi e la ricerca degli zeri.", "checked": true },
+            { "label": "Scomporre un polinomio in fattori mediante raccoglimento a fattor comune totale e parziale.", "checked": true },
+            { "label": "Scomporre un polinomio riconoscendo e applicando i prodotti notevoli (trinomio speciale, quadrato di binomio, differenza di quadrati, ecc.).", "checked": true },
+            { "label": "Scomporre un trinomio di secondo grado utilizzando la formula risolutiva dell'equazione associata.", "checked": true },
+            { "label": "Calcolare il Massimo Comun Divisore e il minimo comune multiplo tra polinomi scomposti in fattori.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "FRAZIONI ALGEBRICHE",
+        "contenuti": [
+            { "label": "Definire una frazione algebrica, determinarne le condizioni di esistenza e semplificarla.", "checked": true },
+            { "label": "Eseguire le quattro operazioni e l'elevamento a potenza con le frazioni algebriche.", "checked": true },
+            { "label": "Interpretare una frazione algebrica come una funzione razionale fratta, analizzandone il dominio.", "checked": true },
+            { "label": "Verificare l'equivalenza tra due frazioni algebriche.", "checked": true },
+            { "label": "Determinare gli zeri di una frazione algebrica, risolvendo l'equazione associata al numeratore.", "checked": true },
+            { "label": "Identificare e scrivere correttamente le condizioni di esistenza di una frazione algebrica.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "EQUAZIONI LINEARI E FRATTE",
+        "contenuti": [
+            { "label": "Applicare correttamente i principi di equivalenza per trasformare un'equazione in una forma più semplice.", "checked": true },
+            { "label": "Risolvere equazioni numeriche lineari, sia intere che fratte, determinando se sono determinate, indeterminate o impossibili.", "checked": true },
+            { "label": "Risolvere e discutere equazioni letterali lineari (intere e fratte) al variare del parametro.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "DISEQUAZIONI LINEARI E FRATTE",
+        "contenuti": [
+            { "label": "Applicare i principi di equivalenza per risolvere le disequazioni, prestando attenzione al cambio di verso.", "checked": true },
+            { "label": "Risolvere disequazioni lineari intere e rappresentarne l'insieme delle soluzioni sulla retta reale.", "checked": true },
+            { "label": "Studiare il segno di un prodotto di fattori di primo grado per risolvere disequazioni di grado superiore al primo.", "checked": true },
+            { "label": "Risolvere disequazioni fratte attraverso lo studio del segno del numeratore e del denominatore.", "checked": true },
+            { "label": "Risolvere sistemi di disequazioni e distinguere il loro procedimento risolutivo da quello delle disequazioni fratte.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "ENTI GEOMETRICI FONDAMENTALI E TRIANGOLI*",
+        "contenuti": [
+            { "label": "Comprendere la struttura deduttiva della geometria euclidea, distinguendo tra enti primitivi, assiomi, definizioni e teoremi.", "checked": true },
+            { "label": "Riconoscere la struttura di un teorema (ipotesi, tesi) e comprendere i concetti di teorema inverso, contronominale e dimostrazione per assurdo.", "checked": true },
+            { "label": "Distinguere tra condizioni necessarie, sufficienti e necessarie e sufficienti in un enunciato geometrico.", "checked": true },
+            { "label": "Classificare i poligoni (concavi, convessi, regolari) e calcolarne il numero di diagonali.", "checked": true },
+            { "label": "Classificare i triangoli in base ai lati e agli angoli e conoscere le loro proprietà fondamentali.", "checked": true },
+            { "label": "Enunciare e applicare i tre criteri di congruenza dei triangoli per dimostrare la congruenza tra figure.", "checked": true },
+            { "label": "Enunciare e applicare le proprietà del triangolo isoscele (teorema diretto e inverso).", "checked": true },
+            { "label": "Applicare i teoremi sulla somma degli angoli interni ed esterni di un triangolo e di un poligono.", "checked": true },
+            { "label": "Applicare le relazioni di disuguaglianza tra i lati e tra lati e angoli di un triangolo.", "checked": true },
+            { "label": "Riconoscere e classificare i principali quadrilateri (trapezi, parallelogrammi, rombi, rettangoli, quadrati) e le loro proprietà.", "checked": true }
+        ]
+    }
+]

@@ -1,0 +1,129 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "8",
+        "periodo": "Trimestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 15: La legge di Coulomb",
+        "contenuti": [
+            { "label": "La carica elettrica", "checked": true },
+            { "label": "Conduttori e isolanti", "checked": true },
+            { "label": "L'induzione elettrostatica e la polarizzazione", "checked": true },
+            { "label": "La legge di Coulomb", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "14",
+        "periodo": "Trimestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 16: Il campo elettrico e il potenziale elettrico",
+        "contenuti": [
+            { "label": "Il campo elettrico", "checked": true },
+            { "label": "La misura e la rappresentazione del campo elettrico", "checked": true },
+            { "label": "L'evoluzione della fisica - Le origini del concetto di campo", "checked": false },
+            { "label": "I campi e le forze a distanza", "checked": true },
+            { "label": "Il flusso e la legge di Gauss", "checked": true },
+            { "label": "L'energia potenziale elettrica", "checked": true },
+            { "label": "Il potenziale elettrico", "checked": true },
+            { "label": "La relazione tra campo elettrico e potenziale", "checked": true },
+            { "label": "L'energia di un condensatore", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "8",
+        "periodo": "Trimestre",
+        "altre_disc": "Tecnologia",
+        "titolo": "Unità 17: La corrente elettrica",
+        "contenuti": [
+            { "label": "La corrente elettrica", "checked": true },
+            { "label": "Le leggi di Ohm", "checked": true },
+            { "label": "La corrente elettrica nei materiali", "checked": true },
+            { "label": "I semiconduttori", "checked": true },
+            { "label": "Il circuito elettrico", "checked": true },
+            { "label": "I resistori nei circuiti elettrici", "checked": true },
+            { "label": "L'effetto Joule", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "12",
+        "periodo": "Pentamestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 18: Il campo magnetico",
+        "contenuti": [
+            { "label": "I campi magnetici e i magneti", "checked": true },
+            { "label": "I campi magnetici e le correnti elettriche", "checked": true },
+            { "label": "Il campo generato da circuiti elettrici", "checked": true },
+            { "label": "La forza di Lorentz", "checked": true },
+            { "label": "La legge di Ampère", "checked": false },
+            { "label": "Il magnetismo nella materia", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "14",
+        "periodo": "Pentamestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 19: L'induzione elettromagnetica e la corrente alternata",
+        "contenuti": [
+            { "label": "La legge di Gauss per il campo magnetico", "checked": true },
+            { "label": "L'induzione e la forza di Lorentz", "checked": true },
+            { "label": "I campi elettrici indotti e l'autoinduzione", "checked": true },
+            { "label": "La corrente alternata", "checked": true },
+            { "label": "Il trasformatore", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "10",
+        "periodo": "Pentamestre",
+        "altre_disc": "Matematica, Filosofia",
+        "titolo": "Unità 20: Le equazioni di Maxwell e le onde elettromagnetiche",
+        "contenuti": [
+            { "label": "Il paradosso di Ampère", "checked": true },
+            { "label": "L'equazione di Maxwell", "checked": true },
+            { "label": "Le onde elettromagnetiche", "checked": true },
+            { "label": "Lo spettro elettromagnetico", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 21: La relatività ristretta e la meccanica quantistica",
+        "contenuti": [
+            { "label": "I postulati della relatività ristretta", "checked": false },
+            { "label": "La dilatazione dei tempi", "checked": false },
+            { "label": "La contrazione delle lunghezze e la simultaneità degli eventi", "checked": false },
+            { "label": "L'energia in relatività", "checked": false },
+            { "label": "La crisi della fisica classica", "checked": false },
+            { "label": "I quanti di luce", "checked": false },
+            { "label": "La teoria atomica e gli albori della meccanica quantistica", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 22: La fisica subatomica e la radioattività",
+        "contenuti": [
+            { "label": "La struttura del nucleo e l'interazione nucleare forte", "checked": false },
+            { "label": "La radioattività e il decadimento radioattivo", "checked": false },
+            { "label": "La fissione e la fusione nucleare", "checked": false },
+            { "label": "Le particelle e le antiparticelle", "checked": false },
+            { "label": "Le interazioni fondamentali", "checked": false }
+        ]
+    }
+]

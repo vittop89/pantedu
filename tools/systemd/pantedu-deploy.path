@@ -1,0 +1,38 @@
+# Phase 25.R.21 — Auto-deploy via webhook+systemd Path unit (Opzione 4).
+#
+# Watcha il flag file scritto da tools/webhook/github.php dopo HMAC verify
+# del push GitHub. Quando il file viene scritto/modificato, systemd lancia
+# pantedu-deploy.service che esegue /usr/local/bin/pantedu-deploy.sh
+# come root.
+#
+# Vantaggi vs SSH-based GHA:
+#   - Niente apertura porte aggiuntive (riusa /_hooks/github su 443)
+#   - Niente nuovo user SSH
+#   - Niente nuove credenziali in GitHub Secrets
+#   - PHP sandbox INTATTA (www-data scrive solo file, non chiama sudo)
+#   - Privilege separation 3 stadi: PHP (www-data) → flag file → systemd (root)
+#
+# Vantaggi vs Phase 25.N (audit-only + manual deploy):
+#   - Push triggera deploy automatico in ~5-15s
+#   - Niente azione manuale richiesta
+#
+# Install: copy in /etc/systemd/system/ + systemctl daemon-reload +
+# systemctl enable --now pantedu-deploy.path
+# Auto-installato da tools/webhook/deploy.sh se mancante.
+
+[Unit]
+Description=Watch deploy trigger flag for GitHub auto-deploy
+Documentation=https://github.com/vittop89/pantedu/blob/master_vps/tools/webhook/README.md
+After=multi-user.target
+
+[Path]
+# PathChanged = trigger su close-after-write (NON su ogni write parziale).
+# webhook PHP usa atomic rename via tmpfile, garantisce che il file sia
+# completo quando arriva la notifica inotify.
+PathChanged=/var/lib/pantedu-deploy/trigger
+# Solo file specifico, no glob (evita trigger spurii su file temporanei
+# come trigger.tmp.* generati dal rename atomico).
+Unit=pantedu-deploy.service
+
+[Install]
+WantedBy=multi-user.target

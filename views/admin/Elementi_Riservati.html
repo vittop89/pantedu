@@ -1,0 +1,524 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<body>
+    <!-- <div id="modelli">
+    <a href="/modelli_eser.php" class="fm-swatch-yellow fm-text-xs">
+        MODELLI PER ESERCIZI</a>
+</div> -->
+
+    <div class="edit" id="modHeaderBtn">
+        <img src="/img/edit.svg" alt="Modifica">
+    </div>
+
+    <div class="selection">
+        <div class="fm-position">
+            <input type="text" class="fm-def-position-imp">
+        </div>
+        <div class="fm-check">
+            <div><input type="checkbox" id="checkboxA" class="checkboxA"><label for="checkboxA" class="labcheck">A</label>
+            </div>
+            <!-- G19.7 — `R` (Recupero) è il termine moderno; `checkboxB` legacy
+                 mantenuto come alias per i 90+ riferimenti JS/PHP/CSS esistenti
+                 (rename atomico era too risky). Nuovo codice deve preferire
+                 `.checkboxR`. CSS applica lo stesso stile. -->
+            <div><input type="checkbox" id="checkboxB" class="checkboxB checkboxR"><label for="checkboxB" class="labcheck">R</label>
+            </div>
+            <div class="fm-input-wrapper-pt-tot">
+                <p class="fm-pt-tot-a" title="Punti totali sezione A">ptA</p>
+                <span class="total-pointsA">0</span>
+            </div>
+            <div class="fm-input-wrapper-pt-tot fm-mr-1" >
+                <p class="fm-pt-tot-b" title="Punti totali sezione R (Recupero)">ptR</p>
+                <span class="total-pointsB">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="fm-edit-eser fm-ml-auto fm-d-flex" >
+        <div class="edit fm-modifica-btn" role="button" tabindex="0" aria-label="Modifica esercizio">
+            <img src="/img/edit.svg" alt="">
+        </div>
+        <div class="edit fm-quick-save-btn fm-d-none" role="button" tabindex="0" aria-label="Salva senza chiudere">
+            <img src="/img/quicksave.svg" alt="" title="Salva senza chiudere">
+        </div>
+        <div class="edit fm-elimina-btn" role="button" tabindex="0" aria-label="Elimina esercizio">
+            <img src="/img/delete.svg" alt="">
+        </div>
+        <!-- <div class="move"></div> -->
+    </div>
+
+    <div class="fm-check-in">
+        <div class="fm-a-bin">
+            <div><input type="checkbox" class="fm-checkbox-ain"><label class="fm-labcheck-in">A</label> </div>
+            <!-- G19.7 — `Rin` (Recupero) alias di `Bin` legacy. -->
+            <div><input type="checkbox" class="fm-checkbox-bin fm-checkbox-rin"><label class="fm-labcheck-in">R </label> </div>
+        </div>
+        <div class="fm-input-wrapper-pt">
+            <p class="pt">pt:</p>
+            <input type="number" class="fm-input-pt" step="0.5" min="0" value="1">
+        </div>
+        <div class="fm-origin-selector">
+            <select class="origin"></select>
+        </div>
+        <div class="fm-color-selector">
+            <select class="fm-color-select" id="colorSelect">
+                <option value="white" class="fm-swatch-white">white</option>
+                <option value="green" class="fm-swatch-green">Green</option>
+                <option value="blue" class="fm-swatch-blue">Blue</option>
+                <option value="red" class="fm-swatch-red">Red</option>
+                <option value="purple" class="fm-swatch-purple">Purple</option>
+                <option value="orange" class="fm-swatch-orange">Orange</option>
+            </select>
+        </div>
+        <div class="fm-edit-quesito">
+            <div class="fm-edit-q fm-add-btn" role="button" tabindex="0" aria-label="Aggiungi quesito">
+                <p><strong>+</strong></p>
+            </div>
+            <div class="fm-edit-q fm-clone" role="button" tabindex="0" aria-label="Clona quesito" title="Clona in file esercizi">
+                <img src="/img/copy.svg" alt="">
+            </div>
+            <div class="fm-edit-q fm-single-modifica-btn" role="button" tabindex="0" aria-label="Modifica quesito" title="Modifica quesito">
+                <img src="/img/edit.svg" alt="">
+            </div>
+            <div class="fm-edit-q fm-single-quick-save-btn fm-d-none" role="button" tabindex="0" aria-label="Salvataggio rapido"  title="Salva senza chiudere (no svg save)">
+                <img src="/img/quicksave.svg" alt="">
+            </div>
+            <div class="fm-edit-q fm-remove-btn" role="button" tabindex="0" aria-label="Elimina quesito" title="Elimina quesito">
+                <img src="/img/delete.svg" alt="">
+            </div>
+        </div>
+        <div class="fm-move-quesito">
+            <button class="fm-move-up-btn" title="Sposta su" aria-label="Sposta su">↑</button>
+            <button class="fm-move-down-btn" title="Sposta giù" aria-label="Sposta giù">↓</button>
+            <input type="number" class="fm-move-position" placeholder="#" min="1" title="Posizione" aria-label="Posizione del quesito">
+        </div>
+        <div class="fm-sync-quesito-btn" title="Sincronizza dal server">
+            <img src="/img/update.svg" alt="Sincronizza dal server">
+        </div>
+    </div>
+
+
+    <div class="fm-move-btn">
+        <img src="/img/moveUpDown.svg" alt="Muovi">
+    </div>
+    <!-- <div class="fm-selector-eser">
+    <select class="fm-tipo-esercizio">
+        <option value="" disabled selected>Inserisci nuovo esercizio</option>
+        <option value="type_Collect-1">Collezione</option>
+        <option value="type_RMulti-6">Risposta multipla</option>
+        <option value="type_VF-1">Vero o Falso</option>
+    </select>
+    <div class="fm-sync-quesiti-btn" alt="Sincronizza" title="Sincronizza tutti gli esercizi dal server">
+        <img src="/img/update.svg">
+    </div>
+    <div class="fm-dropdown-gen">
+        <button class="fm-dropdown-button-gen">Seleziona origine</button>
+        <div class="fm-dropdown-content-gen">
+        </div>
+        <button class="fm-half-moon-button"><span>+</span></button>
+    </div>
+    <div class="fm-help-circle">
+        <span>?</span>
+        <div class="fm-help-message">Una volta SELEZIONATA l'origine puoi inserire un nuovo tipo di esercizio.
+            Una volta SPUNTATA l'origine rendi visibile agli studenti tutte le tipologie di esercizi con quella origine.
+            Per CAMBIARE origine di più tipi di esercizi prima spunta la checkboxA o checkboxR degli esercizi
+            dei quali devi modificare l'origine e poi seleziona l'origine. L'origine può essere cambiata 
+            anche per i singoli quesiti all'interno della tipologia di esercizio.</div>
+    </div>
+</div> -->
+
+
+    <div class="dsa-wrapper-container">
+        <div class="fm-dsa-checkbox-container">
+            <input type="checkbox" class="dsa-checkbox" id="dsa-checkboxF-${index}">
+            <label for="dsa-checkboxF-${index}">*F*</label>
+        </div>
+        <div class="fm-dsa-checkbox-container">
+            <input type="checkbox" class="dsa-checkbox" id="dsa-checkboxGF-${index}">
+            <label for="dsa-checkboxGF-${index}">*GF*</label>
+        </div>
+    </div>
+    <!-- ================================================================================= -->
+    <!-- ================================================================================= -->
+    <!-- ================================================================================= -->
+    <div class="fm-editor-wrapper">
+        <div>
+            <div class="toolbar">
+                <select id="listType" data-fmr="listType">
+                    <option value="">List</option>
+                    <option value="insertUnorderedList">â€¢</option>
+                    <option value="insertOrderedList">1.</option>
+                    <option value="insertOrderedList1">1)</option>
+                    <option value="insertOrderedListA">A.</option>
+                    <option value="insertOrderedLista">a.</option>
+                </select>
+                <div class="fm-element-tikz-selector">
+                    <button class="fm-element-tikz-title">TeX</button>
+                    <div class="fm-element-tikz-groups fm-d-none" ></div>
+                </div>
+                <div class="fm-element-traccia-selector">
+                    <button class="fm-element-traccia-title">By</button>
+                    <div class="fm-element-traccia-groups fm-d-none" ></div>
+                </div>
+                <button class='fm-linkbar' data-fmr="createlink">
+                    <i class="fa fa-link"></i>
+                </button>
+                <button class='solBtn' data-fmr="sol" title="Inserisci soluzione evidenziata">SOL</button>
+                <button class='fm-dsa-btn' data-fmr="dsa" title="Inserisci testo DSA">DSA
+                    <span class="fm-dsa-tooltip">
+                        <strong>*minuscolo*</strong>: sempre visibile, asterischi rimossi in NOR/SOL<br>
+                        <strong>*MAIUSCOLO*</strong>: solo in DSA/DIS
+                    </span>
+                </button>
+                <button class='fm-save-backup-btn' title="Salva backup manuale">💾</button>
+                <div class="fm-element-backup-selector">
+                    <button class="fm-element-backup-title" title="Recupera backup">B_E</button>
+                    <div class="fm-element-backup-list fm-d-none" ></div>
+                </div>
+                <button class='fm-find-replace-btn' data-fmr="findtoggle" title="Trova e sostituisci">
+                    <i class="fa fa-search"></i>
+                </button>
+                <button class='aiCopilotBtn' data-fmr="copilot" title="AI Assistant">
+                    <i class="fa fa-robot"></i>
+                </button>
+                <input type="checkbox" class="fm-insertcheckbox-cell">
+                <div class="fm-type-wrapper"></div>
+            </div>
+            <div class="editor" contenteditable="true"></div>
+        </div>
+        <div class="fm-find-replace-panel fm-d-none" >
+            <div class="fm-find-replace-header">
+                <span>Trova e sostituisci</span>
+                <button class="fm-close-find-replace" data-fmr="findtoggle" title="Chiudi">✕</button>
+            </div>
+            <div class="fm-find-replace-content">
+                <div class="fm-find-replace-row">
+                    <input type="text" class="fm-find-input" placeholder="Cerca..." aria-label="Testo da cercare">
+                    <button class="fm-find-next-btn" data-fmr="findnext" title="Trova successivo" aria-label="Trova successivo">▼</button>
+                    <button class="fm-find-prev-btn" data-fmr="findprev" title="Trova precedente" aria-label="Trova precedente">▲</button>
+                </div>
+                <div class="fm-find-replace-row">
+                    <input type="text" class="fm-replace-input" placeholder="Sostituisci con..." aria-label="Testo sostitutivo">
+                    <button class="fm-replace-btn" data-fmr="replace" title="Sostituisci">Sostituisci</button>
+                    <button class="fm-replace-all-btn" data-fmr="replaceall" title="Sostituisci tutto">Sostituisci tutto</button>
+                </div>
+                <div class="fm-find-replace-options">
+                    <label><input type="checkbox" class="matchCaseCheckbox"> Maiuscole/minuscole</label>
+                    <label><input type="checkbox" class="wholeWordCheckbox"> Parola intera</label>
+                    <label><input type="checkbox" class="useRegexCheckbox"> Regex</label>
+                    <span class="fm-find-replace-counter"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================================= -->
+    <!-- ================================================================================= -->
+    <!-- ================================================================================= -->
+
+    <li>
+        <a class="linkref">
+            <span class="numArg"></span> - <span class="argomento"></span>
+        </a>
+    </li>
+
+    <!-- <button id="from0" class="addArgBtn">+</button> -->
+    <button class="addArgBtn addArgBtn-main">+</button>
+
+    <!-- <div class="input-wrapper-linkref">
+    <div class="input-wrapper-num_Arg">
+        <textarea class="input-numArg"></textarea>
+        <textarea class="input-argomento"></textarea>
+        <button class="addArgBtn">+</button>
+        <button class="delArgBtn">X</button>
+    </div>
+    <div class="input-wrapper-href">
+        <p class="fm-m-0">link: </p>
+        <textarea class="input-href"></textarea>
+    </div>
+</div> -->
+
+    <div class="input-wrapper-linkref">
+        <div class="tool_sidebar">
+            <div class="checkbox-wrapper-saveFile">
+                <input type="checkbox" class="saveFile">
+                <label for="saveFile" class="fm-mr-3">Salva</label>
+            </div>
+            <div class="checkbox-wrapper-accessFile">
+                <input type="checkbox" class="accessFile">
+                <label for="accessFile">🔓</label>
+            </div>
+            <button class="DriveBtn btn-tabs">
+                <img src="https://pantedu.eu/img/google-drive.svg" alt="Google Drive" class="fm-icon-bare">
+            </button>
+            <button class="addArgBtn btn-tabs">+</button>
+            <button class="delArgBtn btn-tabs">X</button>
+        </div>
+        <div class="input-wrapper-num_Arg">
+            <span class="display-toggle" data-display="show" title="Mostra/Nascondi elemento">👁️</span>
+            <textarea class="input-numArg"></textarea>
+            <textarea class="input-argomento"></textarea>
+        </div>
+        <div class="input-wrapper-href">
+            <p class="fm-m-0">link: </p>
+            <textarea class="input-href"></textarea>
+        </div>
+        <div class="input-wrapper-href-hide">
+            <p class="h-link-opener" title="Clicca per aprire l' Hiden-link">H-link: </p>
+            <textarea class="input-href-hide"></textarea>
+        </div>
+    </div>
+
+    <!-- ================================================================================= -->
+    <div id="scrollbarInfo">
+        <!-- Toggle ScrollbarInfo -->
+        <div id="scrollbarInfo-toggle-container">
+            <input type="checkbox" id="scrollbarInfo-toggle" checked>
+            <label for="scrollbarInfo-toggle" class="fm-scrollbar-info-slider" title="Mostra/Nascondi Info Verifica">▼</label>
+        </div>
+
+        <!-- G19.17 — `autocomplete="off"` su tutti gli input InfoVer per
+             disabilitare l'autofill del browser ("Informazioni salvate"
+             dropdown). Chrome/Edge mostravano valori passati salvati come
+             suggerimenti, intrusivi sul flow editor. -->
+        <div id="infoVer">
+            <div id="wrapInfoSchool">
+                <div class="fm-wrap-info-basic">
+                    <p>ANNO</p>
+                    <input id="anno" autocomplete="off">
+                </div>
+                <div class="fm-wrap-info-basic">
+                    <p>TIME</p>
+                    <input id="verTime" autocomplete="off">
+                </div>
+                <div class="fm-wrap-info-basic">
+                    <p>CL</p>
+                    <input id="classe" autocomplete="off">
+                </div>
+                <div class="fm-wrap-info-basic">
+                    <p>SEZ</p>
+                    <input id="sezione" autocomplete="off">
+                </div>
+                <div class="fm-wrap-info-basic">
+                    <p>INDIRIZZO</p>
+                    <!-- G19.19 — `autocomplete="fm-no-autofill"` (valore non
+                         standard) per bypassare il workaround di Chrome che
+                         ignora `autocomplete="off"` su molti input form-like.
+                         Stesso pattern per `#istituto` sotto. -->
+                    <input id="addressSchool" autocomplete="fm-no-autofill" name="fm-address-school-no-fill">
+                </div>
+                <div class="fm-wrap-info-basic">
+                    <p>ISTITUTO</p>
+                    <!-- G19.19 — `<datalist>` rimosso (l'utente lo trovava
+                         intrusivo + duplicati visualizzati). Resta plain
+                         text input. L'auto-fill al drawer open (G19.18)
+                         continua a funzionare per il primo istituto del
+                         docente, ma niente più dropdown a typing. -->
+                    <input id="istituto" autocomplete="fm-no-autofill" name="fm-istituto-no-fill">
+                </div>
+                <!-- G27.infover.tidy — campo VERSIONE rimosso da infover (richiesta utente:
+                     sempre vuoto, inutile mostrarlo). Input nascosto preservato per back-compat
+                     con getVal("versione") in utilities.js, google-drive-latex-saver.js,
+                     ui-comp.js, event-handler.js e con il placeholder TeX {{VERSIONE}}. -->
+                <input type="hidden" id="versione" value="">
+                <div class="fm-sub-wrap-info-school">
+                    <p id="numCopy">NUM.COPIE</p>
+                    <div class="fm-d-flex">
+                        <div class="fm-wrap-info-print">
+                            <p>NOR</p>
+                            <input id="nPrint" class="fm-input-print" placeholder="NOR" autocomplete="off">
+                        </div>
+                        <div class="fm-wrap-info-print">
+                            <p>DSA</p>
+                            <input id="nPrintDSA" class="fm-input-print" placeholder="DSA" autocomplete="off">
+                        </div>
+                        <div class="fm-wrap-info-print">
+                            <p>DIS</p>
+                            <input id="nPrintDIS" class="fm-input-print" placeholder="DIS" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-sub-wrap-info-school">
+                    <p id="SumTotA">P.TOT-A</p>
+                    <input id="SumPtotA" placeholder="Tot Pt-A" readonly>
+                </div>
+                <div class="fm-sub-wrap-info-school">
+                    <p id="SumTotB">P.TOT-R</p>
+                    <input id="SumPtotB" placeholder="Tot Pt-R" readonly>
+                </div>
+                <!-- G19.21 — `#wrapInfoStudent` opzionale: hidden di default,
+                     toggle via `#fm-toggle-student` (👤). Se mai compilato,
+                     i campi nome/cognome restano vuoti e non finiscono nel
+                     payload SalvaTEX (verifica anonima). -->
+                <button id="fm-toggle-student" type="button"
+                        title="Mostra/nascondi campi nome+cognome studente (verifica nominativa)"
+                        aria-pressed="false" aria-controls="wrapInfoStudent">👤</button>
+                <div id="wrapInfoStudent" hidden>
+                    <input id="nome" placeholder="nome studente" autocomplete="off">
+                    <input id="cognome" placeholder="cognome studente" autocomplete="off">
+                </div>
+            </div>
+            <div id="wrapInfoVer">
+                <div id="wrapDSA">
+                    <input id="Compensa" type="checkbox"><label for="Compensa">Compensazione</label>
+                    <input id="DSA" type="checkbox"><label for="DSA">DSA</label>
+                </div>
+                <div id="wrapGriglieMisure">
+                    <input id="griglie" type="checkbox" checked><label for="griglie">Griglie</label>
+                    <input id="misure" type="checkbox" checked><label for="misure">Ult. Misure</label>
+                </div>
+                <select id="verTitlePrefix">
+                    <option value="VERIFICA:">VERIFICA:</option>
+                    <option value="VERIFICA DI RECUPERO:">VERIFICA DI RECUPERO:</option>
+                </select>
+                <input id="verTitle" autocomplete="off">
+            </div>
+            <div class="fm-selector-eser">
+                <!-- G20.7 — 3 zone visualmente separate dentro .selector-eser:
+                     [zone 1] Crea
+                     [zone 2] Help + PrintInfo (save/load info classe + Info btn)
+                     [zone 3] Help + Scelte (save/v1v2v3/load + verTitle/Prefix)
+                     verTitle/Prefix vivono in zone 3 perche' sono parte del
+                     "salvataggio scelte" (#savePrintInfoBtn NON li include
+                     piu' nel payload). -->
+
+                <!-- zone 1: + Crea -->
+                <div class="fm-eser-zone fm-eser-zone--create">
+                    <button type="button" id="fm-create-exercise-btn" class="fm-create-eser-btn">
+                        <span class="fm-create-eser-icon">＋</span>
+                        <span class="fm-create-eser-label">Crea</span>
+                    </button>
+                </div>
+
+                <!-- zone 2: PrintInfo (save/load info-classe + Info btn iniettato da JS) -->
+                <div class="fm-eser-zone fm-eser-zone--printinfo">
+                    <div class="fm-help-circle">
+                        <span>?</span>
+                        <div class="fm-help-message"><strong>Print info classe</strong> — Salva (💾) i
+                            campi anagrafici della classe (anno, tempo, copie NOR/DSA/DIS, sezione,
+                            istituto, …) per riusarli senza ridigitarli. 📂 carica un set salvato.</div>
+                    </div>
+                    <div class="fm-printinfo-actions">
+                        <button id="savePrintInfoBtn" type="button" title="Salva info classe (cls+sez+ind+ist sovrascrive)">💾</button>
+                        <button id="loadPrintInfoBtn" type="button" title="Carica info classe salvate">📂</button>
+                        <!-- Info btn iniettato qui da topbar-modern.js relocateInfoBtn() -->
+                    </div>
+                </div>
+
+                <!-- zone 3: Scelte (help + salva/carica/versione/v1v2v3 + verTitle) -->
+                <div class="fm-eser-zone fm-eser-zone--scelte">
+                    <div class="fm-scelte-verifica-wrapper">
+                        <div class="fm-help-circle">
+                            <span>?</span>
+                            <div class="fm-help-message"><strong>Salvataggio scelte verifica</strong> —
+                                Salva (💾) le selezioni esercizi della versione corrente (v1/v2/v3),
+                                inclusi titolo verifica e flag InfoVer. 📂 ricarica le scelte. La
+                                versione attiva (v1/v2/v3) e' un radio: cambia con un click.</div>
+                        </div>
+                        <button class="fm-salva-scelte-btn" title="Salva scelte (incl. titolo verifica) per la versione attiva">💾</button>
+                        <button class="fm-carica-scelte-btn" title="Carica scelte versione corrente">📂</button>
+                        <!-- G20.7 — #versione iniettato qui (prima di scelte-versioni)
+                             da topbar-modern.js relocateVerTitle() -->
+                        <!-- G20.7 — 3 button toggle al posto di checkbox: il button attivo
+                             ha .fm-version-btn--active. Mutex via JS click handler. -->
+                        <div class="fm-scelte-versioni" role="group" aria-label="Versione scelte">
+                            <button type="button" class="fm-version-btn fm-version-btn--active" data-version="v1" title="salva/carica Versione 1">v1</button>
+                            <button type="button" class="fm-version-btn" data-version="v2" title="salva/carica Versione 2">v2</button>
+                            <button type="button" class="fm-version-btn" data-version="v3" title="salva/carica Versione 3">v3</button>
+                        </div>
+                        <!-- G20.7 — Random selection: toggle (🎲) attiva i 2 input
+                             per problem (N esercizi + Tot punti); pulsante (🎯)
+                             esegue la selezione random rispettando titolo_quesito
+                             distinct e checkboxA/B selezionati. -->
+                        <button type="button" id="fm-random-toggle" class="fm-rand-toggle" title="Modalita' selezione random: mostra input N+Pt per ogni problem" aria-pressed="false">🎲</button>
+                        <button type="button" id="fm-random-pick" class="fm-rand-pick" title="Esegui selezione random sui problem con A/R selezionato">🎯</button>
+                        <!-- verTitlePrefix + verTitle iniettati in .fm-titolo.fm-related-header
+                             da topbar-modern.js relocateVerTitleHeader() (G20.7-update).
+                             PDF-Import: il pulsante .fm-pdfimport-launch è INIETTATO via
+                             JS in relocateVerTitle() (ui-comp re-clona il template). -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ================================================================================= -->
+    <div class="fm-add-del-col">
+        <input type="checkbox" class="fm-insertcheckbox-col">
+        <button class="AddColL fm-add-btn-tables">+</button>
+        <button class="delColX fm-del-btn-tables">X</button>
+        <button class="AddColR fm-add-btn-tables">+</button>
+    </div>
+
+    <div class="Add-Row">
+        <button class="AddRowU fm-add-btn-tables">+</button>
+        <button class="AddRowD fm-add-btn-tables">+</button>
+    </div>
+    <div class="fm-check-del-row">
+        <input type="checkbox" class="fm-insertcheckbox-row">
+        <button class="delRowX fm-del-btn-tables">X</button>
+    </div>
+
+</body>
+
+</html>
+
+<!-- ================================================================================= -->
+<!-- ================================================================================= -->
+
+<div class="control-panel">
+    <div class="control-panel-header" data-fmr="togglecp">
+        <div class="control-panel-title">
+            Gestione di TUTTE le mappe<span id="control-panel-info" class="fm-text-xs fm-text-muted fm-ml-1 fm-cursor-help">ℹ️</span>
+            <div id="control-panel-tooltip" class="fm-tooltip">
+                <p class="fm-text-xs fm-text-white fm-m-0 fm-h-60">
+                    Questi pulsanti utilizzano Google Apps Script per gestire le mappe.<br>
+                    La parola 'TUTTE' fa riferimento a tutte le mappe di tutte le classi del sistema.
+                </p>
+            </div>
+        </div>
+        <span class="control-panel-toggle">▼</span>
+    </div>
+    <div class="control-panel-content">
+        <div class="btn-grid">
+            <button class="btn-syncG" data-fmr="gas" data-arg="sync">
+                🔄Sync All
+            </button>
+            <button class="btn-syncG btn-danger" data-fmr="gas" data-arg="clearMaps">
+                🧹Clean Maps
+            </button>
+            <button class="btn-syncG btn-info" data-fmr="gas" data-arg="status">
+                📊System Status
+            </button>
+            <button class="btn-syncG btn-warning" data-fmr="gas" data-arg="backup">
+                💾 Backup
+            </button>
+            <button class="btn-syncG btn-danger" data-fmr="gas" data-arg="reset">
+                ⚡ Reset System
+            </button>
+            <button class="btn-syncG btn-danger" data-fmr="gas" data-arg="reset">
+                ⚡ Reset System
+            </button>
+        </div>
+        <div id="result-system" class="result">
+            <div class="debug-info fm-text-11 fm-text-muted fm-mt-1" >
+                <span class="debug-timestamp"></span>
+                <span class="debug-params"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="control-panel-class">
+    <div class="btn-grid-panel">
+        <button class="btn-syncG-class" data-fmr="gas" data-arg="sync-class">🔄Sync All</button>
+        <button class="btn-syncG-class btn-stop-sync" data-fmr="gas-stop" disabled>⏹ Stop</button>
+        <button class="btn-syncG-class btn-close-panel" data-fmr="gas-close">✕ Chiudi</button>
+        <button class="btn-syncG-class btn-danger" data-fmr="gas" data-arg="clearMaps-class">🧹Clean</button>
+    </div>
+    <div id="result-class" class="result">
+        <div class="debug-info fm-text-11 fm-text-muted fm-mt-1" >
+            <span class="debug-timestamp"></span>
+            <span class="debug-params"></span>
+        </div>
+    </div>
+</div>

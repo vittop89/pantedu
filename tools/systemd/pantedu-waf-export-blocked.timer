@@ -1,0 +1,12 @@
+[Unit]
+Description=pantedu — Export waf_logs blocked entries timer (1 min)
+
+[Timer]
+# Every minute (after boot+1min, then every minute)
+OnBootSec=1min
+OnUnitActiveSec=1min
+AccuracySec=10s
+Unit=pantedu-waf-export-blocked.service
+
+[Install]
+WantedBy=timers.target

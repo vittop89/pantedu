@@ -1,0 +1,48 @@
+/* ============================================================ */
+/* main.css — single entry point CSS modulare (Phase Roadmap 2). */
+/*                                                                */
+/* Architettura ITCSS-inspired con CSS @layer (cascade esplicito) */
+/*                                                                */
+/*   settings  → tokens (design system primitives)                */
+/*   generic   → a11y baseline (skip link, sr-only, focus)        */
+/*   elements  → bare HTML defaults (html, body, p, a…)           */
+/*   objects   → layout primitives (grid, container)              */
+/*   components→ BEM modules (.fm-card, .fm-btn, .fm-modal…)      */
+/*   utilities → single-purpose helpers (.fm-mt-2, .fm-flex…)     */
+/*   overrides → legacy monoliti (deprecazione progressiva)       */
+/*                                                                */
+/* Browser support 2026 baseline:                                 */
+/*   - Chrome 99+, FF 97+, Safari 15.4+ → 97.4% globalreach       */
+/*   - Fallback graceful: senza @layer le regole comunque         */
+/*     applicano (cascade naturale) — solo specificità diversa.   */
+/*                                                                */
+/* Usage:                                                         */
+/*   <link rel="stylesheet" href="/css/main.css">                 */
+/* ============================================================ */
+
+@layer settings, generic, elements, objects, components, utilities, overrides;
+
+/* settings — design tokens */
+@import url('/css/tokens.css')        layer(settings);
+
+/* generic — a11y baseline, reset minimal */
+@import url('/css/a11y.css')          layer(generic);
+
+/* elements — type selectors only */
+@import url('/css/elements.css')      layer(elements);
+
+/* components — BEM modules via components.css aggregator */
+@import url('/css/components.css')    layer(components);
+
+/* utilities — atomic single-purpose */
+@import url('/css/utilities.css')     layer(utilities);
+
+/* overrides — LEGACY monoliti, deprecazione progressiva.
+   Posizionati nell'ultimo layer cosi' che CONTINUINO a vincere
+   sulle regole modulari durante la migration. Quando una view è
+   completamente migrata BEM, rimuovere selettori legacy dal file
+   sorgente (vedi roadmap-plan.md Phase 5). */
+@import url('/css/shell.css')                     layer(overrides);
+/* Sprint F 2026-05-24 — shell.css content esteso in modulo */
+@import url('/css/modules/_shell-legacy.css')     layer(overrides);
+@import url('/css/risdoc-tokens.css')             layer(overrides);

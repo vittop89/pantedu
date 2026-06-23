@@ -1,0 +1,51 @@
+[
+    {
+        "titolo": "Aritmetica e algebra",
+        "contenuti": [
+            { "label": "Apprendere a fattorizzare semplici polinomi.", "checked": true },
+            { "label": "Eseguire semplici casi di divisione con resto fra due polinomi.", "checked": true },
+            { "label": "Approfondire l’analogia della divisione tra polinomi con la divisione fra numeri interi.", "checked": true },
+            { "label": "Apprendere gli contenuti dell’algebra dei vettori (somma, moltiplicazione per scalare e prodotto scalare).", "checked": true },
+            { "label": "Comprendere il ruolo fondamentale dei vettori nella fisica.", "checked": true },
+            { "label": "Approfondire la conoscenza dei numeri reali (con riguardo ai numeri trascendenti) attraverso lo studio della circonferenza, del cerchio, del numero π, e di contesti con crescite esponenziali e il numero e.", "checked": true },
+            { "label": "Introdursi alla problematica dell’infinito matematico e delle sue connessioni con il pensiero filosofico attraverso la formalizzazione dei numeri reali.", "checked": false },
+            { "label": "Acquisire i primi contenuti del calcolo approssimato, sia dal punto di vista teorico sia mediante l’uso di strumenti di calcolo.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Relazioni e funzioni",
+        "contenuti": [
+            { "label": "Apprendere lo studio delle funzioni quadratiche.", "checked": true },
+            { "label": "Risolvere equazioni e disequazioni di secondo grado.", "checked": true },
+            { "label": "Rappresentare e risolvere problemi utilizzando equazioni di secondo grado.", "checked": true },
+            { "label": "Studiare le funzioni elementari dell’analisi e i loro grafici (polinomiali, razionali, circolari, esponenziale e logaritmo).", "checked": true },
+            { "label": "Apprendere a costruire semplici modelli di crescita o decrescita esponenziale, nonché di andamenti periodici (contesto discreto e continuo), anche in rapporto con altre discipline.", "checked": true },
+            { "label": "Risolvere equazioni e disequazioni con funzioni elementari limitatamente a casi semplici e significativi.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Geometria",
+        "contenuti": [
+            { "label": "Studiare le sezioni coniche sia da un punto di vista geometrico sintetico che analitico.", "checked": false },
+            { "label": "Approfondire la comprensione della specificità dei due approcci (sintetico e analitico) allo studio della geometria.", "checked": false },
+            { "label": "Studiare le proprietà della circonferenza e del cerchio e il problema della determinazione dell'area del cerchio.", "checked": false },
+            { "label": "Apprendere le definizioni, le proprietà e le relazioni elementari delle funzioni circolari.", "checked": true },
+            { "label": "Apprendere i teoremi che permettono la risoluzione dei triangoli e il loro uso nell’ambito di altre discipline (in particolare nella fisica).", "checked": false },
+            { "label": "Studiare alcuni esempi significativi di luogo geometrico.", "checked": false },
+            { "label": "Studiare e saper applicare i teoremi che permettono la risoluzione dei triangoli.", "checked": false },
+            { "label": "Affrontare l’estensione allo spazio di alcuni temi e tecniche della geometria piana, anche per sviluppare l’intuizione geometrica.", "checked": false },
+            { "label": "Studiare le posizioni reciproche di rette e piani nello spazio, il parallelismo e la perpendicolarità.", "checked": false },
+            { "label": "Apprendere i fondamenti matematici della prospettiva.", "checked": false },
+            { "label": "Approfondire le relazioni tra le conoscenze acquisite in ambito geometrico e le problematiche di rappresentazione figurativa e artistica.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Dati e previsioni",
+        "contenuti": [
+            { "label": "Saper far uso delle distribuzioni doppie condizionate e marginali.", "checked": false },
+            { "label": "Saper far uso dei concetti di deviazione standard, dipendenza, correlazione e regressione.", "checked": false },
+            { "label": "Saper far uso del concetto di campione (in semplici situazioni, con dati raccolti dagli studenti e in collegamento con altre discipline).", "checked": false },
+            { "label": "Approfondire il concetto di modello matematico in relazione con le nuove conoscenze acquisite.", "checked": false }
+        ]
+    }
+]

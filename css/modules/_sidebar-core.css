@@ -1,0 +1,393 @@
+/* ============================================================ */
+/* Sidebar Core — Phase Roadmap Sprint 43.                        */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (352 LOC). Visual byte-equivalent.*/
+/* Sidebar core legacy: .fm-switch toggle bar + .sidebar fixed +     */
+/* .sel-wrapper triplet + .fm-sb-scroll + .fm-sb-sec colored      */
+/* section buttons + #fm-sp-* sidepage panels + .frame iframe +   */
+/* #header + slide-right animation.                               */
+/*                                                                */
+/* NB: parallel BEM implementation in _sidebar.css (token-based). */
+/* Queste regole legacy restano per back-compat con view legacy   */
+/* (vedi docs/plans/css-refactor-residue-todo.md TODO #2).         */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - .fm-switch (purple top bar 34px) + .fm-sb-close + .fm-sb-slider*/
+/*   - #IObar (hidden)                                             */
+/*   - .sidebar (fixed left 280px, blue powderblue)                */
+/*   - body.fm-sidebar-closed .fm-switch/.fm-sb-close/.sidebar (collapsed)*/
+/*   - .sel-wrapper (blueviolet triplet container)                 */
+/*   - .fm-sb-lab + .fm-sb-sel + .sel-wrapper > br hide            */
+/*   - .fm-sb-scroll + ::-webkit-scrollbar custom + #fm-sb-scroll  */
+/*   - .fm-sb-sec (sticky colored section buttons)                 */
+/*   - .fm-sb-sec[data-sidepage="mappe|lab|eser|verif|bes|risdoc"] */
+/*     (sticky top:0/30/60/90/120/150 + tokenized colors)          */
+/*   - .btn-esactive (inset) + .fm-sb-sec.active                   */
+/*   - .fm-sb-sec:hover (per-sidepage hover variant)               */
+/*   - .fm-sb-tip + #control-panel-tooltip (positioned tooltips)   */
+/*   - .fm-sb-panel (hidden by default)                            */
+/*   - #fm-sp-mappe/lab/eser/verif/bes/risdoc (panel z-index/bg)   */
+/*   - .frame + iframe + warning-message + .icon.danger/info::before*/
+/*   - #header (sidebar header 20px absolute)                      */
+/*   - div.slide-right p + @keyframes slide-right                  */
+/* ============================================================ */
+
+/* ========SLIDER CHIUDI============= */
+.fm-switch {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--widthLsidebar);
+    height: 34px;
+    background-color: rgb(92, 94, 236);
+    cursor: pointer;
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    transition: width .3s ease;
+}
+.fm-sb-close {
+    overflow: hidden;
+    text-align: center;
+    font-size: 1.25rem;
+    color: white;
+    cursor: pointer;
+    margin-left: auto;
+    width: 68px;
+    opacity: 1;
+    transition: width .3s ease, opacity .3s ease;
+}
+.fm-sb-slider {
+    cursor: pointer;
+    text-align: center;
+    height: 26px;
+    width: 26px;
+    background-color: white;
+    margin-left: auto;
+    margin-right: 5px;
+    flex-shrink: 0; /* Non si restringe */
+}
+#IObar{
+    display: none;
+}
+/* ========FINE SLIDER CHIUDI============= */
+/* @deprecated Phase C.4 — vedi css/modules/_sidebar.css per la nuova
+   implementazione .fm-sidebar token-based BEM. La classe .sidebar
+   continua a funzionare per back-compat con i view legacy. Roadmap
+   migration view-by-view in docs/plans/css-refactor-residue-todo.md
+   sezione "TODO #2 sidebar BEM". */
+.sidebar {
+    background: rgb(176, 222, 252);
+    height: calc(100vh - 34px);
+    width: var(--widthLsidebar);
+    position: fixed;
+    top: 34px;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 1;
+    transition: width .3s ease, opacity .3s ease;
+}
+/* Stato chiuso: CSS-driven, no JS animations */
+body.fm-sidebar-closed .fm-switch { width: 34px; }
+body.fm-sidebar-closed .fm-sb-close { width: 0; opacity: 0; }
+body.fm-sidebar-closed .sidebar { width: 0; opacity: 0; pointer-events: none; }
+/* ======== SELETTORI ============= */
+.sel-wrapper {
+    /* Rimuovi position: fixed; top: 20px; */
+    /* margin: 34px 0 0 0; <-- Rimuovi o adatta se la spaziatura è ancora necessaria */
+    width: 100%; /* Precedentemente var(--widthLsidebar) */
+    background-color: blueviolet;
+    /* display: block; <-- Rimuovi se non necessario, div è block di default */
+    flex-shrink: 0; /* Non si restringe */
+    /* Gli stili per .sel-lab e .sel possono rimanere simili,
+       ma position: fixed al loro interno andrà rimosso se erano relativi
+       alla viewport. Dovranno essere posizionati rispetto a .sel-wrapper */
+    padding: 13px 0; /* Esempio per ricreare il padding verticale */
+    box-sizing: border-box;
+}
+/* `.fm-sb-lab` — sidebar label per il triplet Indirizzo/Classe/Materia. */
+.fm-sb-lab {
+    width: 80px;
+    text-align: right;
+    color: white;
+    display: inline-block; /* Per allineamento con select */
+    margin-right: 5px;
+    vertical-align: middle;
+}
+/* `.fm-sb-sel` — sidebar <select> del triplet iis/cls/mater. Non
+ * confondere con `.sel-iis`/`.sel-cls`/`.sel-mater` (ID coupled al
+ * curriculum JS) né con `.sel-wrapper` / `.sel-session-banner` /
+ * `.sel-action-link` (mantenuti, scope diverso). */
+.fm-sb-sel {
+    width: var(--widthSelector);
+    vertical-align: middle;
+    margin-bottom: 5px;
+}
+/* Potresti aver bisogno di un wrapper per ogni coppia label+select per gestire meglio il layout */
+.sel-wrapper > br { display: none; } /* Nascondi i <br> se riorganizzi il layout interno */
+/* ========FINE SELETTORI============= */
+/* ======== SCROLLBAR (sidebar) =============
+ * `.fm-sb-scroll` — contenitore dei button sezione (Mappe/Lab/Eser/
+ * Verif/BES/RisDoc) e dei pannelli `.fm-sb-panel`. */
+.fm-sb-scroll {
+    width: 100%;
+    flex-grow: 1; /* OCCUPA LO SPAZIO VERTICALE RIMANENTE */
+    min-height: 0; /* Necessario per il corretto funzionamento di flex-grow con overflow */
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer e Edge */
+}
+
+/* Nascondi la scrollbar in WebKit (Chrome, Safari, Edge Chromium) */
+.fm-sb-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.fm-sb-scroll:hover {
+    overflow-y: auto;
+}
+
+/* Webkit scrollbar custom styling del contenitore #fm-sb-scroll. */
+#fm-sb-scroll::-webkit-scrollbar-track {
+    border-radius: 2px;
+}
+#fm-sb-scroll::-webkit-scrollbar {
+    width: 5px;
+    background-color: #F7F7F7;
+}
+#fm-sb-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #BFBFBF;
+}
+/* ======== FINE SCROLLBAR ============= */
+/* ======== BOTTONI =============
+ * `.fm-sb-sec` — button sezione sidebar (Mappe/Lab/Eser/Verif/BES/
+ * RisDoc). Lookup/colore per `[data-sidepage="<key>"]`. */
+.fm-sb-sec {
+    position: sticky;
+    /* Phase 24.73 — offset sticky e margine basati sull'INDICE DI RENDER
+       (--sb-i, iniettato inline in sidebar.php), non più hardcoded per chiave:
+       così disattivare/riordinare le sezioni non sfalsa più la spaziatura. */
+    top: calc(var(--sb-i, 0) * 30px);
+    margin: 0;
+    width: var(--widthLsidebar);
+    padding-right: 10px;
+    border-style: outset;
+    cursor: pointer;
+    z-index: 17;
+}
+
+/* Ogni button preceduto da un panel (cioè ogni sezione tranne la prima, a
+   prescindere dalla chiave/ordine) ha 10px di stacco dal precedente. */
+.fm-sb-panel ~ .fm-sb-sec {
+    margin-top: 10px;
+}
+
+/* Phase D.x TODO #4 — colori tokenizzati. Vedi tokens.css --fm-c-sec-*. */
+/* 2026-05-24 fix: top values devono avere unità (px). Senza unità il browser
+ * ignora la proprietà → position:sticky NON sticka per i pulsanti lab/eser/
+ * verif/bes/risdoc (solo mappe con top:0 funzionava). Bug legacy preservato
+ * verbatim Sprint 43 extraction. */
+/* Phase 24.73 — `top:` per-chiave rimossi: l'offset sticky ora è --sb-i
+   (indice di render). Qui restano SOLO i colori per chiave. */
+.fm-sb-sec[data-sidepage="mappe"] {
+    border-color: var(--fm-c-sec-mappe);
+    background: var(--fm-c-sec-mappe);
+}
+.fm-sb-sec[data-sidepage="lab"] {
+    border-color: var(--fm-c-sec-lab);
+    background-color: var(--fm-c-sec-lab);
+}
+.fm-sb-sec[data-sidepage="eser"] {
+    border-color: var(--fm-c-sec-eser);
+    background-color: var(--fm-c-sec-eser);
+}
+.fm-sb-sec[data-sidepage="verif"] {
+    border-color: var(--fm-c-sec-verif-border);
+    background-color: var(--fm-c-sec-verif);
+}
+.fm-sb-sec[data-sidepage="bes"] {
+    border-color: var(--fm-c-sec-bes);
+    background-color: var(--fm-c-sec-bes);
+}
+.fm-sb-sec[data-sidepage="risdoc"] {
+    border-color: var(--fm-c-sec-risdoc-border);
+    background-color: var(--fm-c-sec-risdoc);
+}
+/* Regole legacy .btn-es / .btn-esAct / .btn-esCopy (position:absolute)
+   rimosse: applicavano absolute+right:0 ai pulsanti upbar (ATTIVA/
+   GENERA-VER/COPIA-ESER), estraendoli dal flex flow di .wrapbtn-es2 e
+   sovrapponendoli a destra dell'upbar. Le regole corrette per upbar
+   vivono in layout_es.css (scope body.exercise-context). I pulsanti
+   sidebar usano selettori .btn-es_sidebar / .btn-esAct_sidebar
+   definiti più sotto. */
+.btn-esactive {
+    border-style: inset;
+}
+.fm-sb-sec[data-sidepage="mappe"]:hover {
+    background-color: var(--fm-c-sec-mappe-hover);
+}
+.fm-sb-sec[data-sidepage="lab"]:hover {
+    background-color: var(--fm-c-sec-lab-hover);
+}
+.fm-sb-sec[data-sidepage="eser"]:hover {
+    background-color: var(--fm-c-sec-eser-hover);
+}
+.fm-sb-sec[data-sidepage="bes"]:hover {
+    background-color: var(--fm-c-sec-bes-hover);
+}
+.fm-sb-sec[data-sidepage="risdoc"]:hover {
+    background-color: var(--fm-c-sec-risdoc-hover);
+}
+.fm-sb-sec.active {
+    border-style: inset;
+}
+/* Sidebar tooltip — hint "ATTIVA" sotto i select. */
+.fm-sb-tip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    margin: 0px;
+    border-radius: 3px;
+    display: none;
+    z-index: 1000;
+    width: 200px;
+    height: 45px;
+    word-wrap: break-word;
+}
+#control-panel-tooltip {
+    height: 58px;
+    width: 222px;
+    position: absolute;
+    left: 33px;
+    top: 224px;
+    z-index: 1000;
+    padding: 10px;
+    display: none;
+}
+/* ========FINE BOTTONI============= */
+/* ======== CONTENUTI BOTTONI ==========
+ * `.fm-sb-panel` — pannello contenuto della sezione sotto ogni button.
+ * ID: `#fm-sp-<key>` con `data-sidepage="<key>"` coerente col button. */
+.fm-sb-panel {
+    display: none;
+}
+#fm-sp-mappe {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 16;
+    background-color: rgb(185, 215, 185);
+}
+#fm-sp-lab {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 14;
+    background-color: rgb(169, 169, 241);
+}
+#fm-sp-eser {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 12;
+    background-color: rgb(238, 233, 201);
+}
+#fm-sp-verif {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 10;
+    background-color: rgb(255, 203, 88);
+}
+#fm-sp-bes {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 8;
+    background-color: rgb(237, 172, 168);
+}
+#fm-sp-risdoc {
+    padding: 9px 0;
+    position: relative;
+    top: 0;
+    z-index: 6;
+    background-color: rgb(243, 138, 224);
+}
+/* .hiding-panel / #hiding-panel-[0-4] rimossi in Phase 6 cleanup:
+   mascheravano i pulsanti di sidebar sottostanti ed erano inutili. */
+/* ======== FINE CONTENUTI BOTTONI ========== */
+/* ======== IFRAME ============= */
+.frame {
+    /* overflow: hidden; */
+    background-color: #000;
+    height: 100%;
+        align-content: center;
+}
+iframe {
+    height: 100vh;
+    background: #ccc;;
+    min-width: 100%;
+}
+.frame div.warning-message#iframe-specific-warning {
+    color: #FFFFFF; /* Testo bianco per contrasto con lo sfondo nero del .frame */
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.1em;
+    padding: 15px;
+    margin: 0; /* Rimuove margini del paragrafo per un miglior controllo del flex centering */
+    background-color: brown;
+}
+.frame div.warning-message#iframe-specific-warning .icon {
+    font-size: 10em; /* Dimensione dell'icona */
+    margin-right: 10px;
+    /* L'icona specifica (es. Unicode o FontAwesome) verrà aggiunta via JS */
+}
+.frame div.warning-message#iframe-specific-warning .icon.danger::before {
+    content: "⚠️"; /* Icona di pericolo Unicode */
+    color: #ffc107; /* Giallo ambra */
+}
+.frame div.warning-message#iframe-specific-warning .icon.info::before {
+    content: "ℹ️"; /* Icona info Unicode */
+    color: #17a2b8; /* Ciano */
+}
+/* ======== FINE IFRAME ============= */
+#header {
+    width: var(--widthLsidebar);
+    height: 20px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid #000;
+    background: #F1EFE2;
+    justify-content: center;
+    align-items: top;
+    z-index: 10;
+}
+div.slide-right p {
+    /* -moz-animation: 15s slide-right;
+  -webkit-animation: 15s slide-right;
+  -o-animation: 15s slide-right; */
+    animation: 15s slide-right;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    /* margin:0; */
+}
+@keyframes slide-right {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+    to {
+        margin-left: -280%;
+        width: 300%;
+    }
+}

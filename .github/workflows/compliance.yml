@@ -1,0 +1,58 @@
+# Compliance / sicurezza per la pubblicazione open-source (Developers Italia).
+# Gate: secret scanning (gitleaks), conformità REUSE/SPDX, validità publiccode.yml.
+# Gira su main (push + PR) e on-demand. Indipendente da ci.yml (che è su master).
+
+name: Compliance (publication readiness)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Secret scanning (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # storia completa per lo scan
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  reuse-lint:
+    name: REUSE / SPDX compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: fsfe/reuse-action@v5
+
+  publiccode:
+    name: publiccode.yml validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate publiccode.yml (YAML + campi obbligatori)
+        run: |
+          python3 - <<'PY'
+          import sys, yaml
+          with open("publiccode.yml", encoding="utf-8") as f:
+              d = yaml.safe_load(f)
+          required = ["publiccodeYmlVersion", "name", "url", "softwareType",
+                      "platforms", "categories", "developmentStatus",
+                      "description", "legal", "maintenance"]
+          missing = [k for k in required if k not in d]
+          assert not missing, f"Campi obbligatori mancanti: {missing}"
+          assert d.get("legal", {}).get("license"), "legal.license mancante"
+          desc = d.get("description", {})
+          assert any(("shortDescription" in v) for v in desc.values()), "shortDescription mancante"
+          print("publiccode.yml valido — versione", d["publiccodeYmlVersion"],
+                "licenza", d["legal"]["license"])
+          PY

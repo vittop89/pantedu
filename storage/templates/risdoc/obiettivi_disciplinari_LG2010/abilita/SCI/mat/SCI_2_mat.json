@@ -1,0 +1,39 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Sviluppare la capacità di calcolo (mentale, con carta e penna, mediante strumenti) con i numeri interi e razionali.",
+        "checked": true
+      },
+      {
+        "label": "Eseguire calcoli con le espressioni letterali per rappresentare un problema (mediante un'equazione, disequazioni o sistemi) e risolverlo.",
+        "checked": true
+      },
+      {
+        "label": "Riconoscere le principali proprietà invarianti delle trasformazioni geometriche.",
+        "checked": true
+      },
+      {
+        "label": "Risolvere equazioni di primo e secondo grado, le disequazioni associate e i sistemi di equazioni lineari in due incognite, utilizzando le tecniche grafiche e algebriche.",
+        "checked": true
+      },
+      {
+        "label": "Rappresentare e analizzare in diversi modi un insieme di dati, scegliendo le rappresentazioni più idonee; distinguere tra caratteri qualitativi e quantitativi e operare con distribuzioni di frequenze.",
+        "checked": true
+      },
+      {
+        "label": "Ricavare semplici inferenze dai diagrammi statistici.",
+        "checked": true
+      },
+      {
+        "label": "Utilizzare gli strumenti informatici per rappresentare e manipolare oggetti matematici e per la rappresentazione di dati.",
+        "checked": true
+      },
+      {
+        "label": "Implementare un algoritmo in pseudo-codice o in un linguaggio di programmazione.",
+        "checked": true
+      }
+    ]
+  }
+]

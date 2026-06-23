@@ -1,0 +1,124 @@
+/* ============================================================ */
+/* Content Layout — Phase Roadmap Sprint 41.                      */
+/*                                                                */
+/* Estratto VERBATIM da layout.css (79 LOC). Visual byte-equivalent.*/
+/* Sidebar-aware content layout: margin-left/margin-top dinamici  */
+/* per #fm-content / .fm-pagestyle / body > main basati su body state*/
+/* classes (fm-sidebar-closed, fm-has-upbar, fm-topbar-active,    */
+/* fm-no-edit, fm-embed).                                         */
+/*                                                                */
+/* Coverage:                                                       */
+/*   - #fm-content/.fm-pagestyle/body>main base layout (margin-left  */
+/*     var(--widthLsidebar), transition .3s, box-sizing)           */
+/*   - body.fm-has-upbar: margin-top 34px                          */
+/*   - body.fm-no-edit: margin-top 0 (no upbar studente/guest)     */
+/*   - body.fm-no-edit #header_page: margin-top 0                  */
+/*   - body.fm-topbar-active.fm-has-upbar: padding-top 0           */
+/*     + content margin-top 0 (modern topbar mode)                 */
+/*   - body.fm-sidebar-closed: content margin-left 34px            */
+/*   - body.fm-embed: margin 0 (iframe embed mode no sidebar)      */
+/*   - .fm-external-iframe (100% width, 100vh-34px height)         */
+/* ============================================================ */
+
+/* ==== Sidebar-aware content layout ==== */
+/* Pagine con sidebar aperta lasciano a sinistra --widthLsidebar.
+   Sidebar chiusa (body.fm-sidebar-closed) → solo 34px per il toggle ☰.
+   Transition smooth accompagna l'animazione sidebar.
+
+   Phase 21 — margin-top 0 di default (pagine senza upbar: mappe, risdoc,
+   bes, home). Scoped override `body.fm-has-upbar` aggiunge i 34px di
+   toggle-bar SOLO per le pagine esercizio/verifica. */
+#fm-content,
+main#fm-content,
+.fm-pagestyle,
+body > main {
+    margin-left: var(--widthLsidebar);
+    margin-top: 0;
+    min-height: 100vh;
+    transition: margin-left .3s ease;
+    box-sizing: border-box;
+}
+body.fm-has-upbar #fm-content,
+body.fm-has-upbar main#fm-content,
+body.fm-has-upbar .fm-pagestyle,
+body.fm-has-upbar > main {
+    margin-top: 34px;
+    min-height: calc(100vh - 34px);
+}
+/* Phase 25.Q.13 — studente/guest: nessuna upbar legacy renderizzata
+ * (vedi _upbar_loader.php skip per non-edit). #fm-content sale subito
+ * sotto la sidebar; rimuovi margin-top residuo. */
+body.fm-no-edit #fm-content,
+body.fm-no-edit main#fm-content,
+body.fm-no-edit .fm-pagestyle,
+body.fm-no-edit > main {
+    margin-top: 0 !important;
+    min-height: 100vh;
+}
+/* Phase 25.Q.13 — solo studente/guest (no upbar renderizzata): azzera
+ * margin-top di #header_page perché manca tutto il chrome superiore.
+ * Teacher/admin mantengono margin-top: 34px per dare aria al
+ * #header_page rispetto alla zona --eser sticky sopra. */
+body.fm-no-edit #header_page {
+    margin-top: 0;
+}
+/* G9.12 — quando topbar moderna e' attiva, la upbar legacy e' nascosta
+ * (display:none) e la .fm-topbar e' position:sticky top:0. I padding/
+ * margin riservati per la upbar legacy non servono piu' → 0. */
+body.fm-topbar-active.fm-has-upbar {
+    padding-top: 0 !important;
+}
+body.fm-topbar-active.fm-has-upbar #fm-content,
+body.fm-topbar-active.fm-has-upbar main#fm-content,
+body.fm-topbar-active.fm-has-upbar .fm-pagestyle,
+body.fm-topbar-active.fm-has-upbar > main {
+    margin-top: 0 !important;
+    min-height: 100vh;
+}
+body.fm-sidebar-closed #fm-content,
+body.fm-sidebar-closed main#fm-content,
+body.fm-sidebar-closed .fm-pagestyle,
+body.fm-sidebar-closed > main {
+    margin-left: 34px;
+}
+/* G20.7 — modalita' embed (iframe ?embed=1): la sidebar non e' renderizzata,
+ * quindi azzera il margin-left riservato allo spazio sidebar. Vale anche
+ * per il toggle ☰ (34px) di body.fm-sidebar-closed. */
+body.fm-embed #fm-content,
+body.fm-embed main#fm-content,
+body.fm-embed .fm-pagestyle,
+body.fm-embed > main {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* /admin (body.fm-area-admin) — il contenuto admin occupa tutta la larghezza:
+ * niente offset sidebar (override sia dello stato aperto che fm-sidebar-closed).
+ * Posizionato dopo gli override sopra per vincere a parità di specificità. */
+body.fm-area-admin #fm-content,
+body.fm-area-admin main#fm-content,
+body.fm-area-admin .fm-pagestyle,
+body.fm-area-admin > main {
+    margin-left: 0;
+}
+
+/* layout/shell.php — layout SENZA sidebar (admin monitoring/waf/tools/
+ * dashboard, auth, error). Rende `<main id="fm-content">` ma non c'è nessuna
+ * sidebar: il `margin-left: var(--widthLsidebar)` base lasciava un offset
+ * fantasma di 280px (contenuto spostato a destra e più stretto). Le pagine
+ * shell che non passano bodyClass=fm-area-admin (es. AdminMonitoringController)
+ * ne erano affette. body.fm-shell NON ha mai sidebar → azzera sempre. */
+body.fm-shell #fm-content,
+body.fm-shell main#fm-content,
+body.fm-shell .fm-pagestyle,
+body.fm-shell > main {
+    margin-left: 0;
+}
+
+.fm-external-iframe {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 34px);
+    border: 0;
+    background: var(--fm-c-surface);
+}

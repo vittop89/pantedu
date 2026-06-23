@@ -1,0 +1,47 @@
+/* ============================================================ */
+/* Topbar — Phase C.4 modular component.                          */
+/* Header bar con titolo pagina + actions (typically a destra).   */
+/* WCAG 1.3.1: usa <header> o role="banner" come container        */
+/* a livello layout/page, NON sul .fm-topbar dentro la card.      */
+/* ============================================================ */
+
+.fm-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fm-space-4);
+    margin-bottom: var(--fm-space-6);
+    padding-bottom: var(--fm-space-3);
+    border-bottom: 1px solid var(--fm-c-border);
+    flex-wrap: wrap;
+}
+
+.fm-topbar h1 {
+    margin: 0;
+    font-size: var(--fm-fs-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    color: var(--fm-c-text);
+}
+
+.fm-tb-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-2);
+    flex-wrap: wrap;
+}
+
+/* Responsive: stack su mobile */
+@media (max-width: 640px) {
+    .fm-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .fm-topbar h1 {
+        font-size: var(--fm-fs-md);
+    }
+    .fm-tb-actions {
+        justify-content: flex-start;
+    }
+}

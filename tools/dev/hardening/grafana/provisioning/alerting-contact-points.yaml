@@ -1,0 +1,29 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: email-vittop89
+    receivers:
+      - uid: email-vittop89
+        type: email
+        settings:
+          addresses: info@pantedu.eu
+          subject: '[pantedu {{ .Status }}] {{ .CommonLabels.alertname }}'
+          message: |
+            {{ range .Alerts }}
+            🚨 ALERT: {{ .Labels.alertname }}
+            Severity: {{ .Labels.severity }}
+            Status: {{ .Status }}
+            Started: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            Summary: {{ .Annotations.summary }}
+            Description: {{ .Annotations.description }}
+            ----
+            {{ end }}
+            Dashboard: http://127.0.0.1:3000 (via SSH -L 3000:127.0.0.1:3000)
+
+policies:
+  - orgId: 1
+    receiver: email-vittop89
+    group_by: [alertname]
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 4h

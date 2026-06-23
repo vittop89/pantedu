@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <title>fm-risdoc-pt-editor — demo Phase 22.3b</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/risdoc-tokens.css">
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 2em; background: #f5f7fa; }
+        h1 { color: #333; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; max-width: 1400px; }
+        .panel {
+            background: #fff; border: 1px solid #e5e5e5; border-radius: 6px;
+            padding: 1em; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+        }
+        .panel h2 { margin: 0 0 0.8em; font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        pre {
+            background: #1e293b; color: #e2e8f0;
+            padding: 1em; border-radius: 4px; overflow: auto;
+            font-size: 12px; line-height: 1.5; max-height: 500px;
+        }
+        #preview-html {
+            padding: 1em; border: 1px dashed #ccc; border-radius: 4px;
+            background: #fafafa;
+        }
+        .bar {
+            display: flex; gap: 1em; align-items: center;
+            margin: 1em 0; padding: 0.8em; background: #fff;
+            border: 1px solid #e5e5e5; border-radius: 4px;
+        }
+        button {
+            padding: 6px 14px; background: #2a5ac7; color: #fff;
+            border: 0; border-radius: 3px; cursor: pointer;
+        }
+        button:hover { background: #1e40af; }
+    </style>
+</head>
+<body>
+    <h1>fm-risdoc-pt-editor — demo</h1>
+    <p>Phase 22.3b POC: editor Portable Text con Tiptap 3 + custom nodes
+       (fieldRef, checkboxGroup, rawTex) + round-trip PT↔PM.</p>
+
+    <div class="bar">
+        <button type="button" id="load-fixture">Carica fixture profilo_classe</button>
+        <button type="button" id="clear">Svuota</button>
+        <button type="button" id="refresh-preview">Refresh preview</button>
+    </div>
+
+    <div class="grid">
+        <div class="panel">
+            <h2>Editor (Rich mode)</h2>
+            <fm-risdoc-pt-editor
+                id="editor"
+                fields='["classe","sezione","anno_scolastico","materia","cognome"]'>
+            </fm-risdoc-pt-editor>
+        </div>
+        <div class="panel">
+            <h2>Live HTML preview (pt-to-html.js SSR-parity)</h2>
+            <div id="preview-html"></div>
+        </div>
+        <div class="panel">
+            <h2>PT AST (JSON)</h2>
+            <pre id="preview-pt"></pre>
+        </div>
+        <div class="panel">
+            <h2>Log eventi</h2>
+            <pre id="log"></pre>
+        </div>
+    </div>
+
+    <!-- Vite build bundle (generato da `npm run build`): risolve hash
+         dinamico via manifest .vite/manifest.json. -->
+    <script type="module">
+        const manifest = await fetch("/build/manifest.json").then((r) => r.json());
+        const entry = manifest["js/entries/risdoc-pt-editor.js"];
+        if (!entry) throw new Error("Bundle risdoc-pt-editor non trovato nel manifest. Esegui `npm run build`.");
+        await import(`/build/${entry.file}`);
+        // Entry espone helper su window.FM.Pt (Vite tree-shakes ES exports da
+        // entry chunks; window global è il canale robusto per consumer esterni).
+        const { ptToHtml } = window.FM.Pt;
+
+        const FIXTURE = [
+            {
+                _type: "block", style: "normal",
+                children: [
+                    { _type: "span", text: "Gli alunni della classe ", marks: [] },
+                    { _type: "fieldRef", name: "classe" },
+                    { _type: "span", text: " ", marks: [] },
+                    { _type: "fieldRef", name: "sezione" },
+                    { _type: "span", text: " adottano un comportamento", marks: [] },
+                ],
+            },
+            {
+                _type: "checkboxGroup",
+                items: [
+                    { state: "x", label: "corretto" },
+                    { state: "_", label: "adeguato" },
+                    { state: "_", label: "poco corretto non" },
+                ],
+            },
+            {
+                _type: "block", style: "normal",
+                children: [
+                    { _type: "span", text: "permettendo un ", marks: [] },
+                    { _type: "span", text: "regolare svolgimento", marks: ["strong"] },
+                    { _type: "span", text: " delle lezioni.", marks: [] },
+                ],
+            },
+        ];
+
+        const editor = document.getElementById("editor");
+        const previewHtml = document.getElementById("preview-html");
+        const previewPt = document.getElementById("preview-pt");
+        const log = document.getElementById("log");
+
+        function refresh(pt) {
+            previewPt.textContent = JSON.stringify(pt, null, 2);
+            previewHtml.innerHTML = ptToHtml(pt);
+        }
+
+        editor.addEventListener("pt-change", (ev) => {
+            const pt = ev.detail.value;
+            refresh(pt);
+            log.textContent = `[${new Date().toLocaleTimeString()}] pt-change ${pt.length} blocks\n` + log.textContent;
+        });
+
+        document.getElementById("load-fixture").addEventListener("click", () => {
+            editor.value = FIXTURE;
+            refresh(FIXTURE);
+        });
+        document.getElementById("clear").addEventListener("click", () => {
+            editor.value = [];
+            refresh([]);
+        });
+        document.getElementById("refresh-preview").addEventListener("click", () => {
+            refresh(editor.getPt());
+        });
+
+        // Prime caricamento con fixture
+        customElements.whenDefined("fm-risdoc-pt-editor").then(() => {
+            editor.value = FIXTURE;
+            refresh(FIXTURE);
+        });
+    </script>
+</body>
+</html>

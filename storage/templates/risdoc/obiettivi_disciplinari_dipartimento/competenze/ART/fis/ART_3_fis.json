@@ -1,0 +1,23 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Applicare il metodo scientifico-sperimentale per analizzare un fenomeno fisico, raccogliendo e interpretando dati quantitativi, valutandone l'incertezza e formalizzando le relazioni tra grandezze attraverso modelli matematici e grafici.",
+                "checked": false
+            },
+            {
+                "label": "Utilizzare il modello vettoriale per rappresentare e analizzare le forze e le loro interazioni, applicando i principi della statica per risolvere problemi di equilibrio di punti materiali e corpi rigidi in diversi contesti.",
+                "checked": false
+            },
+            {
+                "label": "Descrivere, analizzare e prevedere il moto di un corpo in una e due dimensioni, utilizzando le leggi orarie, i vettori e le rappresentazioni grafiche della cinematica per risolvere problemi.",
+                "checked": false
+            },
+            {
+                "label": "Applicare i principi fondamentali della meccanica (come forza, pressione, equilibrio) per interpretare e modellizzare il comportamento dei sistemi fisici in contesti differenti, dalla statica dei solidi a quella dei fluidi.",
+                "checked": false
+            }
+        ]
+    }
+]

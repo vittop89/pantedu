@@ -1,0 +1,8 @@
+/* ============================================================ */
+/* Estratto da js/modules/integrations/google-apps.js.            */
+/* ADR-023 Fase 2 — era iniettato/rimosso a runtime (edit-mode    */
+/* mappe). Ora statico sotto toggle class body.fm-mappe-edit;     */
+/* il JS aggiunge/rimuove la classe invece di un <style>.         */
+/* ============================================================ */
+
+body.fm-mappe-edit #fm-sp-mappe #MAT { margin-top: 42px; }
