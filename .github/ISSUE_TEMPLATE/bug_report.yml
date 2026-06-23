@@ -1,0 +1,94 @@
+name: 🐛 Segnalazione bug
+description: Segnala un malfunzionamento di Pantedu
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per aiutarci a migliorare Pantedu.
+        **Non segnalare qui vulnerabilità di sicurezza** — vedi [SECURITY.md](../../SECURITY.md)
+        e scrivi a security@pantedu.eu.
+
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione del bug
+      description: Una descrizione chiara e concisa di cosa non funziona.
+    validations:
+      required: true
+
+  - type: textarea
+    id: riproduzione
+    attributes:
+      label: Passi per riprodurre
+      description: Sequenza minima per riprodurre il problema.
+      placeholder: |
+        1. Vai su '...'
+        2. Clicca su '...'
+        3. Vedi l'errore
+    validations:
+      required: true
+
+  - type: textarea
+    id: atteso
+    attributes:
+      label: Comportamento atteso
+    validations:
+      required: true
+
+  - type: textarea
+    id: attuale
+    attributes:
+      label: Comportamento attuale
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area interessata
+      options:
+        - Mappe concettuali (drawio)
+        - Esercizi / Verifiche (LaTeX → PDF)
+        - Documenti BES / PDP (RisDoc)
+        - Gestione classi / istituto
+        - Autenticazione / account
+        - Crittografia / chiavi
+        - WAF / sicurezza
+        - Accessibilità (a11y)
+        - API
+        - Altro
+    validations:
+      required: true
+
+  - type: input
+    id: versione
+    attributes:
+      label: Versione di Pantedu
+      placeholder: es. v0.1.0 (o commit hash)
+    validations:
+      required: true
+
+  - type: textarea
+    id: ambiente
+    attributes:
+      label: Ambiente
+      description: Dettagli del deployment.
+      placeholder: |
+        - PHP: 8.x
+        - MariaDB/MySQL: x.x
+        - nginx: x.x
+        - Browser + OS:
+        - TeX Live installato: sì/no
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log / screenshot
+      description: |
+        Eventuali messaggi di errore o screenshot.
+        **Rimuovi sempre dati personali di studenti/docenti/scuole prima di allegare.**
+    validations:
+      required: false
