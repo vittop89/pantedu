@@ -200,14 +200,35 @@ Aggiungi alla crontab di `www-data` (`sudo crontab -u www-data -e`):
 
 ---
 
-## 10. Primo accesso
+## 10. Primo accesso — creazione del super-admin
 
-Il primo istituto e il suo amministratore si creano dal seed iniziale +
-pannello **`/admin/institutes`** (caricamento anagrafica istituto e creazione
-account amministratore, a cui viene assegnata una password one-time).
+Il **primo** amministratore (super-admin tecnico) si crea con il seed
+parametrico, così ogni istituto definisce il **proprio** account e la propria
+password (nessuna credenziale cablata):
 
-Poi accedi a `https://tuodominio/login`: al primo login con password one-time
-viene forzato il cambio password.
+```bash
+export SEED_ADMIN_USERNAME="mario.rossi"          # username login
+export SEED_ADMIN_FIRSTNAME="Mario"
+export SEED_ADMIN_LASTNAME="Rossi"
+export SEED_ADMIN_EMAIL="mario.rossi@tuoistituto.edu.it"
+export SEED_INSTITUTE_CODE="ABIS01234X"           # cod. meccanografico reale
+export SEED_INSTITUTE_NAME='I.I.S. "Nome Istituto"'
+export SEED_INSTITUTE_CITY="Tua Città"
+export SEED_INSTITUTE_REGION="Tua Regione"
+read -rs SEED_ADMIN_PASSWORD; export SEED_ADMIN_PASSWORD   # password forte, mai in chiaro
+php tools/seeds/seed_super_admin.php
+```
+
+Lo script crea utente (`is_super_admin=1`), istituto e collegamento
+docente↔istituto. È idempotente. **Dettagli, regole di sicurezza e rotazione:
+[docs/SUPERADMIN.md](SUPERADMIN.md).**
+
+Dopodiché gli **admin di istituto** successivi si creano dal pannello
+**`/admin/institutes`** (caricamento anagrafica + creazione account con
+password one-time mostrata una sola volta).
+
+Accedi a `https://tuodominio/login`: al primo login viene forzato il cambio
+password.
 
 ---
 
