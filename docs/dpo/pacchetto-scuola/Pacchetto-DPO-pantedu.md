@@ -136,9 +136,9 @@ Il Responsabile si rende disponibile a: chiarimenti tecnici, approfondimenti su 
 
 **Contatto**: vittop89@users.noreply.github.com — DPO request form: https://pantedu.eu/dpo-contact
 
-## Allegati disponibili su richiesta
-- **A — DPIA completa** — `docs/privacy/dpia.pdf` (sorgente: `docs/privacy/dpia.md`)
-- **B — Informativa privacy** — `docs/privacy/informativa.pdf` (sorgente: `docs/privacy/informativa.md`; fonte unica, servita anche su `https://pantedu.eu/privacy/informativa`)
-- **C — Report di audit di sicurezza firmato** (hash-chain di integrità, giugno 2026) — consegna su richiesta, preferibilmente sotto NDA
-- **D — Elenco sub-responsabili dettagliato** — vedi §4 (Hetzner, Cloudflare, Backblaze B2, Google opt-in)
-- **E — Bozza DPA Art. 28** — `docs/dpo/pacchetto-scuola/Bozza-DPA-Art28.pdf` (sorgente: `…/Bozza-DPA-Art28.md`)
+## Allegati (schema unico A–E, coerente con la Lettera di accompagnamento)
+- **A — Questo Pacchetto di accountability** — `docs/dpo/pacchetto-scuola/Pacchetto-DPO-pantedu.pdf` (misure Art. 32, AgID, minimizzazione+DPIA sintesi, titolarità). Elenco sub-responsabili: vedi §4 (Hetzner, Cloudflare, Backblaze B2, Google opt-in).
+- **B — Bozza DPA Art. 28** — `docs/dpo/pacchetto-scuola/Bozza-DPA-Art28.pdf` (sorgente: `…/Bozza-DPA-Art28.md`)
+- **C — Report di audit di sicurezza firmato** (hash-chain di integrità, giugno 2026) — consegna **su richiesta**, preferibilmente sotto NDA
+- **D — DPIA completa** — `docs/privacy/dpia.pdf` (sorgente: `docs/privacy/dpia.md`)
+- **E — Informativa privacy** — `docs/privacy/informativa.pdf` (sorgente: `docs/privacy/informativa.md`; fonte unica, servita anche su `https://pantedu.eu/privacy/informativa`)
