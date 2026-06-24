@@ -43,9 +43,9 @@ final class RegistrationController
     public function showForm(Request $req): Response
     {
         // Phase S2 (ADR-017) — in entrambi i modi self-signup è aperto per
-        // STUDENTI (Vittorio approva). Differenze:
+        // STUDENTI (Operatore approva). Differenze:
         //   - SINGLE: role=teacher pre-filled hidden + non modificabile dal form
-        //     (solo Vittorio = 1 docente; nuovi docenti via admin manuale).
+        //     (solo Operatore = 1 docente; nuovi docenti via admin manuale).
         //   - INSTITUTE: role selezionabile (student | teacher), entrambi approve.
         $view  = View::default();
         $body  = $view->render('auth/register', [
@@ -106,7 +106,7 @@ final class RegistrationController
     public function submit(Request $req): Response
     {
         // Phase S2 (ADR-017) — in single mode è ammesso SOLO role=student
-        // (Vittorio = unico docente; nuovi docenti vanno aggiunti via admin
+        // (Operatore = unico docente; nuovi docenti vanno aggiunti via admin
         // manualmente, non via self-signup pubblica).
         // NB: Request::$post è readonly → NON mutarla (causa Error fatale 500).
         // Usiamo una variabile locale $role passata a submit() più sotto.

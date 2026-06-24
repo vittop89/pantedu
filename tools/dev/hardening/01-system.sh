@@ -3,7 +3,7 @@
 # Idempotente: skip se già applicato. Backup config originali in /etc/*.bak.pantedu.
 #
 # CHANGES safe (no port change SSH, no remove access):
-#   1. SSH: AllowUsers vittorio + ClientAliveInterval 300 + MaxAuthTries 3 +
+#   1. SSH: AllowUsers docente1 + ClientAliveInterval 300 + MaxAuthTries 3 +
 #      MaxSessions 10 + LoginGraceTime 30 + Protocol 2 explicit
 #   2. sysctl kernel: TCP SYN cookies, ICMP redirects off, source routing off,
 #      IP forwarding off, martians log, RP filter strict, exec-shield (auto)
@@ -22,7 +22,7 @@ W() { printf "\033[33m%s\033[0m\n" "$*"; }
 
 [[ $EUID -ne 0 ]] && { R "Run come root"; exit 1; }
 
-ALLOWED_USER="${ALLOWED_USER:-vittorio}"
+ALLOWED_USER="${ALLOWED_USER:-docente1}"
 TS=$(date +%Y%m%d_%H%M%S)
 
 # ──────────────────────────────────────────────────────────────

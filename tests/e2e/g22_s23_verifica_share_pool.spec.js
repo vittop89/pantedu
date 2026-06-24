@@ -2,9 +2,9 @@
  * G22.S23 — Share/recover di verifica_documents (vere verifiche TEX/PDF).
  *
  * Scenario:
- *  1. Vittorio condivide una verifica via POST /api/verifica/{id}/share-pool.
+ *  1. Operatore condivide una verifica via POST /api/verifica/{id}/share-pool.
  *  2. Marco la vede nel pool con content_type='verifica_doc'.
- *  3. Vittorio la dis-condivide → Marco non la vede più.
+ *  3. Operatore la dis-condivide → Marco non la vede più.
  */
 import { test, expect } from "@playwright/test";
 
@@ -37,17 +37,17 @@ async function csrfToken(page) {
 
 test.describe("G22.S23 verifica_documents share-pool", () => {
 
-    test("Vittorio condivide una verifica → Marco la vede; ritira → Marco non la vede", async ({ browser }) => {
+    test("Operatore condivide una verifica → Marco la vede; ritira → Marco non la vede", async ({ browser }) => {
         if (!VITTORIO_PASS) test.skip(true, "PLAYWRIGHT_TEST_PASSWORD non set");
 
-        // -- Vittorio context --
+        // -- Operatore context --
         const vCtx  = await browser.newContext();
         const vPage = await vCtx.newPage();
         await login(vPage, VITTORIO_USER, VITTORIO_PASS);
         const vList = await vPage.request.get("/api/verifica/list?materia=MAT");
         const vj    = await vList.json();
         const verifica = (vj.items || []).find(v => !v.shared_with_pool);
-        expect(verifica, `Vittorio deve avere almeno una verifica MAT non shared (totali=${(vj.items||[]).length})`).toBeTruthy();
+        expect(verifica, `Operatore deve avere almeno una verifica MAT non shared (totali=${(vj.items||[]).length})`).toBeTruthy();
 
         // Attiva share-pool
         const tok = await csrfToken(vPage);

@@ -26,7 +26,7 @@ components:
         username:
           type: string
           maxLength: 50
-          example: vittorio
+          example: docente1
         password:
           type: string
           format: password

@@ -2,7 +2,7 @@
 
 > **Scope**: verifica compatibilità EUPL-1.2 delle dipendenze runtime e dev di pantedu.
 > **Ultimo audit**: 2026-05-22 (commit di riferimento: `master_vps`)
-> **Autore**: Vittorio
+> **Autore**: Operatore
 > **Riferimenti normativi**:
 > - [EUPL-1.2 Compatible Licenses Matrix](https://joinup.ec.europa.eu/collection/eupl/matrix-eupl-compatible-open-source-licences)
 > - [Linee Guida AGID acquisizione e riuso 2020 rev. 2024](https://www.agid.gov.it/it/design-servizi/riuso-open-source)
@@ -188,7 +188,7 @@ In produzione con Cloudflare attivo, il livello 3 (DB locale) viene raramente co
 |-------|---------|---------------------|
 | Material Symbols icons | Apache-2.0 | Servito via Google Fonts CDN (no bundle) |
 | KaTeX fonts | SIL OFL 1.1 / MIT | Bundle in `public/build/` |
-| Custom logos / immagini pantedu | © Vittorio (proprietary) | Inclusi nel repo, rilasciati sotto EUPL come parte del software |
+| Custom logos / immagini pantedu | © Operatore (proprietary) | Inclusi nel repo, rilasciati sotto EUPL come parte del software |
 
 ---
 

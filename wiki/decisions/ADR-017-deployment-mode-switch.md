@@ -27,8 +27,8 @@ realistici:
 
 | Scenario | Descrizione                              | Compliance load | Decisione   |
 | -------- | ---------------------------------------- | --------------- | ----------- |
-| **S1**   | Solo docente Vittorio, uso personale     | Bassa           | Procedere   |
-| **S2**   | Vittorio + colleghi stessa scuola        | Media           | Implementare dopo S1 |
+| **S1**   | Solo docente Operatore, uso personale     | Bassa           | Procedere   |
+| **S2**   | Operatore + colleghi stessa scuola        | Media           | Implementare dopo S1 |
 | S3       | SaaS multi-istituto (paid)               | Altissima       | Scartato    |
 | S4       | OSS GitHub (self-host community)         | Bassa (delegata)| In prep     |
 
@@ -37,7 +37,7 @@ Il codebase corrente è strutturato single-teacher (S1) con scaffolding multi-te
 prevalentemente **operative/legali**, non architetturali:
 
 - **DPO**: S1 non richiesto (singolo dev privato); S2 richiesto (scuola = controller)
-- **Privacy notice / DPA**: S1 minimo; S2 contratti scuola↔Vittorio (Art. 28)
+- **Privacy notice / DPA**: S1 minimo; S2 contratti scuola↔Operatore (Art. 28)
 - **Risk profile**: S1 dati propri; S2 dati colleghi + minori sotto sua responsabilità
 - **Authority cooperation**: S1 risponde lui; S2 con catena scuola→DPO→AG
 
@@ -57,7 +57,7 @@ INSTITUTE_LEGAL_NAME=    # solo se institute: ragione sociale scuola
 Valori:
 
 - `single` (default): scenario S1, **registration self-signup APERTA solo per
-  studenti** (Vittorio = unico docente). Nuovi docenti vanno aggiunti dall'admin
+  studenti** (Operatore = unico docente). Nuovi docenti vanno aggiunti dall'admin
   manualmente via `/admin/users/new`. DPO contact = `APP_MAIL_FROM`.
 - `institute`: scenario S2, registration aperta a colleghi della scuola
   (role=teacher) E ai loro studenti (role=student), entrambi richiedono approve
@@ -83,7 +83,7 @@ Pannello UI in `/admin/system/deployment` (super_admin only):
 
 - Singolo codebase serve entrambi gli scenari → no fork, no divergence
 - Self-hosters S4 (GitHub) scelgono modo al deploy
-- Migration path S1 → S2 senza re-installazione (Vittorio + scuola dopo onboarding)
+- Migration path S1 → S2 senza re-installazione (Operatore + scuola dopo onboarding)
 - Audit/legal templates già modulari (ADR-007 conformità)
 
 ### Negative

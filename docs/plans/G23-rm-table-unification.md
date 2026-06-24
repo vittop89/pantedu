@@ -1,7 +1,7 @@
 # Piano G23 — Unificazione renderer RM/VF/Collect (client+server+TeX)
 
 **Branch**: `master_vps` (working) → `feat/g23-rm-unification` (proposto)
-**Owner**: Vittorio
+**Owner**: Operatore
 **Stato**: 📋 Bozza — in attesa approvazione
 **Aggiornato**: 2026-05-12
 

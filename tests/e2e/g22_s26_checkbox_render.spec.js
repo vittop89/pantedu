@@ -9,7 +9,7 @@
  *
  * Test 1: anteprima admin riflette state del pending content
  *   - Setup: ultimo pending in DB ha state=x per "adeguato"
- *   - Login Vittorio, apri anteprima del pending, verifica DOM
+ *   - Login Operatore, apri anteprima del pending, verifica DOM
  *
  * Test 2: Marco reload preserva spunte in admin_edit (localStorage)
  *   - Login Marco, apri /risdoc/view/16?admin_edit=1

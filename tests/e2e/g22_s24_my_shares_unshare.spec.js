@@ -2,7 +2,7 @@
  * G22.S24 — "I miei contenuti condivisi" + bulk unshare.
  *
  * Verifica che:
- *  1. Vittorio legge /api/teacher/pool/my-shares e ottiene i suoi
+ *  1. Operatore legge /api/teacher/pool/my-shares e ottiene i suoi
  *     teacher_content + verifica_documents shared_with_pool=1.
  *  2. Bulk unshare POST /api/teacher/pool/unshare rimuove la condivisione
  *     e i contenuti spariscono dalla lista.
@@ -36,7 +36,7 @@ async function csrf(page) {
 
 test.describe("G22.S24 my shares + bulk unshare", () => {
 
-    test("Vittorio elenca shared + bulk unshare rimuove dalla lista", async ({ page }) => {
+    test("Operatore elenca shared + bulk unshare rimuove dalla lista", async ({ page }) => {
         if (!VITTORIO_PASS) test.skip(true, "PLAYWRIGHT_TEST_PASSWORD non set");
         await login(page, VITTORIO_USER, VITTORIO_PASS);
 

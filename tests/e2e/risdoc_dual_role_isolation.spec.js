@@ -42,7 +42,7 @@ test("Phase 24.63 — teacher override + admin schema su stesso template sono is
     const TEACHER_SENTINEL = `TEACHER_${Date.now().toString(36)}`;
     const SCHEMA_SENTINEL = `SCHEMA_${Date.now().toString(36)}`;
 
-    // Step 1: vittorio come docente modifica markup HTML (instance_key='')
+    // Step 1: docente1 come docente modifica markup HTML (instance_key='')
     const teacherSave = await page.request.post(`/api/risdoc/templates/${tplId}/override`, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         data: new URLSearchParams({
@@ -53,7 +53,7 @@ test("Phase 24.63 — teacher override + admin schema su stesso template sono is
     });
     expect(teacherSave.ok()).toBeTruthy();
 
-    // Step 2: vittorio come admin modifica schema (institutional override)
+    // Step 2: docente1 come admin modifica schema (institutional override)
     const beforeSchema = await (await page.request.get(`/api/risdoc/templates/${tplId}/schema`)).text();
     const schemaObj = JSON.parse(beforeSchema);
     const schemaModified = { ...schemaObj, _admin_dual_test_marker: SCHEMA_SENTINEL };

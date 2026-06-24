@@ -40,7 +40,7 @@ test("Area docente templates: nav + cascade + write/delete", async ({ page }) =>
     // Test write/delete via API
     const csrf = await page.request.get("/auth/csrf").then(r => r.json()).then(j => j.token);
     const testPath = "texCommon/intestazione.tex";
-    const testContent = "% G20.1 test teacher override\n\\noindent Test Vittorio";
+    const testContent = "% G20.1 test teacher override\n\\noindent Test Operatore";
     const wRes = await page.request.post("/api/teacher/verifica/files/write", {
         data: { path: testPath, content: testContent, _csrf: csrf },
         headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf },

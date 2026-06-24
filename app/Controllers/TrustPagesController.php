@@ -148,7 +148,7 @@ final class TrustPagesController
      * GET /legal/tos                  → ToS docente
      * GET /legal/aup                  → Acceptable Use Policy
      * GET /legal/takedown-procedure   → Procedura Notice & Takedown
-     * GET /legal/dpa                  → Template DPA istituto-Vittorio
+     * GET /legal/dpa                  → Template DPA istituto-Operatore
      */
     public function tos(Request $req): Response
     {

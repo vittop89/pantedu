@@ -391,7 +391,7 @@ TEX;
             $name    = (string)($parts[0] ?? '');
             $surname = (string)($parts[1] ?? '');
         }
-        // Capitalize prima lettera se era lowercase (es. "vittorio" → "Vittorio")
+        // Capitalize prima lettera se era lowercase (es. "docente1" → "Operatore")
         if ($name !== '' && ctype_lower($name[0])) {
             $name = ucfirst($name);
         }

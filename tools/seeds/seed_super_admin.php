@@ -11,8 +11,8 @@
  *
  * Variabili d'ambiente (con fallback per il solo dev locale):
  *   SEED_ADMIN_USERNAME    username login           (default: superadmin)
- *   SEED_ADMIN_FIRSTNAME   nome                     (default: Vittorio)
- *   SEED_ADMIN_LASTNAME    cognome                  (default: Pantaleo)
+ *   SEED_ADMIN_FIRSTNAME   nome                     (default: Operatore)
+ *   SEED_ADMIN_LASTNAME    cognome                  (default: Operatore)
  *   SEED_ADMIN_EMAIL       email                    (default: operatore@example.net)
  *   SEED_ADMIN_PASSWORD    password (>= 8 caratteri, OBBLIGATORIA)
  *   SEED_INSTITUTE_CODE    cod. mecc. istituto      (default: MIUR-ESEMPIO-COMUNE ESEMPIO-SCI)
@@ -41,8 +41,8 @@ if (!Config::get('database.enabled') || !Database::isAvailable()) {
 }
 
 $username   = $_ENV['SEED_ADMIN_USERNAME']  ?? 'superadmin';
-$firstName  = $_ENV['SEED_ADMIN_FIRSTNAME'] ?? 'Vittorio';
-$lastName   = $_ENV['SEED_ADMIN_LASTNAME']  ?? 'Pantaleo';
+$firstName  = $_ENV['SEED_ADMIN_FIRSTNAME'] ?? 'Operatore';
+$lastName   = $_ENV['SEED_ADMIN_LASTNAME']  ?? 'Operatore';
 $email      = $_ENV['SEED_ADMIN_EMAIL']     ?? 'operatore@example.net';
 $role       = 'teacher';
 $password   = $argv[1] ?? ($_ENV['SEED_ADMIN_PASSWORD'] ?? null);

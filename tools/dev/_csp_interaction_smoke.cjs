@@ -5,7 +5,7 @@
  *   - nessuna violazione securitypolicyviolation
  *   - nessun errore JS in console (pageerror)
  *   - parte la fetch attesa (data caricati)
- * Richiede CSP_MODE=report-only + login admin (vittorio).
+ * Richiede CSP_MODE=report-only + login admin (docente1).
  */
 const { chromium } = require("@playwright/test");
 

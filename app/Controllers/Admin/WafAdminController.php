@@ -457,7 +457,7 @@ final class WafAdminController
         $countryPath = (string)\App\Core\Config::get('waf.geoip_db', '');
         $asnPath     = (string)\App\Core\Config::get('waf.geoip_asn_db', '');
         $geo = $this->geoip();
-        $testIps = ['8.8.8.8', '1.1.1.1', '79.18.139.97'];
+        $testIps = ['8.8.8.8', '1.1.1.1', '203.0.113.10'];
         $results = [];
         foreach ($testIps as $ip) {
             $results[$ip] = [

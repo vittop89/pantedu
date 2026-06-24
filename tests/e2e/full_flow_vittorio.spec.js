@@ -65,7 +65,7 @@ async function snapshotPage(page, label) {
     return info;
 }
 
-test("full flow vittorio: multi-click + verifica-mode auto + sel change", async ({ page }) => {
+test("full flow docente1: multi-click + verifica-mode auto + sel change", async ({ page }) => {
     test.setTimeout(120000);
     const errors = [];
     const consoleLogs = [];

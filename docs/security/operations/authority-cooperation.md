@@ -49,10 +49,10 @@ Se uno dei due manca → crypto-shredding O(1) automatico (Art. 17 GDPR).
 | # | Tipo | Dove | Sovereignty | Accesso | Air-gapped |
 |---|------|------|-------------|---------|------------|
 | 1 | **Produzione** | `KMS_MASTER_KEY` env var su VPS Hetzner `beta.pantedu.eu` — file `/var/www/pantedu/.env.local` perms `0640 pantedu:www-data` + `chattr +i` immutable | 🇩🇪 Germania (Hetzner Nuremberg) | SSH chiave personale + Cloud Firewall IP whitelist | ❌ online |
-| 2 | **Backup laptop dev** | `.env.local` su laptop personale Vittorio (`~/progetti_vscode/pantedu/.env.local`, gitignored, mai committato) | 🇮🇹 Italia (locale Vittorio) | login utente Windows + BitLocker FDE | ❌ online |
+| 2 | **Backup laptop dev** | `.env.local` su laptop personale Operatore (`~/progetti_vscode/pantedu/.env.local`, gitignored, mai committato) | 🇮🇹 Italia (locale Operatore) | login utente Windows + BitLocker FDE | ❌ online |
 | 3 | **Cloud cifrato (zero-knowledge)** | Cryptomator vault su OneDrive personale Microsoft: il file dentro il vault contiene `KMS_MASTER_KEY=<hex>`. OneDrive vede solo blob cifrato (Cryptomator AES-256 client-side), zero-knowledge | 🇩🇪/🇮🇪 (OneDrive UE) + zero-knowledge sopra (Cryptomator OSS audited, Germania) | account Microsoft + 2FA + master password Cryptomator | ❌ sync online |
-| 4 | **Password manager locale** | Entry "pantedu KMS_MASTER" in Password Safe (file `.psafe3`/`.kdbx` cifrato master password, salvato sul laptop dev) | 🇮🇹 Italia (locale Vittorio) | master password Password Safe (mai stessa di altri sistemi) | ❌ online (sul laptop) |
-| 5 | **Cold backup HDD esterno** | HDD esterno USB cifrato (NTFS BitLocker o ext4 LUKS), aggiornato mensilmente con copia completa dei backup B2 + `.env.local` snapshot. Etichetta fisica + custodia cassetto/cassetta sicurezza casa | 🇮🇹 Italia (locale Vittorio, fisico) | sblocco LUKS/BitLocker manuale + chiave fisica | ✅ **air-gapped** quando staccato |
+| 4 | **Password manager locale** | Entry "pantedu KMS_MASTER" in Password Safe (file `.psafe3`/`.kdbx` cifrato master password, salvato sul laptop dev) | 🇮🇹 Italia (locale Operatore) | master password Password Safe (mai stessa di altri sistemi) | ❌ online (sul laptop) |
+| 5 | **Cold backup HDD esterno** | HDD esterno USB cifrato (NTFS BitLocker o ext4 LUKS), aggiornato mensilmente con copia completa dei backup B2 + `.env.local` snapshot. Etichetta fisica + custodia cassetto/cassetta sicurezza casa | 🇮🇹 Italia (locale Operatore, fisico) | sblocco LUKS/BitLocker manuale + chiave fisica | ✅ **air-gapped** quando staccato |
 
 #### Procedura mensile cold backup HDD esterno
 
@@ -71,7 +71,7 @@ Se uno dei due manca → crypto-shredding O(1) automatico (Art. 17 GDPR).
 
 #### Procedura verifica annuale integrità (tutte le 5 copie)
 
-**Ogni 12 mesi** (next: 2027-05-21) Vittorio esegue:
+**Ogni 12 mesi** (next: 2027-05-21) Operatore esegue:
 
 1. Apri ognuna delle 5 copie + estrai il valore di KMS_MASTER_KEY
 2. Calcola SHA-256 di ogni copia
@@ -103,11 +103,11 @@ ssh pantedu-vps "grep '^KMS_MASTER_KEY=' /var/www/pantedu/.env.local | cut -d= -
 | VPS Hetzner cancellato/account suspended | ✅ 4 copie alternative |
 | Laptop dev rubato/distrutto | ✅ VPS + OneDrive + HDD esterno (Password Safe perduto col laptop) |
 | OneDrive account compromesso/cancellato | ✅ VPS + laptop + HDD esterno |
-| Catastrofe casa Vittorio (incendio, alluvione) | ✅ VPS + OneDrive (HDD esterno potrebbe essere distrutto se non in cassetta sicurezza banca) |
+| Catastrofe casa Operatore (incendio, alluvione) | ✅ VPS + OneDrive (HDD esterno potrebbe essere distrutto se non in cassetta sicurezza banca) |
 | Ransomware su laptop + sync verso OneDrive (worst case) | ✅ HDD esterno **air-gapped** sopravvive + VPS |
 | Compromissione coordinata laptop + OneDrive + VPS | ✅ HDD esterno air-gapped è ultima linea di difesa |
 | Compromissione TUTTE e 5 simultaneamente | ❌ → **crypto-shred totale** (scenario quasi impossibile se HDD scollegato) |
-| Decesso/incapacità Vittorio | ⚠️ eredi possono accedere a HDD esterno se lasciate istruzioni; eventualmente Step 2.3 con notaio formalizza |
+| Decesso/incapacità Operatore | ⚠️ eredi possono accedere a HDD esterno se lasciate istruzioni; eventualmente Step 2.3 con notaio formalizza |
 
 **Miglioramenti rispetto a 4 copie**:
 - L'HDD esterno air-gapped chiude il pattern "worst case: ransomware/supply-chain compromette tutto online"
@@ -136,9 +136,9 @@ Nelle 4 copie attuali, **non c'è data certa** di custodia. Se in tribunale serv
 
 Per dati di terzi (istituti scolastici, GDPR-compliance) questo è valore aggiunto importante in caso di breach investigation o request GDPR Art. 15-22 contestate.
 
-#### C. Eredità / business continuity post-Vittorio
+#### C. Eredità / business continuity post-Operatore
 
-Se a Vittorio capita qualcosa (decesso, malattia incapacitante, incidente prolungato):
+Se a Operatore capita qualcosa (decesso, malattia incapacitante, incidente prolungato):
 - VPS continua a girare ma nessuno può ruotare la chiave
 - Le 3 copie personali (laptop, OneDrive, Password Safe) richiedono accesso ai device + password che gli eredi potrebbero non avere
 - Senza chiave → studenti/docenti delle scuole-cliente perdono accesso ai dati cifrati
@@ -171,7 +171,7 @@ Tempo manuale: 10-15 min/mese (connetti + run script + scollega).
 | Step | Cosa | Stato | Costo stimato (Italia, 2026) |
 |------|------|-------|------------------------------|
 | 1 | Backup KMS in busta sigillata presso notaio | TODO | ~€200-500 una tantum atto + €0-150/anno custodia |
-| 2 | Shamir Secret Sharing 3-su-5: split tra Vittorio + 2 fiduciari + notaio + cassetta sicurezza banca | TODO | ~€50-80/anno cassetta sicurezza + €0 fiduciari + setup 4-8h |
+| 2 | Shamir Secret Sharing 3-su-5: split tra Operatore + 2 fiduciari + notaio + cassetta sicurezza banca | TODO | ~€50-80/anno cassetta sicurezza + €0 fiduciari + setup 4-8h |
 | 3 | Procedura annuale verifica integrità custodia (`kms_backup_verified` event) | TODO | ~€0-100/anno se richiede visita notaio |
 | 4 | Documento di policy notarizzato che descrive a chi e in quali condizioni la chiave può essere ricostruita | TODO | ~€150-300 una tantum |
 

@@ -1,8 +1,0 @@
-{
-  "_comment": "CONFIG MINIMO - Tutti i metadati vengono estratti automaticamente dalle immagini",
-  "source": "mmb_v2_ed3",
-  "destination": {
-    "container": "#Parabola_ed_equazioni_di_grado_superiore_al_secondo-type_RMulti_ver_1-or_personal",
-    "file": "verifiche/php/MAT/MAT-Parabola_ed_equazioni_di_grado_superiore_al_secondo-ver.php"
-  }
-}

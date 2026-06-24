@@ -17,7 +17,7 @@ use RuntimeException;
  * USO Pantedu:
  *   - Split KMS_MASTER_KEY (32 byte hex) in 5 share
  *   - Threshold K=3 su N=5 → serve concordia di 3 custodi
- *   - Custodi: Vittorio + notaio + avvocato + cassetta sicurezza + backup online
+ *   - Custodi: Operatore + notaio + avvocato + cassetta sicurezza + backup online
  *   - Recovery: collect 3 share → ricomponi master key
  *
  * SICUREZZA:

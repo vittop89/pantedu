@@ -77,7 +77,7 @@ cat <<'EOF'
     # /grafana/ reverse-proxy con basic auth + IP whitelist
     location /grafana/ {
         # IP whitelist (modifica per i tuoi IP)
-        allow 79.18.139.97;
+        allow 203.0.113.10;
         # allow OTHER_OFFICE_IP;
         deny all;
 

@@ -1,7 +1,7 @@
 # Spec — Page-doc block types per editor PT (Phase G23)
 
 > **Status:** DRAFT proposto — 2026-05-24
-> **Owner:** Vittorio
+> **Owner:** Operatore
 > **Related ADR:** ADR-020 (proposed) — `wiki/decisions/ADR-020-page-doc-block-types.md`
 > **Triggered by:** richiesta "aggiungere modello documento per costruire pagine web tipo FismaPant senza scrivere HTML"
 > **Scope:** estendere PT editor (Tiptap + Lit) con 5 nuovi block types per consentire a docenti di comporre pagine informative gerarchiche (legislazione/glossario/linee-guida) senza markup manuale.

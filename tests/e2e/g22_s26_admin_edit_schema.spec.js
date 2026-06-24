@@ -39,7 +39,7 @@ async function login(page, u, p) {
     });
 }
 
-test.skip("Vittorio admin-edit mostra institutional baseline (no compilations)", async ({ page }) => {
+test.skip("Operatore admin-edit mostra institutional baseline (no compilations)", async ({ page }) => {
     if (!PASS) test.skip(true, "PLAYWRIGHT_TEST_PASSWORD non set");
 
     await login(page, USER, PASS);

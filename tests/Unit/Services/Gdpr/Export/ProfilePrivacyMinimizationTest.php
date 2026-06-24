@@ -35,8 +35,8 @@ final class ProfilePrivacyMinimizationTest extends TestCase
             'id'                 => 77,
             'username'           => 'superadmin',
             'role'               => 'teacher',
-            'email'              => 'vittorio@example.com',
-            'first_name'         => 'Vittorio',
+            'email'              => 'docente1@example.com',
+            'first_name'         => 'Operatore',
             'last_name'          => 'Pantaleo',
             // ⚠️ Campi sensibili che NON devono mai uscire
             'password_hash'      => '$2y$12$abc...',
@@ -70,7 +70,7 @@ final class ProfilePrivacyMinimizationTest extends TestCase
             'id'         => 77,
             'username'   => 'superadmin',
             'role'       => 'teacher',
-            'email'      => 'vittorio@example.com',
+            'email'      => 'docente1@example.com',
         ];
         $json = (string)json_encode($clean);
         $file = ExportFile::make('profile.json', $json, 'application/json');

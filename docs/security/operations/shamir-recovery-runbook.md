@@ -24,11 +24,11 @@ Configurazione bilanciata fra **operatività** (recovery facile in vita), **legi
 
 | Scenario | Custodi necessari | Quando applicare |
 |---|---|---|
-| Operatività normale | 1 + 2 + 5 | Vittorio + segreteria + banca — disponibili senza pratiche legali |
-| Decreto autorità | 1 + 3 + 4 | Vittorio + avvocato + notaio — chain-of-custody forte per tribunale |
-| Post-mortem Vittorio | 2 + 3 + 4 | Segreteria + avvocato + notaio — eredi non coinvolti se segreteria custodi tecnica |
+| Operatività normale | 1 + 2 + 5 | Operatore + segreteria + banca — disponibili senza pratiche legali |
+| Decreto autorità | 1 + 3 + 4 | Operatore + avvocato + notaio — chain-of-custody forte per tribunale |
+| Post-mortem Operatore | 2 + 3 + 4 | Segreteria + avvocato + notaio — eredi non coinvolti se segreteria custodi tecnica |
 | Scuola cessa attività | 1 + 3 + 4 | Senza segreteria, ancora 4 custodi → 3 disponibili |
-| Vittorio + Scuola compromessi | 3 + 4 + 5 | Tre custodi esterni indipendenti |
+| Operatore + Scuola compromessi | 3 + 4 + 5 | Tre custodi esterni indipendenti |
 | Single custode perso (qualsiasi) | restano 4 su 5 | Operatività preservata |
 
 ### Perché segreteria scuola sì + perché bilanciare
@@ -36,7 +36,7 @@ Configurazione bilanciata fra **operatività** (recovery facile in vita), **legi
 **Pro segreteria scuola come custode**:
 - Istituzione formale, contratto di stabilità ≥10 anni
 - Stakeholder naturale dei dati educativi (la scuola è "interessato secondario")
-- Recovery più rapido di un notaio per casi non-litigation (es. Vittorio in malattia, eredi)
+- Recovery più rapido di un notaio per casi non-litigation (es. Operatore in malattia, eredi)
 - Documentazione: verbale consegna formale firmato DS + protocollo istituto
 
 **Considerazioni di rischio**:
@@ -99,11 +99,11 @@ Per ogni share, stampa **DUE copie cartacee**:
 Visita un notaio specializzato in **diritto digitale** (Milano/Roma/Torino hanno studi). Costo orientativo: **€200-500 una-tantum + €50-150/anno custodia**.
 
 Atto da firmare include:
-1. **Dichiarazione data controller**: chi è Vittorio, ruolo, contatti.
+1. **Dichiarazione data controller**: chi è Operatore, ruolo, contatti.
 2. **Descrizione segreto**: SHA-256 fingerprint del KMS_MASTER_KEY (NON il segreto stesso!).
 3. **Share custodita**: foglio cartaceo con `FSS1:2:...` (busta sigillata).
 4. **Trigger di apertura**:
-   - Procura notarile da Vittorio (recovery operativo)
+   - Procura notarile da Operatore (recovery operativo)
    - Decreto magistratura (cooperazione autorità)
    - Certificato decesso + procura eredi (post-mortem)
    - Dichiarazione impossibilità medica (curatore)
@@ -115,11 +115,11 @@ Memorizza **riferimento atto** (es. "Repertorio 12345/2026 Notaio Mario Rossi") 
 
 | Share # | Consegna | Procedura |
 |---|---|---|
-| 1 | **Vittorio** | Import in Password Safe (`.psafe3` cifrato) + copia USB Cryptomator. NO email plain, NO sync online. |
-| 2 | **Segreteria scuola** | Stampa cartacea in busta sigillata. Consegna a mano al DS (Dirigente Scolastico) con verbale firmato controfirmato. Custodia in cassaforte istituto. Lettera accompagnamento con: fingerprint segreto, istruzioni recovery (chi contattare, quando aprire), riferimento atto notarile, contatti Vittorio. |
+| 1 | **Operatore** | Import in Password Safe (`.psafe3` cifrato) + copia USB Cryptomator. NO email plain, NO sync online. |
+| 2 | **Segreteria scuola** | Stampa cartacea in busta sigillata. Consegna a mano al DS (Dirigente Scolastico) con verbale firmato controfirmato. Custodia in cassaforte istituto. Lettera accompagnamento con: fingerprint segreto, istruzioni recovery (chi contattare, quando aprire), riferimento atto notarile, contatti Operatore. |
 | 3 | **Avvocato** | USB cifrato + busta sigillata. Lettera istruzioni recovery + fingerprint. Consegna a mano in studio, verbale ricevuta. |
 | 4 | **Notaio** | Già completato in Step 3 (busta sigillata depositata con atto). |
-| 5 | **Cassetta sicurezza banca** | Carta plastificata (no carta termica). Stampa 2 copie: 1 nella cassetta + 1 a casa in cassetta ignifuga. Vittorio intestatario + co-intestatario fiduciario opzionale. |
+| 5 | **Cassetta sicurezza banca** | Carta plastificata (no carta termica). Stampa 2 copie: 1 nella cassetta + 1 a casa in cassetta ignifuga. Operatore intestatario + co-intestatario fiduciario opzionale. |
 
 ### Step 5 — Registrare evento in crypto_custody_events
 
@@ -151,7 +151,7 @@ Se OK: schema validato.
 
 ## Recovery procedure
 
-### Scenario A — Vittorio dimentica password Cryptomator
+### Scenario A — Operatore dimentica password Cryptomator
 
 1. Apre cassetta sicurezza banca → ottiene **share #5**
 2. Chiede a segreteria scuola → ottiene **share #2** (DS apre cassaforte istituto + verbale)
@@ -163,10 +163,10 @@ Se OK: schema validato.
 ### Scenario B — Decreto magistrato (Art. 254 cpp sequestro)
 
 1. Magistrato emette decreto motivato
-2. Vittorio comunica il decreto a:
+2. Operatore comunica il decreto a:
    - **Avvocato** → ricevuta consegna **share #3** (su verbale)
    - **Notaio** → apertura busta **share #4** in presenza magistrato/PG
-3. Vittorio aggiunge la propria **share #1**
+3. Operatore aggiunge la propria **share #1**
 4. Recovery con 3 share (#1 + #3 + #4) sotto controllo magistrato → KMS ricomposto → decifratura dati
 5. Logging immutabile:
    ```
@@ -179,7 +179,7 @@ Se OK: schema validato.
 
 **Tempo stimato**: 24-72 ore (notifica notaio, presa appuntamento avvocato).
 
-### Scenario C — Vittorio deceduto
+### Scenario C — Operatore deceduto
 
 1. Eredi presentano certificato decesso + procura di successione al **notaio**
 2. **Notaio** apre busta secondo Step 3.5 dell'atto deposito → consegna **share #4**
@@ -192,7 +192,7 @@ Se OK: schema validato.
 
 ### Scenario D — Scuola cessa attività / cambia gestione
 
-1. Vittorio segue la procedura di "passaggio consegne" istituzionale
+1. Operatore segue la procedura di "passaggio consegne" istituzionale
 2. Recupera **share #2** dalla segreteria uscente (su verbale formalizzato)
 3. Re-deposita nuova share #2 presso nuova segreteria/gestore (oppure ridistribuisce a custode alternativo)
 4. Registra in `crypto_custody_events`: evento `kms_backup_created` (nuova custodia) + descrizione "passaggio segreteria"
@@ -211,7 +211,7 @@ Se UNO dei 5 custodi è perso/compromesso/non risponde:
 
 1. **Round-trip test** (Step 6 sopra): conferma 3 share casuali ancora ricompongono il segreto.
 2. **Stato custodi**:
-   - **Vittorio**: Password Safe + USB Cryptomator funzionanti, password ricordata
+   - **Operatore**: Password Safe + USB Cryptomator funzionanti, password ricordata
    - **Segreteria scuola**: stesso DS / cambio personale? Cassaforte istituto integra? Verbale aggiornato per eventuali nuovi incarichi?
    - **Avvocato**: studio attivo? Recapiti aggiornati? USB cifrato leggibile?
    - **Notaio**: studio attivo (non sciolto)? Atto vigente? Pagamento custodia annuale OK?

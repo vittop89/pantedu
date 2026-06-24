@@ -22,7 +22,7 @@ const PAGES = process.env.CSP_PROBE_PAGES
         "/exercises",
         "/risdoc",
         "/me/profilo",
-        // admin (vittorio è admin)
+        // admin (docente1 è admin)
         "/admin/dashboard",
         "/admin/logs",
         "/admin/backup",

@@ -1,6 +1,6 @@
 /**
  * Phase G18 — REAL user E2E: simula esattamente il flow descritto da
- * Vittorio nello screenshot (no API direct, no programmatic .checked).
+ * Operatore nello screenshot (no API direct, no programmatic .checked).
  *
  * Bug riprodotto:
  *   - Utente apriva pagina /studio/esercizio/...

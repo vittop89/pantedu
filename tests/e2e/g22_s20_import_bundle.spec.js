@@ -8,11 +8,11 @@
  * NOTA FS Access: il flusso UI completo (pick folder via showDirectoryPicker)
  * non è automatizzabile in Playwright. Quindi qui testiamo:
  *   - UI: presenza Import button + sezione Dashboard Recovery Key
- *   - API: endpoint sequence vittorio→marco end-to-end
+ *   - API: endpoint sequence docente1→marco end-to-end
  */
 const { test, expect, request: pwRequest } = require("@playwright/test");
 
-const VITTORIO = "superadmin";
+const OPERATORE = "superadmin";
 const MARCO    = "marco.rossi";
 const PASSWORD = (process.env.E2E_TEACHER_PASS || "");
 
@@ -41,7 +41,7 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
 
     test("UI: topbar Import button visible (banner pages)", async ({ page }) => {
         await page.goto("/login");
-        await page.locator("input[name=username]").fill(VITTORIO);
+        await page.locator("input[name=username]").fill(OPERATORE);
         await page.locator("input[name=password]").fill(PASSWORD);
         await page.locator("button[type=submit]").first().click();
         await page.waitForLoadState("networkidle");
@@ -59,7 +59,7 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
 
     test("UI: Dashboard sezione Recovery Key", async ({ page }) => {
         await page.goto("/login");
-        await page.locator("input[name=username]").fill(VITTORIO);
+        await page.locator("input[name=username]").fill(OPERATORE);
         await page.locator("input[name=password]").fill(PASSWORD);
         await page.locator("button[type=submit]").first().click();
         await page.waitForLoadState("networkidle");
@@ -71,17 +71,17 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
         expect(label?.length || 0).toBeGreaterThan(5);
     });
 
-    test("API: vittorio → marco end-to-end (recovery + manifest + import)", async ({ browser }) => {
+    test("API: docente1 → marco end-to-end (recovery + manifest + import)", async ({ browser }) => {
         // ── Login con 2 contesti separati
-        const vReq = await loginContext(browser, VITTORIO, PASSWORD);
+        const vReq = await loginContext(browser, OPERATORE, PASSWORD);
         const mReq = await loginContext(browser, MARCO, PASSWORD);
 
         // ── Cleanup precedente marco (verifiche+content)
-        // Non c'è endpoint admin: facciamo cleanup via revoke+regen vittorio
+        // Non c'è endpoint admin: facciamo cleanup via revoke+regen docente1
         // e usiamo rename per evitare conflitti DB. Marco potrebbe avere
         // import precedenti; questo test usa "rename" come strategy.
 
-        // ── 1. Vittorio: genera (o rotate) Recovery Key
+        // ── 1. Operatore: genera (o rotate) Recovery Key
         const csrfV = await csrf(vReq);
         // Revoca eventuale chiave esistente
         await vReq.post("/api/teacher/recovery-key/revoke", {
@@ -100,14 +100,14 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
         expect(gen.recovery_hex).toMatch(/^[0-9a-f]{64}$/);
         const rHex = gen.recovery_hex;
 
-        // ── 2. Vittorio: status post-genera
+        // ── 2. Operatore: status post-genera
         const statusResp = await vReq.get("/api/teacher/recovery-key/status");
         const status = await statusResp.json();
         expect(status.ok).toBe(true);
         expect(status.status.exists).toBe(true);
         expect(status.status.revoked_at).toBeNull();
 
-        // ── 3. Vittorio: manifest signed
+        // ── 3. Operatore: manifest signed
         const mfResp = await vReq.get("/api/teacher/sync-bundle/manifest");
         expect(mfResp.ok()).toBeTruthy();
         const mfBody = await mfResp.json();
@@ -142,7 +142,7 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
     });
 
     test("API: HMAC invalido fallisce con 403", async ({ browser }) => {
-        const vReq = await loginContext(browser, VITTORIO, PASSWORD);
+        const vReq = await loginContext(browser, OPERATORE, PASSWORD);
         const mReq = await loginContext(browser, MARCO, PASSWORD);
         const mfResp = await vReq.get("/api/teacher/sync-bundle/manifest");
         const manifest = (await mfResp.json()).manifest;
@@ -167,7 +167,7 @@ test.describe("G22.S20 — Import bundle + Recovery Key", () => {
     test("DB: indirizzo_id FK popolato dopo import (v2.C2)", async ({ browser }) => {
         // Test indiretto: verifica che curriculum endpoint ritorni indirizzi
         // canonici. La verifica DB diretta è in test_import_e2e.php CLI.
-        const vReq = await loginContext(browser, VITTORIO, PASSWORD);
+        const vReq = await loginContext(browser, OPERATORE, PASSWORD);
         const r = await vReq.get("/api/teacher/curriculum");
         expect(r.ok()).toBeTruthy();
         const j = await r.json();

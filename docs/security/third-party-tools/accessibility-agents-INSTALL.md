@@ -5,7 +5,7 @@
 > e accettato le conditions APPROVE CONDITIONAL.
 
 Questa guida installa `Community-Access/accessibility-agents` v5.4.0
-nell'ambiente Claude Code di Vittorio (Windows workstation).
+nell'ambiente Claude Code di Operatore (Windows workstation).
 La scansione CI/CD pantedu è già configurata in
 [`.github/workflows/a11y.yml`](../../../.github/workflows/a11y.yml) e
 **non richiede questa installazione locale**.

@@ -1,5 +1,5 @@
 <?php
-// G22.S20 v2.C2 — Full E2E real test: vittorio (485 file) → marco
+// G22.S20 v2.C2 — Full E2E real test: docente1 (485 file) → marco
 // Esegue tutto il flusso completo via ImportBundleController reale,
 // batch-by-batch come il client JS, verifica counts + indirizzo_id +
 // filesystem .contract.json + zero errori.
@@ -59,9 +59,9 @@ $vittorioId = 77;
 $marcoId    = 140;
 $t0 = microtime(true);
 
-echo "═══ FULL E2E test: vittorio (all) → marco (v2.C2) ═══\n\n";
+echo "═══ FULL E2E test: docente1 (all) → marco (v2.C2) ═══\n\n";
 
-// ── 1. Setup: cleanup marco + rigenera recovery vittorio
+// ── 1. Setup: cleanup marco + rigenera recovery docente1
 echo "[1] Setup…\n";
 $pdo->beginTransaction();
 $pdo->prepare('DELETE FROM verifica_documents_data WHERE teacher_id=?')->execute([$marcoId]);
@@ -74,10 +74,10 @@ $pdo->prepare('DELETE FROM teacher_recovery_keys WHERE user_id=?')->execute([$vi
 $pdo->prepare('UPDATE teacher_keys SET kek_recovery_wrapped=NULL, recovery_wrap_kv=NULL WHERE teacher_id=?')->execute([$vittorioId]);
 $gen = $svc->generate($vittorioId, '127.0.0.1', 'cli-full-test');
 $rHex = $gen['recovery_hex'];
-echo "  ✓ marco cleaned, vittorio recovery key regenerated\n";
+echo "  ✓ marco cleaned, docente1 recovery key regenerated\n";
 
 // ── 2. Manifest signed (full bundle)
-echo "\n[2] Vittorio: manifest signed (full bundle)…\n";
+echo "\n[2] Operatore: manifest signed (full bundle)…\n";
 auth('superadmin', $vittorioId);
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['REQUEST_URI'] = '/api/teacher/sync-bundle/manifest';

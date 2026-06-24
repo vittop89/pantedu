@@ -9,12 +9,12 @@ use App\Core\Config;
 /**
  * Phase S2 (ADR-017) — Deployment mode helper.
  *
- * Modo `single` (default, S1): solo Vittorio, uso personale didattico.
+ * Modo `single` (default, S1): solo Operatore, uso personale didattico.
  *   - Registration self-signup chiusa (404 sui form pubblici)
  *   - DPO contact = APP_MAIL_FROM
  *   - Privacy notice template S1
  *
- * Modo `institute` (S2): Vittorio + colleghi stessa scuola.
+ * Modo `institute` (S2): Operatore + colleghi stessa scuola.
  *   - Registration aperta (admin approve)
  *   - DPO contact = INSTITUTE_OWNER_EMAIL
  *   - Privacy notice template S2 + footer "Gestito da {INSTITUTE_LEGAL_NAME}"

@@ -1,7 +1,7 @@
 /**
  * G22.S23 — Propagazione toggle Condividi tra esercizio↔verifica abbinati.
  *
- * Quando Vittorio apre un esercizio "Sistemi lineari", la pagina renderizza
+ * Quando Operatore apre un esercizio "Sistemi lineari", la pagina renderizza
  * sia "Esercizi per studenti" (teacher_content #58 content_type='esercizio')
  * sia "Esercizi per costruire la verifica" (teacher_content #105 content_type
  * ='verifica', topic='Sistemi lineari'). Il toggle Condividi deve agire su

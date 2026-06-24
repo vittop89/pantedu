@@ -42,11 +42,11 @@ final class AuthTest extends TestCase
     public function user_returns_array_with_role_username_section(): void
     {
         $_SESSION['autenticato']            = true;
-        $_SESSION['username']               = 'vittorio';
+        $_SESSION['username']               = 'docente1';
         $_SESSION['user_role']              = 'teacher';
         $_SESSION['authenticated_section']  = ['ind' => 'sc', 'cls' => '2s'];
         $u = Auth::user();
-        $this->assertSame('vittorio', $u['username']);
+        $this->assertSame('docente1', $u['username']);
         $this->assertSame('teacher', $u['role']);
         $this->assertSame(['ind' => 'sc', 'cls' => '2s'], $u['section']);
     }

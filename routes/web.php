@@ -1308,7 +1308,7 @@ $router->group(['middleware' => ['auth', 'role:admin', 'log']], function (Router
 
     // G22.S20 v2.C2 — Rotte /area-docente/* spostate al group role:teacher
     // (vedi sopra). Erano per errore nel group role:admin → marco.rossi
-    // (teacher non super_admin) prendeva 403 sul profilo. vittorio super_admin
+    // (teacher non super_admin) prendeva 403 sul profilo. docente1 super_admin
     // non vedeva il bug perché passava entrambe le policy.
 
     // Phase 21 — Risdoc per-teacher admin panel (U8)

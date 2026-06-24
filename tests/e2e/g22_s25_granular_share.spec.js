@@ -2,9 +2,9 @@
  * G22.S25 — Granularità share: grants espliciti per istituto/docente/gruppo.
  *
  * Scenario:
- *  1. Vittorio crea un grant 'teacher' diretto a Marco su esercizio #58.
+ *  1. Operatore crea un grant 'teacher' diretto a Marco su esercizio #58.
  *  2. shared_with_pool=0, Marco vede #58 nel pool (via grant esplicito).
- *  3. Vittorio revoca il grant (setGrants con array vuoto). Marco non vede più.
+ *  3. Operatore revoca il grant (setGrants con array vuoto). Marco non vede più.
  *
  *  + verifica creazione gruppo + share via gruppo.
  */
@@ -103,7 +103,7 @@ test.describe("G22.S25 granular share grants", () => {
         await mCtx.close();
     });
 
-    test("group: Vittorio crea gruppo con Marco + grant target=group → Marco vede", async ({ browser }) => {
+    test("group: Operatore crea gruppo con Marco + grant target=group → Marco vede", async ({ browser }) => {
         if (!VITTORIO_PASS) test.skip(true, "PLAYWRIGHT_TEST_PASSWORD non set");
 
         const vCtx = await browser.newContext();

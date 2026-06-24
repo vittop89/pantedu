@@ -1,7 +1,7 @@
 # Piano G24 — XSS Sanitization (CRITICAL)
 
 **Branch**: `master_vps` (working)
-**Owner**: Vittorio
+**Owner**: Operatore
 **Stato**: 📋 Bozza — in attesa approvazione
 **Aggiornato**: 2026-05-12
 **Priorità**: 🚨 CRITICAL (audit G23 identificato 3 injection point ALTA)

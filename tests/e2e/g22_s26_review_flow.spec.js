@@ -7,7 +7,7 @@
  * G22.S26 — End-to-end review flow per modifiche di collaboratori risdoc.
  *
  * Verifica:
- *   1. Vittorio (super-admin) accede a /admin/templates#risdoc
+ *   1. Operatore (super-admin) accede a /admin/templates#risdoc
  *   2. Vede tab "🛡 Modifiche in revisione" con badge count
  *   3. Apre il diff card pending → 4 modalità rendering (Unificato,
  *      Affiancato, Pretty-print, Anteprima iframe)

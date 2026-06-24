@@ -48,7 +48,7 @@ Lo script:
 | Variabile | Obbligatoria | Default (solo dev) |
 |---|---|---|
 | `SEED_ADMIN_USERNAME`   | consigliata | `superadmin` |
-| `SEED_ADMIN_FIRSTNAME`  | consigliata | `Vittorio` |
+| `SEED_ADMIN_FIRSTNAME`  | consigliata | `Operatore` |
 | `SEED_ADMIN_LASTNAME`   | consigliata | `Pantaleo` |
 | `SEED_ADMIN_EMAIL`      | consigliata | (email dev) |
 | `SEED_ADMIN_PASSWORD`   | **sì** (min 8 caratteri) | — |

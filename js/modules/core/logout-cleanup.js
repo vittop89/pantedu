@@ -4,7 +4,7 @@
  * Su click su qualsiasi link/button verso `/logout`, pulisce le chiavi
  * localStorage che contengono dati personali del docente PRIMA della
  * navigazione. Mitiga leak cross-user su browser condivisi (es. marco
- * logout → vittorio login stesso browser).
+ * logout → docente1 login stesso browser).
  *
  * Defense-in-depth rispetto al sweep all'init di fm-pt-document/risdoc
  * (Phase 25.E10): il sweep copre il caso "B logga e visita pagina con

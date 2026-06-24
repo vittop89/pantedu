@@ -20,7 +20,7 @@ use InvalidArgumentException;
  *   GET  /admin/takedown/{id}          → dettaglio
  *   POST /admin/takedown/{id}/action   → applica azione (rimuovi/sospendi/respingi)
  *
- * Protezione: middleware role:super_admin (solo Vittorio inizialmente).
+ * Protezione: middleware role:super_admin (solo Operatore inizialmente).
  *
  * Phase 25.R.3.1 — refactor: render via View+layout/shell.php anziché HTML
  * hardcoded standalone. Layout coerente con altre pagine /admin/* (topbar,

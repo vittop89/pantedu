@@ -6,7 +6,7 @@
 >
 > **Status (2026-05-20)**: 🟢 Documenti pubblicati su `/legal/*`,
 > infrastruttura di click-acceptance + takedown ATTIVA in produzione.
-> Scenario A è quello operativo (Vittorio docente singolo); ToS è già
+> Scenario A è quello operativo (Operatore docente singolo); ToS è già
 > firmabile e la queue takedown è funzionante. La sottoscrizione formale
 > del DPA con un Istituto avviene quando si estende a Scenario C.
 
@@ -71,7 +71,7 @@ Quando decidi di estendere pantedu ad altri docenti:
 
 7. [ ] **DPA**:
    - Personalizzare `dpa_template.md` con dati reali Istituto
-   - Sottoscrizione formale: Vittorio + Dirigente [Dirigente Scolastico]
+   - Sottoscrizione formale: Operatore + Dirigente [Dirigente Scolastico]
    - Archiviazione copia in cartella `docs/legal/firmati/` (gitignored)
 
 8. [ ] **Comunicazione ai docenti partecipanti**:

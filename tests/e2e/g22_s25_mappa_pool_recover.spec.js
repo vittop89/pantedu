@@ -2,7 +2,7 @@
  * G22.S25 — Coverage: pool + recover per mappe (drawio cifrate).
  *
  * Scenario:
- *  1. Vittorio (owner) condivide mappa con i colleghi (shared_with_pool=1)
+ *  1. Operatore (owner) condivide mappa con i colleghi (shared_with_pool=1)
  *  2. Marco vede la mappa in /api/teacher/pool/materials?content_type=mappa
  *  3. Marco recupera la mappa → new teacher_content row creata,
  *     map_blob_path nuovo (re-cifrato con KEK di Marco)
@@ -20,7 +20,7 @@ const VITTORIO_USER = process.env.PLAYWRIGHT_TEST_USERNAME || "superadmin";
 const VITTORIO_PASS = process.env.PLAYWRIGHT_TEST_PASSWORD || "";
 const MARCO_USER    = "marco.rossi";
 const MARCO_PASS    = (process.env.E2E_TEACHER_PASS || "");
-const MAPPA_ID      = 327; // Vittorio "Tavole trigonometriche", MAT/SCI/2
+const MAPPA_ID      = 327; // Operatore "Tavole trigonometriche", MAT/SCI/2
 
 async function login(page, u, p) {
     await page.addInitScript(() => {
@@ -107,7 +107,7 @@ test("Mappa pool + recover: blob re-cifrato con KEK actor", async ({ browser }) 
         const d = await detailRes.json();
         expect(d.content.content_type).toBe("mappa");
         // map_blob_path nuovo = path sotto Marco (tid=140), distinto da
-        // path originale di Vittorio (tid=77).
+        // path originale di Operatore (tid=77).
         expect(d.content.map_blob_path).toContain("140/");
         expect(d.content.map_blob_path).not.toBe(mappa.map_blob_path);
     }

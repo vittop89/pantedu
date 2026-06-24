@@ -101,7 +101,7 @@ $cap_sections    = $cap_sections ?? [];
             <tr><td>Self-signup studenti</td><td>✅ /register (role hidden=student)</td><td>✅ /register (student | teacher)</td></tr>
             <tr><td>Self-signup docenti</td><td>❌ blocked — admin add manuale</td><td>✅ via /register con approve</td></tr>
             <tr><td>Tab admin "Registrazioni"</td><td>Visibile (approve studenti)</td><td>Visibile (approve teacher+student)</td></tr>
-            <tr><td>Privacy notice — Titolare</td><td>Gestore istanza (Vittorio)</td><td>Istituto scolastico</td></tr>
+            <tr><td>Privacy notice — Titolare</td><td>Gestore istanza (Operatore)</td><td>Istituto scolastico</td></tr>
             <tr><td>Privacy notice — DPO</td><td>APP_MAIL_FROM</td><td>INSTITUTE_OWNER_EMAIL</td></tr>
             <tr><td>Footer watermark</td><td>(nessuno)</td><td>"Gestito da {nome istituto}"</td></tr>
             <tr><td>DPA template scuola</td><td>N/A</td><td>Richiesto (Art. 28)</td></tr>

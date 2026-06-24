@@ -5,7 +5,7 @@
 // =============================================================================
 /**
  * G22.S26 — Full admin review flow (simula click utente):
- *   1. Login Vittorio
+ *   1. Login Operatore
  *   2. Goto /admin/templates#risdoc
  *   3. Click tab "Modifiche in revisione"
  *   4. Click "Mostra contenuto" sulla card pending
@@ -41,7 +41,7 @@ async function login(page, u, p) {
     });
 }
 
-test.skip("Vittorio: full review flow checkbox visibili (cache-bust)", async ({ page }) => {
+test.skip("Operatore: full review flow checkbox visibili (cache-bust)", async ({ page }) => {
     if (!VITTORIO_PASS) test.skip(true, "PLAYWRIGHT_TEST_PASSWORD non set");
     fs.mkdirSync(SCREEN_DIR, { recursive: true });
 

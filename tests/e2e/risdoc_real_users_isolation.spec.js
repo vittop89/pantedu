@@ -4,7 +4,7 @@
  * Flow:
  *   1. superadmin (super_admin) modifica schema institutional → globale.
  *   2. marco.rossi forka template + edit override teacher → solo suo.
- *   3. vittorio modifica i propri override teacher → solo suo.
+ *   3. docente1 modifica i propri override teacher → solo suo.
  *   4. Verifica isolamento: ogni utente vede solo i propri override; lo
  *      schema institutional è la baseline comune.
  */
@@ -58,7 +58,7 @@ test("Phase 24.65 — admin schema institutional + 2 teachers override isolation
     let marcoInstKey;
 
     try {
-        // Step 1: vittorio (super_admin) salva institutional schema override
+        // Step 1: docente1 (super_admin) salva institutional schema override
         const beforeSchema = JSON.parse(await (await pageV.request.get(`/api/risdoc/templates/${tplId}/schema`)).text());
         const newSchema = { ...beforeSchema, _admin_test: ADMIN_SCHEMA_TAG };
         const sSave = await pageV.request.post(`/api/risdoc/templates/${tplId}/institutional-override`, {
@@ -68,7 +68,7 @@ test("Phase 24.65 — admin schema institutional + 2 teachers override isolation
                 content: JSON.stringify(newSchema),
             }).toString(),
         });
-        expect(sSave.ok(), "vittorio admin schema save").toBeTruthy();
+        expect(sSave.ok(), "docente1 admin schema save").toBeTruthy();
 
         // Step 2: VERIFY entrambi vedono lo schema modificato (baseline)
         const schemaForV = await (await pageV.request.get(`/api/risdoc/templates/${tplId}/schema`)).text();
@@ -76,7 +76,7 @@ test("Phase 24.65 — admin schema institutional + 2 teachers override isolation
         expect(schemaForV).toContain(ADMIN_SCHEMA_TAG);
         expect(schemaForM, "marco vede schema admin").toContain(ADMIN_SCHEMA_TAG);
 
-        // Step 3: vittorio salva override teacher (instance base '')
+        // Step 3: docente1 salva override teacher (instance base '')
         const vSave = await pageV.request.post(`/api/risdoc/templates/${tplId}/override`, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             data: new URLSearchParams({
@@ -110,15 +110,15 @@ test("Phase 24.65 — admin schema institutional + 2 teachers override isolation
         expect(mSave.ok(), "marco override save").toBeTruthy();
 
         // Step 6: ISOLATION CHECKS
-        // 6a. vittorio file?kind=html (instance '') → vede VITTORIO_TEACHER_TAG, NON MARCO
+        // 6a. docente1 file?kind=html (instance '') → vede VITTORIO_TEACHER_TAG, NON MARCO
         const vFile = await (await pageV.request.get(
             `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}`
         )).json();
-        expect(vFile.body, "vittorio vede solo i propri override").toContain(VITTORIO_TEACHER_TAG);
+        expect(vFile.body, "docente1 vede solo i propri override").toContain(VITTORIO_TEACHER_TAG);
         expect(vFile.body || "").not.toContain(MARCO_TEACHER_TAG);
         expect(vFile.source).toBe("override");
 
-        // 6b. marco file?kind=html&instance_key=X → vede MARCO_TEACHER_TAG, NON VITTORIO
+        // 6b. marco file?kind=html&instance_key=X → vede MARCO_TEACHER_TAG, NON OPERATORE
         const mFile = await (await pageM.request.get(
             `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}&instance_key=${marcoInstKey}`
         )).json();
@@ -134,10 +134,10 @@ test("Phase 24.65 — admin schema institutional + 2 teachers override isolation
         expect(mFileBase.body || "").not.toContain(VITTORIO_TEACHER_TAG);
         expect(mFileBase.body || "").not.toContain(MARCO_TEACHER_TAG);
 
-        // 6d. vittorio /instances per template → NON vede l'istanza di marco
+        // 6d. docente1 /instances per template → NON vede l'istanza di marco
         const vInsts = await (await pageV.request.get(`/api/risdoc/templates/${tplId}/instances`)).json();
         const vSeesMarco = (vInsts.instances || []).some(i => i.instance_key === marcoInstKey);
-        expect(vSeesMarco, "vittorio non vede istanze di marco").toBeFalsy();
+        expect(vSeesMarco, "docente1 non vede istanze di marco").toBeFalsy();
 
         // 6e. marco /instances → vede SOLO la sua
         const mInsts = await (await pageM.request.get(`/api/risdoc/templates/${tplId}/instances`)).json();
@@ -198,7 +198,7 @@ test("Phase 24.65 — marco non può listare istanze di un altro docente", async
     const tplId = (tplList.templates || [])[0]?.id;
     const csrfV = await getCsrf(pageV);
 
-    // vittorio crea una sua istanza
+    // docente1 crea una sua istanza
     const vFork = await pageV.request.post(`/api/risdoc/templates/${tplId}/instances`, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         data: new URLSearchParams({ _csrf: csrfV, instance_label: "VittorioOnly " + Date.now() }).toString(),
@@ -209,7 +209,7 @@ test("Phase 24.65 — marco non può listare istanze di un altro docente", async
         // marco fa GET istanze del template — vede solo le sue
         const mInsts = await (await pageM.request.get(`/api/risdoc/templates/${tplId}/instances`)).json();
         const seesV = (mInsts.instances || []).some(i => i.instance_key === vInst);
-        expect(seesV, "marco non vede istanze di vittorio").toBeFalsy();
+        expect(seesV, "marco non vede istanze di docente1").toBeFalsy();
     } finally {
         await pageV.request.post(`/api/risdoc/templates/${tplId}/instances/${vInst}/delete`, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },

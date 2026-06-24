@@ -11,18 +11,18 @@
  *   2. CROSS-TEACHER — superadmin (super_admin+teacher) e marco.rossi
  *      (teacher) creano istanze del medesimo template_id in parallelo.
  *      Verifica:
- *        - listInstances per vittorio mostra SOLO le sue istanze
+ *        - listInstances per docente1 mostra SOLO le sue istanze
  *        - listInstances per marco mostra SOLO le sue istanze
  *        - I due set di instance_key NON si sovrappongono nella view
  *          dell'altro utente (anche se i key potrebbero collidere
  *          letteralmente — sono scoped per teacher_id).
  *
- *   3. OVERRIDE PARALLEL — vittorio salva override sull'istanza A,
+ *   3. OVERRIDE PARALLEL — docente1 salva override sull'istanza A,
  *      marco salva override sull'istanza B (stesso template). Nessuno
  *      sovrascrive l'altro (UNIQUE constraint Phase 24.58 include
  *      teacher_id + instance_key).
  *
- *   4. INSTITUTIONAL DUAL-PATH — vittorio super_admin modifica baseline
+ *   4. INSTITUTIONAL DUAL-PATH — docente1 super_admin modifica baseline
  *      institutional, marco vede la baseline aggiornata MA i suoi
  *      override teacher restano intatti (3-layer resolver verifica).
  */
@@ -56,7 +56,7 @@ test.describe.configure({ mode: "serial" });
 test("Phase 25.B7 — RACE: 2 INSERT concorrenti con stesso label → 2 instance_key DIVERSI", async ({ browser }) => {
     test.setTimeout(60_000);
 
-    // 2 sessioni parallele dello stesso teacher (vittorio).
+    // 2 sessioni parallele dello stesso teacher (docente1).
     const ctxA = await browser.newContext();
     const ctxB = await browser.newContext();
     const pageA = await ctxA.newPage();
@@ -112,7 +112,7 @@ test("Phase 25.B7 — RACE: 2 INSERT concorrenti con stesso label → 2 instance
     }
 });
 
-test("Phase 25.B7 — CROSS-TEACHER: vittorio + marco listInstances scoped", async ({ browser }) => {
+test("Phase 25.B7 — CROSS-TEACHER: docente1 + marco listInstances scoped", async ({ browser }) => {
     test.setTimeout(60_000);
 
     const ctxV = await browser.newContext();
@@ -145,17 +145,17 @@ test("Phase 25.B7 — CROSS-TEACHER: vittorio + marco listInstances scoped", asy
         const { instance_key: keyM } = await resM.json();
 
         try {
-            // Vittorio NON deve vedere l'istanza di marco
+            // Operatore NON deve vedere l'istanza di marco
             const listV = await (await pageV.request.get(`/api/risdoc/templates/${tplId}/instances`)).json();
             const labelsV = (listV.instances || []).map(i => i.instance_label);
-            expect(labelsV, "vittorio vede SOLO sue istanze").toContain(labelV);
-            expect(labelsV, "vittorio NO istanze di marco").not.toContain(labelM);
+            expect(labelsV, "docente1 vede SOLO sue istanze").toContain(labelV);
+            expect(labelsV, "docente1 NO istanze di marco").not.toContain(labelM);
 
-            // Marco NON deve vedere l'istanza di vittorio
+            // Marco NON deve vedere l'istanza di docente1
             const listM = await (await pageM.request.get(`/api/risdoc/templates/${tplId}/instances`)).json();
             const labelsM = (listM.instances || []).map(i => i.instance_label);
             expect(labelsM, "marco vede SOLO sue istanze").toContain(labelM);
-            expect(labelsM, "marco NO istanze di vittorio").not.toContain(labelV);
+            expect(labelsM, "marco NO istanze di docente1").not.toContain(labelV);
 
             // GET file con instance_key di marco da pageV → 404 / not found / vuoto
             const detail = await (await pageV.request.get(`/api/admin/risdoc/templates/${tplId}`)).json();
@@ -163,11 +163,11 @@ test("Phase 25.B7 — CROSS-TEACHER: vittorio + marco listInstances scoped", asy
             const fileFromVByMarcoKey = await pageV.request.get(
                 `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}&instance_key=${keyM}`
             );
-            // Vittorio chiamando con la key di marco non ottiene il body di marco
-            // (instance_key passato ma teacher_id resolver = vittorio → no override match).
+            // Operatore chiamando con la key di marco non ottiene il body di marco
+            // (instance_key passato ma teacher_id resolver = docente1 → no override match).
             const fileJson = await fileFromVByMarcoKey.json();
             // Resolver fallback al source file disk (nessun teacher override per
-            // vittorio + keyM esiste). Verifica: source !== "teacher" né body con keyM marker.
+            // docente1 + keyM esiste). Verifica: source !== "teacher" né body con keyM marker.
             expect(fileJson.source).not.toBe("teacher");
         } finally {
             // Cleanup
@@ -186,7 +186,7 @@ test("Phase 25.B7 — CROSS-TEACHER: vittorio + marco listInstances scoped", asy
     }
 });
 
-test("Phase 25.B7 — OVERRIDE PARALLEL: vittorio + marco salvano override su stesso template, no clobbering", async ({ browser }) => {
+test("Phase 25.B7 — OVERRIDE PARALLEL: docente1 + marco salvano override su stesso template, no clobbering", async ({ browser }) => {
     test.setTimeout(60_000);
 
     const ctxV = await browser.newContext();
@@ -226,19 +226,19 @@ test("Phase 25.B7 — OVERRIDE PARALLEL: vittorio + marco salvano override su st
         expect(saveV.ok() && saveM.ok(), "entrambi save success").toBeTruthy();
 
         try {
-            // Vittorio leggendo deve vedere SENT_V (NON SENT_M)
+            // Operatore leggendo deve vedere SENT_V (NON SENT_M)
             const fileV = await (await pageV.request.get(
                 `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}`
             )).json();
-            expect(fileV.body, "vittorio vede il SUO override").toContain(SENT_V);
-            expect(fileV.body, "vittorio NON vede override di marco").not.toContain(SENT_M);
+            expect(fileV.body, "docente1 vede il SUO override").toContain(SENT_V);
+            expect(fileV.body, "docente1 NON vede override di marco").not.toContain(SENT_M);
 
             // Marco leggendo deve vedere SENT_M (NON SENT_V)
             const fileM = await (await pageM.request.get(
                 `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}`
             )).json();
             expect(fileM.body, "marco vede il SUO override").toContain(SENT_M);
-            expect(fileM.body, "marco NON vede override di vittorio").not.toContain(SENT_V);
+            expect(fileM.body, "marco NON vede override di docente1").not.toContain(SENT_V);
         } finally {
             // Cleanup overrides per entrambi
             await pageV.request.post(`/api/risdoc/templates/${tplId}/override/del`, {
@@ -285,7 +285,7 @@ test("Phase 25.B7 — INSTITUTIONAL DUAL-PATH: super_admin modifica baseline, te
         });
         expect(saveM.ok()).toBeTruthy();
 
-        // Step 2: vittorio (super_admin) salva institutional override (baseline)
+        // Step 2: docente1 (super_admin) salva institutional override (baseline)
         const saveInst = await pageV.request.post(`/api/risdoc/templates/${tplId}/institutional-override`, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             data: new URLSearchParams({
@@ -305,11 +305,11 @@ test("Phase 25.B7 — INSTITUTIONAL DUAL-PATH: super_admin modifica baseline, te
             expect(fileM.body, "marco vede il SUO override Phase 21").toContain(SENT_M_OVR);
             expect(fileM.body, "marco NON deve vedere institutional override").not.toContain(SENT_INST);
 
-            // Step 4: un teacher SENZA proprio override (vittorio path teacher)
+            // Step 4: un teacher SENZA proprio override (docente1 path teacher)
             // riceve la baseline institutional aggiornata.
-            // (Vittorio ha doppio path: senza override teacher leggerà la baseline.
+            // (Operatore ha doppio path: senza override teacher leggerà la baseline.
             // Per testare puro path institutional, dobbiamo eliminare prima eventuali
-            // override teacher di vittorio.)
+            // override teacher di docente1.)
             await pageV.request.post(`/api/risdoc/templates/${tplId}/override/del`, {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 data: new URLSearchParams({ _csrf: csrfV, kind: "html", path: htmlPath }).toString(),
@@ -317,7 +317,7 @@ test("Phase 25.B7 — INSTITUTIONAL DUAL-PATH: super_admin modifica baseline, te
             const fileV = await (await pageV.request.get(
                 `/api/risdoc/templates/${tplId}/file?kind=html&path=${encodeURIComponent(htmlPath)}`
             )).json();
-            expect(fileV.source, "vittorio resolver source = institutional").toBe("institutional");
+            expect(fileV.source, "docente1 resolver source = institutional").toBe("institutional");
             expect(fileV.body).toContain(SENT_INST);
         } finally {
             // Cleanup

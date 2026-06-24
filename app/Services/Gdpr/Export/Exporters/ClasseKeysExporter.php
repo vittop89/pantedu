@@ -25,7 +25,7 @@ use PDO;
  * USO AUTORITÀ:
  *   1. Autorità riceve bundle + classe_keys.json
  *   2. Per decifrare published_content[X].body_ct: serve classe_key plaintext.
- *   3. Data controller (Vittorio) usa KMS_MASTER_KEY off-line per unwrap
+ *   3. Data controller (Operatore) usa KMS_MASTER_KEY off-line per unwrap
  *      classe_keys[X].wrapped_key → plaintext key.
  *   4. AES-256-GCM-decrypt published_content[X] con quella key.
  *

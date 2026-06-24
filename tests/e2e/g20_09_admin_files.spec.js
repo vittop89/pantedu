@@ -1,6 +1,6 @@
 /**
  * G20.0 Phase 9 — Admin file-tree editor smoke test.
- * Vittorio è teacher (no super_admin) → endpoint admin restituiscono 403.
+ * Operatore è teacher (no super_admin) → endpoint admin restituiscono 403.
  * Test login come admin di sistema (richiede credenziali admin).
  *
  * Per ora testiamo solo che gli endpoint sono raggiungibili (anche con 403).
