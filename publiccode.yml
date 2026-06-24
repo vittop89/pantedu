@@ -1,8 +1,8 @@
-# publiccode.yml v0.4 — Developers Italia catalog metadata.
+# publiccode.yml — Developers Italia catalog metadata.
 # Spec: https://yml.publiccode.tools/
-# Validator: https://italia.github.io/publiccode-editor/
+# Validator: https://publiccode-editor.developers.italia.it/
 
-publiccodeYmlVersion: "0.4"
+publiccodeYmlVersion: "0.4.0"
 
 name: Pantedu
 url: "https://github.com/vittop89/pantedu"
@@ -32,16 +32,15 @@ intendedAudience:
     - education
     - research
   countries:
-    - it
+    - IT
   unsupportedCountries: []
 
 description:
   it:
     localisedName: Pantedu
     shortDescription: >-
-      Piattaforma educativa self-hosted privacy-first per docenti italiani:
-      mappe concettuali, esercizi, verifiche, gestione classi e materiali
-      didattici cifrati end-to-end.
+      Piattaforma didattica self-hosted privacy-first per docenti: mappe,
+      esercizi, verifiche e materiali cifrati end-to-end.
 
     longDescription: |
       Pantedu è una piattaforma didattica web self-hosted progettata per
@@ -93,12 +92,12 @@ description:
       - Cifratura envelope AES-256-GCM con KEK per docente
       - Crypto-shredding GDPR Art. 17 (O(1) via DROP teacher_keys row)
       - Authority export GDPR Art. 6(1)(c) firmato HMAC
-      - WAF applicativo: Proof-of-Work, scoring, geo-filtering, threat-intel, CrowdSec
+      - "WAF applicativo: Proof-of-Work, scoring, geo-filtering, threat-intel, CrowdSec"
       - Ban brute-force NAT-safe (lockout username + ban IP su credential-stuffing)
-      - Difesa di bordo: origin-lock al proxy/CDN + rate-limiting + anti IP-spoofing
+      - "Difesa di bordo: origin-lock al proxy/CDN + rate-limiting + anti IP-spoofing"
       - Audit log append-only con conservazione configurabile
       - SSO opzionale via Cloudflare Access / nginx auth_request
-      - Accessibilità WCAG 2.2 AA / EN 301 549 (Legge 4/2004 "Stanca"): dichiarazione AgID Form-A, audit per criterio, gate axe-core in CI, formule matematiche con MathML assistivo per screen reader
+      - "Accessibilità WCAG 2.2 AA / EN 301 549 (Legge 4/2004 Stanca): dichiarazione AgID Form-A, audit per criterio, gate axe-core in CI, formule matematiche con MathML assistivo per screen reader"
 
     screenshots: []
 
@@ -109,8 +108,6 @@ description:
 legal:
   license: EUPL-1.2
   mainCopyrightOwner: Vittorio Pantaleo
-  repoOwner: Vittorio Pantaleo
-  authorsFile: "NOTICE.md"
 
 maintenance:
   type: internal
@@ -139,7 +136,7 @@ dependsOn:
   proprietary: []
   hardware: []
 
-it:
+IT:
   countryExtensionVersion: "1.0"
 
   riuso: {}
