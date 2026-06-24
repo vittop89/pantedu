@@ -7,7 +7,7 @@ namespace App\Services\TexCompile;
 /**
  * Client per microservizio tex-compile-vps.
  *
- * Esempio uso (lato pantedu Aruba):
+ * Esempio uso (lato pantedu hosting legacy):
  *
  *   $client = new TexCompileClient(
  *       endpoint: getenv('TEX_COMPILE_ENDPOINT'),       // https://tex.tuosito.it

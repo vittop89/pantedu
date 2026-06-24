@@ -126,7 +126,7 @@ XHR, HTML per navigazione).
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  Nginx (Aruba) + Apache + PHP 8.3                            │
+│  Nginx (hosting legacy) + Apache + PHP 8.3                            │
 │                                                              │
 │  Kernel.php applica WafMiddleware globalmente:               │
 │   1. enabled=0 → bypass                                      │
@@ -290,7 +290,7 @@ server {
 ### GeoIP database auto-update settimanale
 
 ```bash
-# Installa geoipupdate (Aruba VPS Ubuntu)
+# Installa geoipupdate (hosting legacy VPS Ubuntu)
 sudo apt install geoipupdate
 
 # Config /etc/GeoIP.conf

@@ -24,7 +24,7 @@
 | File nella cartella | Git li cambia automaticamente |
 | XAMPP/Apache | **Non serve riavviare** - serve sempre la stessa cartella |
 | Sito locale (browser) | Ricarica la pagina per vedere le modifiche |
-| Server Aruba (FTP) | ⚠️ Il post-commit hook carica file su Aruba **da qualsiasi branch** |
+| Server hosting legacy | ⚠️ Il post-commit hook carica file su hosting condiviso **da qualsiasi branch** |
 
 ---
 
@@ -43,10 +43,10 @@
 
 - **Prima di cambiare branch**: fai commit o stash delle modifiche non salvate
 - **FTP non conosce i branch**: se fai commit senza `GIT_SKIP_DEPLOY=1`, i file vanno online da qualsiasi branch
-- **Eliminare un branch** cancella i commit locali ma **non** i file già caricati su Aruba via FTP
+- **Eliminare un branch** cancella i commit locali ma **non** i file già caricati su hosting condiviso via FTP
 - **Resettare `GIT_SKIP_DEPLOY`**: usa il bottone **🔄 Deploy: ON** nella barra in basso di VS Code:
-  - Clicca una volta → **Deploy DISATTIVATO** (i commit non caricano su Aruba)
-  - Clicca di nuovo → **Deploy ATTIVATO** (i commit caricano su Aruba)
+  - Clicca una volta → **Deploy DISATTIVATO** (i commit non caricano su hosting condiviso)
+  - Clicca di nuovo → **Deploy ATTIVATO** (i commit caricano su hosting condiviso)
   - In alternativa, da terminale:
   ```powershell
   # Disattiva

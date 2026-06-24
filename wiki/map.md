@@ -73,8 +73,8 @@ cssclasses: []
 | Informativa Art. 13 | `docs/privacy/informativa.md` | Trasparenza utenti finali (v2.0+) |
 | Registro trattamenti Art. 30 | `docs/privacy/registro-trattamenti.md` | 8 trattamenti documentati |
 | DPIA Art. 35 | `docs/privacy/dpia.md` | 14 rischi matrice |
-| DPA Aruba (sub-processor) | `docs/privacy/contracts/contracts-index.md` | Mappatura Art. 23 vs Art. 28 §3 |
-| Accountability archive | `docs/privacy/aruba-accountability/aruba-archive-index.md` | T&C + ordini + fatture |
+| DPA hosting legacy (sub-processor) | `docs/privacy/contracts/contracts-index.md` | Mappatura Art. 23 vs Art. 28 §3 |
+| Accountability archive | `docs/privacy/hosting-legacy-accountability/hosting-legacy-archive-index.md` | T&C + ordini + fatture |
 | Breach drill semestrale | `docs/privacy/breach_notification_template.md` | Template Art. 34 |
 
 ADR correlati: [[decisions/ADR-007-gdpr-compliance]], [[decisions/ADR-006-envelope-encryption]] (crypto-shredding O(1) per Art. 17).
@@ -117,12 +117,12 @@ SORT date DESC
 | Quali classi HTML non toccare? | [[domains/esercizi/esercizi-overview]], [[_llm-primer]] |
 | Perché non si usa un framework? | [[decisions/ADR-001-mvc-php-custom]] |
 | Cos'è Plan A vs Plan B risdoc? | [[domains/risdoc/risdoc-overview]], [[decisions/ADR-002-lit3-web-components]] |
-| Cosa non funziona su Aruba? | [[decisions/ADR-003-tex-pipeline]], [[technical-debt]] |
+| Cosa non funziona su hosting condiviso? | [[decisions/ADR-003-tex-pipeline]], [[technical-debt]] |
 | Qual è il debito tecnico principale? | [[technical-debt]] |
 | Come funziona la cifratura body? | [[decisions/ADR-006-envelope-encryption]] |
 | Come funziona il diritto all'oblio? | [[decisions/ADR-007-gdpr-compliance]] |
 | Perché audit reason obbligatoria? | [[decisions/ADR-008-audit-reason]] |
-| Dove sta il DPA Aruba? | `docs/privacy/contracts/contracts-index.md` (Art. 23 T&C v4.4) |
+| Dove sta il DPA hosting legacy? | `docs/privacy/contracts/contracts-index.md` (Art. 23 T&C v4.4) |
 | Come si usa OpenAPI spec? | `docs/api/api-index.md` |
 
 ## Convenzioni link wiki

@@ -30,7 +30,7 @@ Implementazione: `app/Core/Csrf.php` — ~30 LOC, puro PHP session.
 
 1. **Semplicità**: nessun DB o store separato per tracciare token usati.
 2. **UX**: evita invalidazioni al back-button del browser (problema comune con single-use).
-3. **Hosting**: soluzione stateless su sessione PHP, funziona su Aruba shared senza Redis.
+3. **Hosting**: soluzione stateless su sessione PHP, funziona su hosting condiviso shared senza Redis.
 4. **Sufficiente per il threat model**: il rischio principale è CSRF da siti terzi, mitigato dal SameSite=Lax cookie. Il replay attack entro TTL è accettato.
 
 ## Conseguenze

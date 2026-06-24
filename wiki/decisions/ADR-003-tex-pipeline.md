@@ -20,7 +20,7 @@ I documenti risdoc devono essere consegnati come PDF formali (piani annuali, rel
 
 Mantenere la **pipeline pdflatex server-side** come standard. Il server PHP esegue `pdflatex` su file temporanei e restituisce il PDF al client.
 
-**Workaround per Aruba**: su hosting condiviso Aruba (dove pdflatex non è installabile), il server genera un **ZIP** contenente `main.tex + doc.tex + risdoc.sty + images` e lo serve via URL. Il client può poi:
+**Workaround per hosting legacy**: su hosting condiviso hosting legacy (dove pdflatex non è installabile), il server genera un **ZIP** contenente `main.tex + doc.tex + risdoc.sty + images` e lo serve via URL. Il client può poi:
 1. Scaricare lo ZIP e compilare localmente con MiKTeX/TexLive.
 2. Aprire in Overleaf via `snip_uri` (upload automatico da URL).
 
@@ -33,6 +33,6 @@ Mantenere la **pipeline pdflatex server-side** come standard. Il server PHP eseg
 ## Conseguenze
 
 - **Pro**: qualità PDF alta; template riusabili; nessuna riscrittura HTML/CSS.
-- **Contro**: dipendenza da pdflatex installato sul server; non disponibile su Aruba shared. Il workaround ZIP/Overleaf introduce un passo manuale per l'utente.
+- **Contro**: dipendenza da pdflatex installato sul server; non disponibile su hosting condiviso shared. Il workaround ZIP/Overleaf introduce un passo manuale per l'utente.
 - **Zone protette**: i file `texCommon/risdoc.sty`, `texCommon/main.tex`, `texCommon/intestaLAteX_IIS.tex` non devono essere modificati senza test di compilazione. La classe `TexBuilder::esc()` è il layer di sicurezza contro LaTeX injection.
 - **Test**: `tests/e2e/risdoc_tex_production.spec.js` verifica che 7 template producano PDF validi con pdflatex locale.

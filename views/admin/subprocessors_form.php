@@ -19,7 +19,7 @@ include __DIR__ . '/_partials/page_head.php';
 
     <label>Nome *
         <input type="text" name="name" required maxlength="160" value="<?= $h($sp['name'] ?? '') ?>"
-               placeholder="es. Aruba S.p.A."
+               placeholder="es. il provider di hosting"
                class="fm-w-full">
     </label>
 

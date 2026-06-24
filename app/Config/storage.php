@@ -3,7 +3,7 @@
 /**
  * Phase 14 — storage provider config.
  *
- * default_provider=local durante fase Aruba. Per passare a S3/R2
+ * default_provider=local durante fase hosting legacy. Per passare a S3/R2
  * basta cambiare questo valore (nessuna modifica a controller).
  */
 

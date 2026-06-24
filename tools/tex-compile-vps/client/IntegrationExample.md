@@ -1,4 +1,4 @@
-# Integrazione lato Aruba — esempi
+# Integrazione lato hosting legacy — esempi
 
 Pattern consigliati per integrare `TexCompileClient` nei controller
 esistenti di pantedu senza rompere il flow legacy.
@@ -86,7 +86,7 @@ return [
 ];
 ```
 
-`.env` di produzione su Aruba:
+`.env` di produzione su hosting condiviso:
 
 ```ini
 TEX_COMPILE_ENDPOINT=https://tex.tuosito.it
@@ -145,7 +145,7 @@ foreach ($this->jobQueue->pending('verifica.compile') as $job) {
 }
 ```
 
-Su Aruba shared il cron è limitato → opzione concreta solo se passi al VPS
+su hosting condiviso shared il cron è limitato → opzione concreta solo se passi al VPS
 anche il sito stesso (architettura "all-in", vedi `README.md` opzione A).
 Per il PoC iniziale **resta sincrono**: 2-5s di latenza compile sono
 accettabili in UX e tengono il codice semplice.

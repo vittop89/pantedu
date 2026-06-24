@@ -1,9 +1,9 @@
 # Configurazione Cron Job per Anonimizzazione Log
 # Sistema di protezione privacy conforme GDPR
 
-## ISTRUZIONI PER ARUBA HOSTING
+## ISTRUZIONI PER HOSTING HOSTING
 
-### 1. Accesso al pannello di controllo Aruba
+### 1. Accesso al pannello di controllo hosting legacy
 - Accedi al pannello di controllo del tuo hosting
 - Vai nella sezione "Cron Job" o "Operazioni pianificate"
 
@@ -59,11 +59,11 @@ Il file `anonymization_log.txt` dovrebbe contenere righe simili a:
 2025-09-02 02:00:18 - Record anonimizzati: 156/3024 (cutoff: 2025-07-02)
 ```
 
-### 6. Considerazioni per Aruba
+### 6. Considerazioni per hosting legacy
 
 - **Percorsi assoluti**: Usa sempre percorsi assoluti per PHP e per i file
 - **Permessi**: Assicurati che i file PHP abbiano i permessi corretti (644)
-- **Output**: Su Aruba l'output del cron viene spesso inviato via email
+- **Output**: su hosting condiviso l'output del cron viene spesso inviato via email
 - **Timeout**: Gli script non dovrebbero superare i 30 secondi di esecuzione
 
 ### 7. Test manuale
@@ -99,7 +99,7 @@ In caso di problemi:
 1. Verifica i log di errore del server
 2. Controlla i permessi dei file
 3. Testa l'esecuzione manuale dello script
-4. Contatta il supporto Aruba se necessario
+4. Contatta il supporto hosting legacy se necessario
 
 ---
 

@@ -9,7 +9,7 @@ fino al primo PDF compilato end-to-end.
 - Sottodominio già puntato all'IP del VPS (DNS A record)
   Es. `tex.tuosito.it → 1.2.3.4`
 - Email valida per registrazione Let's Encrypt
-- App pantedu funzionante su Aruba
+- App pantedu funzionante su hosting condiviso
 
 ## Step 1 — Configurazione DNS (lato registrar)
 
@@ -124,7 +124,7 @@ x-compile-duration-ms: 850
 
 Se vedi `PDF document` il flow funziona end-to-end.
 
-## Step 6 — Configurazione lato Aruba (app pantedu)
+## Step 6 — Configurazione lato hosting legacy (app pantedu)
 
 ### 6a — Salva client PHP nel progetto
 
@@ -137,7 +137,7 @@ app/Services/TexCompile/TexCompileClient.php
 
 ### 6b — Variabili d'ambiente
 
-Aggiungi al `.env` di produzione (Aruba):
+Aggiungi al `.env` di produzione (hosting legacy):
 
 ```ini
 TEX_COMPILE_ENDPOINT=https://tex.tuosito.it
@@ -167,12 +167,12 @@ echo $res['ok'] ? "OK ({$res['duration_ms']}ms, " . strlen((string)$res['pdf']) 
                 : "FAIL [{$res['http_status']}]:\n{$res['log']}\n";
 ```
 
-Esegui da CLI Aruba (se hai accesso shell) o via endpoint diagnostico
+Esegui da CLI hosting legacy (se hai accesso shell) o via endpoint diagnostico
 temporaneo.
 
 ## Step 7 — Integrazione nei controller esistenti
 
-Dove l'app oggi genera `.tex` ma non può compilarlo (Aruba shared),
+Dove l'app oggi genera `.tex` ma non può compilarlo (hosting legacy shared),
 sostituisci con chiamata al client:
 
 ```php
@@ -202,7 +202,7 @@ sudo systemctl restart tex-compile
 echo "Nuovo segreto: $NEW_SECRET"
 ```
 
-Aggiorna immediatamente lo stesso valore lato Aruba `.env` per evitare
+Aggiorna immediatamente lo stesso valore lato hosting legacy `.env` per evitare
 401 in produzione. Considera un breve "doppio segreto" se vuoi
 rotazione zero-downtime.
 
@@ -241,7 +241,7 @@ curl -s https://tex.pantedu.eu/health
 
 **Smoke test bundle**:
 ```bash
-# Su Aruba, da PHP:
+# su hosting condiviso, da PHP:
 php -r '
 $client = new \App\Services\TexCompile\TexCompileClient(
     getenv("TEX_COMPILE_ENDPOINT"),
@@ -259,7 +259,7 @@ var_dump($result["ok"], strlen((string)$result["pdf"]));
 '
 ```
 
-**Rollback**: se il deploy v1.2.0 dovesse rompersi, il backend Aruba
+**Rollback**: se il deploy v1.2.0 dovesse rompersi, il backend hosting legacy
 include un fallback automatico a `/compile` (single-file) per le row
 con override TEX manuale (preview modal). Per disabilitare il bundle
 path globale, il client switcha a `/compile` quando `tex_files` e' null
@@ -287,7 +287,7 @@ Il servizio è **stateless** — niente da backuppare salvo:
 In caso di disastro VPS:
 1. Ricrea VPS da zero
 2. Rilancia `provision.sh`
-3. Sostituisci segreto HMAC con il vecchio (per non dover aggiornare Aruba)
+3. Sostituisci segreto HMAC con il vecchio (per non dover aggiornare hosting legacy)
 
 ## Troubleshooting
 

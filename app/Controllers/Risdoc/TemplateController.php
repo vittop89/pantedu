@@ -323,7 +323,7 @@ final class TemplateController
     /**
      * GET /api/risdoc/shared/{file}
      * Serve gli asset globali risdoc (risdoc.js, risdoc.css, etc.) da
-     * storage/templates/risdoc/ bypassando .htaccess Aruba. Whitelist
+     * storage/templates/risdoc/ bypassando .htaccess hosting legacy. Whitelist
      * esplicita di estensioni sicure.
      */
     /**

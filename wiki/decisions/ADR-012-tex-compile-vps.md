@@ -20,7 +20,7 @@ VPS: Hetzner CAX11 (ARM64, Debian 13), 5,48 €/mese, no commitment.
 
 ## Contesto
 
-Pantedu gira su Aruba shared hosting Linux che **non dispone di TeX
+Pantedu gira su hosting condiviso (legacy) Linux che **non dispone di TeX
 Live**. Il workflow di generazione PDF era quindi delegato a flow manuali:
 - **Overleaf**: docente manda .tex a Overleaf, compila lì, scarica PDF
 - **VSCode locale**: docente apre .tex in VSCode con MiKTeX/TeX Live
@@ -40,7 +40,7 @@ Limitazioni:
 ## Decisione
 
 Adottare un'**architettura ibrida**:
-- Sito pantedu resta su **Aruba shared** (no migrazione, zero rischio
+- Sito pantedu resta su **hosting legacy shared** (no migrazione, zero rischio
   produzione)
 - Compile LaTeX delegato a un **VPS dedicato** minimale
   (`tex.pantedu.eu`, Hetzner CAX11) che espone un microservizio HTTP
@@ -67,13 +67,13 @@ Adottare un'**architettura ibrida**:
 [Docente clicca TEX/PDF in topbar]
   ↓
 [topbar-modern.js doSalvaTex]
-  ↓ POST /api/verifica/save-tex-batch (PHP, Aruba)
+  ↓ POST /api/verifica/save-tex-batch (PHP, hosting legacy)
 [VerificaController::saveTexBatch] → salva 4-8 varianti in DB cifrate
   ↓ ritorna {docs: [{id, variant}, ...]}
 [topbar-modern.js compilePdfForDocs(docs)]
   ↓ Promise pool max 4 concorrenti
   for each doc:
-    POST /api/verifica/{id}/compile (PHP, Aruba)
+    POST /api/verifica/{id}/compile (PHP, hosting legacy)
       ↓ legge .tex via VerificaDocumentService::readTex
       ↓ POST /compile (PHP TexCompileClient → VPS HMAC)
         ↓ pdflatex sandbox tmpdir + nonstopmode
@@ -90,8 +90,8 @@ Adottare un'**architettura ibrida**:
 
 **Pro**: una sola infrastruttura, niente latenza rete tra app e compile.
 **Contro**: migrazione completa one-shot, downtime, rischio produzione,
-abbandono investimento Aruba esistente.
-**Verdetto**: scartata. L'opzione resta valida per il futuro se Aruba
+abbandono investimento hosting legacy esistente.
+**Verdetto**: scartata. L'opzione resta valida per il futuro se hosting legacy
 dovesse limitare ulteriormente l'app.
 
 ### B. Estensione VSCode dedicata (`pantedu-verifica.vsix`)
@@ -116,7 +116,7 @@ warnings antivirus, friction massima per setup.
 servizio universale (qualunque template pantedu funziona uguale per
 tutti).
 **Contro**: richiede VPS dedicato (~5€/mese), due sistemi da mantenere
-(Aruba + VPS), latenza rete ~250ms aggiuntiva per compile.
+(hosting legacy + VPS), latenza rete ~250ms aggiuntiva per compile.
 **Verdetto**: ✅ scelta. Trade-off ottimale per UX docente + costo.
 
 ## Conseguenze
@@ -129,7 +129,7 @@ tutti).
 - **PDF in archivio pantedu**: cifrato envelope ADR-006, sfogliabile,
   esportabile via /api/verifica/{id}/pdf
 - **Scaling indipendente**: il VPS si può potenziare (CPX21 → CPX31)
-  senza toccare Aruba
+  senza toccare hosting legacy
 - **Rollback istantaneo**: se il VPS ha problemi, basta lasciare
   `TEX_COMPILE_ENDPOINT` vuoto in `.env` per disabilitare l'integrazione;
   il TEX resta sempre salvato (PDF non bloccante per il save)
@@ -141,12 +141,12 @@ tutti).
 - **Costo runtime aggiuntivo**: 5,48 €/mese (~66 €/anno)
 - **Due sistemi da mantenere**: aggiornamenti TeX Live, rinnovo cert TLS
   (auto via certbot), monitoring uptime VPS
-- **Latenza rete**: ~250ms round-trip Aruba ↔ Hetzner DE per ogni compile;
+- **Latenza rete**: ~250ms round-trip hosting legacy ↔ Hetzner DE per ogni compile;
   trascurabile per compile sincrono di 1-5s, percepibile per batch grosso
 - **Single point of failure**: se VPS down, nessun PDF (ma TEX comunque
   salvato; mitigation futura: fallback a job queue + retry async)
 - **Segreto HMAC da custodire**: rotabile via `provision.sh` step 5,
-  richiede aggiornamento simultaneo di `.env.local` su Aruba
+  richiede aggiornamento simultaneo di `.env.local` su hosting condiviso
 
 ## Sicurezza
 
@@ -193,7 +193,7 @@ NEW_SECRET=$(openssl rand -hex 32)
 sudo sed -i "s|^TEX_COMPILE_SECRET=.*|TEX_COMPILE_SECRET=$NEW_SECRET|" /opt/tex-compile/.env
 sudo systemctl restart tex-compile
 
-# Su Aruba: aggiorna .env.local con stesso valore (zero downtime se fatto entro 1 min)
+# su hosting condiviso: aggiorna .env.local con stesso valore (zero downtime se fatto entro 1 min)
 ```
 
 ## Riferimenti

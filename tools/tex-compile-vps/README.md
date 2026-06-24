@@ -1,7 +1,7 @@
 # tex-compile-vps — PoC server-side LaTeX compile
 
 Microservizio stateless per compilazione LaTeX su VPS dedicato.
-Pensato per affiancare l'app principale pantedu in hosting Aruba shared
+Pensato per affiancare l'app principale pantedu in hosting hosting legacy shared
 (che non dispone di TeX Live), delegando la sola fase CPU-bound
 `pdflatex → PDF` a un VPS economico (≤7€/mese).
 
@@ -9,7 +9,7 @@ Pensato per affiancare l'app principale pantedu in hosting Aruba shared
 
 ```
 ┌─────────────────────────┐         HTTPS + HMAC          ┌─────────────────────┐
-│  Aruba shared (PHP app) │  ──────────────────────────►  │  VPS tex-compile    │
+│  hosting legacy shared (PHP app) │  ──────────────────────────►  │  VPS tex-compile    │
 │                         │      POST /compile             │                     │
 │  TexBuilder.php genera  │      { tex, doc_id, engine }   │  FastAPI + uvicorn  │
 │  .tex content           │                                │  pdflatex (TeX Live)│
@@ -19,7 +19,7 @@ Pensato per affiancare l'app principale pantedu in hosting Aruba shared
 ```
 
 **Vantaggi:**
-- Zero migrazione del sito (resta su Aruba)
+- Zero migrazione del sito (resta su hosting condiviso)
 - VPS minimale (no PHP, no DB, no storage persistente)
 - Rollback istantaneo: disattivi VPS → app torna al flow precedente
 - Scaling indipendente: scali solo il VPS al crescere dei compile
@@ -36,7 +36,7 @@ Pensato per affiancare l'app principale pantedu in hosting Aruba shared
 | `app/`         | Servizio FastAPI Python — endpoint `/compile`   |
 | `systemd/`     | Unit file per autostart su Debian/Ubuntu        |
 | `nginx/`       | Reverse proxy + TLS termination                 |
-| `client/`      | Classe PHP da integrare lato Aruba              |
+| `client/`      | Classe PHP da integrare lato hosting legacy              |
 | `provision.sh` | Script one-shot per setup VPS Debian 13 (trixie) |
 | `DEPLOY.md`    | Procedura passo-passo deploy                    |
 | `.env.example` | Variabili d'ambiente del servizio               |
@@ -78,7 +78,7 @@ Pensato per affiancare l'app principale pantedu in hosting Aruba shared
 2. Configurazione DNS sottodominio (`tex.tuosito.it → IP_VPS`)
 3. Generazione cert TLS via certbot
 4. Setup variabili in `.env` con segreto HMAC robusto
-5. Integrazione `TexCompileClient.php` lato Aruba (vedi `client/`)
+5. Integrazione `TexCompileClient.php` lato hosting legacy (vedi `client/`)
 6. Test smoke con un .tex di esempio
 
 Vedi `DEPLOY.md` per procedura completa.

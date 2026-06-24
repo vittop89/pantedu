@@ -5,7 +5,7 @@
  *
  * Reads DSN components from environment. When `enabled` is false the
  * Repository layer short-circuits to legacy JSON stores — lets the app
- * keep running if MySQL is unavailable (e.g. during Aruba activation).
+ * keep running if MySQL is unavailable (e.g. during hosting legacy).
  */
 
 return [

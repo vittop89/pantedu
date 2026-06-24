@@ -84,7 +84,7 @@ ADR e ticket, vedi [`wiki/changelog/`](wiki/changelog/).
   fismapant_app, certbot delete beta.fismapant.com + tex.fismapant.com,
   cleanup `/etc/sudoers.d/fismapant-deploy`, `/etc/fismapant/`,
   `/usr/local/{bin,sbin}/fismapant-*`, userdel -r fismapant.
-  Domini `fismapant.com` (Aruba) e repo GitHub `vittop89/fismapant`
+  Domini `fismapant.com` (hosting legacy) e repo GitHub `vittop89/fismapant`
   NON toccati (archivio storico).
 
 ### Security

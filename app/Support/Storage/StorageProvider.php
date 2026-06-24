@@ -6,7 +6,7 @@ namespace App\Support\Storage;
  * Phase 14 — Storage provider abstraction.
  *
  * Contratto minimo per storage oggetti (materiali docenti, allegati, etc).
- * Implementazioni: LocalStorageProvider (filesystem Aruba),
+ * Implementazioni: LocalStorageProvider (filesystem hosting legacy),
  * S3CompatibleStorageProvider (stub pronto per cloud).
  *
  * Key scheme:

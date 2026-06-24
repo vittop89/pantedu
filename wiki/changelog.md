@@ -24,7 +24,7 @@ Storico modifiche tracciato per **mese** in `wiki/changelog/YYYY-MM.md`.
   (Drive/Local/GitHub) + path mirror verifiche su Drive.
 - [2026-04](changelog/2026-04.md) — Phase 25 quality hardening completa
   (envelope encryption + GDPR self-service + minori + observability +
-  pentest + DPA Aruba). Phase 26 OpenAPI 3.1.
+  pentest + DPA hosting legacy). Phase 26 OpenAPI 3.1.
 
 ## Convenzioni
 

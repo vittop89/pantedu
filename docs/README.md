@@ -17,7 +17,7 @@ Documentazione di progetto organizzata per area tematica. Questa cartella contie
 
 ### Sicurezza e audit
 
-- [`security/pentest/2026-04-29/`](security/pentest/2026-04-29/) — ultimo audit completo AI-assisted whitebox + DAST autorizzato. Sostituisce baseline `pentest-2026-04` (rimossa). Deliverable PDF firmato PAdES BES + TSA AgID Aruba: `report-final-signed.pdf` (sha256:`364409f1...`)
+- [`security/pentest/2026-04-29/`](security/pentest/2026-04-29/) — ultimo audit completo AI-assisted whitebox + DAST autorizzato. Sostituisce baseline `pentest-2026-04` (rimossa). Deliverable PDF firmato PAdES BES + TSA AgID hosting legacy: `report-final-signed.pdf` (sha256:`364409f1...`)
 - [`security/operations/kms-recovery.md`](security/operations/kms-recovery.md) — procedura di recupero KMS_MASTER_KEY in caso di emergenza
 - [`todo/REMEDIATION-pentest-2026-04-29.md`](todo/REMEDIATION-pentest-2026-04-29.md) — working backlog post-audit con step concreti P0-P3
 - [`todo/prompt_security.md`](todo/prompt_security.md) — prompt template per audit AI-assisted (versione 1.1, con lessons learned dal pentest 2026-04-29)

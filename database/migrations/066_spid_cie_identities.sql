@@ -3,7 +3,7 @@
 --
 -- Una row per ogni IdP (SPID provider o CIE) collegato ad un account
 -- pantedu. Permette login multi-IdP per lo stesso user (e.g., docente
--- linka sia Aruba SPID che CIE per ridondanza accessi).
+-- linka sia hosting legacy SPID che CIE per ridondanza accessi).
 --
 -- Crypto: attributes_ct/iv/tag/kv usa envelope encryption con
 -- KMS_MASTER_KEY (riusa stesso meccanismo body_pt_*/body_html_*).
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS spid_cie_identities (
     -- Per SPID: dall'attributo SAML "fiscalNumber".
     -- Per CIE: dal certificato della carta.
     fiscal_code      VARCHAR(16)       NOT NULL,
-    -- SPID IdP entity ID (e.g. "https://identity.aruba.it/saml/sso").
+    -- SPID IdP entity ID (e.g. "https://example.net).
     -- NULL per CIE (unico IdP gov).
     idp_entity_id    VARCHAR(255)      NULL,
     -- Attributi SAML (name, familyName, dateOfBirth, email, ecc.)

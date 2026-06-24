@@ -2,11 +2,11 @@
 --
 -- Sostituisce il flusso sincrono `POST /api/verifica/{id}/compile`
 -- (richiesta utente bloccata 4-20s per 8 varianti, con rischio FPM
--- timeout 30s su Aruba) con un'enqueue + worker pattern:
+-- timeout 30s su hosting condiviso) con un'enqueue + worker pattern:
 --
 --   1. Browser dopo saveBatch chiama POST /api/verifica/{id}/compile-async
 --      che enqueua una row pending e ritorna {job_id} in ~10ms.
---   2. Cron Aruba (1 min) esegue process_compile_jobs.php che pesca i
+--   2. Cron hosting legacy (1 min) esegue process_compile_jobs.php che pesca i
 --      job pending FIFO, invoca VPS /compile-bundle e salva il PDF.
 --   3. Browser polla GET /api/verifica/jobs/{id} fino a status='done'
 --      o 'failed'. Polling backoff: 1s -> 2s -> 5s -> 10s.

@@ -1202,7 +1202,7 @@ $router->group(['middleware' => ['auth', 'role:admin', 'log']], function (Router
     });
 
     // G22.S7 — DB migration via web (super-admin only; check in controller).
-    // Necessario su Aruba shared hosting senza accesso SSH per `php tools/migrate.php`.
+    // Necessario su hosting condiviso (legacy) senza accesso SSH per `php tools/migrate.php`.
     $r->get ('/admin/migrate',         [\App\Controllers\AdminMigrateController::class, 'page']);
     $r->get ('/admin/migrate/status',  [\App\Controllers\AdminMigrateController::class, 'status']);
 

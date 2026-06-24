@@ -99,5 +99,5 @@ flowchart TD
 | ~~`risdoc.js` legacy (4931 LOC)~~ | IIFE monolitica Piano A, non bundle | Rimossa dal repo (in git history); superseded da Web Components Plan B |
 | Dual-write DB+JSON | Rischio desync se una scrittura fallisce | `DB_DUAL_WRITE=false` dopo consolidamento |
 | Vite manifest PHP | `ViteManifest::script()` integrato | ✅ Collegato in `views/partials/head.php` (bundle quando manifest presente, fallback moduli diretti in dev) |
-| pdflatex server-side | Non disponibile su Aruba shared hosting base | Workaround: ZIP export + Overleaf snip_uri |
+| pdflatex server-side | Non disponibile su hosting condiviso (legacy) base | Workaround: ZIP export + Overleaf snip_uri |
 | Google Apps Script | Non testato in CI, dipende da token utente | Separato da core app, best-effort |

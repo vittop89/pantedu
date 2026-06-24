@@ -1,4 +1,4 @@
-# Pantedu root .htaccess — Aruba shared hosting
+# Pantedu root .htaccess — hosting condiviso (legacy)
 # All traffic routed through /public/index.php front controller.
 
 Options -Indexes +FollowSymLinks
@@ -78,7 +78,7 @@ DirectoryIndex public/index.php index.php
     # Phase 25.B7 — info disclosure mitigation (FND-003 pentest 2026-05-18):
     # rimuovi header che rivelano versione PHP/Apache esatta. Server header
     # full version richiede `ServerTokens Prod` (httpd.conf, non gestibile via
-    # .htaccess su Aruba shared); fallback `Header always unset Server` può
+    # .htaccess su hosting condiviso shared); fallback `Header always unset Server` può
     # essere ignorato da mod_security ma vale la pena tentarlo.
     Header always unset X-Powered-By
     Header always unset Server

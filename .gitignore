@@ -134,13 +134,13 @@ docs/security/pentest/*/signed/
 # Privacy / GDPR — accountability files con PII
 # ========================================
 # Documenti di accountability (Art. 28/30/32 GDPR) scaricati dal portale
-# Aruba contengono PII billing (codice cliente, dati pagamento, indirizzi).
+# hosting legacy contengono PII billing (codice cliente, dati pagamento, indirizzi).
 # I file binari NON entrano in git. README + SHA256SUMS sì (no PII, prova
 # integrità degli archivi off-site).
-docs/privacy/aruba-accountability/*
-!docs/privacy/aruba-accountability/README.md
-!docs/privacy/aruba-accountability/SHA256SUMS.txt
-!docs/privacy/aruba-accountability/.gitkeep
+docs/privacy/hosting-legacy-accountability/*
+!docs/privacy/hosting-legacy-accountability/README.md
+!docs/privacy/hosting-legacy-accountability/SHA256SUMS.txt
+!docs/privacy/hosting-legacy-accountability/.gitkeep
 tools/webhook/_vps_env_local.sh
 tools/webhook/_vps_db_diag.sh
 

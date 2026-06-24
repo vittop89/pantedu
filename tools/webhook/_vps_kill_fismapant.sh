@@ -1,6 +1,6 @@
 #!/bin/bash
 # Phase B — Step 11: VPS-only kill of fismapant.
-# Domain on Aruba + GitHub repo are NOT touched.
+# Domain on hosting legacy + GitHub repo are NOT touched.
 # Run from root on pantedu-vps.
 
 set -e

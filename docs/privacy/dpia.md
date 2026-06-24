@@ -129,7 +129,7 @@ Ogni dato raccolto ha finalità motivata documentata:
 - User-Agent: hash SHA-256 (audit traceable, no fingerprinting).
 - Flag DSA/DIS su esercizi (metadata): cifrato at-rest insieme al body del docente (Phase 25.D), accessibile solo al docente proprietario.
 - Body docente (esercizi/verifiche/mappe): cifrato at-rest envelope encryption.
-- Backup: cifrati at-rest (TODO conferma con hosting Aruba: SSL transport ok, server-side encryption verifica).
+- Backup: cifrati **lato client prima dell'upload** (GPG/age) verso Backblaze B2 (UE); transport TLS. L'hosting applicativo è su Hetzner (Germania, UE).
 
 Trattamenti **rifiutati per proporzionalità insufficiente**:
 - Profilazione comportamentale studente (es. "tempo permanenza pagina") — fuori scope Phase 25.
@@ -154,7 +154,7 @@ Trattamenti **rifiutati per proporzionalità insufficiente**:
 | R10 | Cancellazione utente lascia tracce in backup | Media | Media | Crypto-shredding rende illeggibili anche backup (KEK shred = body unreadable) | **BASSO** ✅ |
 | R11 | Phishing parent_email per fake consent | Media | Alta | Token random 64-hex single-use + TTL 30g + warning in mail | **MEDIO** ⚠️ |
 | R12 | Perdita KMS_MASTER_KEY | Bassa | **Critica** | docs/security/kms-recovery.md: 3 backup (env + Yubikey + BIP-39) + drill semestrale | **MEDIO** ⚠️ |
-| R13 | Cloud extra-UE (Aruba data center) | Bassa | Media | Aruba EU data center documentato; SCC se sub-processor extra-UE | **BASSO** ✅ |
+| R13 | Cloud extra-UE | Bassa | Media | Hosting Hetzner (DE) + backup Backblaze B2 (NL), tutto in UE; SCC se sub-processor extra-UE (es. opt-in Google) | **BASSO** ✅ |
 | R14 | Ingegneria sociale → admin reset password | Media | Alta | Multi-fattore admin (TODO Phase 25.E future) — attualmente solo password+CSRF | **MEDIO** ⚠️ |
 
 ### Rischi residui ALTI (BLOCKER PROD-MINORI)
@@ -178,18 +178,19 @@ Trattamenti **rifiutati per proporzionalità insufficiente**:
 - ✅ **Audit log immutabile**: privileged_access_log + crypto_access_log + consent_audit (REVOKE UPDATE/DELETE post-deploy — TODO operational).
 - ✅ **Pseudonimizzazione**: hash SHA-256 IP/UA in audit log.
 - ✅ **Crypto-shredding O(1)**: Art. 17 GDPR efficiente (DELETE 1 row teacher_keys → all body unreadable).
+- ✅ **Governance chiave master (opzionale, su richiesta)**: la `KMS_MASTER_KEY` può essere frazionata con **Shamir Secret Sharing** (es. 3-su-5 o 2-su-3) tra **custodi distinti** (es. responsabile tecnico + segreteria + dirigenza): nessun singolo custode ricostruisce la chiave da solo. Implementazione: `app/Services/Crypto/ShamirSecretSharing*`.
 - ✅ **CSP**: default-src 'self', frame-ancestors 'none', `object-src 'none'`, `base-uri 'self'`; `'unsafe-eval'` rimosso; modalità `strict` (nonce per-request + `strict-dynamic`) pronta + `report-only` per rollout, toggle runtime da `/admin/waf/config` (Track 7, 2026-06-03).
 - ✅ **Isolation testata**: 4-teacher concurrent E2E (Phase 25.B7) + dual-role super_admin path verificato.
 
 ### Organizzative (in implementazione)
 
 - ✅ **Privacy by design** documentato in ADR-006/007.
-- ✅ **DPO contact**: {{OPERATORE_EMAIL}} (Phase 25.C13 form `/dpo-contact` PENDING).
+- ✅ **DPO contact**: form pubblico `/dpo-contact` (instradato a `{{OPERATORE_EMAIL}}`).
 - ✅ **Retention policy**: `app/Config/retention.php` con anonimizzazione automatica.
 - ✅ **Data breach runbook**: `docs/privacy/data_breach_runbook.md` (Phase 25.C12 drill semestrale PENDING).
 - ✅ **Registro trattamenti Art. 30**: completato (Phase 25.C8). Non più obbligatorio ex §3 (no Art. 9), ma redatto come buona pratica per dati di minori e accountability Art. 5 §2.
 - 🚨 **DPIA firmata Titolare**: questo documento, in bozza.
-- ⬜ **DPA con sub-processors**: con Aruba (hosting) — TODO contrattuale.
+- ⬜ **DPA con sub-processors**: Hetzner (hosting UE), Cloudflare (edge), Backblaze B2 (backup) — verifica DPA Art. 28 §4 per ciascuno.
 - ⬜ **Annual privacy review**: scheduled gennaio di ogni anno.
 
 ### KMS_MASTER_KEY backup (Art. 32 §1 c)
@@ -199,6 +200,7 @@ Vedi `docs/security/kms-recovery.md`:
 - Yubikey hardware GPG-encrypted (cassaforte ufficio)
 - Paper BIP-39 32-word seed phrase (cassaforte separata)
 - Drill semestrale documentato
+- **Opzione (su richiesta dell'Istituto)**: frazionamento Shamir *k*-su-*n* (es. 3-su-5) con quote affidate a custodi distinti (responsabile tecnico + segreteria + dirigenza) → nessun single point of trust sulla chiave master.
 
 ## 5. Consultazione preventiva Garante (Art. 36)
 
@@ -228,7 +230,7 @@ Senza completamento del punto 6 (R7 Art. 8 minori), il go-live con utenti < 14 a
 | Campo | Valore |
 |-------|--------|
 | Titolare | {{OPERATORE_NOME}} |
-| Email | {{OPERATORE_EMAIL}} |
+| Email | vittop89@users.noreply.github.com |
 | Data versione bozza | 2026-04-27 (agg. 2026-06-17) |
 | Versione DPIA | 1.1 |
 | Stato | BOZZA — go-live minori OK in Anonima/Ridotta; in Completa con consenso genitoriale (base concordata con l'Istituto) |

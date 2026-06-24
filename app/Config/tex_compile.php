@@ -8,7 +8,7 @@
  * VPS dedicato es. Hetzner CAX11).
  *
  * Architettura:
- *   Aruba (PHP) → POST /compile (HMAC) → VPS → ritorna PDF binario
+ *   hosting legacy (PHP) → POST /compile (HMAC) → VPS → ritorna PDF binario
  *
  * Le credenziali (endpoint URL e segreto HMAC) si configurano in `.env`
  * di produzione. NON committare valori reali in `.env.example` /repo.

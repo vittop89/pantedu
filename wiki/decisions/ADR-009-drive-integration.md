@@ -13,7 +13,7 @@ aliases: ["adr-009", "drive-integration", "google-drive-oauth"]
 
 ## Contesto
 
-`scriptGoogle_sync/` (Google Apps Script + webhook PHP su Aruba) implementa
+`scriptGoogle_sync/` (Google Apps Script + webhook PHP su hosting condiviso) implementa
 oggi il flusso **Drive → server**: il docente carica `.drawio`/PDF su una
 cartella Drive predefinita, GAS fa polling ogni 5 minuti, scarica via FTP
 sull'hosting + genera `MAT_mappe-links_*.json` consumati dal sito.

@@ -16,7 +16,7 @@ L'audit del 2026-04-29 ha prodotto 24 finding aperti, distribuiti su 5 sprint di
 
 ### Finding HIGH aperti (P0, entro 24h)
 
-- **SECRET-001** (CVSS 7.5) — credenziali FTP Aruba hardcoded in `scriptGoogle_sync/upload-webhook.php:32-35`. Rotation password Aruba + spostamento in env var richiesti immediatamente.
+- **SECRET-001** (CVSS 7.5) — credenziali FTP hosting legacy hardcoded in `scriptGoogle_sync/upload-webhook.php:32-35`. Rotation password hosting legacy + spostamento in env var richiesti immediatamente.
 - **SECRET-003** (CVSS 7.0) — DB backups, debug log e file PII utenti tracciati in git per policy `.gitignore` Phase 20 backup-friendly. Aggiornamento `.gitignore` + `git rm --cached` + history rewrite con `git filter-repo` richiesti.
 
 ### Finding MEDIUM aperti (P1, entro 30g)
@@ -40,7 +40,7 @@ L'audit conferma che il **runtime applicativo principale è solido**:
 
 ### Documenti firmati
 
-- [docs/security/pentest/2026-04-29/report-final-signed.pdf](../docs/security/pentest/2026-04-29/report-final-signed.pdf) — 100 pagine, PAdES BES + marca temporale TSA AgID Aruba
+- [docs/security/pentest/2026-04-29/report-final-signed.pdf](../docs/security/pentest/2026-04-29/report-final-signed.pdf) — 100 pagine, PAdES BES + marca temporale TSA AgID hosting legacy
 - Hash SHA-256: `sha256:364409f1b8b8a100c3d6b323bd5ef90f2923238ee46b1f6e2238da48de7bd855`
 - Tag git riproducibilità: `audit-2026-04-29-baseline` su `af3e011`
 
@@ -48,13 +48,13 @@ L'audit conferma che il **runtime applicativo principale è solido**:
 
 Cadenza annuale (2027-04) o anticipato a major release (Phase 26 modernization closure).
 
-## DPA con sub-processor Aruba (Art. 28 GDPR)
+## DPA con sub-processor hosting legacy (Art. 28 GDPR)
 
-L'obbligo di nomina del Responsabile del trattamento ai sensi dell'Art. 28 GDPR per il sub-processor Aruba (hosting + FTP + email) è soddisfatto dalle **Condizioni di fornitura servizi hosting Aruba versione 4.4** (in vigore dal 24 Marzo 2026), Articolo 23 — "Nomina a Responsabile del Trattamento".
+L'obbligo di nomina del Responsabile del trattamento ai sensi dell'Art. 28 GDPR per il sub-processor hosting legacy (hosting + FTP + email) è soddisfatto dalle **Condizioni di fornitura servizi hosting hosting legacy versione 4.4** (in vigore dal 24 Marzo 2026), Articolo 23 — "Nomina a Responsabile del Trattamento".
 
-Documento di riferimento: <https://hosting.aruba.it/documents/tc-files/it/1_condizionifornituraservizihostingaruba.pdf>
+Documento di riferimento: <https://example.net
 
-**Attenzione**: NON è l'Articolo 22 (che dichiara Aruba "Titolare autonomo" per i dati di fatturazione/anagrafica del cliente). Il DPA vero è l'**Articolo 23**, che nomina Aruba come Responsabile per i dati che il Cliente immette/trasmette tramite il servizio.
+**Attenzione**: NON è l'Articolo 22 (che dichiara hosting legacy "Titolare autonomo" per i dati di fatturazione/anagrafica del cliente). Il DPA vero è l'**Articolo 23**, che nomina hosting legacy come Responsabile per i dati che il Cliente immette/trasmette tramite il servizio.
 
 L'Articolo 23 copre tutti i 10 obblighi richiesti dall'Art. 28 §3 GDPR:
 
@@ -68,11 +68,11 @@ L'Articolo 23 copre tutti i 10 obblighi richiesti dall'Art. 28 §3 GDPR:
 - documentazione audit (preavviso 20 giorni, max 1/anno, costi a carico Cliente)
 - riferimento esplicito Art. 28 Regolamento UE 2016/679
 
-**Auto-attivazione**: la nomina si attiva automaticamente con la sottoscrizione del servizio Aruba e l'accettazione delle Condizioni di fornitura. Non è richiesta firma di un documento separato. Per accountability tenere agli atti la data di sottoscrizione del servizio + l'archivio della versione T&C in vigore al momento del trattamento.
+**Auto-attivazione**: la nomina si attiva automaticamente con la sottoscrizione del servizio hosting legacy e l'accettazione delle Condizioni di fornitura. Non è richiesta firma di un documento separato. Per accountability tenere agli atti la data di sottoscrizione del servizio + l'archivio della versione T&C in vigore al momento del trattamento.
 
-**Archivio accountability**: i documenti di prova (T&C v4.4, Informativa Privacy v2.9, conferme ordine + pagamento, storico fatture) sono conservati in `docs/privacy/aruba-accountability/` con hash SHA-256 verificabili. Solo `README.md` e `SHA256SUMS.txt` sono in git (i PDF/XLSX contengono PII billing — backup off-line cifrato). Vedi [`docs/privacy/aruba-accountability/aruba-archive-index.md`](../docs/privacy/aruba-accountability/aruba-archive-index.md).
+**Archivio accountability**: i documenti di prova (T&C v4.4, Informativa Privacy v2.9, conferme ordine + pagamento, storico fatture) sono conservati in `docs/privacy/hosting-legacy-accountability/` con hash SHA-256 verificabili. Solo `README.md` e `SHA256SUMS.txt` sono in git (i PDF/XLSX contengono PII billing — backup off-line cifrato). Vedi [`docs/privacy/hosting-legacy-accountability/hosting-legacy-archive-index.md`](../docs/privacy/hosting-legacy-accountability/hosting-legacy-archive-index.md).
 
-Verifica: 2026-04-29 (post audit pentest-2026-04-29). Status: **risolto** (sostituisce P0.1 della baseline pentest-2026-04 "DPA Aruba firmato").
+Verifica: 2026-04-29 (post audit pentest-2026-04-29). Status: **risolto** (sostituisce P0.1 della baseline pentest-2026-04 "DPA hosting legacy firmato").
 
 ## Auth overview
 
@@ -289,7 +289,7 @@ per i valori raccomandati):
   - `tools/gdpr/breach_drill.php` semestrale
   - `tools/crypto/audit_report.php --json` daily → SOC webhook
 - [ ] Pentest esterno completato (BLOCKER PROD — Phase 25.E7)
-- [x] DPA Aruba ✅ — Art. 23 Condizioni di Fornitura v4.4 (24/03/2026)
+- [x] DPA hosting legacy ✅ — Art. 23 Condizioni di Fornitura v4.4 (24/03/2026)
   costituisce DPA standard ex Art. 28 GDPR. Archive in
   [docs/privacy/contracts/](../docs/privacy/contracts/). 10/10 requisiti
   Art. 28 §3 coperti. Auto-attivo all'accettazione Modulo d'ordine.

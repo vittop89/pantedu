@@ -11,7 +11,7 @@ use SessionUpdateTimestampHandlerInterface;
  *
  * Sostituisce il default filesystem handler:
  *   - abilita scaling orizzontale (più istanze web server condividono sessioni)
- *   - niente corruzione da crash filesystem Aruba
+ *   - niente corruzione da crash filesystem hosting legacy
  *   - GC via DELETE WHERE last_access < NOW()-lifetime (idempotente)
  *
  * Tabella `sessions`:

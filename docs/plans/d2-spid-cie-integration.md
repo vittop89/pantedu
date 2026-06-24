@@ -22,7 +22,7 @@
 Permettere ai docenti/admin pantedu di autenticarsi via:
 
 - **SPID** (Sistema Pubblico di Identità Digitale) — IdP italiani
-  governativi (Aruba, Poste, Lepida, Sielte, Namirial, InfoCert, Register,
+  governativi (hosting legacy, Poste, Lepida, Sielte, Namirial, InfoCert, Register,
   TIM, SpidItalia)
 - **CIE** (Carta d'Identità Elettronica) — autenticazione tramite chip
   della carta d'identità + PIN
@@ -124,7 +124,7 @@ CREATE TABLE spid_cie_identities (
     -- Per SPID: codice fiscale dell'IdP (univoco a livello Italia).
     -- Per CIE: codice fiscale dal certificato carta.
     fiscal_code     VARCHAR(16) NOT NULL,
-    -- Identity Provider (per SPID): aruba/poste/lepida/etc.
+    -- Identity Provider (per SPID): hosting-legacy/poste/lepida/etc.
     idp_entity_id   VARCHAR(255) NULL,
     -- Attributi SPID utili: name, familyName, dateOfBirth, ecc.
     -- Crittografato envelope con KMS (riusa MasterKey).

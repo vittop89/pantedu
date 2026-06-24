@@ -18,7 +18,7 @@ geometry: "margin=2cm"
 >
 > - Form pubblico segnalazione: [`/segnalazione-contenuti`](https://beta.pantedu.eu/segnalazione-contenuti) (rate-limited 3/h/IP)
 > - Coda admin: [`/admin/takedown`](https://beta.pantedu.eu/admin/takedown) (super-admin only)
-> - Email contatto: `{{OPERATORE_EMAIL}}` (alias Aruba → {{OPERATORE_EMAIL}})
+> - Email contatto: `{{OPERATORE_EMAIL}}` (alias → casella dell'operatore)
 > - Tabella DB: `takedown_requests` (migration 057 applicata)
 > - Service: `App\Services\Gdpr\TakedownRequestService`
 >

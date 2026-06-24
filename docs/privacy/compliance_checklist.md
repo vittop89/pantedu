@@ -8,7 +8,7 @@ Copertura tecnica post BATCH 1-5.
 |---|:-:|---|
 | Privacy by design/default (art. 25) | ✅ | AclPolicy scoping teacher-id default; super-admin esclude studenti |
 | Minimizzazione dati (art. 5 §1 c) | ✅ | UsersAdminController::index filtra `role<>'student'` e unset `email` per super-admin |
-| Cifratura in transito (art. 32) | ⚠️ | HTTPS richiesto in produzione; verificare cert Aruba |
+| Cifratura in transito (art. 32) | ✅ | HTTPS/TLS 1.2+ con HSTS preload (edge Cloudflare + origin Hetzner) |
 | Cifratura at-rest | ✅ | Phase 25.D envelope encryption AES-256-GCM (ADR-006). Per-teacher KEK derivata via HKDF-SHA256 da KMS_MASTER_KEY off-line backed up. Crypto-shredding O(1) per Art. 17. |
 | Password hashing robusto | ✅ | bcrypt cost 12 (RegistrationService + seed_super_admin) |
 | Audit log accessi privilegiati (art. 30) | ✅ | `privileged_access_log` append-only + reason obbligatorio |
@@ -18,7 +18,7 @@ Copertura tecnica post BATCH 1-5.
 | Data breach runbook (artt. 33-34) | ✅ | `docs/privacy/data_breach_runbook.md` |
 | DPIA (art. 35) | ✅ | Phase 25.C9 — `docs/privacy/dpia.md` v1.0 completa. 14 rischi mappati con misure mitiganti. Bozza firmabile dal Titolare. Consultazione Garante NON necessaria condizionata a chiusura R6+R7. |
 | Policy aggiornata | ✅ | Phase 25.C10 — `docs/privacy/informativa.md` v2.0 con disclosure IP/UA SHA-256 hash + BES/DSA Art. 9 + minori Art. 8 + self-service /me/* endpoints |
-| Registro trattamenti | ✅ | Phase 25.C8 — `docs/privacy/registro-trattamenti.md` v1.0. Redatto come buona pratica (Art. 5 §2 accountability + dati minori Art. 8). 8 trattamenti documentati, sub-processor Aruba EU. **Correzione 2026-04-27**: rimosso falso positivo "Art. 9 BES/DSA" — verificato sul codebase: app processa solo metadata contenuto del docente, no dati sanitari studente individuali. |
+| Registro trattamenti | ✅ | Phase 25.C8 — `docs/privacy/registro-trattamenti.md` v1.0. Redatto come buona pratica (Art. 5 §2 accountability + dati minori Art. 8). 8 trattamenti documentati, sub-processor hosting Hetzner (DE, UE). **Correzione 2026-04-27**: rimosso falso positivo "Art. 9 BES/DSA" — verificato sul codebase: app processa solo metadata contenuto del docente, no dati sanitari studente individuali. |
 
 ## ACL runtime
 

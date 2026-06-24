@@ -130,13 +130,13 @@ if ($reqPath !== '/' && $reqPath !== '/index.php' && !str_ends_with($reqPath, '.
     }
 }
 
-// Phase X — layout detection per shared hosting (es. Aruba Linux basic).
+// Phase X — layout detection per shared hosting (es. hosting legacy Linux basic).
 // Dev/local: webroot (questo file) è dentro `public/` + parent contiene
 //             `app/`, `vendor/`, `routes/`, `schemas/`, ecc.
-// Aruba:     webroot = `httpdocs/` (o equivalente) contiene SOLO questo
+// hosting legacy:     webroot = `httpdocs/` (o equivalente) contiene SOLO questo
 //             index.php + static assets; `app/`, `vendor/`, `routes/`, …
 //             sono in `../private/` sibling (fuori dalla webroot per safety).
-// Detection: presenza di `../private/app/bootstrap.php` → layout Aruba.
+// Detection: presenza di `../private/app/bootstrap.php` → layout hosting legacy.
 $appRoot = is_file(__DIR__ . '/../private/app/bootstrap.php')
     ? __DIR__ . '/../private'
     : __DIR__ . '/..';

@@ -33,7 +33,7 @@ cssclasses: []
 | `ExportController` + `processLegacyTex()` | 350+ righe in un metodo privato — logica TeX accoppiata al controller | Alto: difficile testare, evolvere |
 | ~~`risdoc.js` (Plan A, 4931 LOC)~~ | IIFE monolitica legacy — **rimossa dal repo** (in git history), superata dai Web Components Plan B | Risolto |
 | `TeacherContentRepository` + dual-write | Scrive su DB e JSON simultaneamente per transizione | Medio: sincronizzazione manuale |
-| `LegacyController` | Serve asset statici via PHP anziché direttamente da Apache | Basso: overhead accettabile in Aruba shared |
+| `LegacyController` | Serve asset statici via PHP anziché direttamente da Apache | Basso: overhead accettabile in hosting legacy shared |
 
 ## Test coverage per dominio
 

@@ -8,10 +8,10 @@
  *
  * Schedule consigliato: ogni minuto (lock atomic permette multi-worker).
  *
- * Crontab Linux (Aruba shared):
+ * Crontab Linux (hosting legacy shared):
  *   * * * * * cd /var/www/pantedu && /usr/bin/php tools/cron/process_compile_jobs.php >> storage/logs/compile_jobs.log 2>&1
  *
- * Aruba cPanel cron:
+ * hosting legacy cPanel cron:
  *   /usr/bin/php /home/user/public_html/tools/cron/process_compile_jobs.php
  *
  * Variabili ENV:

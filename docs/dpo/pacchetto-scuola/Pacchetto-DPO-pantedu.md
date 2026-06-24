@@ -8,11 +8,11 @@ lang: it
 
 # 0. Sintesi per il DPO/RPD (in una pagina)
 
-**Pantedu** è una piattaforma didattica web (materiali di matematica/fisica: esercizi, verifiche, mappe, documenti) sviluppata e gestita personalmente da **{{OPERATORE_NOME}}**. Questo documento è il pacchetto di *accountability* GDPR pensato per il DPO/RPD di una scuola che valuti l'adozione di Pantedu.
+**Pantedu** è una piattaforma didattica web (materiali didattici di **qualsiasi disciplina**: esercizi, verifiche, mappe concettuali, documenti) sviluppata e gestita personalmente da **{{OPERATORE_NOME}}**. L'autore la utilizza attualmente per le proprie materie (matematica/fisica), ma la piattaforma è **agnostica rispetto alla disciplina** e può ospitare contenuti di qualunque materia. Questo documento è il pacchetto di *accountability* GDPR pensato per il DPO/RPD di una scuola che valuti l'adozione di Pantedu.
 
-- **Natura d'uso (importante).** Pantedu nasce e opera per **uso personale** del suo autore (didattica propria). L'eventuale **adozione da parte di un Istituto è possibile su richiesta della scuola e a spese di quest'ultima** (hosting/risorse dedicate) — vedi §5. In tale scenario la scuola è **Titolare del trattamento** e Pantedu/{{OPERATORE_NOME}} è **Responsabile del trattamento** (GDPR Art. 28), con DPA dedicato.
+- **Natura d'uso (importante).** Pantedu opera oggi in due scenari: **(1)** uso personale dell'autore per la propria didattica (Titolare = autore) e **(2)** uso da parte di **pochi colleghi docenti per la sola redazione di propri documenti**, senza dati di studenti e senza esercizi/mappe/verifiche, con isolamento cifrato per-docente. L'eventuale **(3) adozione dell'intero Istituto è possibile su richiesta della scuola e a spese di quest'ultima** (hosting/risorse dedicate) — vedi §5: in tale scenario la scuola è **Titolare del trattamento** e Pantedu/{{OPERATORE_NOME}} è **Responsabile del trattamento** (GDPR Art. 28), con DPA dedicato.
 - **Postura di sicurezza.** L'applicazione è stata sottoposta (giugno 2026) a un **audit di sicurezza esaustivo** (VA automatizzato + verifica manuale + test attivo su clone isolato). **Nessuna vulnerabilità Critical/High residua**; tutti i finding sono stati corretti e sono in produzione. Sintesi in §6.
-- **Minimizzazione dati.** Pantedu **non tratta dati identificativi diretti degli studenti** nel flusso didattico (vedi §4 e DPIA allegata). I dati BES/DSA **non** costituiscono dato sanitario Art. 9 (solo marcatori aggregati lato docente, nessun collegamento studente↔patologia in DB).
+- **Minimizzazione dati.** La quantità di dati studente è **configurabile dal Titolare** tra tre modalità (Completa / Ridotta / Anonima — vedi §4): nella modalità **Anonima** Pantedu **non tratta alcun dato identificativo dello studente** (accesso tramite credenziale del docente). I dati BES/DSA **non** costituiscono dato sanitario Art. 9 (solo marcatori aggregati lato docente, nessun collegamento studente↔patologia in DB).
 - **Dati nell'UE.** Hosting su **Hetzner Cloud, datacenter di Norimberga (Germania, UE)**. Cifratura a riposo e in transito.
 
 ---
@@ -47,6 +47,7 @@ lang: it
 | **Backup** | Backup giornaliero **cifrato** (systemd + Backblaze B2), archivio fuori dal server | `tools/backup/*`, memoria ops |
 | **Verifica regolare (Art. 32 §1(d))** | Audit di sicurezza giugno 2026 (VA + manuale + attivo); toolchain SAST/SCA/DAST/secret-scanning | §6 + report firmato |
 | **Lifecycle chiavi** | Pre-flight guard su generazione/rotazione (no rigenerazioni silenziose distruttive) | Audit §4.6 |
+| **Governance chiave master (opz.)** | Possibilità di **frazionare la `KMS_MASTER_KEY` con schema *Shamir Secret Sharing*** (es. 3-su-5 o 2-su-3): la chiave è ricostruibile solo combinando *k* quote su *n*, affidate a **custodi distinti** (es. responsabile tecnico + segreteria + dirigenza). Nessun singolo custode può ricostruire la chiave da solo (no single point of trust). **Implementabile su richiesta** dell'Istituto. | `app/Services/Crypto/ShamirSecretSharing*` |
 | **Autenticazione forte** | Infrastruttura **2FA TOTP** (RFC 6238) presente, attivabile per ruolo; **SPID/CIE**: non integrato (raccomandazione roadmap §7) | `app/Config/security.php` |
 
 ---
@@ -71,31 +72,39 @@ Posizione tecnica formale (Art. 32 + AgID ABSC 4): *l'applicazione è stata sott
 # 4. Minimizzazione dei dati e DPIA (GDPR Art. 5, 8, 35)
 
 - **Dati trattati**: identificazione utente operatore (username, nome, cognome, email) — dato comune, base giuridica Art. 6(1)(b) (esecuzione del servizio di registrazione). Conservazione: **730 giorni di inattività → anonimizzazione automatica** (`app/Config/retention.php`); log a **30 giorni**.
-- **Studenti / minori (Art. 8)** — *ambito ristretto*: l'accesso studente è previsto **solo per gli studenti del sottoscritto** (non per gli studenti degli altri docenti) e ha **unica finalità la visualizzazione delle fonti** (badge + riferimento bibliografico) degli esercizi tratti da libri protetti da diritto d'autore. **Non** sono mai esposti agli studenti **traccia né soluzioni**; nessuna produzione/modifica di contenuti da parte dello studente. La quantità di dati raccolti è **configurabile dal Titolare/super-admin** (`/admin/system/deployment`) tra **tre modalità** (default: Completa):
+- **Scoping della visibilità (garanzia tecnica, trasversale).** L'accesso studente è **rigorosamente compartimentato**: ogni studente vede **esclusivamente** i contenuti pubblicati dei docenti del **proprio istituto + indirizzo + classe** di registrazione (ancorato all'account; **nessun accesso** ai contenuti di altre classi, indirizzi o istituti). Nell'uso personale dell'autore (Scenario 1) l'accesso è inoltre ristretto **ai soli studenti del sottoscritto**.
+- **Studenti / minori (Art. 8)** — *ambito ristretto*: nello **Scenario 1** la finalità dell'accesso studente è la **visualizzazione delle fonti** (badge + riferimento bibliografico) degli esercizi tratti da libri protetti da diritto d'autore; **non** sono mai esposti agli studenti **traccia né soluzioni**, e non è prevista alcuna produzione/modifica di contenuti da parte dello studente. In un'eventuale adozione d'Istituto (Scenario 3) le finalità sono definite dal Titolare nel DPA. La quantità di dati raccolti è **configurabile dal Titolare/super-admin** (`/admin/system/deployment`) tra **tre modalità** (default: Completa):
   - **Completa** *(default)* — dati trattati: `username` (= nome.cognome), **nome**, **cognome**, **email**, **data di nascita** (per determinare la maggiore/minore età), **istituto**, **indirizzo**, **classe**; per i **minori di 14 anni** è richiesto e registrato il **consenso del genitore** (email + nome del genitore, con doppio opt-in — tabella `parent_consents`, Art. 8). Conservazione: **730 gg di inattività → anonimizzazione automatica**.
   - **Ridotta** — dati trattati: `username` (= nome.cognome), **nome**, **cognome**, **email**, **istituto**, **indirizzo**, **classe**. **Non** si raccolgono **data di nascita** né **dati del genitore** (nessun *age-gating* Art. 8): scelta di minimizzazione (Art. 5.1.c) coerente con la sola finalità di visualizzazione delle fonti.
   - **Anonima** — **nessun account studente**: gli studenti accedono tramite una credenziale del docente; la sessione registra **solo** un *grant* tecnico legato all'`id` del docente (`fm_teacher_access`), **zero dati identificativi dello studente**.
-- **Finalità di indirizzo/classe/istituto**: indispensabili allo *scoping* della visibilità — ogni studente vede **esclusivamente** i contenuti pubblicati dei docenti del **proprio istituto + indirizzo + classe** di registrazione (ancorato all'account; nessun accesso ai contenuti di altre classi/istituti).
-
-  Una DPIA dedicata è disponibile (`docs/privacy/dpia.md`, allegata) e copre tutte le modalità.
+- I campi **indirizzo/classe/istituto** sono raccolti (modalità Completa e Ridotta) in quanto **indispensabili allo *scoping*** descritto sopra: determinano quali contenuti lo studente può vedere. Una DPIA dedicata è disponibile (`docs/privacy/dpia.md`, allegata) e copre tutte le modalità.
 - **BES/DSA — NON dato sanitario Art. 9**: verificato sul codice. Pantedu tratta solo **marcatori aggregati** lato docente (es. "stampa N copie versione DSA"), senza collegare uno studente identificato a una condizione. Nessun trattamento Art. 9.
 - **Sub-responsabili (Art. 28 §2)**:
   - **Hetzner Cloud** (Germania, UE) — hosting/infrastruttura.
   - **Cloudflare** — CDN/edge security (terminazione TLS, WAF edge).
   - **Backblaze B2** — backup cifrati (i dati sono cifrati prima del caricamento).
   - **Google** — solo su **opt-in** esplicito del docente (OAuth/Drive per import facoltativo).
-  - **Aruba** — solo registrar DNS del dominio (non tratta dati personali → non sub-responsabile).
+  - **Porkbun** — solo registrar del dominio (gestione DNS; non tratta dati personali degli interessati → non sub-responsabile del trattamento).
   - **MaxMind/db-ip** — database GeoIP locale per il WAF (nessun invio di dati personali a terzi).
 
 ---
 
 # 5. Titolarità, modello d'uso ed economico
 
-- **Uso personale (default).** Pantedu è gestito dall'autore per la **propria attività didattica**. In questo scenario il Titolare del trattamento dei propri dati è l'autore stesso.
-- **Uso da parte di una scuola (su richiesta, a spese della scuola).** Qualora un Istituto richieda di adottare Pantedu per i propri docenti/studenti:
+Pantedu si articola in **tre scenari d'uso** distinti per finalità, ambito di trattamento e titolarità:
+
+**Scenario 1 — Uso personale dell'autore (attuale, default).** Pantedu è gestito dall'autore per la **propria attività didattica**. Il Titolare del trattamento dei propri dati è l'autore stesso. L'accesso studenti è ristretto **ai soli studenti dell'autore** e alla sola visualizzazione delle fonti (vedi §3).
+
+**Scenario 2 — Uso da parte di alcuni colleghi docenti (attuale, limitato).** Un numero ristretto di colleghi utilizza la piattaforma **esclusivamente per la redazione dei propri documenti didattici** (programmazioni, relazioni, documenti BES/PDP redatti dal docente), **senza alcun trattamento di dati personali di studenti** e **senza produzione/condivisione di esercizi, mappe o verifiche**. Caratteristiche rilevanti per il DPO:
+  - ciascun docente tratta **solo contenuti propri**, **isolati e cifrati per-docente** (envelope encryption, chiave KEK individuale): un docente **non** può accedere ai contenuti di un altro;
+  - **nessun dato personale di studenti** è trattato dai colleghi tramite la piattaforma in questo scenario;
+  - eventuali dati personali contenuti *dentro* i documenti redatti dal docente (es. un PDP che cita un alunno) restano sotto la **titolarità dell'Istituto** nell'ambito dell'ordinaria attività del docente: Pantedu funge da mero strumento di redazione/archiviazione cifrata, equiparabile a un editor locale, e tali documenti sono accessibili **solo** al docente autore. Per formalizzare questo specifico flusso resta disponibile la sottoscrizione del DPA (Scenario 3).
+
+**Scenario 3 — Adozione dell'intero Istituto (disponibilità futura, su richiesta e a spese della scuola).** Qualora l'Istituto richieda di adottare Pantedu con l'intero ventaglio di funzionalità per i propri docenti/studenti:
   - la **scuola** assume il ruolo di **Titolare del trattamento**;
   - **Pantedu / {{OPERATORE_NOME}}** assume il ruolo di **Responsabile del trattamento (Art. 28)**, regolato da **apposito accordo (DPA)** che includerà: finalità e durata, categorie di dati e interessati, misure Art. 32 (questo pacchetto), elenco sub-responsabili (§4), obblighi di assistenza (Art. 33/34/35), istruzioni documentate, restituzione/cancellazione a fine rapporto;
   - i **costi** di infrastruttura dedicata (hosting, risorse, eventuali integrazioni SPID/CIE, pentest manuale certificato se richiesto dal DPO) sono **a carico della scuola**.
+
 - **Licenza software**: EUPL-1.2 (codice ispezionabile su richiesta, in linea con i principi Developers Italia).
 
 ---
@@ -128,8 +137,8 @@ Il Responsabile si rende disponibile a: chiarimenti tecnici, approfondimenti su 
 **Contatto**: vittop89@users.noreply.github.com — DPO request form: https://pantedu.eu/dpo-contact
 
 ## Allegati disponibili su richiesta
-- A — DPIA completa (`docs/privacy/dpia.md`)
-- B — Informativa privacy (`docs/privacy/informativa.pdf` — fonte unica, servita anche su `/privacy/informativa`)
-- C — Report di audit di sicurezza firmato (hash-chain, giugno 2026)
-- D — Elenco sub-responsabili dettagliato
-- E — Bozza DPA Art. 28
+- **A — DPIA completa** — `docs/privacy/dpia.pdf` (sorgente: `docs/privacy/dpia.md`)
+- **B — Informativa privacy** — `docs/privacy/informativa.pdf` (sorgente: `docs/privacy/informativa.md`; fonte unica, servita anche su `https://pantedu.eu/privacy/informativa`)
+- **C — Report di audit di sicurezza firmato** (hash-chain di integrità, giugno 2026) — consegna su richiesta, preferibilmente sotto NDA
+- **D — Elenco sub-responsabili dettagliato** — vedi §4 (Hetzner, Cloudflare, Backblaze B2, Google opt-in)
+- **E — Bozza DPA Art. 28** — `docs/dpo/pacchetto-scuola/Bozza-DPA-Art28.pdf` (sorgente: `…/Bozza-DPA-Art28.md`)

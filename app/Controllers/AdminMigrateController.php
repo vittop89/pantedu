@@ -15,7 +15,7 @@ use Throwable;
 /**
  * G22.S7 — Endpoint admin per applicare DB migration via browser.
  *
- * Necessario su Aruba shared hosting: niente accesso SSH, niente
+ * Necessario su hosting condiviso (legacy): niente accesso SSH, niente
  * possibilita' di lanciare `php tools/migrate.php` da terminale. Il
  * super_admin apre /admin/migrate dal browser, vede la lista pending,
  * clicca "Esegui" e le migration vengono applicate.
@@ -78,7 +78,7 @@ button:disabled { background: #aaa; cursor: not-allowed; }
 </head>
 <body>
 <h1>📦 Database Migration</h1>
-<p class="muted">Strumento admin per applicare migration al DB di produzione (Aruba shared hosting senza SSH).</p>
+<p class="muted">Strumento admin per applicare migration al DB di produzione (hosting condiviso (legacy) senza SSH).</p>
 
 <div class="box">
     <h2>Eseguite ({$status['count_executed']})</h2>

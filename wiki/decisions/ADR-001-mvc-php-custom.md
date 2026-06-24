@@ -24,8 +24,8 @@ Unica dipendenza esterna PHP di runtime: `vlucas/phpdotenv` (env), `justinrainbo
 
 ## Motivazioni verificate dal codice
 
-1. **Controllo totale**: nessuna dipendenza da versioni framework. Il codebase vive su Aruba shared hosting con PHP 8.3 ma senza estensioni esotiche.
-2. **Hosting constraint**: Aruba shared non supporta CLI Artisan, Symfony Console, ecc.
+1. **Controllo totale**: nessuna dipendenza da versioni framework. Il codebase vive su hosting condiviso (legacy) con PHP 8.3 ma senza estensioni esotiche.
+2. **Hosting constraint**: hosting legacy shared non supporta CLI Artisan, Symfony Console, ecc.
 3. **Semplicità**: ~8 classi Core coprono tutto il necessario. Nessun overhead.
 4. **Migrazione progressiva**: poter aggiungere feature senza breaking changes da upgrade framework.
 

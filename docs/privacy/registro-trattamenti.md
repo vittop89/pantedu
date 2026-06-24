@@ -46,8 +46,8 @@ aliases: ["registro", "ROPA", "art-30"]
 | **Base giuridica** | Art. 6(1)(b) — esecuzione contratto registrazione (TOS) |
 | **Categorie interessati** | Docenti, studenti (anche minori), admin |
 | **Categorie dati** | username, nome, cognome, email, password (hashed bcrypt), role, institute_id |
-| **Destinatari** | Solo Titolare + sub-processor (hosting Aruba) |
-| **Trasferimenti extra-UE** | NO (Aruba EU data center) |
+| **Destinatari** | Solo Titolare + sub-processor (hosting Hetzner, DE) |
+| **Trasferimenti extra-UE** | NO (Hetzner data center Germania, UE) |
 | **Tempi conservazione** | 730g inattività → anonimizzazione (`app/Config/retention.php`) |
 | **Misure sicurezza** | bcrypt cost 12 + HTTPS + CSRF + rate-limit 10/min/IP |
 
@@ -153,29 +153,19 @@ Se in futuro si introducesse tracking studente-DSA (es. profilo studente con fla
 
 | Sub-processor | Servizio | Localizzazione | DPA |
 |---------------|----------|----------------|-----|
-| Aruba S.p.A. | Web hosting + DB MySQL + storage | Italia (EU) | ✅ **Art. 23 Condizioni di Fornitura v4.4 (24/03/2026)** — DPA standard ex Art. 28 GDPR auto-attivo all'accettazione Modulo d'ordine. Archive: [docs/privacy/contracts/aruba-condizioni-fornitura-v4.4-2026-03-24.pdf](contracts/aruba-condizioni-fornitura-v4.4-2026-03-24.pdf). 10/10 requisiti Art. 28 §3 coperti. SHA-256: `626a3919b391...6ca5c876`. |
-| Google LLC (eventuale, opzionale) | OAuth login + Drive integration (Phase futura) | USA — SCC necessarie | NA (non attivo) |
+| Hetzner Online GmbH | Hosting applicativo (server, DB, storage) | Germania (UE) | ✅ DPA Art. 28 GDPR di Hetzner (Data Processing Agreement standard, accettato all'attivazione del servizio). EU only. |
+| Cloudflare, Inc. | CDN / edge security (terminazione TLS, WAF di bordo) | Rete globale; per il traffico IT instradamento UE | ✅ DPA Cloudflare + SCC per eventuali trasferimenti (Capo V GDPR). |
+| Backblaze Inc. (B2) | Backup off-site (dati **cifrati lato client** prima dell'upload) | UE (regione europea) | ✅ DPA Backblaze; i dati sono cifrati prima dell'invio → Backblaze non accede al contenuto. |
+| Google LLC (eventuale, opzionale) | OAuth login + Drive integration — solo su **opt-in** esplicito del docente | USA — SCC necessarie | NA finché non attivato dal docente |
 
-### Aruba S.p.A. — dettaglio DPA
+> **Non sub-responsabili del trattamento**: **Porkbun LLC** (registrar del dominio / gestione DNS) e l'eventuale provider della **PEC personale** del titolare non trattano dati personali degli interessati del servizio → non sono sub-responsabili ex Art. 28.
 
-- **Base giuridica**: Art. 23 Condizioni di Fornitura Hosting Aruba v4.4
-  in vigore dal 24/03/2026 (citazione verbatim "ai sensi dell'articolo 28
-  del Regolamento UE 2016/679")
-- **Accettazione**: automatica all'invio del Modulo d'ordine + pagamento
-  iniziale (Art. 4.1 Condizioni)
-- **Durata**: pari al Contratto + tacito rinnovo
-- **Audit right**: 20 giorni preavviso, max 1/anno + extra in caso breach
-  (Art. 23 Sez II.f)
-- **Cancellazione fine contratto**: a scelta Cliente, cancellazione o
-  restituzione dati + cancellazione copie esistenti (Art. 23 Sez II.e)
-- **Sub-sub-processor**: autorizzazione generale + lista aggiornata su
-  richiesta a privacy@staff.aruba.it (Art. 23 Sez III)
-- **Localizzazione**: EU only (informativa Aruba v2.9). Eventuali transfer
-  extra-EU coperti da SCC.
-- **Breach notification**: Aruba notifica Cliente con tempistiche normative
-  (Art. 23 Sez IV → Art. 33 §2 GDPR)
-- **Mappatura clausole**: vedi [docs/privacy/contracts/contracts-index.md](contracts/contracts-index.md)
-  per matrice 10/10 requisiti vs Art. 28 §3
+### Hetzner — dettaglio DPA
+
+- **Base giuridica**: Data Processing Agreement Art. 28 GDPR di Hetzner Online GmbH, accettato all'attivazione del servizio.
+- **Localizzazione**: data center in Germania (UE); nessun trasferimento extra-UE per l'hosting.
+- **Cancellazione fine contratto**: cancellazione/restituzione dati a scelta del Cliente.
+- **Breach notification**: secondo le tempistiche normative (→ Art. 33 §2 GDPR).
 
 ## Sezione E — Eventi storici
 
@@ -184,7 +174,8 @@ Se in futuro si introducesse tracking studente-DSA (es. profilo studente con fla
 | Data | Versione | Modifica | Operatore |
 |------|----------|----------|-----------|
 | 2026-04-27 | 1.0 | Prima compilazione (Phase 25.C8) | {{OPERATORE_NOME}} |
-| 2026-04-29 | 1.1 | Sezione D Aruba aggiornata: DPA Art. 23 Condizioni Fornitura v4.4 archiviato + mappato vs Art. 28 §3 (10/10 requisiti) | {{OPERATORE_NOME}} |
+| 2026-04-29 | 1.1 | Sezione D: DPA sub-processor hosting archiviato + mappato vs Art. 28 §3 | {{OPERATORE_NOME}} |
+| 2026-06-24 | 1.2 | Migrazione infrastruttura: hosting → **Hetzner** (DE, UE), backup → **Backblaze B2**, edge → **Cloudflare**; registrar → **Porkbun** (non sub-responsabile). Rimosso hosting legacy come hosting (resta solo eventuale PEC personale del titolare, fuori dal trattamento). | {{OPERATORE_NOME}} |
 
 ### Data breach notificati
 

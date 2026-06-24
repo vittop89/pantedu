@@ -6,7 +6,7 @@ use App\Support\SafePath;
 use RuntimeException;
 
 /**
- * Provider locale (filesystem). Fase Aruba iniziale.
+ * Provider locale (filesystem). Fase hosting legacy iniziale.
  *
  * Key → path: tutte le chiavi sono sempre relative al rootDir e
  * normalizzate con SafePath per evitare traversal. La struttura

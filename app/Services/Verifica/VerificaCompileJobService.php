@@ -116,7 +116,7 @@ final class VerificaCompileJobService
      * G22.S7 — Processa un job SPECIFICO inline (non FIFO). Usato dal
      * compileAsync endpoint per "trigger-on-request": dopo enqueue
      * processiamo subito il job nella stessa request, evitando il delay
-     * cron (10 min su Aruba shared).
+     * cron (10 min su hosting condiviso shared).
      *
      * Se il job e' gia' in 'running' o 'done' ritorna lo stato corrente
      * senza ri-processare. Se e' 'retry' fuori backoff o 'pending', lo

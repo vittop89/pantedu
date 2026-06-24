@@ -86,7 +86,7 @@ final class ExportController
         $headBody  = $built['headBody'];
         // Build ZIP
         // Nota: il ZIP serve essere raggiungibile via URL. Con Apache root =
-        // repo root (Aruba setup), scriviamo in `storage/risdoc-tmp/` e
+        // repo root (hosting legacy setup), scriviamo in `storage/risdoc-tmp/` e
         // aggiungiamo whitelist `.htaccess` (vedi root `.htaccess`).
         $pubDir = $root . '/storage/risdoc-tmp';
         if (!is_dir($pubDir) && !@mkdir($pubDir, 0775, true) && !is_dir($pubDir)) {
@@ -117,7 +117,7 @@ final class ExportController
             }
         }
         $zip->close();
-// Servo via endpoint PHP (bypass .htaccess restrictions su Aruba shared).
+// Servo via endpoint PHP (bypass .htaccess restrictions su hosting condiviso shared).
         $url = $this->publicUrl($req) . '/api/risdoc/exports/' . $name;
         if ($mode === 'overleaf') {
             return Response::json([

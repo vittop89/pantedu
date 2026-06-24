@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS data_breach_incidents (
 CREATE TABLE IF NOT EXISTS subprocessors (
     id                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     -- Identità
-    name                VARCHAR(160) NOT NULL,         -- es. "Aruba S.p.A."
+    name                VARCHAR(160) NOT NULL,         -- es. "il provider di hosting"
     service_description VARCHAR(255) NOT NULL,         -- es. "Web hosting + DB + storage"
     -- Localizzazione + trasferimenti
     country             VARCHAR(64) NOT NULL,          -- es. "Italia"
@@ -76,5 +76,5 @@ CREATE TABLE IF NOT EXISTS subprocessors (
 -- Seed iniziale (snapshot dell'informativa attuale)
 INSERT IGNORE INTO subprocessors (name, service_description, country, extra_eu_transfer, transfer_safeguards, dpa_signed, contact_email, active)
 VALUES
-    ('Aruba S.p.A.', 'Web hosting + database + storage', 'Italia', 0, NULL, 1, 'privacy@staff.aruba.it', 1),
+    ('il provider di hosting', 'Web hosting + database + storage', 'Italia', 0, NULL, 1, 'privacy@example.net', 1),
     ('Google LLC',   'OAuth login + Google Drive integration (opt-in)', 'USA', 1, 'SCC + DPF', 0, NULL, 1);

@@ -24,7 +24,7 @@ cssclasses: []
 | 8 | Google Apps Script / mappe | Zero test. Dipendenza da token utente Google. Nessuna gestione errori strutturata. | Medio | `js/modules/integrations/google-apps.js`, `scriptGoogle_sync/` | - |
 | 9 | `TeacherContentController` | Controller con molti metodi (quesito CRUD, group CRUD, sidebar, manifest, contract). Candidato a split. | Basso | `app/Controllers/TeacherContentController.php` | 16-20 |
 | 10 | `ContractAggregate::findItemIndex` | `{itemRef}` è un locator opaco con 3 formati (numeric, `{gid}_q{idx}`, `g{gi}_q{ii}`). Documentato nel codice ma fragile. | Medio | `app/Services/Contract/ContractAggregate.php` | 16 |
-| 11 | pdflatex non disponibile Aruba | Su Aruba shared hosting pdflatex non è installabile. Workaround: ZIP+Overleaf. Compilazione server-side non possibile in prod. | Alto (funzionale) | `app/Controllers/Risdoc/ExportController.php` | 21 |
+| 11 | pdflatex non disponibile hosting legacy | Su hosting condiviso (legacy) pdflatex non è installabile. Workaround: ZIP+Overleaf. Compilazione server-side non possibile in prod. | Alto (funzionale) | `app/Controllers/Risdoc/ExportController.php` | 21 |
 | 12 | Frontend JS non bundle | `js/modules/bootstrap.js` caricato direttamente senza Vite bundle. No tree-shaking, no HMR in prod. | Basso | `views/partials/head.php` | 17 |
 | 13 | `_archive_phase18/` `_archive_phase20/` | Directory archivio con codice legacy (verifiche PHP 3000-5000 LOC). Non più usato ma presenti nel repo. | Basso (disk) | `_archive_phase18/`, `_archive_phase20/` | - |
 | 14 | Session `is_super_admin` caching | Flag cachato in sessione, aggiornato solo via `refreshCurrentUserClaims()`. Se il flag cambia nel DB, resta stale fino al logout. | Basso | `app/Core/Auth.php::isSuperAdmin()` | 14 |

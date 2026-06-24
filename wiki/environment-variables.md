@@ -52,7 +52,7 @@ File: `.env` (root progetto). Template: `.env.example`. Caricato da `Dotenv::cre
 ## Note configurazione
 
 ### DB_ENABLED=false (modalità JSON)
-In assenza di MySQL (es. prima attivazione Aruba), il sistema usa file JSON legacy in `log/data/`:
+In assenza di MySQL (es. prima attivazione hosting legacy), il sistema usa file JSON legacy in `log/data/`:
 - `log/data/admin_users.json` — utenti admin
 - `log/data/collaborators.json` — collaboratori
 - `eser/{folder}/eser_{code}/users/users.json` — utenti per classe

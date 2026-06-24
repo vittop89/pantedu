@@ -101,7 +101,7 @@ if [[ ! -f "$APP_DIR/.env" ]]; then
     sed -i "s|^TEX_COMPILE_SECRET=.*$|TEX_COMPILE_SECRET=$SECRET|" "$APP_DIR/.env"
     echo ""
     echo "  ┌────────────────────────────────────────────────────────────────┐"
-    echo "  │ SEGRETO HMAC GENERATO — copia in Aruba config!                 │"
+    echo "  │ SEGRETO HMAC GENERATO — copia in hosting legacy config!                 │"
     echo "  ├────────────────────────────────────────────────────────────────┤"
     echo "  │ $SECRET │"
     echo "  └────────────────────────────────────────────────────────────────┘"
@@ -237,6 +237,6 @@ else
     echo "    curl http://$DOMAIN/health  # (NB: il servizio risponde solo via /health proxy)"
 fi
 echo ""
-echo "  Segreto HMAC (per integrazione Aruba):"
+echo "  Segreto HMAC (per integrazione hosting legacy):"
 echo "    grep TEX_COMPILE_SECRET $APP_DIR/.env"
 echo "============================================================"

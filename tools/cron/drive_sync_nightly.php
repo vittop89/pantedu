@@ -14,7 +14,7 @@
  * Esempio crontab Linux:
  *   0 3 * * * cd /var/www/pantedu && /usr/bin/php tools/cron/drive_sync_nightly.php >> storage/logs/drive_sync.log 2>&1
  *
- * Esempio Aruba (cPanel cron jobs):
+ * Esempio hosting legacy (cPanel cron jobs):
  *   /usr/bin/php /home/user/public_html/tools/cron/drive_sync_nightly.php
  *
  * Output:
