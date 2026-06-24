@@ -2,7 +2,7 @@
 # Spec: https://yml.publiccode.tools/
 # Validator: https://publiccode-editor.developers.italia.it/
 
-publiccodeYmlVersion: "0.4.0"
+publiccodeYmlVersion: "0"
 
 name: Pantedu
 url: "https://github.com/vittop89/pantedu"
@@ -147,9 +147,3 @@ IT:
     anpr: false
     pagopa: false
     io: false
-
-  conforme:
-    lineeGuidaDesign: false
-    modelloInteroperabilita: false
-    misureMinimeSicurezza: true
-    gdpr: true
