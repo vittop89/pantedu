@@ -1,0 +1,55 @@
+name: ✨ Proposta di funzionalità
+description: Suggerisci una nuova funzionalità o un miglioramento
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema o bisogno
+      description: Quale problema o necessità vorresti risolvere?
+      placeholder: Es. "Da docente fatico a ... perché ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: soluzione
+    attributes:
+      label: Soluzione proposta
+      description: Cosa vorresti che accadesse?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative considerate
+    validations:
+      required: false
+
+  - type: textarea
+    id: contesto
+    attributes:
+      label: Contesto aggiuntivo
+      description: |
+        Es. casi d'uso concreti (anche per scuola secondaria, BES, DSA),
+        impatto su accessibilità o privacy.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area interessata
+      options:
+        - Mappe concettuali (drawio)
+        - Esercizi / Verifiche (LaTeX → PDF)
+        - Documenti BES / PDP (RisDoc)
+        - Gestione classi / istituto
+        - Autenticazione / account
+        - Crittografia / chiavi
+        - WAF / sicurezza
+        - Accessibilità (a11y)
+        - API
+        - Altro
+    validations:
+      required: true

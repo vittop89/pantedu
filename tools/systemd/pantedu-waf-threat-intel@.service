@@ -1,0 +1,25 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync (source=%i)
+Documentation=https://github.com/vittop89/pantedu/tools/waf/sync_threat_intel.php
+# Aspetta network attivo prima di sync (curl HTTPS verso GitHub/Spamhaus/CrowdSec).
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Owner del repo /var/www/pantedu (idem altri timer pantedu).
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+
+# %i = istanza (asn/spamhaus/x4b/crowdsec/tor) passata dal .timer.
+ExecStart=/usr/bin/php /var/www/pantedu/tools/waf/sync_threat_intel.php --source=%i
+
+# Timeout 5 min (X4B 50k IP impiega ~10s, CrowdSec via API <5s).
+TimeoutStartSec=300
+
+Restart=no
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

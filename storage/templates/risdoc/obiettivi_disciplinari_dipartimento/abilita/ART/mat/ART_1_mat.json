@@ -1,0 +1,140 @@
+[
+    {
+        "titolo": "Numeri naturali e numeri interi",
+        "contenuti": [
+            { "label": "Eseguire le quattro operazioni con i numeri naturali e applicarne le proprietà (commutativa, associativa, distributiva).", "checked": false },
+            { "label": "Applicare le proprietà delle potenze con base naturale per semplificare calcoli.", "checked": false },
+            { "label": "Calcolare multipli, divisori, Massimo Comun Divisore (MCD) e minimo comune multiplo (mcm) di due o più numeri.", "checked": false },
+            { "label": "Rappresentare, confrontare e ordinare i numeri interi sulla retta numerica.", "checked": false },
+            { "label": "Eseguire le quattro operazioni e l'elevamento a potenza con i numeri interi, gestendo correttamente i segni.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Numeri razionali e introduzione ai numeri reali",
+        "contenuti": [
+            { "label": "Eseguire le quattro operazioni e l'elevamento a potenza con i numeri razionali (frazioni).", "checked": false },
+            { "label": "Convertire frazioni in numeri decimali e viceversa, riconoscendo numeri decimali finiti, periodici semplici e misti.", "checked": false },
+            { "label": "Impostare e risolvere proporzioni e problemi che coinvolgono l'uso di percentuali.", "checked": false },
+            { "label": "Rappresentare, confrontare e ordinare i numeri razionali sulla retta.", "checked": false },
+            { "label": "Utilizzare la notazione scientifica e determinare l'ordine di grandezza di un numero.", "checked": false },
+            { "label": "Riconoscere la necessità di ampliare l'insieme Q a R attraverso esempi di numeri irrazionali.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Insiemi e logica",
+        "contenuti": [
+            { "label": "Rappresentare un insieme (per elencazione, per proprietà, con diagrammi di Eulero-Venn) e identificare i suoi sottoinsiemi.", "checked": false },
+            { "label": "Eseguire le operazioni di unione, intersezione, differenza e prodotto cartesiano tra insiemi.", "checked": false },
+            { "label": "Utilizzare i diagrammi di Venn per risolvere problemi logici e di classificazione.", "checked": false },
+            { "label": "Comprendere il significato dei connettivi logici (e, o, non) e delle loro tavole di verità.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Monomi",
+        "contenuti": [
+            { "label": "Riconoscere un monomio, determinarne grado, parte letterale e coefficiente.", "checked": false },
+            { "label": "Eseguire l'addizione algebrica di monomi simili.", "checked": false },
+            { "label": "Eseguire operazioni di moltiplicazione, divisione ed elevamento a potenza tra monomi, applicando le proprietà delle potenze.", "checked": false },
+            { "label": "Calcolare il Massimo Comune Divisore e il minimo comune multiplo tra monomi.", "checked": false },
+            { "label": "Utilizzare il calcolo letterale con i monomi per modellizzare e risolvere semplici problemi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Polinomi",
+        "contenuti": [
+            { "label": "Riconoscere un polinomio, determinarne il grado e classificarlo (completo, ordinato, omogeneo).", "checked": false },
+            { "label": "Eseguire addizioni, sottrazioni e moltiplicazioni tra polinomi.", "checked": false },
+            { "label": "Riconoscere e applicare i principali prodotti notevoli (quadrato di binomio, somma per differenza, cubo di binomio).", "checked": false },
+            { "label": "Utilizzare i polinomi per tradurre e risolvere problemi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Introduzione alla scomposizione di polinomi",
+        "contenuti": [
+            { "label": "Scomporre un polinomio in fattori utilizzando il raccoglimento a fattor comune totale e parziale.", "checked": false },
+            { "label": "Applicare i prodotti notevoli (differenza di quadrati, quadrato di binomio) per scomporre polinomi.", "checked": false },
+            { "label": "Scomporre un trinomio caratteristico del tipo x²+sx+p.", "checked": false },
+            { "label": "Calcolare il Massimo Comune Divisore e il minimo comune multiplo tra polinomi scomposti.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Funzioni",
+        "contenuti": [
+            { "label": "Definire una funzione e identificarne dominio e codominio.", "checked": false },
+            { "label": "Rappresentare punti e funzioni elementari nel piano cartesiano.", "checked": false },
+            { "label": "Analizzare e rappresentare graficamente le funzioni di proporzionalità diretta e inversa.", "checked": false },
+            { "label": "Riconoscere e rappresentare graficamente una funzione lineare y=mx+q, interpretando il significato di m e q.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Equazioni di primo grado numeriche intere",
+        "contenuti": [
+            { "label": "Riconoscere un'identità da un'equazione e classificarla (determinata, indeterminata, impossibile).", "checked": false },
+            { "label": "Applicare i principi di equivalenza per risolvere un'equazione di primo grado numerica intera.", "checked": false },
+            { "label": "Interpretare graficamente la soluzione di un'equazione come punto di intersezione tra due rette.", "checked": false },
+            { "label": "Tradurre un problema dal linguaggio naturale al linguaggio algebrico e risolverlo tramite un'equazione di primo grado.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Disequazioni di primo grado numeriche intere",
+        "contenuti": [
+            { "label": "Applicare i principi di equivalenza per le disequazioni, prestando attenzione al cambio di verso quando si moltiplica o divide per un numero negativo.", "checked": false },
+            { "label": "Risolvere disequazioni numeriche intere di primo grado e rappresentarne le soluzioni graficamente.", "checked": false },
+            { "label": "Risolvere sistemi di disequazioni di primo grado trovando l'intersezione delle soluzioni.", "checked": false },
+            { "label": "Interpretare graficamente la soluzione di una disequazione.", "checked": false },
+            { "label": "Tradurre e risolvere problemi utilizzando disequazioni e sistemi di disequazioni.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Statistica",
+        "contenuti": [
+            { "label": "Raccogliere e organizzare dati in tabelle, calcolando frequenze assolute, relative e percentuali.", "checked": false },
+            { "label": "Costruire e interpretare i principali tipi di grafici statistici (istogrammi, ideogrammi, areogrammi).", "checked": false },
+            { "label": "Calcolare e interpretare gli indici di posizione (media aritmetica, mediana, moda).", "checked": false },
+            { "label": "Calcolare e interpretare semplici indici di dispersione (campo di variazione).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Piano euclideo",
+        "contenuti": [
+            { "label": "Distinguere tra enti primitivi, assiomi, definizioni e teoremi nel contesto della geometria euclidea.", "checked": false },
+            { "label": "Riconoscere e nominare parti di retta (segmenti, semirette) e angoli (consecutivi, adiacenti, opposti al vertice).", "checked": false },
+            { "label": "Classificare poligoni e angoli (convessi, concavi, retti, acuti, ottusi).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Dalla congruenza alla misura",
+        "contenuti": [
+            { "label": "Comprendere il concetto di congruenza tra figure geometriche come sovrapponibilità.", "checked": false },
+            { "label": "Confrontare e sommare segmenti e angoli.", "checked": false },
+            { "label": "Comprendere il passaggio dal confronto alla misura di una grandezza, scegliendo un'unità di misura.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Congruenza nei triangoli",
+        "contenuti": [
+            { "label": "Enunciare e applicare i tre criteri di congruenza dei triangoli per dimostrare la congruenza tra figure.", "checked": false },
+            { "label": "Impostare e sviluppare semplici dimostrazioni geometriche, distinguendo ipotesi e tesi.", "checked": false },
+            { "label": "Enunciare e applicare le proprietà del triangolo isoscele (teorema diretto e inverso).", "checked": false },
+            { "label": "Applicare il teorema dell'angolo esterno e le disuguaglianze tra gli elementi di un triangolo.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Rette perpendicolari e parallele e introduzione alle isometrie",
+        "contenuti": [
+            { "label": "Disegnare e riconoscere rette perpendicolari e parallele.", "checked": false },
+            { "label": "Utilizzare i criteri di parallelismo (basati su angoli alterni, corrispondenti, coniugati) per dimostrare che due rette sono parallele.", "checked": false },
+            { "label": "Applicare il teorema sulla somma degli angoli interni di un triangolo e di un poligono.", "checked": false },
+            { "label": "Applicare i criteri di congruenza specifici per i triangoli rettangoli.", "checked": false },
+            { "label": "Riconoscere le principali isometrie (traslazione, rotazione, simmetria) come trasformazioni che conservano la congruenza.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Quadrilateri",
+        "contenuti": [
+            { "label": "Classificare i quadrilateri e riconoscerne le proprietà (trapezi, parallelogrammi).", "checked": false },
+            { "label": "Riconoscere le proprietà specifiche di rettangoli, rombi e quadrati come parallelogrammi particolari.", "checked": false },
+            { "label": "Enunciare e applicare il piccolo teorema di Talete relativo alle rette parallele tagliate da due trasversali.", "checked": false }
+        ]
+    }
+]

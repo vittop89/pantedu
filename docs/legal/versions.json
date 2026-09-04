@@ -1,0 +1,97 @@
+{
+  "_comment": [
+    "Registro delle versioni dei documenti contrattuali. Unica fonte di verità",
+    "per date di pubblicazione ed entrata in vigore.",
+    "",
+    "Flusso per pubblicare una nuova versione:",
+    "  1. modifica il .md e alza `version:` nel frontmatter;",
+    "  2. aggiungi qui la voce con effective_from >= published_at + 30 giorni",
+    "     (ToS §8, AUP §6) se la modifica è sostanziale;",
+    "  3. rigenera il PDF;",
+    "  4. `php tools/legal/sync_versions.php --apply` per allineare il DB.",
+    "",
+    "`node tools/ci/check-legal-versions.mjs` blocca la CI se il frontmatter e",
+    "questo file divergono, o se il preavviso è più corto del dovuto.",
+    "",
+    "L'ultima voce di ogni array (per effective_from) è la versione corrente.",
+    "substantial=false salta il preavviso: usalo SOLO per correzioni che non",
+    "cambiano obblighi o diritti (refusi, link, riformulazioni neutre).",
+    "`notice_waiver`: motivazione scritta per entrare in vigore prima dei notice_days SENZA declassare la modifica a non sostanziale. Si usa quando nessuno fa affidamento sul testo precedente. Il check CI lo accetta e lo stampa."
+  ],
+  "notice_days": 30,
+  "documents": {
+    "tos": {
+      "file": "docs/legal/tos_docente.md",
+      "route": "/legal/tos",
+      "label": "Termini di Servizio — Docente",
+      "versions": [
+        {
+          "version": "1.0",
+          "published_at": "2026-05-20",
+          "effective_from": "2026-05-20",
+          "substantial": true,
+          "summary": "Prima pubblicazione dei Termini di Servizio docente."
+        },
+        {
+          "version": "1.1",
+          "published_at": "2026-09-01",
+          "effective_from": "2026-09-01",
+          "substantial": false,
+          "summary": "Recapito per chiarimenti spostato su {{OPERATORE_EMAIL}}. Nessun obbligo o diritto modificato: il canale di segnalazione resta {{OPERATORE_EMAIL}}."
+        },
+        {
+          "version": "1.2",
+          "published_at": "2026-09-01",
+          "effective_from": "2026-09-01",
+          "substantial": true,
+          "summary": "§2.1.3, §3(c) e §4(c): corretta l'affermazione secondo cui l'operatore tecnico NON POTEVA accedere ai contenuti. La cifratura per-docente esclude gli altri docenti e chi ottenga il database, ma l'operatore custodisce la chiave master da cui derivano le KEK. Il testo ora dichiara l'accesso tecnicamente possibile, ammesso nei soli casi dell'Informativa §11-bis e tracciato in `crypto_custody_events`. L'esonero del §4(c) poggia ora sull'art. 16 D.Lgs. 70/2003.",
+          "notice_waiver": "Preavviso rinunciato dall'operatore il 2026-09-01. A quella data il registro contiene una sola accettazione, dell'account di prova marco.rossi (id 140), e nessun docente reale fa affidamento sul testo precedente. Differire l'entrata in vigore avrebbe tenuto valida per 30 giorni un'affermazione che sappiamo inesatta: il preavviso esiste per proteggere chi ha accettato, non per ritardare una rettifica che nessuno subisce. La modifica resta classificata come sostanziale."
+        },
+        {
+          "version": "1.3",
+          "published_at": "2026-09-03",
+          "effective_from": "2026-09-03",
+          "substantial": true,
+          "summary": "Tolte le formule che presentavano l'Applicativo come strumento dell'Istituto: Preambolo, §1(b), §2.1.2, §4(a). Nuovi §2.4 (divieto di inserire dati personali di studenti in qualunque campo; nessun account studente) e §2.5 (la piattaforma non conserva gli atti formali dell'Istituto). §3(a): IP e User-Agent nei registri come hash. §3(c): Shamir protegge la copia di sicurezza della chiave, non elimina l'accesso operativo. §7(c): segnalazione al Dirigente solo per violazioni attinenti al servizio.",
+          "notice_waiver": "Preavviso rinunciato dall'operatore il 2026-09-03: nessun docente reale ha ancora un'utenza — le sole accettazioni a registro sono di account di prova — e le iscrizioni ai colleghi si aprono solo dopo il parere del DPO. Non c'è nessuno il cui affidamento sul testo precedente vada protetto; differire avrebbe tenuto in vigore per 30 giorni un inquadramento che sappiamo errato. La modifica resta classificata come sostanziale."
+        }
+      ]
+    },
+    "aup": {
+      "file": "docs/legal/aup.md",
+      "route": "/legal/aup",
+      "label": "Acceptable Use Policy",
+      "versions": [
+        {
+          "version": "1.0",
+          "published_at": "2026-05-20",
+          "effective_from": "2026-05-20",
+          "substantial": true,
+          "summary": "Prima pubblicazione della Acceptable Use Policy."
+        },
+        {
+          "version": "1.1",
+          "published_at": "2026-09-01",
+          "effective_from": "2026-09-01",
+          "substantial": false,
+          "summary": "§5: rimossa la destinazione del forward di abuse@ (non si pubblica). Recapito per chiarimenti su {{OPERATORE_EMAIL}}. Canale di segnalazione e SLA invariati."
+        },
+        {
+          "version": "1.2",
+          "published_at": "2026-09-03",
+          "effective_from": "2026-09-03",
+          "substantial": true,
+          "summary": "Gli studenti non hanno più account: Premessa e §1.2 riscritti, tolti i limiti di upload per studenti (§3). Nuovo §2.6: divieto di inserire dati personali di studenti in qualunque campo. §4.2 e §4.3: segnalazione al Dirigente limitata alle violazioni attinenti al servizio.",
+          "notice_waiver": "Preavviso rinunciato dall'operatore il 2026-09-03, per la stessa ragione della versione 1.3 dei Termini: nessun docente reale ha un'utenza, le accettazioni a registro sono di account di prova, e le iscrizioni si aprono dopo il parere del DPO. La modifica resta classificata come sostanziale."
+        },
+        {
+          "version": "1.3",
+          "published_at": "2026-09-04",
+          "effective_from": "2026-09-04",
+          "substantial": false,
+          "summary": "Note di stato corrette: erano ferme al 20 maggio e dicevano che l'Applicativo non accetta file dagli utenti, mentre PDF-Import (disattivato) accetta pagine PDF di libri di testo; il blocco copyright vale anche per la condivisione con singoli colleghi. Nessun obbligo o diritto modificato."
+        }
+      ]
+    }
+  }
+}

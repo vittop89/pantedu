@@ -1,0 +1,11 @@
+[Unit]
+Description=pantedu — timer orario per la pulizia dei file temporanei dell'export
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=5min
+Persistent=true
+Unit=pantedu-tmp-cleanup.service
+
+[Install]
+WantedBy=timers.target

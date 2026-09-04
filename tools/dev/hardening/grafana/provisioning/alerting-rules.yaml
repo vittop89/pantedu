@@ -1,0 +1,153 @@
+# Phase 25.K — Grafana alert rules per pantedu security stack.
+#
+# Datasource UID `dfmkj0ntovw1sa` è machine-specific (Loki su VPS attuale).
+# Su install nuovo: cambia con il valore di `SELECT uid FROM data_source WHERE type='loki'`.
+#
+# Soglie calibrate su baseline reale osservato (2026-05-19):
+#   nginx max=15.4 req/min, WAF max=1/5min, fail2ban max=2/h, suricata=0/10min
+#
+# Thresholds attuali (3-5x sopra max osservato per evitare flap):
+# - Nginx > 50 req/min      10min sustained    warning
+# - WAF blocks > 20         5min               critical
+# - Fail2ban bans > 30      1h, for 15m        warning
+# - Suricata alert > 5      10min, for 5m      critical
+#
+# execErrState: OK (NO fake-firing su query broken — safer than Alerting default).
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: pantedu-security
+    folder: pantedu
+    interval: 1m
+    rules:
+      - uid: alert-nginx-rate
+        title: Nginx high request rate
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: dfmkj0ntovw1sa
+            relativeTimeRange: { from: 300, to: 0 }
+            model:
+              expr: 'sum(rate({job="nginx"} [5m])) * 60'
+              refId: A
+              queryType: range
+              intervalMs: 60000
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange: { from: 0, to: 0 }
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { params: [50], type: gt }
+                  operator: { type: and }
+                  query: { params: [C] }
+                  reducer: { params: [], type: last }
+                  type: query
+        noDataState: OK
+        execErrState: OK
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Nginx req/min > 50 sustained 10min'
+          description: 'Traffico nginx anomalo. Verifica accessi sospetti o DDoS in corso.'
+
+      - uid: alert-waf-blocks
+        title: WAF blocks spike
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: dfmkj0ntovw1sa
+            relativeTimeRange: { from: 300, to: 0 }
+            model:
+              expr: 'sum(count_over_time({job="waf-blocked"} [5m]))'
+              refId: A
+              queryType: range
+              intervalMs: 60000
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange: { from: 0, to: 0 }
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { params: [20], type: gt }
+                  operator: { type: and }
+                  query: { params: [C] }
+                  reducer: { params: [], type: last }
+                  type: query
+        noDataState: OK
+        execErrState: OK
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'WAF: > 20 blocks negli ultimi 5min'
+          description: 'Possibile attacco DDoS o scanner aggressivo. Controlla i log WAF.'
+
+      - uid: alert-fail2ban-rate
+        title: Fail2ban bans high
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: dfmkj0ntovw1sa
+            relativeTimeRange: { from: 3600, to: 0 }
+            model:
+              expr: 'sum(count_over_time({job="fail2ban"} |= "Ban" [1h]))'
+              refId: A
+              queryType: range
+              intervalMs: 60000
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange: { from: 0, to: 0 }
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { params: [30], type: gt }
+                  operator: { type: and }
+                  query: { params: [C] }
+                  reducer: { params: [], type: last }
+                  type: query
+        noDataState: OK
+        execErrState: OK
+        for: 15m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Fail2ban: > 30 ban nell ultima ora'
+          description: 'Scansione SSH/auth pesante in corso. Verifica /var/log/fail2ban.log.'
+
+      - uid: alert-suricata
+        title: Suricata alert detected
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: dfmkj0ntovw1sa
+            relativeTimeRange: { from: 600, to: 0 }
+            model:
+              expr: 'sum(count_over_time({job="suricata"} | json | event_type="alert" [10m]))'
+              refId: A
+              queryType: range
+              intervalMs: 60000
+          - refId: C
+            datasourceUid: __expr__
+            relativeTimeRange: { from: 0, to: 0 }
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { params: [5], type: gt }
+                  operator: { type: and }
+                  query: { params: [C] }
+                  reducer: { params: [], type: last }
+                  type: query
+        noDataState: OK
+        execErrState: OK
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Suricata NIDS: > 5 alert in 10min'
+          description: 'Suricata ha rilevato un evento sospetto. Verifica /var/log/suricata/eve.json.'

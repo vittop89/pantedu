@@ -1,0 +1,21 @@
+[Unit]
+# 2026-09-04 — esecuzione delle cancellazioni art. 17 a fine cooling-off.
+#
+# DeletionRequestService::executeOverdue() esisteva e nessuno lo chiamava:
+# una richiesta confermata restava in cooling_off per sempre, mentre
+# l'informativa prometteva l'esecuzione dopo trenta giorni. Ogni giorno,
+# prima del backup, così che la copia della notte non contenga più
+# l'account cancellato.
+Description=pantedu — esecuzione delle cancellazioni art. 17 dovute
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/gdpr/execute_deletions.php --apply
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

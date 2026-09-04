@@ -1,0 +1,219 @@
+[
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 1: Le grandezze fisiche",
+        "contenuti": [
+            { "label": "Le grandezze fisiche e le unità di misura", "checked": false },
+            { "label": "La notazione scientifica", "checked": false },
+            { "label": "Le misure di lunghezza, area, volume", "checked": false },
+            { "label": "Le misure di tempo, massa, densità", "checked": false },
+            { "label": "L'incertezza della misura", "checked": false },
+            { "label": "Le misure indirette", "checked": false },
+            { "label": "Le leggi fisiche", "checked": false },
+            { "label": "Le relazioni tra due grandezze", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 2: I vettori e le forze",
+        "contenuti": [
+            { "label": "Le grandezze vettoriali", "checked": false },
+            { "label": "Le componenti di un vettore", "checked": false },
+            { "label": "Le forze e la loro misura", "checked": false },
+            { "label": "Il principio di azione e reazione", "checked": false },
+            { "label": "La forza peso", "checked": false },
+            { "label": "La forza elastica", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 3: L'equilibrio dei corpi",
+        "contenuti": [
+            { "label": "L'equilibrio del punto materiale e la forza normale", "checked": false },
+            { "label": "L'attrito radente", "checked": false },
+            { "label": "La tensione e il piano inclinato", "checked": false },
+            { "label": "L'equilibrio rispetto alle rotazioni", "checked": false },
+            { "label": "L'equilibrio dei corpi estesi", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 4: L'equilibrio dei fluidi",
+        "contenuti": [
+            { "label": "La pressione", "checked": false },
+            { "label": "I fluidi", "checked": false },
+            { "label": "La legge di Stevin e il principio di Pascal", "checked": false },
+            { "label": "I vasi comunicanti e la misura della pressione", "checked": false },
+            { "label": "La legge di Archimede", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 5: I moti in una dimensione",
+        "contenuti": [
+            { "label": "Introduzione al moto", "checked": false },
+            { "label": "Il moto e la velocità", "checked": false },
+            { "label": "Il moto rettilineo uniforme", "checked": false },
+            { "label": "Il moto e l'accelerazione", "checked": false },
+            { "label": "Il moto rettilineo uniformemente accelerato", "checked": false },
+            { "label": "La caduta libera", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 6: I moti in due dimensioni",
+        "contenuti": [
+            { "label": "I vettori spostamento, velocità e accelerazione", "checked": false },
+            { "label": "Il moto di un proiettile", "checked": false },
+            { "label": "Il moto circolare uniforme", "checked": false },
+            { "label": "Il moto armonico", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "16",
+        "periodo": "Trimestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 7: Le forze e il movimento",
+        "contenuti": [
+            { "label": "Il primo principio della dinamica", "checked": true },
+            { "label": "Il secondo principio della dinamica", "checked": true },
+            { "label": "Il terzo principio della dinamica", "checked": true },
+            { "label": "La dinamica dei corpi in caduta", "checked": true },
+            { "label": "La dinamica del moto circolare", "checked": true },
+            { "label": "I moti oscillatori", "checked": true },
+            { "label": "I sistemi di riferimento non inerziali", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "12",
+        "periodo": "Trimestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 8: L'energia",
+        "contenuti": [
+            { "label": "Il lavoro", "checked": true },
+            { "label": "Il lavoro e l'energia cinetica", "checked": true },
+            { "label": "Le forze conservative, l'energia potenziale e l'energia meccanica", "checked": true },
+            { "label": "Il ruolo delle forze non conservative", "checked": true },
+            { "label": "La potenza", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "8",
+        "periodo": "Pentamestre",
+        "altre_disc": "Matematica",
+        "titolo": "Unità 9: La quantità di moto e il momento angolare",
+        "contenuti": [
+            { "label": "La quantità di moto e l'impulso", "checked": true },
+            { "label": "La conservazione della quantità di moto e gli urti", "checked": true },
+            { "label": "La conservazione del momento angolare", "checked": true }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 10: La legge di gravitazione universale",
+        "contenuti": [
+            { "label": "Dai modelli geometrici alle leggi di Keplero", "checked": false },
+            { "label": "Da Keplero a Newton", "checked": false },
+            { "label": "Le conseguenze della legge di Newton", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "16",
+        "periodo": "Pentamestre",
+        "altre_disc": "Chimica, Matematica",
+        "titolo": "Unità 11: Il calore e la temperatura",
+        "contenuti": [
+            { "label": "La temperatura e l'equilibrio termico", "checked": true },
+            { "label": "La dilatazione termica", "checked": true },
+            { "label": "Il calore", "checked": true },
+            { "label": "I cambiamenti di fase", "checked": true },
+            { "label": "La propagazione del calore", "checked": true },
+            { "label": "L'equazione di stato dei gas perfetti", "checked": true },
+            { "label": "Le leggi dei gas perfetti", "checked": true },
+            { "label": "La teoria cinetica dei gas", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "14",
+        "periodo": "Pentamestre",
+        "altre_disc": "Chimica, Scienze della Terra",
+        "titolo": "Unità 12: I principi fondamentali della termodinamica",
+        "contenuti": [
+            { "label": "Il concetto di energia interna", "checked": true },
+            { "label": "Il lavoro in termodinamica", "checked": true },
+            { "label": "Il primo principio della termodinamica", "checked": true },
+            { "label": "L'annuncio di Mayer-Joule del secondo principio e le macchine termiche", "checked": true },
+            { "label": "Il teorema e il ciclo di Carnot", "checked": true },
+            { "label": "L'enunciato di Clausius del secondo principio e l'entropia", "checked": true }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 13: Le onde meccaniche e il suono",
+        "contenuti": [
+            { "label": "Le onde trasversali e longitudinali", "checked": false },
+            { "label": "Le onde periodiche", "checked": false },
+            { "label": "Le onde sonore", "checked": false },
+            { "label": "La riflessione e l'effetto Doppler", "checked": false },
+            { "label": "L'interferenza e la diffrazione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "Unità 14: La luce e l'ottica fisica",
+        "contenuti": [
+            { "label": "La luce", "checked": false },
+            { "label": "La riflessione e lo specchio piano", "checked": false },
+            { "label": "Gli specchi sferici", "checked": false },
+            { "label": "La rifrazione e la riflessione totale", "checked": false },
+            { "label": "Le lenti", "checked": false },
+            { "label": "La natura ondulatoria della luce", "checked": false }
+        ]
+    }
+]

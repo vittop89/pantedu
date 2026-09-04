@@ -1,0 +1,119 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "LA MATEMATICA PER COMPRENDERE LA FISICA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Proporzioni e percentuali", "checked": true },
+            { "label": "Le grandezze direttamente proporzionali", "checked": true },
+            { "label": "La dipendenza lineare", "checked": true },
+            { "label": "Le grandezze inversamente proporzionali", "checked": true },
+            { "label": "Le grandezze con proporzionalità quadratica diretta", "checked": true },
+            { "label": "Risolvere le equazioni", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "LE GRANDEZZE FISICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Misura e densità", "checked": true },
+            { "label": "Il metodo sperimentale", "checked": true },
+            { "label": "Grandezze fisiche e unità di misura", "checked": true },
+            { "label": "Notazione scientifica e ordine di grandezza", "checked": true },
+            { "label": "Le equivalenze", "checked": true },
+            { "label": "Una grandezza derivata: la densità", "checked": true },
+            { "label": "L'analisi dimensionale", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "LE MISURE E GLI ERRORI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Elaborazione di una serie di dati", "checked": true },
+            { "label": "I tipi di errore", "checked": true },
+            { "label": "L'errore relativo", "checked": true },
+            { "label": "Cifre significative e criteri di arrotondamento", "checked": true },
+            { "label": "Le serie di misure", "checked": true },
+            { "label": "La propagazione degli errori", "checked": true },
+            { "label": "Gli strumenti di misura", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "I VETTORI E LE FORZE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Le grandezze vettoriali", "checked": true },
+            { "label": "Le operazioni con i vettori", "checked": true },
+            { "label": "La scomposizione dei vettori", "checked": true },
+            { "label": "Prodotto scalare e prodotto vettoriale", "checked": true },
+            { "label": "Le forze", "checked": true },
+            { "label": "La forza peso e la massa", "checked": true },
+            { "label": "La forza elastica: la legge di Hooke", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "L'EQUILIBRIO DEI CORPI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "L'invenzione delle forze", "checked": true },
+            { "label": "L'equilibrio del punto materiale", "checked": true },
+            { "label": "L'equilibrio sul piano inclinato", "checked": true },
+            { "label": "L'equilibrio di un corpo appeso", "checked": true },
+            { "label": "Le forze di attrito", "checked": true },
+            { "label": "Il momento di una forza rispetto a un punto O", "checked": true },
+            { "label": "Il momento di una coppia di forze", "checked": true },
+            { "label": "La condizione di equilibrio di un corpo rigido", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "L'EQUILIBRIO DEI FLUIDI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Archimede e il galleggiamento dei corpi", "checked": true },
+            { "label": "La pressione", "checked": true },
+            { "label": "Il principio di Pascal", "checked": true },
+            { "label": "La legge di Stevino", "checked": true },
+            { "label": "Il principio di Archimede", "checked": true },
+            { "label": "La pressione atmosferica", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "IL MOTO RETTILINEO UNIFORME",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Lo studio del moto", "checked": true },
+            { "label": "Velocità media e istantanea", "checked": true },
+            { "label": "Il moto rettilineo uniforme", "checked": true },
+            { "label": "La pendenza della retta", "checked": true },
+            { "label": "La legge oraria del moto rettilineo uniforme", "checked": true },
+            { "label": "La lettura dei grafici", "checked": true }
+        ]
+    }
+]

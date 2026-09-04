@@ -1,0 +1,60 @@
+{
+    "$id": "cosa-sono-strumenti-compensativi",
+    "title": "Strumenti Compensativi - Cosa sono",
+    "category": "STRCOMP",
+    "origin": "strcomp",
+    "body_class": "fm-studio-strcomp",
+    "_g23_status": "implemented (page-doc staticContent + accordion, ADR-020)",
+    "body_pt_seed_ref": "schemas/risdoc/_pt/seeds/cosa-sono-strumenti-compensativi.pt.json",
+    "_g23_sprint_4": "Seed splittato: 1 staticContent intro + 1 accordion con sub-sezioni h2 (mappa concettuale, schema, formulario, cosa-non-ammesso, conclusione PDP). Parser intelligente in tools/scripts/extract-seed-from-fismapant.php.",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Strumenti Compensativi",
+            "selectors": []
+        },
+        {
+            "type": "static-content",
+            "name": "introduzione",
+            "format": "html",
+            "title": "Introduzione",
+            "description": "Testo introduttivo sul significato e ruolo degli strumenti compensativi nel PDP.",
+            "body": "<p>All'interno del Piano Didattico Personalizzato (PDP), gli strumenti compensativi sono mezzi che aiutano lo studente con DSA/BES a ridurre gli effetti del disturbo senza sostituirsi all'apprendimento.</p>"
+        },
+        {
+            "type": "static-content",
+            "name": "mappa_concettuale",
+            "format": "html",
+            "title": "1. Mappa Concettuale",
+            "body": "<h3>Definizione Rigorosa</h3><p>Una mappa concettuale è una rappresentazione grafica gerarchica della conoscenza...</p><h3>Caratteristiche Essenziali</h3><ul><li>Nodi concettuali</li><li>Parole-legame</li><li>Struttura gerarchica/reticolare</li><li>Sinteticità</li></ul>"
+        },
+        {
+            "type": "static-content",
+            "name": "schema",
+            "format": "html",
+            "title": "2. Schema",
+            "body": "<h3>Definizione Rigorosa</h3><p>Uno schema è una rappresentazione sintetica e strutturata di informazioni o processi.</p><h3>Caratteristiche Essenziali</h3><ul><li>Parole chiave</li><li>Struttura logica</li><li>Sinteticità</li><li>Possibile uso di simboli/icone</li></ul>"
+        },
+        {
+            "type": "static-content",
+            "name": "formulario",
+            "format": "html",
+            "title": "3. Formulario",
+            "body": "<h3>Definizione Rigorosa</h3><p>Un formulario è una raccolta organizzata e circoscritta di formule matematiche, fisiche, chimiche, regole grammaticali, ecc.</p>"
+        },
+        {
+            "type": "static-content",
+            "name": "cosa_non_ammesso",
+            "format": "html",
+            "title": "Specificazioni - Cosa NON è ammesso",
+            "body": "<h3>Riassunto</h3><p>Un riassunto non è ammesso come strumento compensativo di tipo mappa/schema.</p><h3>Frasi / Simil-Frasi</h3><p>Inserimento di frasi all'interno di mappe/schemi/formulari non ammesso.</p>"
+        },
+        {
+            "type": "static-content",
+            "name": "conclusione_pdp",
+            "format": "html",
+            "title": "Conclusione per il PDP",
+            "body": "<p>Nel redigere il PDP è essenziale specificare che le mappe, gli schemi e i formulari ammessi devono rispettare i criteri sopra descritti.</p>"
+        }
+    ]
+}

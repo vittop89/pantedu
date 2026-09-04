@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — timer mensile per l'anonimizzazione degli account inattivi
+
+[Timer]
+# Mensile: la soglia è 730 giorni, un passaggio al mese è ampiamente
+# sufficiente e non carica il database in orario di lezione.
+OnCalendar=*-*-01 04:15:00
+Persistent=true
+RandomizedDelaySec=30min
+Unit=pantedu-gdpr-retention.service
+
+[Install]
+WantedBy=timers.target

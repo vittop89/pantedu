@@ -1,0 +1,27 @@
+[Unit]
+# 2026-09-02 — anonimizzazione degli account inattivi (art. 5(1)(e) GDPR).
+#
+# Il job esisteva da Phase 14 ma non era pianificato da nessuna parte, mentre
+# informativa, registro art. 30, DPIA e bozza di DPA lo davano per automatico:
+# «730 giorni di inattività → anonimizzazione automatica». Con quattro account
+# e nessuno vicino alla soglia non c'era ancora sovra-conservazione, ma la
+# misura era dichiarata e non operava.
+#
+# GDPR_RETENTION_ENABLED=1 è obbligatorio: senza, lo script gira in dry-run e
+# non scrive nulla. È una scelta dell'autore dello script, e va bene — ma
+# significa che pianificarlo senza il flag avrebbe prodotto un timer che non
+# anonimizza niente, cioè lo stesso problema con una riga di log in più.
+Description=pantedu — anonimizzazione account inattivi (retention GDPR)
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+Environment=GDPR_RETENTION_ENABLED=1
+ExecStart=/usr/bin/php /var/www/pantedu/tools/gdpr/anonymize_expired.php
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=multi-user.target

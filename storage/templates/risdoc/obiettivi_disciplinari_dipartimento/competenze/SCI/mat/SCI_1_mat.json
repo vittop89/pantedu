@@ -1,0 +1,27 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare il linguaggio e le tecniche del calcolo algebrico (operazioni con polinomi, scomposizioni, frazioni algebriche) per rappresentare e risolvere problemi, modellizzando situazioni reali e formalizzando strategie risolutive attraverso equazioni e disequazioni.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare le proprietà e le strutture dei diversi insiemi numerici (naturali, interi, razionali), utilizzando il calcolo in modo flessibile e consapevole e il linguaggio degli insiemi per descrivere, classificare e ordinare.",
+                "checked": true
+            },
+            {
+                "label": "Analizzare e interpretare relazioni e funzioni utilizzando diverse forme di rappresentazione (algebrica, grafica, tabulare) per modellizzare e prevedere l'andamento di fenomeni di varia natura, con particolare riferimento alla proporzionalità e alla funzione lineare.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare il ragionamento logico-deduttivo per costruire argomentazioni, dimostrare semplici teoremi e validare procedimenti, riconoscendo la struttura e i principi fondanti del pensiero matematico, in particolare quello geometrico.",
+                "checked": true
+            },
+            {
+                "label": "Raccogliere, organizzare e interpretare criticamente dati per analizzare fenomeni, utilizzando le rappresentazioni grafiche e gli indici statistici più opportuni per descriverli e comunicarli efficacemente.",
+                "checked": true
+            }
+        ]
+    }
+]

@@ -1,0 +1,175 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "15",
+        "periodo": "Trimestre",
+        "altre_disc": "",
+        "titolo": "NUMERI NATURALI E NUMERI INTERI",
+        "contenuti": [
+            { "label": "Rappresentazione sulla retta, confronto e ordinamento", "checked": true },
+            { "label": "Operazioni e loro proprietà", "checked": true },
+            { "label": "Proprietà delle potenze", "checked": true },
+            { "label": "Multipli, divisori, MCD, mcm", "checked": true },
+            { "label": "Espressioni", "checked": true }
+        ]
+    },    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "30",
+        "periodo": "Trimestre",
+        "altre_disc": "",
+        "titolo": "NUMERI RAZIONALI",
+        "contenuti": [
+            { "label": "Rappresentazione sulla retta, confronto e ordinamento", "checked": true },
+            { "label": "Frazioni equivalenti", "checked": true },
+            { "label": "Operazioni", "checked": true },
+            { "label": "Numeri decimali", "checked": true },
+            { "label": "Proporzioni e percentuali", "checked": true },
+            { "label": "Espressioni", "checked": true }
+        ]
+    },    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "15",
+        "periodo": "Trimestre",
+        "altre_disc": "",
+        "titolo": "INSIEMI*",
+        "contenuti": [
+            { "label": "Definizione di insiemi e sottoinsiemi", "checked": true },
+            { "label": "Unione e intersezione", "checked": true },
+            { "label": "Sottrazione", "checked": true },
+            { "label": "Prodotto cartesiano", "checked": true },
+            { "label": "Relazione d'equivalenza", "checked": true },
+            { "label": "Relazione d'ordine", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "0",
+        "periodo": "",
+        "altre_disc": "",
+        "titolo": "STATISTICA*",
+        "contenuti": [
+            { "label": "Frequenza assoluta e relativa", "checked": false },
+            { "label": "Ortogrammi, areogrammi e istogrammi", "checked": false },
+            { "label": "Indici di posizione: media aritmetica, moda, mediana", "checked": false },
+            { "label": "Indici di dispersione", "checked": false }
+        ]
+    },    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "15",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "RELAZIONI E FUNZIONI",
+        "contenuti": [
+            { "label": "Definizione di relazione", "checked": true },
+            { "label": "Relazioni di equivalenza e d'ordine", "checked": true },
+            { "label": "Definizione di funzione, dominio e zeri", "checked": true },
+            { "label": "Funzioni nel piano cartesiano", "checked": true },
+            { "label": "Funzione composta e funzione inversa", "checked": true },
+            { "label": "Proporzionalità diretta e inversa", "checked": true },
+            { "label": "Funzione lineare", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "15",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "MONOMI E POLINOMI",
+        "contenuti": [
+            { "label": "Definizioni: di polinomio, del grado, delle tipologie", "checked": true },
+            { "label": "Operazioni", "checked": true },
+            { "label": "Prodotti notevoli", "checked": true },
+            { "label": "Polinomi come funzioni", "checked": true },
+            { "label": "Zeri di un polinomio", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "20",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "SCOMPOSIZIONE DI POLINOMI",
+        "contenuti": [
+            { "label": "Teorema del resto e teorema di Ruffini", "checked": true },
+            { "label": "Raccoglimento totale", "checked": true },
+            { "label": "Raccoglimento parziale", "checked": true },
+            { "label": "Scomposizione con prodotti notevoli (trinomio speciale, quadrato di binomio, differenza di quadrati, quadrato di trinomio, cubo di binomio, somma o differenza di cubi)", "checked": true },
+            { "label": "Scomposizione mediante formula risolutiva di un'equazione di secondo grado", "checked": true },
+            { "label": "MCD e mcm di polinomi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "10",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "FRAZIONI ALGEBRICHE",
+        "contenuti": [
+            { "label": "Definizione e semplificazione", "checked": true },
+            { "label": "Operazioni", "checked": true },
+            { "label": "Frazioni algebriche come funzioni", "checked": true },
+            { "label": "Frazioni equivalenti", "checked": true },
+            { "label": "Zeri di una frazione algebrica", "checked": true },
+            { "label": "Condizioni di esistenza", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "15",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "EQUAZIONI LINEARI E FRATTE",
+        "contenuti": [
+            { "label": "Principi di equivalenza", "checked": true },
+            { "label": "Equazioni numeriche intere e fratte", "checked": true },
+            { "label": "Equazioni letterali intere e fratte", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "20",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "DISEQUAZIONI LINEARI E FRATTE",
+        "contenuti": [
+            { "label": "Principi di equivalenza", "checked": true },
+            { "label": "Disequazioni intere di primo grado", "checked": true },
+            { "label": "Segno di un prodotto", "checked": true },
+            { "label": "Disequazioni fratte", "checked": true },
+            { "label": "Confronto tra disequazioni fratte e sistemi di disequazioni", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "10",
+        "periodo": "Pentamestre",
+        "altre_disc": "",
+        "titolo": "ENTI GEOMETRICI FONDAMENTALI E TRIANGOLI*",
+        "contenuti": [
+            { "label": "La geometria Euclidea", "checked": true },
+            { "label": "Differenze tra assiomi, postulati e definizioni", "checked": true },
+            { "label": "Definizioni di: teorema diretto, inverso, contronominale e dimostrazione per assurdo", "checked": true },
+            { "label": "Le condizioni necessarie e sufficienti", "checked": true },
+            { "label": "Le tipologie di poligoni e il numero di diagonali", "checked": true },
+            { "label": "Triangoli: definizioni", "checked": true },
+            { "label": "Primo criterio di congruenza", "checked": true },
+            { "label": "Secondo criterio di congruenza", "checked": true },
+            { "label": "Triangolo isoscele", "checked": true },
+            { "label": "Terzo criterio di congruenza", "checked": true },
+            { "label": "Angoli esterni e angoli interni", "checked": true },
+            { "label": "Disuguaglianze tra i lati", "checked": true },
+            { "label": "I quadrilateri", "checked": true }
+        ]
+    }
+]

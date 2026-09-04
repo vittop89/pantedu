@@ -1,0 +1,29 @@
+% =============================================================================
+% main_SOL.tex — Variante SOL (Soluzione, copia docente).
+% Include badge editoriali, soluzioni inline, cerchi colorati.
+% =============================================================================
+\documentclass[12pt]{article}
+\usepackage{{{TEXCOMMON_DIR}}/verifica}
+\verificaFontNormal
+\verificaCounterFooter{SOL}{copia docente}
+
+% G27.tikz.hoist — preamble macros estratti dai TikZ template
+\input{tikz_preamble}
+
+\title{ {{TITOLO_VERIFICA}} \\\large [SOL] }
+\date{}
+
+\begin{document}
+\thispagestyle{firstpage}
+\input{{{TEXCOMMON_DIR}}/intestazione}
+
+% G27.badge — Registro fonti (solo le fonti effettivamente usate). Generato
+% sempre da TexBuilder + BadgeRenderer (anche se vuoto: solo commento). NB:
+% non usare \IfFileExists perche' in MODE_FLAT il bundle e' inlinato e il
+% file non e' presente su disco → la branch IfFileExists fallirebbe.
+\input{fonti_SOL}
+
+\input{{{ESERCIZI_FILE}}}
+
+\input{{{GRIGLIE_DIR}}/{{INDIRIZZO_CODE}}_{{MATERIA_CODE}}}
+\end{document}

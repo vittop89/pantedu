@@ -1,0 +1,1422 @@
+[
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Ultimo aggiornamento: 5 gennaio 2026",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Nota Importante.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Le presenti linee guida sono adottate specificamente dal ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "Cognome Nome",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " per le proprie classi e discipline di insegnamento, tenuto conto del Piano Triennale dell'Offerta Formativa (PTOF) dell'Istituto e della normativa scolastica vigente. ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Le seguenti linee guida sono state redatte in conformità con le indicazioni ministeriali e le normative vigenti, tra cui il DPR 122/2009 (\"Regolamento recante coordinamento delle norme vigenti per la valutazione degli alunni\"), la Legge 170/2010 (\"Nuove norme in materia di disturbi specifici di apprendimento in ambito scolastico\") e la Direttiva Ministeriale 27/12/2012 (\"Strumenti d’intervento per alunni con bisogni educativi speciali e organizzazione territoriale per l’inclusione scolastica\"), al fine di garantire un processo di valutazione equo, trasparente e inclusivo per tutti gli studenti. Si raccomanda di leggere attentamente ogni sezione e di rivolgersi al docente per eventuali chiarimenti.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "PARTE I. NORME GENERALI SU VERIFICHE E VALUTAZIONI",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "A. Registrazione e datazione dei voti nel Registro Elettronico (RE)",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Tempistiche di inserimento.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " I voti delle verifiche saranno inseriti nel RE il giorno stesso della loro consegna/restituzione agli studenti e contestuale correzione in classe, nel rispetto dei principi di trasparenza della valutazione. ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "(Rif. DPR 122/2009, Art. 1; Normativa sulla Privacy GDPR Reg. UE 2016/679)",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Data di riferimento del voto.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " La data associata al voto che apparirà sul RE corrisponderà sempre al giorno effettivo in cui la verifica è stata sostenuta dallo studente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "B. Indicazioni Generali sulle Verifiche",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Punteggi indicativi e valutazione finale.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "I punti (pt.) assegnati ai singoli esercizi indicano il loro peso relativo e possono fornire allo studente un'indicazione di massima sulla valutazione.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "La somma dei punti (pt.) assegnati non costituisce un voto oggettivo e definitivo. La valutazione finale, coerente con gli obiettivi di apprendimento, sarà determinata esclusivamente attraverso l'applicazione della griglia di valutazione specifica, allegata alla verifica e comunicata agli studenti. ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "(Rif. DPR 122/2009, Art. 2)",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Disposizioni per studenti con diritto a misure specifiche.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "Le seguenti misure sono applicate in conformità con la Legge 170/2010, il DM 5669/2011 e le Linee Guida del 2011 pergli studenti con DSA, e la Direttiva Ministeriale 27/12/2012 e C.M. n.8 del 6/03/2013 per gli studenti con altri Bisogni Educativi Speciali (BES), come specificato nel Piano Didattico Personalizzato (PDP) di ciascuno studente.",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": " Al momento della somministrazione della verifica, il docente annoterà su un'apposita sezione del compito (o su un verbale allegato) l'utilizzo e la tipologia degli strumenti compensativi (es. calcolatrice, mappe concettuali, schemi) e delle misure dispensantive (tempi aggiuntivi o riduzione della quantita di esercizi) concessi allo studente, come previsto dal PDP. Tale sezione/verbale dovrà essere controfirmata dallo studente per presa visione. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Misure dispensative.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Riduzione della quantità di esercizi o di domande in verifica. ",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Se lo studente decide di cimentarsi anche nelle richieste da cui sarebbe dispensato, queste verranno valutate e il loro punteggio concorrerà alla formazione del voto finale, mantenendo il loro peso specifico (",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "vedi esempio⬇️",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "). Tale scelta non pregiudica il diritto alla misura dispensativa. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "I quesiti contrassegnati con il simbolo ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "(*F*)",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": " sono da considerarsi ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "F",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "acoltativi.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Il simbolo ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "(*GF*)",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": " indica che la ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "G",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "iustifica alla risposta del relativo quesito è da considerarsi ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "F",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "acoltative.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Le richieste racchiuse tra asterischi e sottolineate (es. ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "*",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "esempio",
+        "marks": [
+          "underline"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "*",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": ") sono facoltative.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Eventuali ulteriori misure dispensative specifiche saranno chiaramente indicate in MAIUSCOLO e tra asterischi (es. ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "*ESEMPIO*",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": ").",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Tempo aggiuntivo.",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Qualora previsto dal PDP e in assenza delle precedenti misure specifiche per il compito, potrà essere concessa la misura dispensativa dai tempi standard di svolgimento della verifica, garantendo un tempo aggiuntivo fino a un massimo del ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "30%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " rispetto a quello standard. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Strumenti compensativi",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Conformità.",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Gli strumenti compensativi (mappe, schemi, tabelle, ecc.) devono essere conformi a quanto specificato nel PDP. In caso di non conformità rilevata prima della prova, si procederà come segue: ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "lo strumento difforme verrà ritirato dal docente e allegato alla verifica al momento della consegna, in tal caso, lo studente potrà eventualmente utilizzare una mappa sostitutiva fornita e preparata dal docente in forma digitale o cartacea;",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "in alternativa, se le modifiche necessarie sono realizzabili sul momento, lo studente potrà correggere lo strumento per renderlo idoneo all'utilizzo immediato.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Processo di approvazione.",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " La validità degli strumenti per la verifica dipende da un processo di condivisione e revisione tra studente e docente. Si distinguono due casi. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Strumenti concordati.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Sono gli strumenti che lo studente ha elaborato e condiviso con il docente durante le lezioni precedenti la verifica. Grazie a questo confronto, il docente ha avuto il tempo necessario per visionarli insieme allo studente, guidarlo nella correzione di eventuali errori o imprecisioni e, infine, approvarli. Questi strumenti sono considerati un supporto affidabile per la prova. ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Strumenti non concordati.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Sono gli strumenti che lo studente presenta al docente senza un adeguato preavviso, non consentendo una revisione congiunta. Anche se il docente può averli visionati rapidamente, non sono considerati \"approvati\" perché non c'è stato il tempo di verificarne l'accuratezza e la correttezza. L'uso di tali strumenti potrebbe quindi contenere imprecisioni che rischiano di compromettere la performance dello studente. ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "PARTE II. NORME SUI RECUPERI E SULLA COMPENSAZIONE ORALE",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "NOTA BENE. Condizioni generali di applicabilità dei recuperi e della compensazione. ",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Si precisa che tutte le opportunità di recupero e compensazione orale, come dettagliate nelle sezioni successive, sono offerte e garantite nel contesto di un regolare e continuativo svolgimento delle lezioni e del programma didattico annuale. Fattori quali assenze prolungate e debitamente motivate del docente, sospensioni dell'attività didattica per cause di forza maggiore, o impegni istituzionali improrogabili che coinvolgano il docente e/o la classe, potrebbero comportare necessarie modifiche, limitazioni o riprogrammazioni delle sessioni offerte. In tali circostanze, il docente fornirà tempestiva comunicazione agli studenti riguardo alle eventuali variazioni, nel rispetto dei principi di equità e del diritto allo studio. ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "A. Recuperi delle verifiche (regole generali per tutti gli studenti)",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Modalità di recupero.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": "Le attività di recupero sono finalizzate al raggiungimento degli obiettivi di apprendimento, come previsto dalla normativa sulla valutazione (DPR 122/2009).",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Una verifica scritta si recupera, di norma, con un'altra verifica scritta.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Una verifica orale si recupera, di norma, con un'altra verifica orale.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Eventuali deroghe a questa regola (ad es. recupero scritto con orale o viceversa) sono a discrezione del docente e verranno comunicate preventivamente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Condizioni specifiche per il recupero.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Frequenza dei recuperi scritti.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " È possibile recuperare al massimo una verifica scritta ogni due verifiche scritte sostenute, tramite un'ulteriore prova scritta (ad esempio, se in un periodo ci sono state 4 verifiche scritte, se ne possono recuperare al massimo 2 con prove scritte).",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Scelta dello studente.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Lo studente sceglie quale, tra le ultime due verifiche scritte sostenute, intende recuperare (ad esempio, se su 3 verifiche svolte si vuole usufruire del recupero solo dopo la terza, allora sarà possibile recuperare solo la terza o la seconda, e non la prima). Il giorno del recupero viene concordato con il docente, tenendo conto anche delle esigenze degli altri studenti che intendono recuperare.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Validità del voto di recupero.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Se il voto ottenuto nel recupero è superiore a quello originale, il voto originale viene annullato (evidenziato in blu o con apposita dicitura sul RE) e non concorre alla media; farà media solo il nuovo voto.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Se il voto ottenuto nel recupero è uguale o inferiore a quello originale, il voto originale rimane valido e concorre alla media, così come concorrerà alla media anche il voto (insufficiente) del recupero.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Limiti al recupero.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Non è possibile recuperare verifiche che sono già state oggetto di un precedente tentativo di recupero.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Condizione sulla media per l'accesso al recupero.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Regola generale.",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " \"Di norma, gli studenti con una media nel trimestre/pentamestre pari o superiore a 5,5 non sono ammessi alle prove di recupero. Per il pentamestre, la media deve essere calcolata esclusivamente sui voti degli argomenti affrontati in tale periodo, senza considerare il voto relativo alla media del trimestre.\"",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Valutazioni eccezionali.",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Il docente si riserva la facoltà di valutare singole situazioni, inclusi casi con media pari a 5,5, per un'eventuale ammissione eccezionale al recupero, a sua discrezione.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Recupero straordinario orale di fine anno scolastico.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "In via del tutto eccezionale, e subordinatamente alle esigenze organizzative e didattiche della scuola, potrà essere concessa un'ultima opportunità di recupero esclusivamente orale verso la conclusione dell'anno scolastico (indicativamente a partire dal 15 maggio).",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Riguarda il voto di una singola verifica relativa all’ultimo periodo didattico, scelta dallo studente e preventivamente concordata con il docente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Tale recupero è un'opportunità finale e aggiuntiva. Questa possibilità non sostituisce eventuali prove di recupero precedenti non fruite; una volta effettuato, o decorso il termine, non saranno concesse altre opportunità.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Le regole sulla \"Validità del Voto di Recupero\" (punto 2.3 della presente sezione A) e sulla \"Condizione sulla Media\" (punto 2.5 della presente sezione A) si applicano integralmente anche a questa fattispecie.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": " Deroga ai \"Limiti al recupero\" (punto 2.4 della sezione A) per il recupero straordinario orale: ",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Qualora lo studente scelga di utilizzare questa opportunità di recupero straordinario per una verifica che è già stata oggetto di un precedente tentativo di recupero (e che quindi presenta due valutazioni insufficienti che concorrono alla media), il voto finale risultante da questo recupero straordinario orale sarà determinato da una ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "media ponderata",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " dei tre voti (i due precedenti insufficienti e quello del recupero straordinario orale) secondo i seguenti pesi: ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": " Il voto finale così calcolato sostituirà le due precedenti valutazioni insufficienti per quella specifica verifica e concorrerà alla media generale. Questa deroga si applica unicamente alla fattispecie del recupero straordinario orale di fine anno e non ad altre forme di recupero. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Voto del recupero orale straordinario: ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "peso 100%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ".",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Primo voto insufficiente originario della verifica (antecedente al primo recupero): ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "peso 20%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " se il voto era inferiore o uguale a 4.5;",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 5
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "peso 40%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " se il voto era superiore a 4.5 e inferiore o uguale a 5.5.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 5
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Voto insufficiente del primo tentativo di recupero della verifica: ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 4
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "peso 30%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " se il voto era inferiore o uguale a 4.5;",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 5
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "peso 50%",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " se il voto era superiore a 4.5 e inferiore o uguale a 5.5.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 5
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "B. Recuperi delle verifiche (integrazioni per studenti con BES/DSA)",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Per gli studenti con Disturbi Specifici dell'Apprendimento (DSA) certificati, o con altri Bisogni Educativi Speciali (BES) formalizzati, si applicano le regole generali della precedente sezione A (Recuperi delle verifiche), con le seguenti integrazioni, in linea con il PDP. ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "(Rif. L. 170/2010; DM 5669/2011; Dir. Min. 27/12/2012)",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Flessibilità per verifiche scritte.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " In ottemperanza del punto 1.3 della sezione A, il recupero di una verifica scritta può avvenire, a scelta dello studente e in accordo con il docente, sia tramite una nuova verifica scritta sia tramite una verifica orale.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Priorità nella programmazione del recupero.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Ad integrazione del punto 2.2 della sezione A, gli studenti con DSA/BES avranno la priorità e la precedenza nella scelta e nella calendarizzazione dei giorni per lo svolgimento delle prove di recupero, sempre in accordo con il docente e compatibilmente con l'organizzazione didattica generale. Tale priorità mira a garantire che le necessità specifiche di questi studenti siano tenute in debita considerazione nella pianificazione delle attività di recupero, prestando particolare attenzione a evitare, per quanto possibile, la sovrapposizione con altre prove di recupero o verifiche programmate. Qualora lo studente, nonostante la priorità offerta e dopo essere stato informato delle possibili sovrapposizioni, esprima la volontà di sostenere comunque il recupero in una data che comporta concomitanza con altre prove, il docente ne darà formale annotazione sul registro della prova di recupero, specificando la volontarietà della scelta da parte dello studente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "C. Compensazione orale delle verifiche scritte (per studenti con BES/DSA)",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "La compensazione orale è uno strumento specifico, distinto dal recupero, volto a supportare gli studenti con Bisogni Educativi Speciali (BES) o Disturbi Specifici dell'Apprendimento (DSA) il cui Piano Didattico Personalizzato (PDP) preveda esplicitamente tale misura, ai sensi della Legge 170/2010 e relative Linee Guida.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Definizione e scopo.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " La compensazione orale non sostituisce la verifica scritta ma permette di rivalutarla. Consiste in un colloquio orale in cui il docente verifica le conoscenze e competenze relative alle parti della verifica scritta che sono risultate deficitarie. Questo approccio mira a offrire un'ulteriore opportunità di dimostrare l'effettiva preparazione, specialmente per gli studenti con DSA che potrebbero incontrare difficoltà nell'espressione scritta, nella decodifica del testo o nella gestione del tempo durante la prova scritta, permettendo loro di manifestare le proprie competenze in una modalità differente e aspirare così a un miglioramento della valutazione iniziale. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Studenti idonei.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Possono usufruire della compensazione orale gli studenti con BES o con DSA il cui Piano Didattico Personalizzato (PDP) riporti esplicitamente la misura ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "\"Prevedere verifiche orali a compensazione di quelle scritte\"",
+        "marks": [
+          "em"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " o dicitura analoga.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Limiti quantitativi.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "È possibile compensare al massimo una verifica scritta per periodo didattico a scelta dello studente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Verifiche compensabili.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Solo le verifiche scritte sono compensabili oralmente; in particolare, verifica compensata con esito negativo può essere soggetta a un recupero in itinere scritto/orale.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Sono escluse dalla compensazione orale le verifiche scritte di recupero.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Procedura.",
+        "marks": [
+          "strong"
+        ]
+      }
+    ],
+    "listItem": "number",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Tempistica.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Il colloquio di compensazione orale si terrà, di norma, il primo giorno/ora utile successivo/a allo svolgimento della verifica scritta (e comunque prima della sua consegna ufficiale e della presa visione del corretto svolgimento della verifica in classe), compatibilmente con l'organizzazione didattica.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Proposta di compensazione.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Nel giorno stabilito per la compensazione, il docente chiederà agli studenti idonei se intendono avvalersi della possibilità di compensazione orale per quella specifica prova.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Registrazione del rifiuto.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Qualora lo studente scelga di rifiutare la prova orale di compensazione, il docente ne darà formale registrazione. Tale annotazione avverrà. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Direttamente sulla verifica scritta, che dovrà essere controfirmata dallo studente.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Nel registro elettronico, contestualmente all'inserimento del voto della verifica.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 3
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Colloquio.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Il colloquio orale consiste nel verificare le parti della verifica scritta che sono risultate deficitarie e può includere domande di teoria ed esercizi da svolgere (es. alla lavagna); questi ultimi saranno gli stessi proposti nella verifica scritta oppure esercizi aventi la stessa richista/traccia, ma con quesiti equivalenti, ovvero con eventuali piccole variazioni non significative ai fini del contenuto da verifricare. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Rivalutazione.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " L'esito positivo del colloquio può portare a una rivalutazione migliorativa del voto scritto; in caso di esito negativo, invece, il voto della verifica scritta rimarrà invariato e non subirà alcuna penalizzazione. ",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Termine ultimo per la compensazione.",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Una volta che le verifiche sono state corrette, consegnate, i relativi voti inseriti nel registro elettronico e gli studenti hanno preso visione del corretto svolgimento della verifica in classe, non sarà più possibile richiedere o effettuare la compensazione orale per quella specifica verifica.",
+        "marks": []
+      }
+    ],
+    "listItem": "number",
+    "level": 2
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "ESEMPIO DI VERIFICA SCRITTA CON POSSIBILE COMPENSAZIONE ORALE",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "La seguente verifica scritta è un esempio di prova in cui è prevista la possibilità di compensazione orale.",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "TORNA SU⬆️",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Sembra che tu non abbia un visualizzatore PDF per questo browser. Puoi ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "cliccare qui per scaricare il file PDF.",
+        "marks": []
+      }
+    ]
+  }
+]

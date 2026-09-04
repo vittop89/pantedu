@@ -1,0 +1,23 @@
+[
+  {
+    "titolo": "CONOSCENZE",
+    "contenuti": [
+      {
+        "label": "Conoscere le leggi del moto, i sistemi di riferimento inerziali e non inerziali, e il principio di relatività di Galilei.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le leggi dei gas, la relativa teoria cinetica e la connessione tra ambito microscopico e macroscopico.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere i principi della termodinamica, la legge di conservazione dell'energia e i limiti intrinseci alle trasformazioni tra forme di energia.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere i fenomeni ondulatori, le loro grandezze caratteristiche e i fenomeni di propagazione (sovrapposizione, interferenza e diffrazione).",
+        "checked": true
+      }
+    ]
+  }
+]

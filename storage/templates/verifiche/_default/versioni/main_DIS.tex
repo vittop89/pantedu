@@ -1,0 +1,45 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+% =============================================================================
+% main_DIS.tex — Variante DIS (dyslexic-friendly).
+%
+% Magic comment "% !TeX program = xelatex" sopra: editor moderni (Overleaf,
+% TeXstudio, VSCode LaTeX Workshop, TeXworks) compilano automaticamente
+% con XeLaTeX, che e' richiesto per il font OpenDyslexic via fontspec.
+%
+% Il documento usa \verificaFontNormal (sans-serif standard). Solo
+% l'\input{esercizi_DIS} viene avvolto in {dyslexicScope}, che applica
+% OpenDyslexic + interlinea 1.6 (con auto-fallback a helvet se fontspec
+% non e' disponibile o il font non e' installato). Intestazione, ulteriori
+% misure, misure dispensative e griglia restano nel font normale.
+% =============================================================================
+\documentclass[12pt]{article}
+\usepackage{{{TEXCOMMON_DIR}}/verifica}
+\verificaFontNormal
+\verificaSetupFontDis
+\verificaCounterFooter{DIS}{{{COPIE_DIS}}}
+
+% G27.tikz.hoist — preamble macros estratti dai TikZ template
+\input{tikz_preamble}
+
+\title{ {{TITOLO_VERIFICA}} \\\large [DIS] }
+\date{}
+
+\begin{document}
+\thispagestyle{firstpage}
+\input{{{TEXCOMMON_DIR}}/intestazione}
+
+\begin{dyslexicScope}
+\input{{{ESERCIZI_FILE}}}
+\end{dyslexicScope}
+
+\input{{{TEXCOMMON_DIR}}/ulteriori_misure}
+\input{{{TEXCOMMON_DIR}}/BES_DSA/misure_dispensative}
+
+\input{{{GRIGLIE_DIR}}/{{INDIRIZZO_CODE}}_{{MATERIA_CODE}}{{GRIGLIA_SUFFIX}}}
+
+% Compensazione orale SOTTO la griglia (porting legacy master).
+% Inclusa solo se Compensa attivo: TexBuilder risolve {{COMPENSA_OPEN}} a vuoto
+% se compensa=true, altrimenti a `%` per commentare l'\input.
+{{COMPENSA_OPEN}}\input{{{TEXCOMMON_DIR}}/BES_DSA/compensazione_orale}{{COMPENSA_CLOSE}}
+\end{document}

@@ -1,0 +1,101 @@
+/* ============================================================ */
+
+/* components.css — entry point for modular CSS components.       */
+
+/* Phase C.4 — caricato dopo tokens.css + a11y.css, prima del     */
+
+/* monolite legacy layout.css (cosi' le regole modulari sono      */
+
+/* override-able dal legacy se serve durante migration).          */
+
+/*                                                                */
+
+/* Importato da:                                                  */
+
+/*   - views/partials/head.php (sidebar layout)                   */
+
+/*   - views/layout/shell.php (admin/login shell)                 */
+
+/* ============================================================ */
+
+@import '/css/modules/_buttons.css';
+@import '/css/modules/_forms.css';
+@import '/css/modules/_modals.css';
+@import '/css/modules/_alerts.css';
+@import '/css/modules/_cards.css';
+@import '/css/modules/_breadcrumb.css';
+@import '/css/modules/_badges.css';
+@import '/css/modules/_topbar.css';
+@import '/css/modules/_admin-toolnav.css';
+@import '/css/modules/_sidebar.css';
+@import '/css/modules/_editor-toolbar.css';
+@import '/css/modules/_login-federated.css';
+
+/* Phase Roadmap 3 — mass-extract */
+@import '/css/modules/_grid.css';
+@import '/css/modules/_tables.css';
+@import '/css/modules/_sidepage.css';
+@import '/css/modules/_source-editor.css';
+@import '/css/modules/_print-info.css';
+@import '/css/modules/_sync-bar.css';
+@import '/css/modules/_sync-status.css';
+@import '/css/modules/_verifica-doc.css';
+@import '/css/modules/_admin-tabs.css';
+@import '/css/modules/_admin-cards.css';
+@import '/css/modules/_waf-dashboard.css';
+@import '/css/modules/_toasts.css';
+@import '/css/modules/_template-form.css';
+@import '/css/modules/_import-bundle.css';
+@import '/css/modules/_topbar-modern.css';
+@import '/css/modules/_area-docente.css';
+@import '/css/modules/_exercise-overrides.css';
+@import '/css/modules/_drive-integration.css';
+@import '/css/modules/_sidebar-widgets.css';
+@import '/css/modules/_db-sidepage.css';
+@import '/css/modules/_dark-mode.css';
+@import '/css/modules/_legacy-modals.css';
+@import '/css/modules/_bottom-bar-panel.css';
+@import '/css/modules/_control-panel.css';
+@import '/css/modules/_content-layout.css';
+@import '/css/modules/_upbar-legacy.css';
+@import '/css/modules/_sidebar-core.css';
+
+/* Sprint D 2026-05-24 — layout_editor.css extraction */
+@import '/css/modules/_editor-builder.css';
+
+/* Sprint E 2026-05-24 — layout_es.css extraction (3921 LOC) */
+@import '/css/modules/_exercise-legacy.css';
+
+/* Sprint G 2026-05-24 — admin.css residue extraction (336 LOC) */
+@import '/css/modules/_admin-legacy.css';
+
+/* G23 page-doc — block types per pagine informative (glossario, legislazione, ecc.) */
+@import '/css/modules/_pt-page-doc.css';
+
+/* G24 — <fm-pt-document> chrome unificato (ADR-022) */
+@import '/css/modules/_pt-document.css';
+
+/* ADR-024 — .fm-doc-topbar BEM unica (custom + risdoc), adattiva WCAG */
+@import '/css/modules/_doc-topbar.css';
+
+/* Lighthouse perf — 5 FA icons → SVG mask inline. Sostituisce all.min.css ~75KB. */
+@import '/css/modules/_fm-icons.css';
+
+/* ADR-023 Fase 2 (2026-05-25) — CSS-in-JS runtime estratto in moduli @layer.
+   Cascade deterministica: niente più \3c style> iniettati con timing variabile. */
+@import '/css/modules/_geogebra-editor.css';
+@import '/css/modules/_tex-element-editor.css';
+@import '/css/modules/_tikz-blocks-manager.css';
+@import '/css/modules/_tikz-template-filler.css';
+@import '/css/modules/_tikz-editor-modal.css';
+@import '/css/modules/_ver-generation-overlay.css';
+@import '/css/modules/_verifiche-print-ui.css';
+@import '/css/modules/_vertitle-autocomplete.css';
+@import '/css/modules/_mappe-edit-mode.css';
+@import '/css/modules/_model-sync-modal.css';
+@import '/css/modules/_latex-shortcuts.css';
+@import '/css/modules/_category-manager.css';
+@import '/css/modules/_teacher-dashboard.css';
+
+/* Phase PDF-Import — pagina /teacher/pdf-import (estrazione esercizi da PDF). */
+@import '/css/modules/_pdf-import.css';

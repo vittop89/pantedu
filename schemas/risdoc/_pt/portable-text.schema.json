@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pantedu.local/schemas/risdoc/_pt/portable-text.schema.json",
+  "title": "Portable Text — Risdoc subset (Phase 22)",
+  "description": "Validation schema for Portable Text AST used by risdoc. Subset minimo: block (style normal), checkboxGroup, rawTex. Custom inline: fieldRef. Marks standard: strong/em/underline/code.",
+  "type": "array",
+  "items": { "$ref": "#/$defs/block" },
+  "$defs": {
+    "block": {
+      "oneOf": [
+        { "$ref": "#/$defs/textBlock" },
+        { "$ref": "#/$defs/checkboxGroup" },
+        { "$ref": "#/$defs/rawTex" },
+        { "$ref": "#/$defs/table" },
+        { "$ref": "#/$defs/select" },
+        { "$ref": "#/$defs/textField" },
+        { "$ref": "#/$defs/formCheckbox" },
+        { "$ref": "#/$defs/sectionHeader" },
+        { "$ref": "#/$defs/glossaryTable" },
+        { "$ref": "#/$defs/staticContent" },
+        { "$ref": "#/$defs/accordion" },
+        { "$ref": "#/$defs/linkListPdf" },
+        { "$ref": "#/$defs/citationNorma" }
+      ]
+    },
+    "textBlock": {
+      "type": "object",
+      "required": ["_type", "children"],
+      "properties": {
+        "_type": { "const": "block" },
+        "_key": { "type": "string" },
+        "style": { "enum": ["normal"] },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inline" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "inline": {
+      "oneOf": [
+        { "$ref": "#/$defs/span" },
+        { "$ref": "#/$defs/fieldRef" }
+      ]
+    },
+    "span": {
+      "type": "object",
+      "required": ["_type", "text"],
+      "properties": {
+        "_type": { "const": "span" },
+        "_key": { "type": "string" },
+        "text": { "type": "string" },
+        "marks": {
+          "type": "array",
+          "items": { "enum": ["strong", "em", "underline", "code"] },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "fieldRef": {
+      "type": "object",
+      "required": ["_type", "name"],
+      "properties": {
+        "_type": { "const": "fieldRef" },
+        "_key": { "type": "string" },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+          "description": "Nome campo in snake_case (es. classe, sezione, anno_scolastico)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "checkboxGroup": {
+      "type": "object",
+      "required": ["_type", "items"],
+      "properties": {
+        "_type": { "const": "checkboxGroup" },
+        "_key": { "type": "string" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["state", "label"],
+            "properties": {
+              "state": {
+                "enum": ["x", "_"],
+                "description": "x = checked (\\xcheckbox), _ = unchecked (\\checkbox)"
+              },
+              "label": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "rawTex": {
+      "type": "object",
+      "required": ["_type", "content"],
+      "properties": {
+        "_type": { "const": "rawTex" },
+        "_key": { "type": "string" },
+        "content": {
+          "type": "string",
+          "description": "Contenuto LaTeX grezzo. Injected as-is nel TeX, renderizzato come callout read-only in HTML."
+        }
+      },
+      "additionalProperties": false
+    },
+    "table": {
+      "type": "object",
+      "required": ["_type", "columns", "rows"],
+      "properties": {
+        "_type": { "const": "table" },
+        "_key": { "type": "string" },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Header labels delle colonne (prima riga in <thead>)."
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "type": "string", "description": "Cell text plain (backward-compat)." },
+                {
+                  "type": "object",
+                  "description": "Cell strutturato: testo + widget opzionale + merge attrs.",
+                  "properties": {
+                    "text": { "type": "string" },
+                    "widget": {
+                      "oneOf": [
+                        { "type": "null" },
+                        {
+                          "type": "object",
+                          "required": ["_type"],
+                          "properties": {
+                            "_type": { "enum": ["select", "textField"] },
+                            "value": { "type": "string" },
+                            "kind": { "enum": ["text", "number", "date"] },
+                            "placeholder": { "type": "string" },
+                            "binding": { "type": "string", "description": "ADR-030 binding widget: terna|fixed." },
+                            "opt_mode": { "type": "string" },
+                            "options_source": { "type": "object" },
+                            "options": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "value": { "type": "string" },
+                                  "label": { "type": "string" },
+                                  "group": { "type": "string" }
+                                }
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "colspan": { "type": "integer", "minimum": 1, "maximum": 20 },
+                    "rowspan": { "type": "integer", "minimum": 1, "maximum": 20 },
+                    "merged":  { "type": "boolean" },
+                    "bg":      { "type": "string" },
+                    "align":   { "enum": ["", "left", "center", "right"] },
+                    "valign":  { "enum": ["", "top", "middle", "bottom"] },
+                    "cid":     { "type": "string", "description": "ADR-030 id cella stabile (binding per-terna)." },
+                    "binding": { "type": "string", "description": "ADR-030 binding cella: terna|fixed." },
+                    "formula": { "type": "string", "description": "ADR-031 formula stile Excel (=SOMMA(...))." }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "caption": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "select": {
+      "type": "object",
+      "required": ["_type"],
+      "properties": {
+        "_type": { "const": "select" },
+        "_key": { "type": "string" },
+        "name": { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["value", "label"],
+            "properties": {
+              "value": { "type": "string" },
+              "label": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "options_source": {
+          "description": "Opzionale: popolazione dinamica delle options da file JSON. {file: path assoluto} o {folder: path templato su state}.",
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["file"],
+              "properties": { "file": { "type": "string" } },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["folder"],
+              "properties": { "folder": { "type": "string" } },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "textField": {
+      "type": "object",
+      "required": ["_type"],
+      "properties": {
+        "_type": { "const": "textField" },
+        "_key": { "type": "string" },
+        "name": { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "kind": { "enum": ["text", "number", "date"] },
+        "placeholder": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "formCheckbox": {
+      "type": "object",
+      "required": ["_type", "label"],
+      "properties": {
+        "_type": { "const": "formCheckbox" },
+        "_key": { "type": "string" },
+        "name": { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+        "label": { "type": "string" },
+        "checked": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "sectionHeader": {
+      "type": "object",
+      "required": ["_type", "title"],
+      "properties": {
+        "_type": { "const": "sectionHeader" },
+        "_key": { "type": "string" },
+        "title": { "type": "string" },
+        "level": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "selectors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Nomi di field state (classe/sezione/indirizzo/...) da mostrare inline come info selettori nell'header"
+        }
+      },
+      "additionalProperties": false
+    },
+    "glossaryTable": {
+      "type": "object",
+      "description": "G23 page-doc — tabella lemmi/definizioni con colonne fisse, sortable+searchable client-side.",
+      "required": ["_type", "columns", "entries"],
+      "properties": {
+        "_type": { "const": "glossaryTable" },
+        "_key": { "type": "string" },
+        "name": { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+        "columns": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": { "type": "string" },
+          "description": "Header labels colonne. Convenzione: ['N.', 'Lemma', 'Definizione', 'Fonte']."
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "n":           { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
+              "lemma":       { "type": "string" },
+              "definizione": { "type": "string" },
+              "fonte":       { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "sortable":   { "type": "boolean", "default": true },
+        "searchable": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    },
+    "staticContent": {
+      "type": "object",
+      "description": "G23 page-doc — contenuto HTML sanitizzato con nesting items per gerarchie documentali.",
+      "required": ["_type"],
+      "properties": {
+        "_type": { "const": "staticContent" },
+        "_key":  { "type": "string" },
+        "title": { "type": "string" },
+        "level": { "type": "integer", "minimum": 2, "maximum": 4 },
+        "format": { "enum": ["html", "markdown"], "default": "html" },
+        "body":  { "type": "string", "description": "Body sanitizzato. Tag whitelist: h2-h4/p/ul/ol/li/a/strong/em/blockquote/code/pre/br/hr." },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/staticContent" },
+          "description": "Sub-sezioni nested (max depth 4)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "accordion": {
+      "type": "object",
+      "description": "G23 page-doc — sezioni collapsible via <details>/<summary> native.",
+      "required": ["_type", "items"],
+      "properties": {
+        "_type": { "const": "accordion" },
+        "_key":  { "type": "string" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title":        { "type": "string" },
+              "body_pt":      { "type": "array", "items": { "$ref": "#/$defs/block" } },
+              "default_open": { "type": "boolean", "default": false }
+            },
+            "additionalProperties": false
+          }
+        },
+        "allow_multiple": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    },
+    "linkListPdf": {
+      "type": "object",
+      "description": "G23 page-doc — lista link normativi gerarchici (PDF/URL) con metadati.",
+      "required": ["_type", "items"],
+      "properties": {
+        "_type": { "const": "linkListPdf" },
+        "_key":  { "type": "string" },
+        "title": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "href"],
+            "properties": {
+              "label":       { "type": "string" },
+              "href":        { "type": "string" },
+              "external":    { "type": "boolean", "default": false },
+              "description": { "type": "string" },
+              "sub_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["label", "href"],
+                  "properties": {
+                    "label":    { "type": "string" },
+                    "href":     { "type": "string" },
+                    "external": { "type": "boolean", "default": false }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "citationNorma": {
+      "type": "object",
+      "description": "G23 page-doc — citazione legge/decreto strutturata.",
+      "required": ["_type", "tipo"],
+      "properties": {
+        "_type": { "const": "citationNorma" },
+        "_key":  { "type": "string" },
+        "tipo": { "enum": ["L", "DL", "DLgs", "DPR", "DM", "DI", "CM", "DDG", "OM", "Racc", "COM", "altro"] },
+        "numero":    { "type": "string" },
+        "anno":      { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
+        "data":      { "type": "string", "format": "date" },
+        "articolo":  { "type": "string" },
+        "title":     { "type": "string" },
+        "href":      { "type": "string" },
+        "quote":     { "type": "string", "maxLength": 500 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,126 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "DERIVATE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Derivata di una funzione", "checked": false },
+            { "label": "Derivate fondamentali", "checked": false },
+            { "label": "Operazioni con le derivate", "checked": false },
+            { "label": "Derivata di una funzione composta", "checked": false },
+            { "label": "Derivata della funzione inversa", "checked": false },
+            { "label": "Derivate di ordine superiore al primo", "checked": false },
+            { "label": "Retta tangente", "checked": false },
+            { "label": "Derivata e velocità di variazione", "checked": false },
+            { "label": "Differenziale di una funzione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "DERIVABILITÀ E TEOREMI DEL CALCOLO DIFFERENZIALE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Punti di non derivabilità", "checked": false },
+            { "label": "Teorema di Rolle", "checked": false },
+            { "label": "Teorema di Lagrange", "checked": false },
+            { "label": "Conseguenze del teorema di Lagrange", "checked": false },
+            { "label": "Teorema di Cauchy", "checked": false },
+            { "label": "Teorema di De L'Hospital", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "MASSIMI, MINIMI E FLESSI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Definizioni", "checked": false },
+            { "label": "Massimi, minimi, flessi orizzontali e derivata prima", "checked": false },
+            { "label": "Flessi e derivata seconda", "checked": false },
+            { "label": "Massimi, minimi, flessi e derivate successive", "checked": false },
+            { "label": "Problemi di ottimizzazione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "STUDIO DELLE FUNZIONI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Studio di una funzione", "checked": false },
+            { "label": "Grafici di una funzione e della sua derivata", "checked": false },
+            { "label": "Applicazioni dello studio di una funzione", "checked": false },
+            { "label": "Risoluzione approssimata di un'equazione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "INTEGRALI INDEFINITI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Integrale indefinito", "checked": false },
+            { "label": "Integrali indefiniti immediati", "checked": false },
+            { "label": "Integrazione per sostituzione", "checked": false },
+            { "label": "Integrazione per parti", "checked": false },
+            { "label": "Integrazione di funzioni razionali fratte", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "INTEGRALI DEFINITI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Integrale definito", "checked": false },
+            { "label": "Teorema fondamentale del calcolo integrale", "checked": false },
+            { "label": "Calcolo delle aree", "checked": false },
+            { "label": "Calcolo dei volumi", "checked": false },
+            { "label": "Integrali impropri", "checked": false },
+            { "label": "Applicazioni degli integrali alla fisica", "checked": false },
+            { "label": "Integrazione numerica", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "EQUAZIONI DIFFERENZIALI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Che cos'è un'equazione differenziale", "checked": false },
+            { "label": "Risoluzione di alcuni tipi di equazioni differenziali", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "σ1 - DISTRIBUZIONI DI PROBABILITÀ",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Variabili casuali discrete e distribuzioni di probabilità", "checked": false },
+            { "label": "Valori caratterizzanti una variabile casuale discreta", "checked": false },
+            { "label": "Distribuzioni di probabilità di uso frequente", "checked": false },
+            { "label": "Giochi aleatori", "checked": false },
+            { "label": "Variabili casuali standardizzate", "checked": false },
+            { "label": "Variabili casuali continue", "checked": false }
+        ]
+    }
+]

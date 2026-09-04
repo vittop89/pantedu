@@ -1,0 +1,61 @@
+[
+    {
+        "titolo": "Aritmetica e algebra",
+        "contenuti": [
+            { "label": "Sviluppare capacità di calcolo (mentale, scritto, strumentale) con numeri interi e razionali (frazioni e decimali).", "checked": true },
+            { "label": "Studiare le proprietà delle operazioni.", "checked": true },
+            { "label": "Approfondire la conoscenza della struttura dei numeri interi e dei procedimenti algoritmici attraverso l'algoritmo euclideo per il MCD.", "checked": true },
+            { "label": "Acquisire una conoscenza intuitiva dei numeri reali e della loro rappresentazione geometrica su una retta.", "checked": true },
+            { "label": "Comprendere la dimostrazione dell'irrazionalità di \\(\\sqrt{2}\\) e altri numeri.", "checked": false },
+            { "label": "Applicare il calcolo algebrico allo studio dei numeri irrazionali e delle espressioni con essi, affrontando il tema dell'approssimazione.", "checked": true },
+            { "label": "Acquisire i metodi di calcolo dei radicali (senza eccessivi tecnicismi manipolatori).", "checked": true },
+            { "label": "Apprendere gli contenuti di base del calcolo letterale, le proprietà dei polinomi e le operazioni semplici tra essi.", "checked": true },
+            { "label": "Eseguire calcoli con espressioni letterali per rappresentare e risolvere problemi (equazioni, disequazioni, sistemi) e per dimostrare risultati generali in aritmetica.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Geometria",
+        "contenuti": [
+            { "label": "Conoscere i fondamenti della geometria euclidea del piano.", "checked": false },
+            { "label": "Comprendere l'importanza e il significato di postulato, assioma, definizione, teorema, dimostrazione.", "checked": false },
+            { "label": "Comprendere gli aspetti geometrici e le implicazioni numeriche (numeri irrazionali) del teorema di Pitagora, con focus sugli aspetti concettuali.", "checked": false },
+            { "label": "Conoscere le principali trasformazioni geometriche (traslazioni, rotazioni, simmetrie, similitudini, teorema di Talete) e riconoscere le principali proprietà invarianti.", "checked": false },
+            { "label": "Apprendere i principi matematici delle tecniche di rappresentazione delle figure dello spazio e le loro relazioni con le discipline grafiche/geometriche.", "checked": false },
+            { "label": "Studiare i problemi di rappresentazione delle figure nel contesto artistico.", "checked": false },
+            { "label": "Realizzare costruzioni geometriche elementari con strumenti tradizionali (riga e compasso) e software di geometria.", "checked": false },
+            { "label": "Utilizzare il metodo delle coordinate cartesiane per rappresentare punti, rette e proprietà (parallelismo, perpendicolarità) nel piano.", "checked": false },
+            { "label": "Approfondire la portata concettuale e tecnica dell'algebra nella rappresentazione degli oggetti geometrici.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Relazioni e funzioni",
+        "contenuti": [
+            { "label": "Utilizzare il linguaggio degli insiemi e delle funzioni (dominio, composizione, inversa) per rappresentare fenomeni e introdurre il concetto di modello matematico.", "checked": true },
+            { "label": "Descrivere un problema con un’equazione, una disequazione o un sistema; ottenere informazioni e ricavare le soluzioni di un modello matematico (anche in ricerca operativa/teoria delle decisioni).", "checked": true },
+            { "label": "Studiare le funzioni del tipo \\(f(x)=ax+b, f(x)=|x|, f(x)=a/x, f(x)=x^2\\) matematicamente e per la descrizione/soluzione di problemi applicativi.", "checked": true },
+            { "label": "Risolvere graficamente e algebricamente equazioni di primo grado in una incognita, disequazioni associate e sistemi di equazioni lineari in due incognite.", "checked": true },
+            { "label": "Apprendere gli contenuti della teoria della proporzionalità diretta e inversa.", "checked": true },
+            { "label": "Passare agevolmente da un registro di rappresentazione a un altro (numerico, grafico, funzionale), anche utilizzando strumenti informatici.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Dati e previsioni",
+        "contenuti": [
+            { "label": "Rappresentare e analizzare in diversi modi (anche con strumenti informatici) un insieme di dati, scegliendo le rappresentazioni più idonee.", "checked": false },
+            { "label": "Distinguere tra caratteri qualitativi, quantitativi discreti e quantitativi continui; operare con distribuzioni di frequenze e rappresentarle.", "checked": false },
+            { "label": "Studiare definizioni e proprietà dei valori medi e delle misure di variabilità; usare strumenti di calcolo per analizzare dati e serie statistiche.", "checked": false },
+            { "label": "Raccogliere e analizzare dati in collegamento con altre discipline.", "checked": false },
+            { "label": "Apprendere la nozione di probabilità (esempi da contesti classici) e introdurre nozioni di statistica.", "checked": false },
+            { "label": "Studiare esempi di modelli matematici in diversi ambiti, descriverne le caratteristiche principali e distinguerne gli aspetti specifici.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "contenuti di informatica",
+        "contenuti": [
+            { "label": "Utilizzare strumenti informatici per rappresentare e manipolare oggetti matematici.", "checked": false },
+            { "label": "Studiare le modalità di rappresentazione dei dati elementari testuali e multimediali.", "checked": false },
+            { "label": "Comprendere il concetto di algoritmo e elaborare strategie di risoluzioni algoritmiche per problemi semplici.", "checked": false },
+            { "label": "Comprendere il concetto di funzione calcolabile, di calcolabilità e relativi esempi semplici.", "checked": false }
+        ]
+    }
+]

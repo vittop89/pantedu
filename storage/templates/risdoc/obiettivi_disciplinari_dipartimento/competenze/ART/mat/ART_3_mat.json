@@ -1,0 +1,19 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare il linguaggio e le tecniche del calcolo algebrico (polinomi, frazioni, equazioni e disequazioni di vario grado) per modellizzare, formalizzare e risolvere problemi, interpretando criticamente le soluzioni nel contesto di origine.",
+                "checked": false
+            },
+            {
+                "label": "Padroneggiare il metodo delle coordinate per studiare le proprietà delle figure geometriche, in particolare delle coniche, integrando l'approccio analitico con il ragionamento logico-deduttivo proprio della geometria euclidea.",
+                "checked": false
+            },
+            {
+                "label": "Interpretare e utilizzare la rappresentazione grafica di funzioni ed equazioni come strumento per risolvere problemi, analizzare le proprietà delle soluzioni e affrontare situazioni non risolvibili per via puramente algebrica.",
+                "checked": false
+            }
+        ]
+    }
+]

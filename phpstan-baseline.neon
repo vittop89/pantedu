@@ -1,0 +1,874 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Match arm is unreachable because previous comparison is always true\\.$#"
+			count: 1
+			path: app/Controllers/Admin/AdminLogsController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Admin\\\\RisdocAdminController\\:\\:\\$institutional is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/Admin/RisdocAdminController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Core\\\\Request\\:\\:\\$params\\.$#"
+			count: 5
+			path: app/Controllers/Admin/WafAdminController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Auth\\\\CieController\\:\\:isEnabled\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/Auth/CieController.php
+
+		-
+			message: "#^Static method App\\\\Core\\\\Response\\:\\:json\\(\\) invoked with 3 parameters, 1\\-2 required\\.$#"
+			count: 1
+			path: app/Controllers/Auth/CieController.php
+
+		-
+			message: "#^Static method App\\\\Core\\\\Response\\:\\:json\\(\\) invoked with 3 parameters, 1\\-2 required\\.$#"
+			count: 1
+			path: app/Controllers/Auth/SpidController.php
+
+		-
+			message: "#^Static method App\\\\Controllers\\\\ContentStudyController\\:\\:legacyDictToRegistryArray\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/ContentStudyController.php
+
+		-
+			message: "#^Static method App\\\\Controllers\\\\ContentStudyController\\:\\:registryArrayToLegacyDict\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/ContentStudyController.php
+
+		-
+			message: "#^Call to static method readRaw\\(\\) on an unknown class App\\\\Controllers\\\\TemplateDefaults\\.$#"
+			count: 1
+			path: app/Controllers/ContentTemplateController.php
+
+		-
+			message: "#^Call to static method seedDefault\\(\\) on an unknown class App\\\\Controllers\\\\TemplateDefaults\\.$#"
+			count: 1
+			path: app/Controllers/ContentTemplateController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\ContentTemplateController\\:\\:\\$repo is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/ContentTemplateController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\CurriculumController\\:\\:resolveCurrentInstitute\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/CurriculumController.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 1
+			path: app/Controllers/DpoContactController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Core\\\\Request\\:\\:\\$params\\.$#"
+			count: 1
+			path: app/Controllers/GeoGebraCatalogController.php
+
+		-
+			message: "#^Call to static method introForType\\(\\) on an unknown class App\\\\Controllers\\\\TemplateDefaults\\.$#"
+			count: 1
+			path: app/Controllers/GroupController.php
+
+		-
+			message: "#^Call to static method itemsForType\\(\\) on an unknown class App\\\\Controllers\\\\TemplateDefaults\\.$#"
+			count: 1
+			path: app/Controllers/GroupController.php
+
+		-
+			message: "#^Call to static method titleForType\\(\\) on an unknown class App\\\\Controllers\\\\TemplateDefaults\\.$#"
+			count: 1
+			path: app/Controllers/GroupController.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: app/Controllers/GroupController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\GroupController\\:\\:\\$repo is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/GroupController.php
+
+		-
+			message: "#^Offset 'materia' does not exist on array\\{type\\: 'verifica\\-tex'\\}\\.$#"
+			count: 2
+			path: app/Controllers/ImportBundleController.php
+
+		-
+			message: "#^Offset 'title' does not exist on array\\{type\\: string\\}\\.$#"
+			count: 3
+			path: app/Controllers/ImportBundleController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LatexShortcutsController\\:\\:sanitizeGroups\\(\\) has parameter \\$groups with no type specified\\.$#"
+			count: 1
+			path: app/Controllers/LatexShortcutsController.php
+
+		-
+			message: "#^Match arm is unreachable because previous comparison is always true\\.$#"
+			count: 1
+			path: app/Controllers/MapsController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\QuesitoController\\:\\:\\$repo is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/QuesitoController.php
+
+		-
+			message: "#^Offset 'username' does not exist on array\\{id\\: string, status\\: string\\}\\.$#"
+			count: 1
+			path: app/Controllers/RegistrationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Risdoc\\\\ExportController\\:\\:processLegacyTex\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/Risdoc/ExportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Risdoc\\\\ExportController\\:\\:substituteFields\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/Risdoc/ExportController.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: app/Controllers/Risdoc/TemplateViewController.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 2
+			path: app/Controllers/Risdoc/TemplateViewController.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: app/Controllers/Risdoc/TemplateViewController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\StudyHeaderController\\:\\:\\$repo is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/StudyHeaderController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Controllers\\\\StudySourcesController\\:\\:legacyDictToRegistryArray\\(\\)\\.$#"
+			count: 2
+			path: app/Controllers/StudySourcesController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Controllers\\\\StudySourcesController\\:\\:registryArrayToLegacyDict\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/StudySourcesController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\StudySourcesController\\:\\:\\$repo is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/StudySourcesController.php
+
+		-
+			message: "#^Static method App\\\\Controllers\\\\TeacherGitHubController\\:\\:sanitizePathComponent\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Controllers/TeacherGitHubController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Core\\\\Request\\:\\:post\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/TosAcceptanceController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Core\\\\Auth\\:\\:userId\\(\\)\\.$#"
+			count: 2
+			path: app/Controllers/TosAcceptanceController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\VerificaBatchController\\:\\:\\$svc is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/VerificaBatchController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\VerificaBatchController\\:\\:\\$tex is never read, only written\\.$#"
+			count: 1
+			path: app/Controllers/VerificaBatchController.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between 3000\\|5000 and 0 is always true\\.$#"
+			count: 1
+			path: app/Controllers/VerificaCompileController.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$manifest\\.$#"
+			count: 1
+			path: app/Controllers/VerificaSyncController.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$rootPathBase\\.$#"
+			count: 1
+			path: app/Controllers/VerificaSyncController.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: app/Core/Auth.php
+
+		-
+			message: "#^Static property App\\\\Core\\\\Container\\:\\:\\$bindings \\(array\\<class\\-string, \\(callable\\(\\)\\: mixed\\)\\|object\\>\\) does not accept array\\{App\\\\Core\\\\Contracts\\\\DatabaseInterface\\: 'App\\\\\\\\Core\\\\\\\\Gateway\\\\\\\\DatabaseGateway', App\\\\Core\\\\Contracts\\\\ConfigInterface\\: 'App\\\\\\\\Core\\\\\\\\Gateway\\\\\\\\ConfigGateway', App\\\\Core\\\\Contracts\\\\AuthInterface\\: 'App\\\\\\\\Core\\\\\\\\Gateway\\\\\\\\AuthGateway'\\}\\.$#"
+			count: 1
+			path: app/Core/Container.php
+
+		-
+			message: "#^Variable \\$_GET on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Core/Request.php
+
+		-
+			message: "#^Variable \\$_POST on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Core/Request.php
+
+		-
+			message: "#^Method App\\\\Middleware\\\\SecurityHeadersMiddleware\\:\\:handle\\(\\) should return App\\\\Core\\\\Response but returns mixed\\.$#"
+			count: 1
+			path: app/Middleware/SecurityHeadersMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Core\\\\Auth\\:\\:userId\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/TosAcceptanceMiddleware.php
+
+		-
+			message: "#^Property App\\\\Middleware\\\\WafMiddleware\\:\\:\\$scoring is never read, only written\\.$#"
+			count: 1
+			path: app/Middleware/WafMiddleware.php
+
+		-
+			message: "#^Offset 'content_format' does not exist on array\\{teacher_id\\?\\: int, content_type\\?\\: array\\<string\\>\\|string, subject_code\\?\\: string, indirizzo\\?\\: string, classe\\?\\: string, topic\\?\\: string, visibility\\?\\: array\\<string\\>\\|string, q\\?\\: string, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: app/Repositories/TeacherContentRepository.php
+
+		-
+			message: "#^Offset 'institute_id' does not exist on array\\{teacher_id\\?\\: int\\|int\\<1, max\\>, content_type\\?\\: array\\<string\\>\\|string, subject_code\\?\\: string, indirizzo\\?\\: string, classe\\?\\: string, topic\\?\\: string, visibility\\?\\: array\\<string\\>\\|string, q\\?\\: string, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: app/Repositories/TeacherContentRepository.php
+
+		-
+			message: "#^Offset 'section_id' does not exist on array\\{teacher_id\\?\\: int, content_type\\?\\: array\\<string\\>\\|string, subject_code\\?\\: string, indirizzo\\?\\: string, classe\\?\\: string, topic\\?\\: string, visibility\\?\\: array\\<string\\>\\|string, q\\?\\: string, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: app/Repositories/TeacherContentRepository.php
+
+		-
+			message: "#^Offset 'section_id_not_in' does not exist on array\\{teacher_id\\?\\: int, content_type\\?\\: array\\<string\\>\\|string, subject_code\\?\\: string, indirizzo\\?\\: string, classe\\?\\: string, topic\\?\\: string, visibility\\?\\: array\\<string\\>\\|string, q\\?\\: string, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: app/Repositories/TeacherContentRepository.php
+
+		-
+			message: "#^Offset 'source_code' does not exist on array\\{teacher_id\\?\\: int, content_type\\?\\: array\\<string\\>\\|string, subject_code\\?\\: string, indirizzo\\?\\: string, classe\\?\\: string, topic\\?\\: string, visibility\\?\\: array\\<string\\>\\|string, q\\?\\: string, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: app/Repositories/TeacherContentRepository.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
+			count: 3
+			path: app/Services/Contract/ContractAggregate.php
+
+		-
+			message: "#^Offset int\\<1, 2\\> on array\\{0, 50000, 200000\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Services/Contract/ContractRepository.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between non\\-falsy\\-string and false will always evaluate to false\\.$#"
+			count: 1
+			path: app/Services/Crypto/ClasseKeyService.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between non\\-falsy\\-string and false will always evaluate to false\\.$#"
+			count: 1
+			path: app/Services/Crypto/TeacherCryptoService.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between non\\-falsy\\-string and false will always evaluate to false\\.$#"
+			count: 2
+			path: app/Services/Crypto/TeacherRecoveryService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\CurriculumService\\:\\:\\$backupDir is never read, only written\\.$#"
+			count: 1
+			path: app/Services/CurriculumService.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between int and null will always evaluate to false\\.$#"
+			count: 1
+			path: app/Services/CurriculumService.php
+
+		-
+			message: "#^Parameter \\#3 \\$tx of class App\\\\Services\\\\Verifica\\\\VerificaDocumentService constructor expects App\\\\Support\\\\TransactionRunner\\|null, App\\\\Services\\\\Crypto\\\\EncryptedBlobStore given\\.$#"
+			count: 1
+			path: app/Services/Drive/VerificaSyncService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:removeAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:setAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\DsaService\\:\\:findOrCreateTargetDiv\\(\\) should return DOMElement but returns DOMNode\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\DsaService\\:\\:findOrCreateTargetDiv\\(\\) should return DOMElement but returns DOMNode\\|null\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Parameter \\#1 \\$container of method App\\\\Services\\\\DsaService\\:\\:removeAddTextDsa\\(\\) expects DOMElement, DOMNode given\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Parameter \\#2 \\$li of method App\\\\Services\\\\DsaService\\:\\:ensureAddTextDsa\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Parameter \\#3 \\$container of method App\\\\Services\\\\DsaService\\:\\:ensureAddTextDsa\\(\\) expects DOMElement, DOMNode\\|false given\\.$#"
+			count: 1
+			path: app/Services/DsaService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Gdpr\\\\Export\\\\UserDataExportService\\:\\:aggregateSummary\\(\\) should return array\\<string, array\\{label\\: string, files_count\\: int, total_size\\: int, summary\\: array, sha256\\: array\\<int, array\\{path\\: string, sha256\\: string\\}\\>\\}\\> but returns array\\<string, array\\{label\\: string, files_count\\: int, total_size\\: int, summary\\: array\\<string, mixed\\>, files_sha256\\: array\\<int\\<0, max\\>, array\\{path\\: string, sha256\\: string, size\\: int\\}\\>\\}\\>\\.$#"
+			count: 1
+			path: app/Services/Gdpr/Export/UserDataExportService.php
+
+		-
+			message: "#^Offset 1 on array\\{string, string, string, string\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 2
+			path: app/Services/GeoGebra/GeoGebraTexPreProcessor.php
+
+		-
+			message: "#^Offset 2 on array\\{string, string, string, string\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 2
+			path: app/Services/GeoGebra/GeoGebraTexPreProcessor.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: app/Services/InstituteMergeService.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$context with type App\\\\Services\\\\Maps\\\\ViewerContext\\|null is not subtype of native type array\\|null\\.$#"
+			count: 1
+			path: app/Services/Maps/MapPermissionService.php
+
+		-
+			message: "#^Parameter \\$context of method App\\\\Services\\\\Maps\\\\MapPermissionService\\:\\:canView\\(\\) has invalid type App\\\\Services\\\\Maps\\\\ViewerContext\\.$#"
+			count: 1
+			path: app/Services/Maps/MapPermissionService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\MiurSchoolsService\\:\\:loadIndex\\(\\) should return array\\<int, array\\{denom\\: string, type\\: string, city\\: string, prov\\: string, reg\\: string, code\\: string, _key\\: string\\}\\> but returns array\\<int, array\\{denom\\: string, type\\: string, city\\: string, prov\\: string, reg\\: string, code\\: string\\}\\>\\.$#"
+			count: 1
+			path: app/Services/MiurSchoolsService.php
+
+		-
+			message: "#^Offset string on \\*NEVER\\* on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Services/PdfImport/ExerciseInserter.php
+
+		-
+			message: "#^Match arm is unreachable because previous comparison is always true\\.$#"
+			count: 1
+			path: app/Services/PdfImport/Provider/ProviderRouter.php
+
+		-
+			message: "#^Access to an undefined property DOMNode\\:\\:\\$tagName\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 4
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:hasAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PhpContentParser\\:\\:detectType\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PhpContentParser\\:\\:serializeFlat\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Method App\\\\Services\\\\PhpContentParser\\:\\:splitLatexRegions\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Parameter \\#1 \\$root of method App\\\\Services\\\\PhpContentParser\\:\\:parseBlocks\\(\\) expects DOMElement, DOMNode given\\.$#"
+			count: 5
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Parameter \\#2 \\$it of method App\\\\Services\\\\PhpContentParser\\:\\:parseItem\\(\\) expects DOMElement, DOMNode given\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: app/Services/PhpContentParser.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: app/Services/Risdoc/Pt/PtToTex.php
+
+		-
+			message: "#^Variable \\$boxStack in empty\\(\\) always exists and is always falsy\\.$#"
+			count: 1
+			path: app/Services/Risdoc/Pt/PtToTex.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: app/Services/Risdoc/Pt/TexBlockExtractor.php
+
+		-
+			message: "#^Strict comparison using \\!\\=\\= between null and null will always evaluate to false\\.$#"
+			count: 2
+			path: app/Services/Risdoc/Pt/TexBlockExtractor.php
+
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 1
+			path: app/Services/Risdoc/TemplateDefaults.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/TableUpdateService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getElementsByTagName\\(\\)\\.$#"
+			count: 1
+			path: app/Services/TableUpdateService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:setAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/TableUpdateService.php
+
+		-
+			message: "#^While loop condition is always false\\.$#"
+			count: 1
+			path: app/Services/TableUpdateService.php
+
+		-
+			message: """
+				#^PHPDoc tag @param has invalid value \\(array\\{
+				  mode\\: string,                // 'zip' \\| 'vsc'
+				  variant_kind\\?\\: string,        // 'NOR'\\|'SOL'\\|'DSA'\\|'DIS' \\(override esplicito\\)
+				  institute_code\\?\\: string,      // scope per cascade lookup, default '_default'
+				  institute_name\\?\\: string,      // \\{\\{ISTITUTO_NOME\\}\\} \\(header_label \\|\\| name\\)
+				  docente_nome\\?\\: string,        // \\{\\{DOCENTE_NOME\\}\\}
+				  tempo_minuti\\?\\: int,           // \\{\\{TEMPO_MINUTI\\}\\}, default 55
+				  copie\\?\\: array\\{NOR\\?\\:int, DSA\\?\\:int, DIS\\?\\:int\\}
+				\\} \\$opts\\)\\: Unexpected token "//", expected type at offset 228$#
+			"""
+			count: 1
+			path: app/Services/TexBuilder.php
+
+		-
+			message: "#^Variable \\$instituteId might not be defined\\.$#"
+			count: 1
+			path: app/Services/TexBuilder.php
+
+		-
+			message: "#^Variable \\$teacherId might not be defined\\.$#"
+			count: 1
+			path: app/Services/TexBuilder.php
+
+		-
+			message: "#^Static method App\\\\Services\\\\TexBuilder\\\\Sanitizer\\:\\:listOptions\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Services/TexBuilder/Sanitizer.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/TikzElementsService.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 1
+			path: app/Services/TikzService.php
+
+		-
+			message: """
+				#^PHPDoc tag @param has invalid value \\(array\\{
+				  teacher_id\\: int, materia\\: string, title\\: string,
+				  selection\\: array,                            payload Selection
+				  exercise_ids\\?\\: list\\<int\\>, fm_db_section\\?\\: string,
+				  template_context\\: array,                     placeholders
+				  tipologia\\?\\: string,
+				  compensa\\?\\: bool,                             \\#Compensa checkbox
+				  includeGriglia\\?\\: bool,                       \\#griglie
+				  includeMisure\\?\\: bool,                        \\#misure
+				  nPrint\\?\\: int\\|null, nPrintDSA\\?\\: int\\|null, nPrintDIS\\?\\: int\\|null,
+				  variants\\?\\: list\\<string\\>                      override esplicito \\(es\\. \\['A_SOL','A_NOR'\\]\\)
+				\\} \\$input\\)\\: Unexpected token "Selection", expected '\\}' at offset 919$#
+			"""
+			count: 1
+			path: app/Services/Verifica/VerificaDocumentService.php
+
+		-
+			message: "#^Using nullsafe method call on non\\-nullable type PDOStatement\\|false\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: app/Services/Waf/WafLogService.php
+
+		-
+			message: "#^Using nullsafe method call on non\\-nullable type PDOStatement\\|false\\. Use \\-\\> instead\\.$#"
+			count: 5
+			path: app/Services/Waf/WafSecurityRepository.php
+
+		-
+			message: "#^Using nullsafe method call on non\\-nullable type PDOStatement\\|false\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: app/Services/Waf/WafThreatIntelService.php
+
+		-
+			message: "#^Property App\\\\Support\\\\Storage\\\\S3CompatibleStorageProvider\\:\\:\\$accessKey is never read, only written\\.$#"
+			count: 1
+			path: app/Support/Storage/S3CompatibleStorageProvider.php
+
+		-
+			message: "#^Property App\\\\Support\\\\Storage\\\\S3CompatibleStorageProvider\\:\\:\\$bucket is never read, only written\\.$#"
+			count: 1
+			path: app/Support/Storage/S3CompatibleStorageProvider.php
+
+		-
+			message: "#^Property App\\\\Support\\\\Storage\\\\S3CompatibleStorageProvider\\:\\:\\$endpoint is never read, only written\\.$#"
+			count: 1
+			path: app/Support/Storage/S3CompatibleStorageProvider.php
+
+		-
+			message: "#^Property App\\\\Support\\\\Storage\\\\S3CompatibleStorageProvider\\:\\:\\$region is never read, only written\\.$#"
+			count: 1
+			path: app/Support/Storage/S3CompatibleStorageProvider.php
+
+		-
+			message: "#^Property App\\\\Support\\\\Storage\\\\S3CompatibleStorageProvider\\:\\:\\$secret is never read, only written\\.$#"
+			count: 1
+			path: app/Support/Storage/S3CompatibleStorageProvider.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$extPattern with type string\\|null is not subtype of native type array\\|null\\.$#"
+			count: 1
+			path: app/Support/Validator.php
+
+		-
+			message: "#^Constant TEST_FIXTURES not found\\.$#"
+			count: 2
+			path: tests/Unit/BlockListTest.php
+
+		-
+			message: "#^Property class@anonymous/tests/Unit/Contract/ContractRepositoryTest\\.php\\:292\\:\\:\\$stubKey is never read, only written\\.$#"
+			count: 1
+			path: tests/Unit/Contract/ContractRepositoryTest.php
+
+		-
+			message: "#^Property class@anonymous/tests/Unit/Contract/ContractRepositoryTest\\.php\\:32\\:\\:\\$stubKey is never read, only written\\.$#"
+			count: 1
+			path: tests/Unit/Contract/ContractRepositoryTest.php
+
+		-
+			message: "#^Offset 'username' does not exist on array\\{id\\: string, status\\: string\\}\\.$#"
+			count: 3
+			path: tests/Unit/RegistrationServiceTest.php
+
+		-
+			message: "#^Offset 'files_sha256' does not exist on array\\{label\\: string, files_count\\: int, total_size\\: int, summary\\: array, sha256\\: array\\<int, array\\{path\\: string, sha256\\: string\\}\\>\\}\\.$#"
+			count: 3
+			path: tests/Unit/Services/Gdpr/Export/UserDataExportServiceTest.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: tests/Unit/Support/PdoTransactionRunnerTest.php
+
+		-
+			message: "#^Offset 'type' does not exist on array\\{filePath\\: string, problemId\\: string, position\\: int, text\\: string, items\\: array\\<int, array\\>\\}\\.$#"
+			count: 3
+			path: tests/Unit/TexBuilderTest.php
+
+		-
+			message: "#^Dead catch \\- InvalidArgumentException is never thrown in the try block\\.$#"
+			count: 4
+			path: tools/admin/cleanup_institutes.php
+
+		-
+			message: "#^Empty array passed to foreach\\.$#"
+			count: 1
+			path: tools/admin/cleanup_institutes.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: tools/admin/cleanup_institutes.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: tools/admin/cleanup_institutes.php
+
+		-
+			message: "#^Variable \\$idsToDelete in empty\\(\\) always exists and is always falsy\\.$#"
+			count: 1
+			path: tools/admin/cleanup_institutes.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Contract\\\\ContractRepository\\:\\:load\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: tools/backfill_source_type.php
+
+		-
+			message: "#^Match arm is unreachable because previous comparison is always true\\.$#"
+			count: 1
+			path: tools/cleanup_curriculum.php
+
+		-
+			message: "#^Offset 'alive' on array\\{alive\\: int\\<0, max\\>, dead\\: int\\<0, max\\>, missing\\?\\: int\\<0, max\\>, orphan_db\\?\\: 0\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 2
+			path: tools/crypto/survey_all_blobs.php
+
+		-
+			message: "#^Offset 'dead' on array\\{alive\\: int\\<0, max\\>, dead\\: int\\<0, max\\>, missing\\?\\: int\\<0, max\\>, orphan_db\\?\\: 0\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: tools/crypto/survey_all_blobs.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_eof\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_open\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_open\\(\\) has parameter \\$m with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_open\\(\\) has parameter \\$o with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_open\\(\\) has parameter \\$op with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_open\\(\\) has parameter \\$p with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_read\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_read\\(\\) has parameter \\$n with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_seek\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_seek\\(\\) has parameter \\$o with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_seek\\(\\) has parameter \\$w with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_stat\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:stream_tell\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:url_stat\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:url_stat\\(\\) has parameter \\$f with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Method TestPhpInputWrapper\\:\\:url_stat\\(\\) has parameter \\$p with no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Property TestPhpInputWrapper\\:\\:\\$context has no type specified\\.$#"
+			count: 1
+			path: tools/dev/test_import_full_e2e.php
+
+		-
+			message: "#^Offset mixed on non\\-empty\\-array\\<int\\<0, max\\>\\> on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: tools/diag/test_local_bundle_paths.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, App\\\\Services\\\\TexBuilder\\\\BuildResult given\\.$#"
+			count: 2
+			path: tools/diag/test_tex_compile.php
+
+		-
+			message: "#^Empty array passed to foreach\\.$#"
+			count: 1
+			path: tools/fix_layout_smart.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: tools/fix_layout_smart.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$changes\\.$#"
+			count: 1
+			path: tools/fix_spacing_body_html.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$h2\\.$#"
+			count: 1
+			path: tools/fix_spacing_body_html.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$samples\\.$#"
+			count: 1
+			path: tools/fix_spacing_body_html.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$where\\.$#"
+			count: 1
+			path: tools/fix_spacing_body_html.php
+
+		-
+			message: "#^Function walkAndFix\\(\\) has parameter \\$node with no type specified\\.$#"
+			count: 1
+			path: tools/fix_spacing_body_html.php
+
+		-
+			message: "#^Offset 'skipped_php' on array\\{scanned\\: int\\<0, max\\>, migrated\\: int\\<0, max\\>, skipped\\: int\\<0, max\\>, skipped_php\\: int\\<0, max\\>, errors\\: int\\<0, max\\>, bytes\\: int\\<0, max\\>\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: tools/migrations/migrate_legacy_to_storage.php
+
+		-
+			message: "#^Function iterFiles\\(\\) has parameter \\$dir with no type specified\\.$#"
+			count: 1
+			path: tools/prewarm_tikz_via_php.php
+
+		-
+			message: "#^Function walkTikz\\(\\) has parameter \\$found with no type specified\\.$#"
+			count: 1
+			path: tools/prewarm_tikz_via_php.php
+
+		-
+			message: "#^Function walkTikz\\(\\) has parameter \\$node with no type specified\\.$#"
+			count: 1
+			path: tools/prewarm_tikz_via_php.php
+
+		-
+			message: "#^Access to an undefined property DOMNode\\:\\:\\$tagName\\.$#"
+			count: 1
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			count: 2
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Function isXmlElement\\(\\) has parameter \\$node with no type specified\\.$#"
+			count: 1
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Function textContent\\(\\) has parameter \\$node with no type specified\\.$#"
+			count: 1
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Match arm is unreachable because previous comparison is always true\\.$#"
+			count: 1
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Parameter \\#1 \\$li of function parseLinkListItem expects DOMElement, DOMNode given\\.$#"
+			count: 2
+			path: tools/scripts/extract-seed-from-fismapant.php
+
+		-
+			message: "#^Undefined variable\\: \\$this$#"
+			count: 1
+			path: tools/test_topic_render.php
+
+		-
+			message: "#^Function parseExtras\\(\\) has parameter \\$raw with no type specified\\.$#"
+			count: 1
+			path: tools/tikz_prewarm_cache.php
+
+		-
+			message: "#^Function parseLibs\\(\\) has parameter \\$raw with no type specified\\.$#"
+			count: 1
+			path: tools/tikz_prewarm_cache.php
+
+		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: tools/tikz_reorder_first_to_last.php
+
+		-
+			message: "#^Variable \\$baseDir might not be defined\\.$#"
+			count: 1
+			path: tools/waf/migrate_legacy_blocks.php

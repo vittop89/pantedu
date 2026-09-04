@@ -1,0 +1,36 @@
+% Preambolo per i PDF legali/privacy — incluso da tools/legal/build_pdf.sh.
+%
+% Nasce da un problema concreto: nelle tabelle lunghe (registro art. 30
+% Sezione D, matrice di rischio della DPIA) le righe si confondevano fra loro.
+% Lo stile booktabs, usato da pandoc, per scelta non traccia linee fra le
+% righe: va bene per tabelle compatte, meno quando una cella occupa piu' linee
+% e il lettore perde la corrispondenza orizzontale.
+
+% I comandi qui sotto vivono in booktabs (\heavyrulewidth), longtable (\LTpre)
+% ed etoolbox (\AtBeginEnvironment). Il template di pandoc li carica soltanto
+% dentro un $if(tables)$: un documento SENZA tabelle -- i ToS, per esempio --
+% non li ha, e xelatex si ferma su "Undefined control sequence". Il PDF non
+% viene prodotto e sul disco resta quello vecchio.
+%
+% Caricarli qui li rende disponibili in ogni caso; ripetere \usepackage con le
+% stesse opzioni e' innocuo quando pandoc li ha gia' inclusi.
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{etoolbox}
+
+% Piu' aria sopra e sotto il testo di ogni cella: separa le righe senza
+% aggiungere tratti, restando coerente con lo stile booktabs.
+\renewcommand{\arraystretch}{1.35}
+
+% Filetti leggermente piu' marcati in testa e in coda alla tabella, cosi' il
+% blocco si stacca dal testo circostante.
+\setlength{\heavyrulewidth}{1.1pt}
+\setlength{\lightrulewidth}{0.5pt}
+
+% Le tabelle larghe respirano meglio con un corpo leggermente ridotto: evita
+% che una cella lunga si spezzi in troppe righe.
+\AtBeginEnvironment{longtable}{\small}
+
+% Spazio verticale attorno alla tabella.
+\setlength{\LTpre}{10pt}
+\setlength{\LTpost}{10pt}

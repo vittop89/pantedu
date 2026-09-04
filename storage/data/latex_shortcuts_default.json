@@ -1,0 +1,79 @@
+{
+  "espansioni": [
+    { "label": "Rightarrow", "type": "hotstring", "trigger": "\\rw", "snippet": "\\Rightarrow ", "desc": "⇒" },
+    { "label": "Longrightarrow", "type": "hotstring", "trigger": "\\lr", "snippet": "\\Longrightarrow ", "desc": "⟹" },
+    { "label": "Longleftrightarrow", "type": "hotstring", "trigger": "\\llr", "snippet": "\\Longleftrightarrow ", "desc": "⟺" },
+    { "label": "vartheta", "type": "hotstring", "trigger": "\\vart", "snippet": "\\vartheta ", "desc": "ϑ" },
+    { "label": "varepsilon", "type": "hotstring", "trigger": "\\vare", "snippet": "\\varepsilon ", "desc": "ε" },
+    { "label": "Delta", "type": "hotstring", "trigger": "\\del", "snippet": "\\Delta ", "desc": "Δ" },
+    { "label": "rbracelr", "type": "hotstring", "trigger": "\\rb", "snippet": "\\rbracelr ", "desc": "macro parentesi tonde" },
+    { "label": "sbracelr", "type": "hotstring", "trigger": "\\sb", "snippet": "\\sbracelr ", "desc": "macro parentesi quadre" },
+    { "label": "bracelr", "type": "hotstring", "trigger": "\\br", "snippet": "\\bracelr ", "desc": "macro parentesi graffe" },
+    { "label": "Vero/Falso", "type": "hotstring", "trigger": "\\vf", "snippet": "\\(\\text{V}\\,\\square\\quad \\text{F}\\,\\square\\quad \\) ", "desc": "V☐  F☐" },
+    { "label": "Correzione esercizi", "type": "hotstring", "trigger": "ccc", "snippet": "Correzione degli esercizi assegnati per casa. ", "desc": "frase ricorrente" },
+    { "label": "Ulteriore esercitazione", "type": "hotstring", "trigger": "uuu", "snippet": "Ulteriore esercitazione. ", "desc": "frase ricorrente" },
+    { "label": "Esercitazione pre-verifica", "type": "hotstring", "trigger": "uuv", "snippet": "Ulteriore esercitazione in vista della verifica. ", "desc": "frase ricorrente" }
+  ],
+  "strutture": [
+    { "label": "bigtriangleup pedice", "type": "hotstring", "trigger": "\\btu", "snippet": "\\bigtriangleup_{${CUR}}", "desc": "△ con pedice" },
+    { "label": "xRightarrow", "type": "hotstring", "trigger": "\\xra", "snippet": "\\xRightarrow[${CUR}]{${SEL}}", "desc": "freccia ⇒ con etichetta" },
+    { "label": "xleftarrow", "type": "hotstring", "trigger": "\\xla", "snippet": "\\xleftarrow[${CUR}]{${SEL}}", "desc": "freccia ⇐ con etichetta" },
+    { "label": "underbrace", "type": "hotstring", "trigger": "\\unb", "snippet": "\\underbrace{${SEL}}_{${CUR}}", "desc": "graffa sotto" },
+    { "label": "overbrace", "type": "hotstring", "trigger": "\\ovb", "snippet": "\\overbrace{${SEL}}^{${CUR}}", "desc": "graffa sopra" },
+    { "label": "overline", "type": "hotstring", "trigger": "\\ovl", "snippet": "\\overline{${SEL}${CUR}}", "desc": "linea sopra" },
+    { "label": "underset", "type": "hotstring", "trigger": "\\uns", "snippet": "\\underset{${CUR}}{${SEL}}", "desc": "sotto/base" },
+    { "label": "overset", "type": "hotstring", "trigger": "\\ovs", "snippet": "\\overset{${CUR}}{${SEL}}", "desc": "sopra/base" },
+    { "label": "under+overset", "type": "hotstring", "trigger": "\\uos", "snippet": "\\underset{${CUR}}{\\overset{}{${SEL}}}", "desc": "sotto e sopra" }
+  ],
+  "tasti-simboli": [
+    { "label": "Inline math", "type": "hotkey", "keys": "alt+\\", "snippet": "\\(${SEL}${CUR}\\)", "desc": "\\( … \\)" },
+    { "label": "Chiudi+apri math", "type": "hotkey", "keys": "ctrl+shift+\\", "snippet": "\\)\n\\(${CUR}", "desc": "\\) a capo \\(" },
+    { "label": "quad", "type": "hotkey", "keys": "alt+q", "snippet": "\\quad ", "desc": "spazio \\quad" },
+    { "label": "limite", "type": "hotkey", "keys": "alt+l", "snippet": "\\displaystyle\\lim_{x\\to${CUR}}", "desc": "\\lim_{x\\to}" },
+    { "label": "vettore", "type": "hotkey", "keys": "alt+v", "snippet": "\\vec{${SEL}${CUR}}", "desc": "\\vec{}" },
+    { "label": "cancel", "type": "hotkey", "keys": "alt+shift+c", "snippet": "\\cancel{${SEL}${CUR}}", "desc": "\\cancel{}" },
+    { "label": "per ogni", "type": "hotkey", "keys": "alt+f", "snippet": "\\forall ", "desc": "∀" },
+    { "label": "appartiene R", "type": "hotkey", "keys": "alt+m", "snippet": "\\in\\mathbb{R}", "desc": "∈ ℝ" },
+    { "label": "appartiene N", "type": "hotkey", "keys": "alt+n", "snippet": "\\in\\mathbb{N}", "desc": "∈ ℕ" },
+    { "label": "graffa aperta", "type": "hotkey", "keys": "alt+x", "snippet": "{", "desc": "{" },
+    { "label": "graffa chiusa", "type": "hotkey", "keys": "alt+c", "snippet": "}", "desc": "}" },
+    { "label": "testo", "type": "hotkey", "keys": "alt+t", "snippet": "\\text{${SEL}${CUR}}", "desc": "\\text{}" }
+  ],
+  "tasti-operazioni": [
+    { "label": "per (cdot)", "type": "hotkey", "keys": "alt+z", "snippet": "\\cdot ", "desc": "·" },
+    { "label": "frazione", "type": "hotkey", "keys": "alt+d", "snippet": "\\dfrac{${SEL}}{${CUR}}", "desc": "\\dfrac{}{}" },
+    { "label": "radice", "type": "hotkey", "keys": "alt+s", "snippet": "\\sqrt{${SEL}${CUR}}", "desc": "√" }
+  ],
+  "tasti-parentesi": [
+    { "label": "left( apri", "type": "hotkey", "keys": "alt+shift+s", "snippet": "\\left(${SEL}${CUR}", "desc": "\\left(" },
+    { "label": "right) chiudi", "type": "hotkey", "keys": "alt+shift+d", "snippet": "\\right)", "desc": "\\right)" },
+    { "label": "left[ apri", "type": "hotkey", "keys": "ctrl+alt+shift+s", "snippet": "\\left[${SEL}${CUR}", "desc": "\\left[" },
+    { "label": "right] chiudi", "type": "hotkey", "keys": "ctrl+alt+shift+d", "snippet": "\\right]", "desc": "\\right]" },
+    { "label": "array", "type": "hotkey", "keys": "alt+shift+a", "snippet": "\\begin{array}{ll}\n${SEL}${CUR}\n\\end{array}", "desc": "ambiente array" },
+    { "label": "cases", "type": "hotkey", "keys": "alt+shift+e", "snippet": "\\begin{cases}\n${SEL}${CUR}\n\\end{cases}", "desc": "sistema {" },
+    { "label": "align*", "type": "hotkey", "keys": "alt+shift+w", "snippet": "\\begin{align*}\n${SEL}${CUR}\n\\end{align*}", "desc": "allineamento" },
+    { "label": "vmatrix", "type": "hotkey", "keys": "alt+shift+v", "snippet": "\\begin{vmatrix}\n${SEL}${CUR}\n\\end{vmatrix}", "desc": "determinante" }
+  ],
+  "tasti-colori": [
+    { "label": "color nero", "type": "hotkey", "keys": "alt+shift+z", "snippet": "\\color{black}", "desc": "testo nero" },
+    { "label": "color rosso", "type": "hotkey", "keys": "alt+r", "snippet": "\\color{red}", "desc": "testo rosso" },
+    { "label": "color blu", "type": "hotkey", "keys": "alt+b", "snippet": "\\color{blue}", "desc": "testo blu" },
+    { "label": "color verde", "type": "hotkey", "keys": "alt+g", "snippet": "\\color{green}", "desc": "testo verde" },
+    { "label": "evidenziatore", "type": "hotkey", "keys": "ctrl+shift+r", "snippet": "\\fcolorbox{red}{yellow}{$\\color{black}${SEL}${CUR}$}", "desc": "box giallo bordo rosso" },
+    { "label": "cerchio rosso", "type": "hotkey", "keys": "alt+shift+r", "snippet": "\\enclose{circle}[mathcolor=red]{${SEL}${CUR}}", "desc": "○ rosso" },
+    { "label": "cerchio blu", "type": "hotkey", "keys": "alt+shift+b", "snippet": "\\enclose{circle}[mathcolor=blue]{${SEL}${CUR}}", "desc": "○ blu" },
+    { "label": "cerchio verde", "type": "hotkey", "keys": "alt+shift+g", "snippet": "\\enclose{circle}[mathcolor=green]{${SEL}${CUR}}", "desc": "○ verde" },
+    { "label": "cerchio nero 1", "type": "hotkey", "keys": "ctrl+shift+1", "snippet": "\\enclose{circle}[mathcolor=black]{1}", "desc": "①" },
+    { "label": "cerchio nero 2", "type": "hotkey", "keys": "ctrl+shift+2", "snippet": "\\enclose{circle}[mathcolor=black]{2}", "desc": "②" },
+    { "label": "cerchio nero 3", "type": "hotkey", "keys": "ctrl+shift+3", "snippet": "\\enclose{circle}[mathcolor=black]{3}", "desc": "③" },
+    { "label": "cerchio nero 4", "type": "hotkey", "keys": "ctrl+shift+4", "snippet": "\\enclose{circle}[mathcolor=black]{4}", "desc": "④" }
+  ],
+  "tasti-passaggi": [
+    { "label": "passaggio I (=)", "type": "hotkey", "keys": "alt+1", "snippet": "\\underset{\\colorbox{yellow}{$ \\,\\text{ I }\\,$}}{=}", "desc": "= con I" },
+    { "label": "passaggio II (=)", "type": "hotkey", "keys": "alt+2", "snippet": "\\underset{\\colorbox{yellow}{$ \\text{ II }$}}{=}", "desc": "= con II" },
+    { "label": "passaggio III (=)", "type": "hotkey", "keys": "alt+3", "snippet": "\\underset{\\colorbox{yellow}{$ \\text{III}$}}{=}", "desc": "= con III" },
+    { "label": "etichetta I", "type": "hotkey", "keys": "alt+shift+1", "snippet": "\\lower{-1pt}\\colorbox{yellow}{$ \\text{ I }$}\\quad ", "desc": "box I" },
+    { "label": "etichetta II", "type": "hotkey", "keys": "alt+shift+2", "snippet": "\\lower{-1pt}\\colorbox{yellow}{$ \\text{II}$}\\quad ", "desc": "box II" },
+    { "label": "etichetta III", "type": "hotkey", "keys": "alt+shift+3", "snippet": "\\lower{-1pt}\\colorbox{yellow}{$ \\text{III}$}\\quad ", "desc": "box III" }
+  ]
+}

@@ -1,0 +1,190 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "EQUAZIONI E DISEQUAZIONI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Disequazioni", "checked": false },
+            { "label": "Disequazioni di primo grado", "checked": false },
+            { "label": "Disequazioni di secondo grado", "checked": false },
+            { "label": "Disequazioni di grado superiore al secondo", "checked": false },
+            { "label": "Disequazioni fratte", "checked": false },
+            { "label": "Sistemi di disequazioni", "checked": false },
+            { "label": "Equazioni e disequazioni con valori assoluti", "checked": false },
+            { "label": "Equazioni e disequazioni irrazionali", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "FUNZIONI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Funzioni e loro caratteristiche", "checked": false },
+            { "label": "Funzioni iniettive, suriettive e biunivoche", "checked": false },
+            { "label": "Funzione inversa", "checked": false },
+            { "label": "Proprietà delle funzioni", "checked": false },
+            { "label": "Funzioni composte", "checked": false },
+            { "label": "Trasformazioni geometriche e grafici", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "SUCCESSIONI E PROGRESSIONI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Successioni numeriche", "checked": false },
+            { "label": "Principio di induzione", "checked": false },
+            { "label": "Progressioni aritmetiche", "checked": false },
+            { "label": "Progressioni geometriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "PIANO CARTESIANO E RETTA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Punti e segmenti", "checked": false },
+            { "label": "Punto medio di un segmento, baricentro di un triangolo", "checked": false },
+            { "label": "Rette nel piano cartesiano", "checked": false },
+            { "label": "Posizione reciproca di due rette", "checked": false },
+            { "label": "Distanza di un punto da una retta", "checked": false },
+            { "label": "Luoghi geometrici e retta", "checked": false },
+            { "label": "Fasci di rette", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "PARABOLA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Parabola e sua equazione", "checked": false },
+            { "label": "Parabola con asse parallelo all'asse x", "checked": false },
+            { "label": "Parabola e funzioni", "checked": false },
+            { "label": "Parabola e trasformazioni geometriche", "checked": false },
+            { "label": "Rette e parabole", "checked": false },
+            { "label": "Determinare l'equazione di una parabola", "checked": false },
+            { "label": "Fasci di parabole", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "CIRCONFERENZA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Circonferenza e sua equazione", "checked": false },
+            { "label": "Rette e circonferenze", "checked": false },
+            { "label": "Determinare l'equazione di una circonferenza", "checked": false },
+            { "label": "Posizione di due circonferenze", "checked": false },
+            { "label": "Fasci di circonferenze", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "ELLISSE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Ellisse e sua equazione", "checked": false },
+            { "label": "Ellissi e rette", "checked": false },
+            { "label": "Determinare l'equazione di un'ellisse", "checked": false },
+            { "label": "Ellisse e trasformazioni geometriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "IPERBOLE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Iperbole e sua equazione", "checked": false },
+            { "label": "Iperbole e rette", "checked": false },
+            { "label": "Determinare l'equazione di un'iperbole", "checked": false },
+            { "label": "Iperbole traslata", "checked": false },
+            { "label": "Iperbole equilatera", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "CONICHE",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Coniche", "checked": false },
+            { "label": "Definizione di una conica mediante l'eccentricità", "checked": false },
+            { "label": "Disequazioni di secondo grado in due incognite", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "ESPONENZIALI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Potenze con esponente reale", "checked": false },
+            { "label": "Funzione esponenziale", "checked": false },
+            { "label": "Equazioni esponenziali", "checked": false },
+            { "label": "Disequazioni esponenziali", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "LOGARITMI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Definizione di logaritmo", "checked": false },
+            { "label": "Proprietà dei logaritmi", "checked": false },
+            { "label": "Funzione logaritmica", "checked": false },
+            { "label": "Equazioni logaritmiche", "checked": false },
+            { "label": "Disequazioni logaritmiche", "checked": false },
+            { "label": "Logaritmi ed equazioni e disequazioni esponenziali", "checked": false },
+            { "label": "Dominio e segno di funzioni con esponenziali e logaritmi", "checked": false },
+            { "label": "Equazioni e disequazioni logaritmiche risolvibili solo graficamente", "checked": false },
+            { "label": "Coordinate logaritmiche e semilogaritmiche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "STATISTICA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Dati statistici", "checked": false },
+            { "label": "Indici di posizione e variabilità", "checked": false },
+            { "label": "Distribuzione gaussiana", "checked": false },
+            { "label": "Rapporti statistici", "checked": false },
+            { "label": "Introduzione alla statistica bivariata", "checked": false },
+            { "label": "Regressione e correlazione", "checked": false }
+        ]
+    }
+]

@@ -1,0 +1,19 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Padroneggiare gli strumenti fondamentali del calcolo infinitesimale (limiti, derivate, integrali) per analizzare in modo approfondito le proprietà qualitative e quantitative delle funzioni, modellizzando e interpretando fenomeni di varia natura.",
+                "checked": false
+            },
+            {
+                "label": "Utilizzare i teoremi del calcolo differenziale e integrale per costruire argomentazioni rigorose, giustificare i procedimenti risolutivi e risolvere problemi di ottimizzazione, dimostrando padronanza del ragionamento logico-deduttivo.",
+                "checked": false
+            },
+            {
+                "label": "Applicare il calcolo integrale per risolvere problemi geometrici e fisici, interpretando l'integrale definito come misura di grandezze (aree, volumi) e comprendendone il nesso con il concetto di accumulazione.",
+                "checked": false
+            }
+        ]
+    }
+]

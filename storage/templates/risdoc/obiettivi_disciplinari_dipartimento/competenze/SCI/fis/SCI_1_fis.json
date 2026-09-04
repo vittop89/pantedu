@@ -1,0 +1,31 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Osservare, descrivere ed analizzare fenomeni appartenenti alla realtà naturale, utilizzando le categorie e gli strumenti concettuali della fisica per riconoscere e quantificare le grandezze pertinenti.",
+                "checked": true
+            },
+            {
+                "label": "Utilizzare il linguaggio e gli strumenti della matematica (calcolo vettoriale, analisi grafica, equazioni) per modellizzare, interpretare e prevedere il comportamento di sistemi fisici in condizioni di equilibrio o di moto rettilineo.",
+                "checked": true
+            },
+            {
+                "label": "Acquisire e interpretare dati sperimentali, valutandone l'affidabilità attraverso l'analisi degli errori e delle incertezze, e rappresentandoli in modo efficace per trarre conclusioni coerenti.",
+                "checked": true
+            },
+            {
+                "label": "Analizzare e risolvere problemi di statica e cinematica, individuando in modo autonomo le grandezze pertinenti, le leggi fisiche appropriate (es. principi di equilibrio, leggi di Stevino e Archimede) e le strategie risolutive più efficaci.",
+                "checked": true
+            },
+            {
+                "label": "Individuare le relazioni tra diverse grandezze fisiche e applicare principi unificanti (come il concetto di forza e di equilibrio) a contesti differenti (meccanica dei solidi, statica dei fluidi), dimostrando capacità di astrazione e di collegamento.",
+                "checked": true
+            },
+            {
+                "label": "Comunicare i risultati delle proprie analisi e risoluzioni, utilizzando una terminologia scientifica precisa e rigorosa e diverse forme di rappresentazione (testuale, grafica, simbolica) in base al contesto e all'interlocutore.",
+                "checked": true
+            }
+        ]
+    }
+]

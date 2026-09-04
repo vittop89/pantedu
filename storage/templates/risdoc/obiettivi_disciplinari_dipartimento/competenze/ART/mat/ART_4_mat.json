@@ -1,0 +1,19 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Padroneggiare le funzioni trascendenti (esponenziali, logaritmiche, goniometriche) per analizzare, interpretare e modellizzare fenomeni di varia natura, risolvendo i problemi ad essi connessi.",
+                "checked": false
+            },
+            {
+                "label": "Applicare i principi della trigonometria e della geometria dello spazio per analizzare e risolvere problemi complessi, dimostrando capacità di visualizzazione e di applicare modelli a contesti reali.",
+                "checked": false
+            },
+            {
+                "label": "Utilizzare i modelli del calcolo combinatorio e della probabilità per analizzare e interpretare dati e situazioni di incertezza, formalizzando strategie e valutando criticamente i risultati.",
+                "checked": false
+            }
+        ]
+    }
+]

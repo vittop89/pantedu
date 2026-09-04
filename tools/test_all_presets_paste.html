@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Paste content</title>
+<style>body{font:13px/1.4 system-ui;margin:20px}pre{background:#f5f5f5;padding:14px;overflow:auto;white-space:pre-wrap;word-break:break-all}</style>
+</head>
+<body>
+<h2>Copia tutto il blocco sotto e incolla nell'editor Pantedu</h2>
+<p>Apri questa pagina nel browser, click "📋 Copia tutto", poi incolla nel campo QUESITO dell'editor.</p>
+<p><strong>NB:</strong> l'HTML è <strong>minificato</strong> (no whitespace tra tag) per evitare righe vuote nel campo contenteditable con <code>white-space: pre-wrap</code>.</p>
+<hr>
+
+<button onclick="copyAll()" style="padding:10px 20px;font:14px system-ui;background:#2a5ac7;color:#fff;border:none;border-radius:4px;cursor:pointer;margin:10px 0">📋 Copia tutto in clipboard</button>
+
+<div id="paste-content" style="display:none">
+<p><b>default-ol</b> &mdash; 1. a. i.</p><ol class="fm-dsa-li-list"><li>uno <b>grassetto</b><ol class="fm-dsa-li-list"><li>uno.uno <i>corsivo</i><ol class="fm-dsa-li-list"><li>uno.uno.uno <u>sotto</u></li></ol></li></ol></li><li>due</li></ol>
+<p><b>alpha-decimal</b> &mdash; A. 1. a.</p><ol class="fm-dsa-li-list" data-fm-list-style="alpha-decimal"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>lower-alpha-roman</b> &mdash; a. i. 1.</p><ol class="fm-dsa-li-list" data-fm-list-style="lower-alpha-roman"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>roman-alpha</b> &mdash; I. A. 1.</p><ol class="fm-dsa-li-list" data-fm-list-style="roman-alpha"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>decimal-zero</b> &mdash; 01. a. i.</p><ol class="fm-dsa-li-list" data-fm-list-style="decimal-zero"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>paren</b> &mdash; 1) a) i)</p><ol class="fm-dsa-li-list" data-fm-list-style="paren"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>alpha-paren</b> &mdash; A) 1) a)</p><ol class="fm-dsa-li-list" data-fm-list-style="alpha-paren"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>lower-alpha-paren</b> &mdash; a) i) 1)</p><ol class="fm-dsa-li-list" data-fm-list-style="lower-alpha-paren"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>roman-paren</b> &mdash; I) A) 1)</p><ol class="fm-dsa-li-list" data-fm-list-style="roman-paren"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>decimal-zero-paren</b> &mdash; 01) a) i)</p><ol class="fm-dsa-li-list" data-fm-list-style="decimal-zero-paren"><li>uno<ol class="fm-dsa-li-list"><li>uno.uno<ol class="fm-dsa-li-list"><li>uno.uno.uno</li></ol></li></ol></li><li>due</li></ol>
+<p><b>default-ul</b> &mdash; &#9679; &#9675; &#9632;</p><ul class="fm-dsa-li-list"><li>uno<ul class="fm-dsa-li-list"><li>uno.uno<ul class="fm-dsa-li-list"><li>uno.uno.uno</li></ul></li></ul></li><li>due</li></ul>
+<p><b>arrow-bullet</b> &mdash; &#10148; &#9830; &#9679;</p><ul class="fm-dsa-li-list" data-fm-list-style="arrow-bullet"><li>uno<ul class="fm-dsa-li-list"><li>uno.uno<ul class="fm-dsa-li-list"><li>uno.uno.uno</li></ul></li></ul></li><li>due</li></ul>
+<p><b>star-circle</b> &mdash; &#9733; &#9675; &#9632;</p><ul class="fm-dsa-li-list" data-fm-list-style="star-circle"><li>uno<ul class="fm-dsa-li-list"><li>uno.uno<ul class="fm-dsa-li-list"><li>uno.uno.uno</li></ul></li></ul></li><li>due</li></ul>
+<p><b>mix inline format</b></p><ol class="fm-dsa-li-list" data-fm-list-style="lower-alpha-roman"><li>plain <b>bold</b> <i>italic</i> <u>underline</u><ol class="fm-dsa-li-list"><li><b><i>bold+italic</i></b> dentro <b><u>bold+underline</u></b></li><li>solo plain</li></ol></li><li>fine</li></ol>
+</div>
+
+<h3>Preview (come appare):</h3>
+<div id="paste-preview"></div>
+
+<h3>Source HTML (minificato, copy/paste-ready):</h3>
+<pre id="paste-source"></pre>
+
+<script>
+const raw = document.getElementById("paste-content").innerHTML;
+// Strip whitespace tra tag (>...<) per minificare ulteriormente.
+// Mantengo spazi DENTRO i tag (es. <li>uno due</li>).
+const minified = raw.replace(/>\s+</g, "><").trim();
+
+document.getElementById("paste-preview").innerHTML = minified;
+document.getElementById("paste-source").textContent = minified;
+
+function copyAll() {
+    navigator.clipboard.writeText(minified).then(() => {
+        alert("✓ Copiato " + minified.length + " caratteri!\nIncolla nel campo QUESITO con Ctrl+V.");
+    });
+}
+</script>
+
+</body></html>

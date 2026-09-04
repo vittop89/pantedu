@@ -1,0 +1,123 @@
+<!--
+    Phase G8 — UpBar legacy (filtri esercizi).
+
+    Cleanup G8.14:
+      - Rimosso `.selwrapbtncopy` (Overleaf/Server/Drive checkbox + GENERA-VER):
+        sostituito dalla nuova `.fm-topbar` (vedi _topbar_modern.php).
+      - Rimosse `.tooltip` legacy: la nuova topbar usa attributi `title`
+        standard sui bottoni.
+      - Resta `.upbar-controls-container` con i filtri DIFFICOLTA / ORIGINE /
+        HideAll Probl/Eser/Soluz / ShowChecked-A/R / CheckAll-A/R: spostati
+        nel drawer ⚙ filtri della nuova topbar via CSS (display:none →
+        display:flex su body.fm-filtri-open). I loro event handler legacy
+        (script.js + upbar-controls.js) restano intatti.
+-->
+<div class="fm-upbar" id="SelBtnCopy">
+    <!-- Toggle UpBar -->
+    <div id="upbar-toggle-container">
+        <input type="checkbox" id="upbar-toggle" checked>
+        <label for="upbar-toggle" class="fm-upbar-slider" title="Mostra/Nascondi UpBar">▼</label>
+    </div>
+
+    <div class="fm-scrollbar-up-bar">
+        <!-- G8 — `.selwrapbtncopy` (Overleaf/Server/Drive + #btnCopyver) e i
+             tooltip dedicati sono stati rimossi: la nuova `.fm-topbar`
+             (_topbar_modern.php) li sostituisce con bottoni espliciti
+             (📤 Overleaf · 💾 ZIP · 🔘 GENERA) e il bridge invisibile dei
+             rispettivi hidden inputs preserva la compat con utilities.js
+             per save/restore preferenze utente in print_info.json
+             (G22.S6: print-export.js dismesso). -->
+        <div class="fm-upbar-controls-container">
+
+            <div class="fm-wrapgrid">
+                <div class="dropdown" id="sel-dif">
+                    <div class="fm-d-grid">
+                        <label class="fm-label-btn-drop" for="sel-dif">DIFFICOLT&#0192;</label>
+                        <button class="dropdown-button">All</button>
+                    </div>
+                    <div class="fm-dropdown-content">
+                        <a href="#" data-value="All">All</a>
+                        <a href="#" data-value="1">●</a>
+                        <a href="#" data-value="2">●●</a>
+                        <a href="#" data-value="3">●●●</a>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-wrapgrid" id="wrapper-mods">
+                <div class="dropdown" id="sel-origin">
+                    <div class="fm-d-grid">
+                        <label class="fm-label-btn-drop" for="sel-origin">ORIGINE</label>
+                        <button class="dropdown-button">All</button>
+                    </div>
+                    <div class="fm-dropdown-content">
+                        <a href="#" data-value="All">All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-wrapgrid-checks" id="toggle-visibility-control">
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <button id="btnP" class="fm-btn-up-bar">HideAll Probl</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">HideAll Eser</label>
+                            <input type="checkbox" id="toggleExercises" class="show-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">HideAll Soluz</label>
+                            <input type="checkbox" id="btnS" class="show-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-wrapgrid-checks" id="toggle-checkboxABin-control">
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">ShowChecked-A</label>
+                            <input type="checkbox" id="showAllA" class="show-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">ShowChecked-R</label>
+                            <input type="checkbox" id="showAllB" class="show-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-wrapgrid-checks" id="toggle-selectAll-control">
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">CheckAll-A</label>
+                            <input type="checkbox" id="selectAllA" class="fm-select-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-checkbox-row">
+                    <div class="fm-no-drop">
+                        <div class="fm-d-flex fm-items-center">
+                            <label class="fm-label-btn-drop">CheckAll-R</label>
+                            <input type="checkbox" id="selectAllB" class="fm-select-all-checkbox">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-wrapgrid">
+
+            </div>
+        </div>
+    </div>
+</div>

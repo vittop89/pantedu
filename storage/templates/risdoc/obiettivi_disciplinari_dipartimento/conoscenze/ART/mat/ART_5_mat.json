@@ -1,0 +1,119 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "6",
+        "periodo": "Trimestre",
+        "titolo": "Unità 1: Introduzione all'analisi: funzioni e successioni",
+        "altre_disc": "Fisica, Filosofia",
+        "contenuti": [
+            { "label": "L'insieme R: richiami e complementi", "checked": true },
+            { "label": "Funzioni reali di variabile reale: dominio e studio del segno", "checked": true },
+            { "label": "Funzioni reali di variabile reale: prime proprietà", "checked": true },
+            { "label": "Successioni", "checked": false },
+            { "label": "Progressioni aritmetiche e geometriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "16",
+        "periodo": "Trimestre",
+        "titolo": "Unità 2: Limiti",
+        "altre_disc": "Fisica, Filosofia",
+        "contenuti": [
+            { "label": "Introduzione al concetto di limite", "checked": true },
+            { "label": "Dagli intorni alle definizioni di limite", "checked": true },
+            { "label": "Le funzioni continue e l'algebra dei limiti", "checked": true },
+            { "label": "Forme di indecisione di funzioni algebriche", "checked": true },
+            { "label": "Forme di indecisione di alcune funzioni trascendenti", "checked": true },
+            { "label": "Infiniti e loro confronto", "checked": true },
+            { "label": "Limiti di successioni", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "8",
+        "periodo": "Trimestre",
+        "titolo": "Unità 3: Continuità",
+        "altre_disc": "Fisica",
+        "contenuti": [
+            { "label": "Funzioni continue", "checked": true },
+            { "label": "Punti singolari e loro classificazione", "checked": true },
+            { "label": "Proprietà delle funzioni continue in un intervallo chiuso e limitato", "checked": true },
+            { "label": "Asintoti e grafico probabile di una funzione", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "16",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 4: La derivata",
+        "altre_disc": "Fisica, Economia",
+        "contenuti": [
+            { "label": "Il concetto di derivata", "checked": true },
+            { "label": "Continuità e derivabilità", "checked": true },
+            { "label": "Derivate delle funzioni elementari", "checked": true },
+            { "label": "Algebra delle derivate", "checked": true },
+            { "label": "Derivata della funzione composta", "checked": true },
+            { "label": "Classificazione e studio dei punti di non derivabilità", "checked": true },
+            { "label": "Applicazioni del concetto di derivata", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "8",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 5: Teoremi sulle funzioni derivabili",
+        "altre_disc": "Fisica",
+        "contenuti": [
+            { "label": "Concetti introduttivi: punti di estremo relativo e assoluto e punti di flesso", "checked": true },
+            { "label": "Teoremi sulle funzioni derivabili", "checked": true },
+            { "label": "Criteri per l'analisi dei punti stazionari e dei punti di flesso", "checked": true },
+            { "label": "Problemi di massimo e di minimo", "checked": false },
+            { "label": "Il teorema di de l'Hôpital", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "12",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 6: Lo studio di funzione",
+        "altre_disc": "Fisica, Scienze",
+        "contenuti": [
+            { "label": "Schema per lo studio del grafico di una funzione", "checked": true },
+            { "label": "Dal grafico di una funzione a quello della sua derivata prima", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 7: Integrale indefinito",
+        "altre_disc": "Fisica",
+        "contenuti": [
+            { "label": "L'integrale indefinito", "checked": false },
+            { "label": "Integrali immediati e integrazione per scomposizione", "checked": false },
+            { "label": "Integrazione di funzioni composte e per sostituzione", "checked": false },
+            { "label": "Integrazione per parti", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 8: Integrale definito",
+        "altre_disc": "Fisica, Architettura",
+        "contenuti": [
+            { "label": "Dalle aree all'integrale definito", "checked": false },
+            { "label": "Proprietà dell'integrale definito e il suo calcolo", "checked": false },
+            { "label": "Applicazioni degli integrali definiti", "checked": false }
+        ]
+    }
+]

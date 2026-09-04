@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Pantedu — Test tutti i preset liste</title>
+<style>
+body { font: 14px/1.4 system-ui; margin: 20px; background: #1a1a1a; color: #eee; }
+h1 { color: #fbbf24; }
+h2 { color: #60a5fa; margin-top: 24px; border-bottom: 1px solid #444; padding-bottom: 4px; }
+.preset-block {
+    background: #0e0e0e; border: 1px solid #333; border-radius: 6px;
+    padding: 12px; margin: 12px 0;
+}
+.preset-block .label { font-weight: 700; color: #fbbf24; margin-bottom: 8px; }
+pre.copy { background: #000; color: #9bc1ff; padding: 10px; border-radius: 4px;
+    overflow-x: auto; font: 12px/1.4 Consolas, monospace; max-height: 200px; }
+button.copy-btn {
+    background: #2a5ac7; color: #fff; border: none; padding: 6px 14px;
+    border-radius: 4px; cursor: pointer; margin: 6px 0;
+}
+button.copy-btn:hover { background: #3568d8; }
+.instructions {
+    background: #1e3a5f; border-left: 4px solid #60a5fa; padding: 10px 14px;
+    margin: 14px 0; border-radius: 4px;
+}
+.instructions code { background: #000; padding: 2px 6px; border-radius: 3px; }
+.snippet-all {
+    background: #14532d; border-left: 4px solid #10b981; padding: 14px;
+    margin: 14px 0; border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<h1>Test tutti i preset liste — Pantedu</h1>
+
+<div class="instructions">
+    <strong>Come usarlo:</strong>
+    <ol>
+        <li>Apri l'editor inline di un quesito su Pantedu</li>
+        <li>Posizionati nel campo <code>QUESITO</code> (svuotalo se serve)</li>
+        <li>Clicca <strong>"Inietta nell'editor"</strong> qui sotto per copiare l'HTML</li>
+        <li>Incolla con <kbd>Ctrl+V</kbd> nel campo Quesito</li>
+        <li>Salva → verifica preview + .fm-collection post-save + ricompila PDF</li>
+    </ol>
+    <strong>Cosa testa:</strong>
+    <ul>
+        <li>Tutti i 9 preset ordered (numerici/alfa/roman/zero + suffisso . o ))</li>
+        <li>2 preset unordered (arrow-bullet, star-circle) + default disc</li>
+        <li>3 livelli annidati per ogni preset</li>
+        <li>Inline format (<b>bold</b>, <i>italic</i>, <u>underline</u>) dentro <code>&lt;li&gt;</code></li>
+    </ul>
+</div>
+
+<div class="snippet-all">
+    <strong>🚀 Iniezione completa one-shot</strong> (Console DevTools):
+    <button class="copy-btn" onclick="copyAllJS()">Copia snippet JS</button>
+    <p style="margin:6px 0">Apri DevTools (F12) sull'editor, incolla nella Console → tutti i preset vengono iniettati nel campo QUESITO attivo.</p>
+</div>
+
+<script>
+const PRESETS = [
+    { name: "default-ol", label: "default 1. a. i.", attr: "", tag: "ol" },
+    { name: "alpha-decimal", label: "A. 1. a.", attr: ' data-fm-list-style="alpha-decimal"', tag: "ol" },
+    { name: "lower-alpha-roman", label: "a. i. 1.", attr: ' data-fm-list-style="lower-alpha-roman"', tag: "ol" },
+    { name: "roman-alpha", label: "I. A. 1.", attr: ' data-fm-list-style="roman-alpha"', tag: "ol" },
+    { name: "decimal-zero", label: "01. a. i.", attr: ' data-fm-list-style="decimal-zero"', tag: "ol" },
+    { name: "paren", label: "1) a) i)", attr: ' data-fm-list-style="paren"', tag: "ol" },
+    { name: "alpha-paren", label: "A) 1) a)", attr: ' data-fm-list-style="alpha-paren"', tag: "ol" },
+    { name: "lower-alpha-paren", label: "a) i) 1)", attr: ' data-fm-list-style="lower-alpha-paren"', tag: "ol" },
+    { name: "roman-paren", label: "I) A) 1)", attr: ' data-fm-list-style="roman-paren"', tag: "ol" },
+    { name: "decimal-zero-paren", label: "01) a) i)", attr: ' data-fm-list-style="decimal-zero-paren"', tag: "ol" },
+    { name: "default-ul", label: "default ● ○ ■", attr: "", tag: "ul" },
+    { name: "arrow-bullet", label: "➤ ♦ ●", attr: ' data-fm-list-style="arrow-bullet"', tag: "ul" },
+    { name: "star-circle", label: "★ ○ ■", attr: ' data-fm-list-style="star-circle"', tag: "ul" },
+];
+
+function buildPresetHtml(p) {
+    const t = p.tag;
+    return `<${t} class="fm-dsa-li-list"${p.attr}>
+  <li>uno <b>grassetto</b>
+    <${t} class="fm-dsa-li-list">
+      <li>uno.uno <i>corsivo</i>
+        <${t} class="fm-dsa-li-list">
+          <li>uno.uno.uno <u>sottolineato</u></li>
+          <li>uno.uno.due</li>
+        </${t}>
+      </li>
+      <li>uno.due <b><i>bold+italic</i></b></li>
+    </${t}>
+  </li>
+  <li>due</li>
+  <li>tre</li>
+</${t}>`;
+}
+
+function buildSnippet(presets) {
+    return presets.map(p => `<p><b>${p.label}</b> (${p.name})</p>\n${buildPresetHtml(p)}\n<br>`).join("\n");
+}
+
+const ALL_HTML = buildSnippet(PRESETS);
+
+// Render preview + buttons per ogni preset
+const body = document.body;
+for (const p of PRESETS) {
+    const block = document.createElement("div");
+    block.className = "preset-block";
+    const html = buildPresetHtml(p);
+    block.innerHTML = `
+        <div class="label">${p.label} <span style="font-weight:400;color:#888;font-size:11px">(${p.name})</span></div>
+        <button class="copy-btn" onclick="copyText(this, ${JSON.stringify(html).replace(/'/g, "\\'")})">Copia HTML</button>
+        <button class="copy-btn" onclick="injectToOpenEditor(${JSON.stringify(html).replace(/'/g, "\\'")})">Iniezione nell'editor</button>
+        <pre class="copy">${html.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
+    `;
+    body.appendChild(block);
+}
+
+// All-in-one block
+const allBlock = document.createElement("div");
+allBlock.className = "preset-block";
+allBlock.innerHTML = `
+    <div class="label" style="color:#10b981">⚡ TUTTI i preset (one-shot)</div>
+    <button class="copy-btn" onclick="copyText(this, ${JSON.stringify(ALL_HTML).replace(/'/g, "\\'")})">Copia HTML completo</button>
+    <pre class="copy" style="max-height:300px">${ALL_HTML.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
+`;
+body.appendChild(allBlock);
+
+function copyText(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "✓ Copiato!";
+        btn.style.background = "#10b981";
+        setTimeout(() => { btn.textContent = orig; btn.style.background = ""; }, 1500);
+    }).catch(() => alert("Errore copia"));
+}
+
+function injectToOpenEditor(html) {
+    alert("Non funziona da questa pagina (cross-origin). Apri DevTools sull'editor Pantedu e usa lo snippet JS one-shot.");
+}
+
+function copyAllJS() {
+    const allHtml = ALL_HTML;
+    const js = `(function() {
+    const ta = document.activeElement?.classList?.contains("fm-editor-field")
+        ? document.activeElement
+        : (window.__fmFocusedTA || document.querySelector(".fm-editor-field"));
+    if (!ta) { alert("Click prima nel campo QUESITO dell'editor!"); return; }
+    ta.innerHTML = ${JSON.stringify(allHtml)};
+    ta.dispatchEvent(new Event("input", { bubbles: true }));
+    console.log("✓ Iniettati", ${PRESETS.length}, "preset nell'editor");
+})();`;
+    navigator.clipboard.writeText(js).then(() => {
+        alert("✓ Snippet copiato!\n\n1. Vai sull'editor Pantedu\n2. Click nel campo QUESITO\n3. Apri DevTools (F12) → Console\n4. Incolla e premi Invio");
+    });
+}
+</script>
+
+</body>
+</html>

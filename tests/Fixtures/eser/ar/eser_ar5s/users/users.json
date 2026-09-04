@@ -1,0 +1,17 @@
+{
+    "users": {
+        "student1": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "student",
+            "course": "ar5s",
+            "active": true,
+            "created": "2026-03-01"
+        },
+        "student_other": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "student",
+            "course": "sc5s",
+            "active": true
+        }
+    }
+}

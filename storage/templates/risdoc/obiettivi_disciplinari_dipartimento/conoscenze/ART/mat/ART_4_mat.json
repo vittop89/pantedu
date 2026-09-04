@@ -1,0 +1,136 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "5",
+        "periodo": "Trimestre",
+        "titolo": "Unità 1: Richiami e complementi sulle funzioni",
+        "altre_disc": "Fisica, Scienze",
+        "contenuti": [
+            { "label": "Introduzione alle funzioni", "checked": true },
+            { "label": "Trasformazioni e grafici delle funzioni", "checked": true },
+            { "label": "Prime proprietà delle funzioni reali di variabile reale", "checked": true },
+            { "label": "Funzione inversa", "checked": true },
+            { "label": "Funzioni composte", "checked": false }
+        ]
+    },
+        {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "10",
+        "periodo": "Trimestre",
+        "titolo": "Unità 4: Funzioni e formule goniometriche",
+        "altre_disc": "Fisica, Disegno e Storia dell’Arte",
+        "contenuti": [
+            { "label": "Gli angoli e le loro misure", "checked": true },
+            { "label": "Definizioni delle funzioni goniometriche", "checked": true },
+            { "label": "Prime proprietà delle funzioni goniometriche", "checked": true },
+            { "label": "Angoli associati", "checked": true },
+            { "label": "Grafici delle funzioni goniometriche", "checked": true },
+            { "label": "Formule di addizione, sottrazione, duplicazione e bisezione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "7",
+        "periodo": "Trimestre",
+        "titolo": "Unità 5: Trigonometria",
+        "altre_disc": "Fisica",
+        "contenuti": [
+            { "label": "Teoremi sui triangoli rettangoli", "checked": true },
+            { "label": "Applicazioni dei teoremi sui triangoli rettangoli", "checked": true },
+            { "label": "Teoremi sui triangoli qualunque", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "8",
+        "periodo": "Trimestre",
+        "titolo": "Unità 6: Equazioni e disequazioni goniometriche",
+        "altre_disc": "Fisica",
+        "contenuti": [
+            { "label": "Equazioni goniometriche elementari", "checked": true },
+            { "label": "Equazioni goniometriche di secondo grado", "checked": false },
+            { "label": "Equazioni lineari in seno e coseno", "checked": false },
+            { "label": "Disequazioni goniometriche elementari o a esse riconducibili", "checked": false },
+            { "label": "Problemi con equazioni o disequazioni goniometriche", "checked": false }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "15",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 2: Funzioni, equazioni e disequazioni esponenziali",
+        "altre_disc": "Fisica, Scienze, Chimica",
+        "contenuti": [
+            { "label": "Le potenze a esponente reale", "checked": true },
+            { "label": "La funzione esponenziale", "checked": true },
+            { "label": "Equazioni esponenziali", "checked": true },
+            { "label": "Disequazioni esponenziali", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "15",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 3: Funzioni, equazioni e disequazioni logaritmiche",
+        "altre_disc": "Fisica, Scienze, Chimica",
+        "contenuti": [
+            { "label": "La funzione logaritmica", "checked": true },
+            { "label": "Proprietà dei logaritmi", "checked": true },
+            { "label": "Equazioni logaritmiche ed equazioni esponenziali risolvibili mediante logaritmi", "checked": true },
+            { "label": "Disequazioni logaritmiche e disequazioni esponenziali risolvibili mediante logaritmi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "6",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 7: Geometria euclidea nello spazio",
+        "altre_disc": "Disegno e Storia dell’Arte, Filosofia",
+        "contenuti": [
+            { "label": "Introduzione alla geometria nello spazio e parallelismo", "checked": false },
+            { "label": "Perpendicolarità nello spazio", "checked": false },
+            { "label": "Proiezioni, distanze e angoli", "checked": false },
+            { "label": "Prismi, parallelepipedi e piramidi", "checked": false },
+            { "label": "Solidi di rotazione", "checked": false },
+            { "label": "Aree di superfici e volumi", "checked": false },
+            { "label": "Poliedri e poliedri regolari", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "8",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 8: Richiami e complementi di statistica",
+        "altre_disc": "Scienze, Educazione Civica",
+        "contenuti": [
+            { "label": "Introduzione alla statistica", "checked": false },
+            { "label": "Indici di posizione e di variabilità", "checked": false },
+            { "label": "Tabelle a doppia entrata", "checked": false },
+            { "label": "Correlazione e regressione", "checked": false }
+        ]
+    },
+    {
+        "check_uda": false,
+        "N_uda": "",
+        "num_ore": "18",
+        "periodo": "Pentamestre",
+        "titolo": "Unità 9: Calcolo combinatorio e probabilità",
+        "altre_disc": "Scienze, Filosofia",
+        "contenuti": [
+            { "label": "Introduzione al calcolo combinatorio", "checked": false },
+            { "label": "Disposizioni e permutazioni", "checked": false },
+            { "label": "Combinazioni", "checked": false },
+            { "label": "Probabilità", "checked": false },
+            { "label": "I primi teoremi sul calcolo delle probabilità", "checked": false },
+            { "label": "Probabilità condizionata e probabilità composte Eventi indipendenti", "checked": false }
+        ]
+    }
+]

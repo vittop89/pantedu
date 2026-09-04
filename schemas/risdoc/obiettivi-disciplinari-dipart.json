@@ -1,0 +1,52 @@
+{
+    "$id": "obiettivi-disciplinari-dipart",
+    "title": "Obiettivi disciplinari - Dipartimento",
+    "category": "RISORSE",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "OBIETTIVI DISCIPLINARI DI DIPARTIMENTO",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina"
+            ]
+        },
+        {
+            "type": "checkbox-group",
+            "name": "competenze",
+            "title": "COMPETENZE DISCIPLINARI",
+            "description": "Recupero competenze da classi precedente/successiva",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_dipartimento/competenze"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "abilita",
+            "title": "ABILITA'",
+            "description": "Recupero abilità da classi precedente/successiva",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_dipartimento/abilita"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "conoscenze",
+            "title": "CONOSCENZE",
+            "description": "Recupero conoscenze da classi precedente/successiva",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_dipartimento/conoscenze"
+            },
+            "pt_unified": true
+        }
+    ]
+}

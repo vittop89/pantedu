@@ -1,0 +1,566 @@
+% =============================================================================
+% verifica.sty — Preambolo LaTeX per le verifiche FismaPant.
+% Tutti i pacchetti, definizioni colore, comandi custom (\checkbox, ecc.).
+% Editabile dall'admin via /admin/templates#verifiche.
+% =============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{verifica}[2026/05/04 FismaPant Verifica package]
+
+\RequirePackage{wrapfig}
+\RequirePackage{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{cancel}
+\RequirePackage[fleqn]{amsmath}
+\RequirePackage{tabularx}
+\RequirePackage{tikz}
+\RequirePackage{arydshln}
+\RequirePackage{pbox}
+\RequirePackage{physics}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+\RequirePackage[table]{xcolor}  % opzione [table] carica colortbl per \rowcolor
+\RequirePackage{colortbl}        % esplicito: garantisce \rowcolor/\cellcolor
+\RequirePackage{tcolorbox}
+\RequirePackage{etoolbox}
+\RequirePackage{xkeyval}
+\RequirePackage{circledsteps}
+\RequirePackage{adjustbox}
+\RequirePackage{titling}
+\RequirePackage{pgfplots}
+\RequirePackage{fancyhdr}
+\RequirePackage{multirow}
+\RequirePackage{array}
+\RequirePackage{makecell}
+\RequirePackage{atbegshi}
+\RequirePackage{lastpage}
+\RequirePackage{refcount}
+\RequirePackage{dashrule}
+\RequirePackage{changepage}
+\RequirePackage{tikzpeople}
+
+\usetikzlibrary{arrows.meta, calc, patterns, positioning, angles, quotes, decorations.markings, decorations.pathmorphing, shadings, 3d, shapes.callouts, matrix, backgrounds}
+\pgfplotsset{compat=1.18}
+
+% --- Tolleranza Unicode (G27): contenuti col math come glifi (output
+% MathJax) altrimenti rompono pdflatex ("not set up for use"). Mappa i
+% glifi piu comuni ai comandi math. xe/lua li rendono nativi via fontspec.
+\RequirePackage{iftex}
+\ifpdftex
+  \RequirePackage{newunicodechar}
+  % Silenzia i warning "Redefining Unicode character": ridefiniamo di proposito
+  % alcuni glifi gia mappati da pacchetti caricati prima (-, x, div...).
+  \IfFileExists{silence.sty}{%
+    \RequirePackage{silence}%
+    \WarningFilter{newunicodechar}{Redefining Unicode character}%
+  }{}
+  \newunicodechar{−}{\ensuremath{-}}
+  \newunicodechar{×}{\ensuremath{\times}}
+  \newunicodechar{÷}{\ensuremath{\div}}
+  \newunicodechar{±}{\ensuremath{\pm}}
+  \newunicodechar{∓}{\ensuremath{\mp}}
+  \newunicodechar{⋅}{\ensuremath{\cdot}}
+  \newunicodechar{∙}{\ensuremath{\cdot}}
+  \newunicodechar{·}{\ensuremath{\cdot}}
+  \newunicodechar{√}{\ensuremath{\surd}}
+  \newunicodechar{≤}{\ensuremath{\le}}
+  \newunicodechar{≥}{\ensuremath{\ge}}
+  \newunicodechar{≠}{\ensuremath{\ne}}
+  \newunicodechar{≈}{\ensuremath{\approx}}
+  \newunicodechar{≡}{\ensuremath{\equiv}}
+  \newunicodechar{∞}{\ensuremath{\infty}}
+  \newunicodechar{∑}{\ensuremath{\sum}}
+  \newunicodechar{∏}{\ensuremath{\prod}}
+  \newunicodechar{∫}{\ensuremath{\int}}
+  \newunicodechar{∂}{\ensuremath{\partial}}
+  \newunicodechar{∇}{\ensuremath{\nabla}}
+  \newunicodechar{∈}{\ensuremath{\in}}
+  \newunicodechar{∉}{\ensuremath{\notin}}
+  \newunicodechar{⊂}{\ensuremath{\subset}}
+  \newunicodechar{⊆}{\ensuremath{\subseteq}}
+  \newunicodechar{∪}{\ensuremath{\cup}}
+  \newunicodechar{∩}{\ensuremath{\cap}}
+  \newunicodechar{→}{\ensuremath{\to}}
+  \newunicodechar{⇒}{\ensuremath{\Rightarrow}}
+  \newunicodechar{⇔}{\ensuremath{\Leftrightarrow}}
+  \newunicodechar{∀}{\ensuremath{\forall}}
+  \newunicodechar{∃}{\ensuremath{\exists}}
+  \newunicodechar{°}{\ensuremath{^\circ}}
+  \newunicodechar{′}{\ensuremath{\prime}}
+  \newunicodechar{⋯}{\ensuremath{\cdots}}
+  \newunicodechar{…}{\ensuremath{\ldots}}
+  \newunicodechar{∅}{\ensuremath{\emptyset}}
+  \newunicodechar{≃}{\ensuremath{\simeq}}
+  \newunicodechar{∼}{\ensuremath{\sim}}
+  \newunicodechar{𝑎}{\ensuremath{a}}
+  \newunicodechar{𝑏}{\ensuremath{b}}
+  \newunicodechar{𝑐}{\ensuremath{c}}
+  \newunicodechar{𝑑}{\ensuremath{d}}
+  \newunicodechar{𝑒}{\ensuremath{e}}
+  \newunicodechar{𝑓}{\ensuremath{f}}
+  \newunicodechar{𝑔}{\ensuremath{g}}
+  \newunicodechar{ℎ}{\ensuremath{h}}
+  \newunicodechar{𝑖}{\ensuremath{i}}
+  \newunicodechar{𝑗}{\ensuremath{j}}
+  \newunicodechar{𝑘}{\ensuremath{k}}
+  \newunicodechar{𝑙}{\ensuremath{l}}
+  \newunicodechar{𝑚}{\ensuremath{m}}
+  \newunicodechar{𝑛}{\ensuremath{n}}
+  \newunicodechar{𝑜}{\ensuremath{o}}
+  \newunicodechar{𝑝}{\ensuremath{p}}
+  \newunicodechar{𝑞}{\ensuremath{q}}
+  \newunicodechar{𝑟}{\ensuremath{r}}
+  \newunicodechar{𝑠}{\ensuremath{s}}
+  \newunicodechar{𝑡}{\ensuremath{t}}
+  \newunicodechar{𝑢}{\ensuremath{u}}
+  \newunicodechar{𝑣}{\ensuremath{v}}
+  \newunicodechar{𝑤}{\ensuremath{w}}
+  \newunicodechar{𝑥}{\ensuremath{x}}
+  \newunicodechar{𝑦}{\ensuremath{y}}
+  \newunicodechar{𝑧}{\ensuremath{z}}
+  \newunicodechar{𝐴}{\ensuremath{A}}
+  \newunicodechar{𝐵}{\ensuremath{B}}
+  \newunicodechar{𝐶}{\ensuremath{C}}
+  \newunicodechar{𝐷}{\ensuremath{D}}
+  \newunicodechar{𝐸}{\ensuremath{E}}
+  \newunicodechar{𝐹}{\ensuremath{F}}
+  \newunicodechar{𝐺}{\ensuremath{G}}
+  \newunicodechar{𝐻}{\ensuremath{H}}
+  \newunicodechar{𝐼}{\ensuremath{I}}
+  \newunicodechar{𝐽}{\ensuremath{J}}
+  \newunicodechar{𝐾}{\ensuremath{K}}
+  \newunicodechar{𝐿}{\ensuremath{L}}
+  \newunicodechar{𝑀}{\ensuremath{M}}
+  \newunicodechar{𝑁}{\ensuremath{N}}
+  \newunicodechar{𝑂}{\ensuremath{O}}
+  \newunicodechar{𝑃}{\ensuremath{P}}
+  \newunicodechar{𝑄}{\ensuremath{Q}}
+  \newunicodechar{𝑅}{\ensuremath{R}}
+  \newunicodechar{𝑆}{\ensuremath{S}}
+  \newunicodechar{𝑇}{\ensuremath{T}}
+  \newunicodechar{𝑈}{\ensuremath{U}}
+  \newunicodechar{𝑉}{\ensuremath{V}}
+  \newunicodechar{𝑊}{\ensuremath{W}}
+  \newunicodechar{𝑋}{\ensuremath{X}}
+  \newunicodechar{𝑌}{\ensuremath{Y}}
+  \newunicodechar{𝑍}{\ensuremath{Z}}
+  \newunicodechar{𝒂}{\ensuremath{a}}
+  \newunicodechar{𝒃}{\ensuremath{b}}
+  \newunicodechar{𝒄}{\ensuremath{c}}
+  \newunicodechar{𝒅}{\ensuremath{d}}
+  \newunicodechar{𝒆}{\ensuremath{e}}
+  \newunicodechar{𝒇}{\ensuremath{f}}
+  \newunicodechar{𝒈}{\ensuremath{g}}
+  \newunicodechar{𝒉}{\ensuremath{h}}
+  \newunicodechar{𝒊}{\ensuremath{i}}
+  \newunicodechar{𝒋}{\ensuremath{j}}
+  \newunicodechar{𝒌}{\ensuremath{k}}
+  \newunicodechar{𝒍}{\ensuremath{l}}
+  \newunicodechar{𝒎}{\ensuremath{m}}
+  \newunicodechar{𝒏}{\ensuremath{n}}
+  \newunicodechar{𝒐}{\ensuremath{o}}
+  \newunicodechar{𝒑}{\ensuremath{p}}
+  \newunicodechar{𝒒}{\ensuremath{q}}
+  \newunicodechar{𝒓}{\ensuremath{r}}
+  \newunicodechar{𝒔}{\ensuremath{s}}
+  \newunicodechar{𝒕}{\ensuremath{t}}
+  \newunicodechar{𝒖}{\ensuremath{u}}
+  \newunicodechar{𝒗}{\ensuremath{v}}
+  \newunicodechar{𝒘}{\ensuremath{w}}
+  \newunicodechar{𝒙}{\ensuremath{x}}
+  \newunicodechar{𝒚}{\ensuremath{y}}
+  \newunicodechar{𝒛}{\ensuremath{z}}
+  \newunicodechar{𝑨}{\ensuremath{A}}
+  \newunicodechar{𝑩}{\ensuremath{B}}
+  \newunicodechar{𝑪}{\ensuremath{C}}
+  \newunicodechar{𝑫}{\ensuremath{D}}
+  \newunicodechar{𝑬}{\ensuremath{E}}
+  \newunicodechar{𝑭}{\ensuremath{F}}
+  \newunicodechar{𝑮}{\ensuremath{G}}
+  \newunicodechar{𝑯}{\ensuremath{H}}
+  \newunicodechar{𝑰}{\ensuremath{I}}
+  \newunicodechar{𝑱}{\ensuremath{J}}
+  \newunicodechar{𝑲}{\ensuremath{K}}
+  \newunicodechar{𝑳}{\ensuremath{L}}
+  \newunicodechar{𝑴}{\ensuremath{M}}
+  \newunicodechar{𝑵}{\ensuremath{N}}
+  \newunicodechar{𝑶}{\ensuremath{O}}
+  \newunicodechar{𝑷}{\ensuremath{P}}
+  \newunicodechar{𝑸}{\ensuremath{Q}}
+  \newunicodechar{𝑹}{\ensuremath{R}}
+  \newunicodechar{𝑺}{\ensuremath{S}}
+  \newunicodechar{𝑻}{\ensuremath{T}}
+  \newunicodechar{𝑼}{\ensuremath{U}}
+  \newunicodechar{𝑽}{\ensuremath{V}}
+  \newunicodechar{𝑾}{\ensuremath{W}}
+  \newunicodechar{𝑿}{\ensuremath{X}}
+  \newunicodechar{𝒀}{\ensuremath{Y}}
+  \newunicodechar{𝒁}{\ensuremath{Z}}
+  \newunicodechar{α}{\ensuremath{\alpha}}
+  \newunicodechar{β}{\ensuremath{\beta}}
+  \newunicodechar{γ}{\ensuremath{\gamma}}
+  \newunicodechar{δ}{\ensuremath{\delta}}
+  \newunicodechar{ε}{\ensuremath{\varepsilon}}
+  \newunicodechar{ζ}{\ensuremath{\zeta}}
+  \newunicodechar{η}{\ensuremath{\eta}}
+  \newunicodechar{θ}{\ensuremath{\theta}}
+  \newunicodechar{λ}{\ensuremath{\lambda}}
+  \newunicodechar{μ}{\ensuremath{\mu}}
+  \newunicodechar{ν}{\ensuremath{\nu}}
+  \newunicodechar{π}{\ensuremath{\pi}}
+  \newunicodechar{ρ}{\ensuremath{\rho}}
+  \newunicodechar{σ}{\ensuremath{\sigma}}
+  \newunicodechar{τ}{\ensuremath{\tau}}
+  \newunicodechar{φ}{\ensuremath{\varphi}}
+  \newunicodechar{χ}{\ensuremath{\chi}}
+  \newunicodechar{ψ}{\ensuremath{\psi}}
+  \newunicodechar{ω}{\ensuremath{\omega}}
+  \newunicodechar{Δ}{\ensuremath{\Delta}}
+  \newunicodechar{Ω}{\ensuremath{\Omega}}
+  \newunicodechar{Σ}{\ensuremath{\Sigma}}
+  \newunicodechar{Π}{\ensuremath{\Pi}}
+  \newunicodechar{Φ}{\ensuremath{\Phi}}
+  \newunicodechar{²}{\ensuremath{^{2}}}
+  \newunicodechar{³}{\ensuremath{^{3}}}
+  \newunicodechar{¹}{\ensuremath{^{1}}}
+  \newunicodechar{⁰}{\ensuremath{^{0}}}
+  \newunicodechar{⁴}{\ensuremath{^{4}}}
+  \newunicodechar{⁵}{\ensuremath{^{5}}}
+  \newunicodechar{⁶}{\ensuremath{^{6}}}
+  \newunicodechar{⁷}{\ensuremath{^{7}}}
+  \newunicodechar{⁸}{\ensuremath{^{8}}}
+  \newunicodechar{⁹}{\ensuremath{^{9}}}
+  \newunicodechar{₀}{\ensuremath{_{0}}}
+  \newunicodechar{₁}{\ensuremath{_{1}}}
+  \newunicodechar{₂}{\ensuremath{_{2}}}
+  \newunicodechar{₃}{\ensuremath{_{3}}}
+  \newunicodechar{₄}{\ensuremath{_{4}}}
+  \newunicodechar{₅}{\ensuremath{_{5}}}
+  \newunicodechar{₆}{\ensuremath{_{6}}}
+  \newunicodechar{₇}{\ensuremath{_{7}}}
+  \newunicodechar{₈}{\ensuremath{_{8}}}
+  \newunicodechar{₉}{\ensuremath{_{9}}}
+\fi
+
+
+\definecolor{customgreen}{HTML}{25d366}
+\definecolor{green}{RGB}{34,139,34}
+\definecolor{grigiochiaro}{gray}{0.85}
+
+\geometry{paper=a4paper, top=20pt, margin=54pt}
+\setlength{\headheight}{20pt}
+\setlength{\mathindent}{0pt}
+\setlength{\parindent}{0pt}
+
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+% G27.listmk — marker liste a dimensione uniforme + default itemize ●○■.
+% I simboli amssymb hanno taglie native molto diverse (\bullet/\circ piccoli,
+% \blacksquare/\bigstar grandi): \fmmk normalizza l'ALTEZZA via \resizebox così
+% i marker appaiono uniformi, coerenti con la resa a schermo (●○■ / ➤♦● / ★○■).
+% La taglia (0.85ex) è tunabile.
+\providecommand{\fmmk}[1]{\raisebox{0.12ex}{\resizebox{!}{0.85ex}{\ensuremath{#1}}}}
+% Default itemize (liste senza preset): cerchio pieno / vuoto / quadrato pieno.
+% I preset espliciti (arrow-bullet/star-circle) sovrascrivono in scope locale.
+\setlist[itemize,1]{label=\fmmk{\bullet}}
+\setlist[itemize,2]{label=\fmmk{\circ}}
+\setlist[itemize,3]{label=\fmmk{\blacksquare}}
+
+\newcommand{\dottedline}[1]{\makebox[#1][s]{\dotfill}}
+
+% Custom command: checkbox vuota
+\newcommand{\checkbox}{%
+    \begin{tikzpicture}[baseline=0]
+        \draw (0,0) rectangle (1.5ex,1.5ex);
+    \end{tikzpicture}%
+}
+
+% Custom command: checkbox barrata (X)
+\newcommand{\xcheckbox}{%
+    \begin{tikzpicture}[baseline=0]
+        \draw (0,0) rectangle (1.5ex,1.5ex);
+        \draw (0,0) -- (1.5ex,1.5ex);
+        \draw (0,1.5ex) -- (1.5ex,0);
+    \end{tikzpicture}%
+}
+
+% Forza inizio pagina dispari
+\newcommand{\ensureOddPageStart}{%
+  \newpage
+  \checkoddpage
+  \ifoddpage\else\mbox{}\newpage\fi
+}
+
+% Anno scolastico (set/dic = corrente/successivo, gen/ago = precedente/corrente)
+\newcommand{\prevyear}{\the\numexpr\year-1\relax}
+\newcommand{\nextyear}{\the\numexpr\year+1\relax}
+\newcommand{\thisyear}{\the\year}
+\newcommand{\schoolyear}{%
+  \ifnum\month<9\prevyear/\thisyear\else\thisyear/\nextyear\fi
+}
+
+% Page-style con disclaimer pesi esercizi
+\fancypagestyle{firstpage}{
+  \fancyhf{}
+  \fancyhead[L]{\centering\fontsize{8.5pt}{10pt}\selectfont
+  I punti (pt.) indicano il peso degli esercizi e possono orientare lo studente verso una stima del voto, tuttavia non costituiscono una valutazione definitiva, che sara' determinata attraverso la griglia di valutazione allegata.}
+}
+
+% =============================================================================
+% Counter copie: badge in basso a destra "stampe-{KIND}: {N}".
+% Uso: nel main_VARIANT.tex chiama UNA volta \verificaCounterFooter{NOR}{3}
+% o {SOL}/{DSA}/{DIS}. Centralizza la \AtBeginShipout in modo che ogni
+% variante tex riferisca solo il proprio counter.
+% =============================================================================
+\newcommand{\verificaCounterFooter}[2]{%
+  \AtBeginShipout{%
+    \AtBeginShipoutUpperLeft{%
+      \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east, xshift=-0.5cm, yshift=0.5cm]
+          at (current page.south east) {\textbf{stampe-#1: #2}};
+      \end{tikzpicture}%
+    }%
+  }%
+}
+
+% =============================================================================
+% Font setup centralizzato.
+%
+% Tutti i main_*.tex usano \verificaFontNormal in preambolo (helvetica sf).
+% Le varianti DIS/DSA scopano il cambio font/interlinea SOLO attorno
+% all'\input{esercizi_*} via gli env {dyslexicScope} / {dsaScope}, in modo
+% che intestazione, ulteriori_misure, misure_dispensative e griglia restino
+% nel font/spaziatura standard del documento.
+%
+% Per il main_DIS.tex la PRIMA RIGA deve essere `% !TeX program = xelatex`
+% cosi' Overleaf / TeXstudio / VSCode LaTeX Workshop usano XeLaTeX
+% automaticamente (no decommentare manuale).
+% =============================================================================
+\RequirePackage{iftex}
+
+\newcommand{\verificaFontNormal}{%
+  \ifxetex
+    \RequirePackage{fontspec}%
+    \setsansfont{Latin Modern Sans}[Scale=0.92]%
+    \renewcommand{\familydefault}{\sfdefault}%
+  \else\ifluatex
+    \RequirePackage{fontspec}%
+    \setsansfont{Latin Modern Sans}[Scale=0.92]%
+    \renewcommand{\familydefault}{\sfdefault}%
+  \else
+    \usepackage[scaled]{helvet}%
+    \usepackage[T1]{fontenc}%
+    \renewcommand{\familydefault}{\sfdefault}%
+  \fi\fi
+}
+
+% \verificaSetupFontDis: chiamare nel PREAMBOLO di main_DIS.tex.
+% Carica fontspec (XeLaTeX/LuaLaTeX) e definisce \fontDis come selettore di
+% font OpenDyslexic. Se OpenDyslexic non e' installato (o engine = pdflatex)
+% \fontDis diventa \relax e il dyslexicScope cade sul sans-serif gia' attivo
+% (helvet via \verificaFontNormal) con sola interlinea maggiorata.
+\newcommand{\verificaSetupFontDis}{%
+  \ifxetex
+    \RequirePackage{fontspec}%
+    \IfFontExistsTF{OpenDyslexic}{%
+      \newfontfamily\fontDis{OpenDyslexic}%
+    }{%
+      \let\fontDis\relax%
+    }%
+  \else
+    \ifluatex
+      \RequirePackage{fontspec}%
+      \IfFontExistsTF{OpenDyslexic}{%
+        \newfontfamily\fontDis{OpenDyslexic}%
+      }{%
+        \let\fontDis\relax%
+      }%
+    \else
+      % pdflatex: niente fontspec → fallback no-op (helvet rimane attivo)
+      \let\fontDis\relax%
+    \fi
+  \fi
+}
+
+% Scope locale per dislessici: applica \fontDis (OpenDyslexic se disponibile)
+% + interlinea 1.6, all'interno di un \begingroup. Tutto fuori dall'env resta
+% nel font/spaziatura del documento.
+\newenvironment{dyslexicScope}{%
+  \par\begingroup
+  \fontDis
+  \renewcommand{\baselinestretch}{1.6}\selectfont
+}{%
+  \par\endgroup
+}
+
+% Scope locale per DSA: solo interlinea maggiorata (1.5), font invariato.
+\newenvironment{dsaScope}{%
+  \par\begingroup
+  \renewcommand{\baselinestretch}{1.5}\selectfont
+}{%
+  \par\endgroup
+}
+
+% =============================================================================
+% G27.badge — Badge editoriale: riquadro fonte + box numero esercizio +
+% pallini difficolta'. Sostituisce il pattern LaTeX inline ripetuto a ogni
+% esercizio nei file SOL.tex (\overset/\underset/\fcolorbox copincollati).
+%
+% Uso tipico (emesso da BadgeRenderer.php):
+%   \badge[bg=green]{cdm_v4_ed1}{23}{342}{2}
+%   \badge{mmb_v3_ed3}{145}{17}{1}
+%
+% Il src_key deve essere precedentemente registrato con \definefonte; in caso
+% contrario il riquadro fonte cade su un placeholder visibile [fonte:KEY].
+% =============================================================================
+
+% \definefonte{KEY}{TITLE}{VOLUME}{AUTHORS}
+% Registra una fonte nel namespace fmf@. Idempotente: una seconda chiamata
+% sovrascrive (utile se il TexBuilder rigenera il preambolo a ogni save).
+\newcommand{\definefonte}[4]{%
+  \csdef{fmf@#1@title}{#2}%
+  \csdef{fmf@#1@volume}{#3}%
+  \csdef{fmf@#1@authors}{#4}%
+  \csdef{fmf@#1@ok}{1}%
+}
+
+% Stile fontebox (xkeyval namespace fmfonte). Default = comportamento
+% legacy. Override per-docente via \fmsetfonte{...} emesso da BadgeRenderer
+% nel preambolo (block style in fonti_SOL.tex).
+%   titlesize  font-size del titolo libro       (default \small)
+%   metasize   font-size di volume/authors       (default \tiny)
+%   rowsep     spaziatura verticale tra righe   (default -5pt; meno = più stretto)
+%   colspec    column spec del riquadro array   (default |c|; alt: |p{4cm}| per fissare width)
+%   vpad       padding verticale ESTERNO (sopra prima riga + sotto ultima),
+%              dimension LaTeX (default 0pt). Es. 4pt → 4pt sopra il titolo
+%              e 4pt sotto gli autori; tra le righe interne resta `rowsep`.
+%              Implementato via \rule (strut invisibile), no impact su altri
+%              array del documento.
+\define@key{fmfonte}{titlesize}{\def\fmf@tsize{#1}}
+\define@key{fmfonte}{metasize}{\def\fmf@msize{#1}}
+\define@key{fmfonte}{rowsep}{\def\fmf@rsep{#1}}
+\define@key{fmfonte}{colspec}{\def\fmf@cspec{#1}}
+\define@key{fmfonte}{vpad}{\def\fmf@vpad{#1}}
+\presetkeys{fmfonte}{titlesize=\small,metasize=\tiny,rowsep=-5pt,colspec=|c|,vpad=0pt}{}
+% G27.bugfix — \presetkeys registra i defaults, ma i \def\fmf@xxx{...} vengono
+% eseguiti SOLO al primo \setkeys{fmfonte}{...}. Senza chiamata esplicita, i
+% \fmf@xxx restano undefined → \fontebox fallisce con "Undefined control sequence".
+% Forziamo init dei defaults qui.
+\setkeys{fmfonte}{}
+
+% Setter pubblico: \fmsetfonte{titlesize=\footnotesize,rowsep=-3pt}
+\newcommand{\fmsetfonte}[1]{\setkeys{fmfonte}{#1}}
+
+% \fontebox{KEY} — riquadro con title/volume/authors. Uso in math mode
+% (chiamato da \badge); placeholder grafico se KEY non registrata.
+%
+% G27.refactor — Passato da `array{|c|}\hline ... \hline\end{array}` a
+% TikZ \node[draw, inner ysep=...] perche':
+%   1. vpad (padding sopra/sotto) gestito nativamente da `inner ysep`,
+%      senza spezzare bordi verticali (limite di \noalign{\vskip} nel
+%      pattern array).
+%   2. Bordo box pulito, line width controllabile.
+%   3. Allineamento baseline garantito da `baseline=(fb.base)`.
+%
+% width: stringa vuota = auto-fit sul contenuto; altrimenti dim LaTeX
+% (es. 4cm) → TikZ `text width=...`. Per back-compat la key colspec
+% ancora esiste ma non e' piu' usata da \fontebox.
+\newcommand{\fontebox}[1]{%
+  \ifcsname fmf@#1@ok\endcsname
+    \begingroup
+    % G27.bugfix — baseline=(fb.center) allinea il riquadro fonte al
+    % CENTRO verticale rispetto al badge numero esercizio (vs `fb.base`
+    % che lo allineava sulla baseline dell'ultima riga "Authors", lasciandolo
+    % visivamente in BASSO rispetto al badge \overset{bullets}{\underset{P-NN}{box}}).
+    \begin{tikzpicture}[baseline=(fb.center)]%
+      % NB: nessun \\[\fmf@rsep] dopo l'ULTIMA riga: causerebbe shift
+      % verticale del bordo inferiore (rsep tipicamente negativo, -5pt,
+      % tira il bordo inferiore sul testo). Lo spacing tra le righe
+      % interne resta su rsep, padding esterno su inner ysep.
+      %
+      % inner ysep = base 1.5pt + vpad utente. Il base evita che bordo
+      % tocchi il testo quando vpad=0pt (ascenders/descenders toccavano
+      % la linea con inner ysep=0).
+      \node[draw=black, line width=0.4pt, rectangle, align=center,
+            inner xsep=4pt,
+            inner ysep=\dimexpr 1.5pt+\fmf@vpad\relax] (fb) {%
+        {\fmf@tsize\csname fmf@#1@title\endcsname}\\[\fmf@rsep]
+        {\fmf@msize\csname fmf@#1@volume\endcsname}\\[\fmf@rsep]
+        {\fmf@msize\csname fmf@#1@authors\endcsname}%
+      };
+    \end{tikzpicture}%
+    \endgroup
+  \else
+    % Fallback: il key non viene stampato (avrebbe `_` underscore illegale
+    % in text mode). Per debug consultare il log: BadgeRenderer emette i
+    % key validi sanitizzati.
+    \begin{tikzpicture}[baseline]%
+      \node[draw=black, line width=0.4pt, inner xsep=4pt, inner ysep=2pt]
+        {\fmf@msize[fonte non registrata]};
+    \end{tikzpicture}%
+  \fi
+}
+
+% \fmdots{N}{MAX} — bullets difficolta' (N filled \bullet, MAX-N empty \circ).
+% Usa contatore dedicato per evitare collisioni con eventuali loop esterni.
+\newcounter{fmdotsi}
+\newcommand{\fmdots}[2]{%
+  \setcounter{fmdotsi}{1}%
+  \loop\ifnum\value{fmdotsi}<\numexpr#2+1\relax
+    \ifnum\value{fmdotsi}>#1\relax\circ\else\bullet\fi
+    \stepcounter{fmdotsi}%
+  \repeat
+}
+
+% Opzioni \badge (xkeyval namespace fmbadge).
+%   bg       colore xcolor di sfondo del box numero (default gray)
+%   txt      colore xcolor del numero esercizio (default white)
+%   exsize   font size del numero (default \large; alt: \Large, \huge)
+%   minw     larghezza minima del box (default 1cm)
+%   diffmax  totale pallini difficolta' (default 4)
+%   diffsize font size dei pallini difficolta' (default \huge; alt: \Huge,\LARGE)
+\define@key{fmbadge}{bg}{\def\fmb@bg{#1}}
+\define@key{fmbadge}{txt}{\def\fmb@txt{#1}}
+\define@key{fmbadge}{exsize}{\def\fmb@exsz{#1}}
+\define@key{fmbadge}{minw}{\def\fmb@minw{#1}}
+\define@key{fmbadge}{diffmax}{\def\fmb@dmax{#1}}
+\define@key{fmbadge}{diffsize}{\def\fmb@dsz{#1}}
+\presetkeys{fmbadge}{bg=gray,txt=white,exsize=\large,minw=1cm,diffmax=4,diffsize=\huge}{}
+% G27.bugfix — init explicit dei defaults (vedi commento analogo su fmfonte sopra).
+\setkeys{fmbadge}{}
+
+% Setter pubblico globale: \fmsetbadge{bg=blue,exsize=\Large,minw=1.5cm}
+% Sovrascrive i default per TUTTI i \badge successivi (senza override [opt]).
+\newcommand{\fmsetbadge}[1]{\presetkeys{fmbadge}{#1}{}}
+
+% \badge[opt]{src_key}{page}{ex_num}{difficulty}
+% Inline-safe: \ensuremath wrappa il contenuto in math mode anche se chiamato
+% da text mode (caso tipico: dopo \item nel body esercizi).
+% NB: \huge prima di \fmdots emette warning "invalid in math mode" ma
+% produce comunque output a dimensione large; replica fedelmente il pattern
+% legacy SOL.tex (vedi tex_pdf/.../mat-2sc-v01-___-SOL.tex per riferimento).
+\newcommand{\badge}[5][]{%
+  \begingroup
+    \setkeys{fmbadge}{#1}%
+    \ensuremath{%
+      % G27.bugfix — entrambi i sub-elementi (fontebox + badge composto)
+      % wrappati in \vcenter{\hbox{...}} per allineamento sull'asse
+      % matematico. Senza, il fontebox restava a baseline mentre il
+      % badge composto (overset/underset) si estendeva sopra (bullets) e
+      % sotto (P-NN) lasciando il fontebox visivamente in basso.
+      % G27.badge — ordine badge→fonte (difficolta'+pagina+numero PRIMA, poi
+      % fonte/book): coerente con il rendering inline a schermo (ContractRenderer,
+      % richiesta utente 2026-06-04 "prima il badge poi la fonte").
+      \vcenter{\hbox{$%
+        \overset{\color{red}\fmb@dsz\fmdots{#5}{\fmb@dmax}}{%
+          \underset{\text{P-#3}}{%
+            \fcolorbox{white}{\fmb@bg}{%
+              \makebox[\fmb@minw][c]{%
+                \textcolor{\fmb@txt}{\fmb@exsz #4}%
+              }%
+            }%
+          }%
+        }%
+      $}}\quad
+      \vcenter{\hbox{\fontebox{#2}}}\quad
+    }%
+  \endgroup
+}

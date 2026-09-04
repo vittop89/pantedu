@@ -1,0 +1,14 @@
+[Unit]
+Description=pantedu — daily encrypted backup (DB + storage + config) to remote
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=-/etc/pantedu/backup.env
+ExecStart=/usr/local/bin/pantedu-backup-encrypted.sh
+TimeoutStartSec=3600
+
+[Install]
+WantedBy=multi-user.target

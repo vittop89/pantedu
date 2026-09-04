@@ -1,0 +1,51 @@
+[
+    {
+        "titolo": "Approccio Generale e Linguaggio della Fisica",
+        "contenuti": [
+            { "label": "Costruire il linguaggio della fisica classica (grandezze fisiche scalari e vettoriali, unità di misura).", "checked": true },
+            { "label": "Abituarsi a semplificare e modellizzare situazioni reali.", "checked": true },
+            { "label": "Risolvere problemi e avere consapevolezza critica del proprio operato.", "checked": true },
+            { "label": "Comprendere il campo di indagine della disciplina (anche con approccio sperimentale).", "checked": true },
+            { "label": "Imparare a esplorare fenomeni e a descriverli con un linguaggio adeguato (anche con approccio sperimentale).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Meccanica",
+        "contenuti": [
+            { "label": "Affrontare problemi relativi all’equilibrio dei corpi e dei fluidi.", "checked": true },
+            { "label": "Affrontare lo studio del moto dal punto di vista cinematico e dinamico.", "checked": true },
+            { "label": "Introdurre le leggi di Newton.", "checked": true },
+            { "label": "Discutere i sistemi di riferimento inerziali e non inerziali.", "checked": true },
+            { "label": "Discutere il principio di relatività di Galilei.", "checked": true },
+            { "label": "Familiarizzare con i concetti di lavoro, energia e quantità di moto.", "checked": true },
+            { "label": "Discutere i primi esempi di conservazione di grandezze fisiche.", "checked": true },
+            { "label": "Studiare la gravitazione (dalle leggi di Keplero alla sintesi newtoniana).", "checked": false },
+            { "label": "Approfondire il dibattito del XVI e XVII secolo sui sistemi cosmologici (in rapporto con storia e filosofia).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Termodinamica (Fenomeni Termici)",
+        "contenuti": [
+            { "label": "Affrontare concetti di base come temperatura, quantità di calore scambiato ed equilibrio termico.", "checked": true },
+            { "label": "Comprendere le leggi dei gas e le loro trasformazioni attraverso il modello del gas perfetto.", "checked": false },
+            { "label": "Studiare i principi della termodinamica.", "checked": false },
+            { "label": "Generalizzare la legge di conservazione dell’energia.", "checked": true },
+            { "label": "Comprendere i limiti intrinseci alle trasformazioni tra forme di energia.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Ottica",
+        "contenuti": [
+            { "label": "Interpretare i fenomeni della riflessione e della rifrazione della luce (ottica geometrica).", "checked": false },
+            { "label": "Analizzare le proprietà di lenti e specchi (ottica geometrica).", "checked": false },
+            { "label": "Studiare contenuti essenziali di ottica fisica (in conclusione allo studio delle onde).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Onde",
+        "contenuti": [
+            { "label": "Studiare le onde meccaniche e i loro parametri.", "checked": true },
+            { "label": "Studiare i fenomeni caratteristici delle onde meccaniche.", "checked": false }
+        ]
+    }
+]

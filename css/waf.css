@@ -1,0 +1,19 @@
+/* ════════════════════════════════════════════════════════════
+ * waf.css — LEGACY WAF admin styles, EMPTIED 2026-05-24.
+ *
+ * @deprecated Tutto il contenuto è stato spostato in:
+ *   css/modules/_waf-dashboard.css (caricato globalmente via
+ *   main.bundle.css → main.css @layer components).
+ *
+ * Sprint A4: tabs + banner + counter
+ * Sprint C1: tables + scroll wrapper + scrollbar
+ * Sprint C2: forms KV + outcome badges
+ * Sprint C3: actions-bar + flag + grid + stack + blocks-toc +
+ *            histogram + section + subtabs + toggle + empty +
+ *            logs-wrapper/-table + section-heading + required +
+ *            inline-status + text-error + enrich-toggle + switch +
+ *            asn/rdns + tutti i body.fm-dark dark overrides.
+ *
+ * Loader: shell.php tiene il <link rel="stylesheet" href="/css/waf.css">
+ * per evitare 404 in dev; rimuovibile in deploy successivo (Phase 6).
+ * ════════════════════════════════════════════════════════════ */

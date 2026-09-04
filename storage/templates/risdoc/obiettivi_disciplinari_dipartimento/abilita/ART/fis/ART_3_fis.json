@@ -1,0 +1,67 @@
+[
+    {
+        "titolo": "Comprendere e misurare le grandezze fisiche",
+        "contenuti": [
+            { "label": "Riconoscere e definire le grandezze fisiche fondamentali e derivate, utilizzando correttamente le unità di misura del Sistema Internazionale.", "checked": true },
+            { "label": "Utilizzare la notazione scientifica e l'ordine di grandezza per esprimere e confrontare misure.", "checked": true },
+            { "label": "Eseguire e interpretare misure di lunghezza, area e volume, scegliendo gli strumenti appropriati.", "checked": true },
+            { "label": "Eseguire e interpretare misure di tempo, massa e densità, comprendendone le definizioni operative.", "checked": true },
+            { "label": "Valutare e comunicare l'incertezza associata a una misura diretta e indiretta.", "checked": true },
+            { "label": "Calcolare grandezze fisiche derivate attraverso misure indirette, propagando correttamente l'incertezza.", "checked": true },
+            { "label": "Identificare e formulare una legge fisica a partire da dati sperimentali.", "checked": true },
+            { "label": "Analizzare e rappresentare graficamente le relazioni tra due grandezze fisiche (proporzionalità diretta, inversa, quadratica).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Analizzare e applicare i concetti di vettore e forza",
+        "contenuti": [
+            { "label": "Distinguere tra grandezze scalari e vettoriali e rappresentare graficamente i vettori.", "checked": true },
+            { "label": "Scomporre un vettore nelle sue componenti cartesiane e ricomporlo.", "checked": true },
+            { "label": "Definire il concetto di forza come interazione e  e sapere come si misura utilizzando un dinamometro.", "checked": true },
+            { "label": "Applicare il principio di azione e reazione per descrivere le interazioni tra corpi.", "checked": true },
+            { "label": "Calcolare e rappresentare la forza peso di un oggetto.", "checked": true },
+            { "label": "Descrivere e calcolare la forza elastica utilizzando la legge di Hooke.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Analizzare le condizioni di equilibrio dei corpi",
+        "contenuti": [
+            { "label": "Determinare le condizioni di equilibrio per un punto materiale e identificare la forza normale.", "checked": true },
+            { "label": "Descrivere e calcolare la forza d'attrito radente statico e dinamico.", "checked": true },
+            { "label": "Analizzare le forze in gioco (tensione, peso, attrito) in sistemi semplici come un corpo su un piano inclinato.", "checked": true },
+            { "label": "Definire il momento di una forza e applicarlo per determinare l'equilibrio di un corpo rigido rispetto alla rotazione.", "checked": true },
+            { "label": "Applicare le condizioni di equilibrio statico a corpi estesi e sistemi di corpi.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Comprendere e applicare i principi dell'equilibrio dei fluidi",
+        "contenuti": [
+            { "label": "Definire la pressione e calcolarla in diverse situazioni.", "checked": false },
+            { "label": "Distinguere le proprietà dei fluidi (liquidi e gas) e la loro incomprimibilità (per i liquidi).", "checked": false },
+            { "label": "Enunciare e applicare la legge di Stevin per calcolare la pressione nei fluidi e il principio di Pascal per descrivere la trasmissione della pressione.", "checked": false },
+            { "label": "Spiegare il funzionamento dei vasi comunicanti e descrivere i metodi per la misura della pressione (es. barometro).", "checked": false },
+            { "label": "Enunciare e applicare la legge di Archimede per determinare la spinta idrostatica e prevedere il galleggiamento dei corpi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Descrivere e analizzare i moti in una dimensione",
+        "contenuti": [
+            { "label": "Definire i concetti base della cinematica: sistema di riferimento, traiettoria, posizione, spostamento.", "checked": true },
+            { "label": "Definire e calcolare la velocità media e istantanea.", "checked": true },
+            { "label": "Descrivere e rappresentare (graficamente e analiticamente) il moto rettilineo uniforme.", "checked": true },
+            { "label": "Definire e calcolare l'accelerazione media e istantanea.", "checked": true },
+            { "label": "Descrivere e rappresentare (graficamente e analiticamente) il moto rettilineo uniformemente accelerato.", "checked": true },
+            { "label": "Analizzare il moto di caduta libera dei gravi come esempio di moto rettilineo uniformemente accelerato.", "checked": true },
+            { "label": "Usare correttamente le leggi orarie e della cinematica per risolvere semplici problmei attraverso una corretta impostazione iniziale del problema.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Descrivere e analizzare i moti in due dimensioni",
+        "contenuti": [
+            { "label": "Utilizzare i vettori per descrivere lo spostamento, la velocità e l'accelerazione in due dimensioni.", "checked": true },
+            { "label": "Analizzare e descrivere il moto di un proiettile (moto parabolico) scomponendolo lungo gli assi.", "checked": true },
+            { "label": "Descrivere le caratteristiche del moto circolare uniforme (periodo, frequenza, velocità angolare, accelerazione centripeta).", "checked": true },
+            { "label": "Riconoscere e descrivere le caratteristiche fondamentali del moto armonico semplice.", "checked": false }
+        ]
+    }
+]

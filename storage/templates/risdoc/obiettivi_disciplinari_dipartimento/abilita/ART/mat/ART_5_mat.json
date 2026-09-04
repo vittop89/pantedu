@@ -1,0 +1,81 @@
+[
+    {
+        "titolo": "Padroneggiare i fondamenti dell'analisi: funzioni e successioni",
+        "contenuti": [
+            { "label": "Utilizzare le proprietà dell'insieme dei numeri reali (R) e operare con intervalli e intorni.", "checked": true },
+            { "label": "Determinare il dominio e studiare il segno di funzioni reali di variabile reale (algebriche e trascendenti elementari).", "checked": true },
+            { "label": "Analizzare le proprietà fondamentali delle funzioni (iniettività, suriettività, biunivocità, monotonia, parità/disparità, periodicità).", "checked": true },
+            { "label": "Definire e rappresentare successioni numeriche, identificandone le principali caratteristiche.", "checked": false },
+            { "label": "Riconoscere e utilizzare le formule relative alle progressioni aritmetiche e geometriche per risolvere problemi.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Comprendere e calcolare i limiti di funzioni e successioni",
+        "contenuti": [
+            { "label": "Interpretare graficamente e intuitivamente il concetto di limite di una funzione in un punto o all'infinito.", "checked": true },
+            { "label": "Utilizzare la definizione formale di limite (mediante intorni) per verificare semplici limiti.", "checked": true },
+            { "label": "Riconoscere, saper enunciare i teoremi fondamentali dei limiti (unicità e confronto).", "checked": true },
+            { "label": "Applicare i teoremi sull'algebra dei limiti (somma, prodotto, quoziente) e riconoscere le funzioni continue.", "checked": true },
+            { "label": "Risolvere forme di indecisione nel calcolo dei limiti di funzioni algebriche (razionali fratte, irrazionali).", "checked": true },
+            { "label": "Risolvere forme di indecisione nel calcolo dei limiti di funzioni trascendenti elementari (esponenziali, logaritmiche, goniometriche) utilizzando limiti notevoli.", "checked": true },
+            { "label": "Confrontare gli ordini di infinito e infinitesimo per la risoluzione di forme indeterminate.", "checked": true },
+            { "label": "Calcolare il limite di successioni numeriche e comprendere il concetto di convergenza/divergenza.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Analizzare la continuità delle funzioni",
+        "contenuti": [
+            { "label": "Verificare la continuità di una funzione in un punto e in un intervallo utilizzando la definizione di limite.", "checked": true },
+            { "label": "Identificare e classificare i punti di discontinuità (singolarità) di una funzione (eliminabile, di prima specie, di seconda specie).", "checked": true },
+            { "label": "Enunciare e applicare i teoremi fondamentali sulle funzioni continue in un intervallo chiuso e limitato (Weierstrass, zeri, valori intermedi).", "checked": true },
+            { "label": "Determinare gli asintoti (verticali, orizzontali, obliqui) di una funzione e utilizzarli per tracciare un grafico probabile.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Comprendere e calcolare la derivata di una funzione",
+        "contenuti": [
+            { "label": "Interpretare geometricamente (pendenza della tangente) e fisicamente (velocità istantanea) il concetto di derivata come limite del rapporto incrementale.", "checked": true },
+            { "label": "Relazionare la continuità con la derivabilità di una funzione, fornendo esempi e controesempi.", "checked": true },
+            { "label": "Calcolare le derivate delle funzioni elementari (potenza, esponenziale, logaritmica, goniometriche).", "checked": true },
+            { "label": "Applicare le regole di derivazione per la somma, il prodotto e il quoziente di funzioni.", "checked": true },
+            { "label": "Calcolare la derivata di una funzione composta utilizzando la regola della catena.", "checked": true },
+            { "label": "Identificare e classificare i punti di non derivabilità di una funzione (cuspidi, punti angolosi, flessi a tangente verticale).", "checked": false },
+            { "label": "Utilizzare la derivata per determinare l'equazione della retta tangente al grafico di una funzione in un punto.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Applicare i teoremi sulle funzioni derivabili",
+        "contenuti": [
+            { "label": "Definire e identificare graficamente i punti di massimo/minimo relativo e assoluto, e i punti di flesso di una funzione.", "checked": true },
+            { "label": "Enunciare e interpretare geometricamente i teoremi di Rolle, Lagrange e Cauchy.", "checked": false },
+            { "label": "Utilizzare il segno della derivata prima per determinare gli intervalli di monotonia e i punti stazionari (massimi, minimi, flessi a tangente orizzontale).", "checked": true },
+            { "label": "Risolvere problemi di ottimizzazione (massimo e minimo) applicando i concetti di derivata.", "checked": false },
+            { "label": "Applicare il teorema di de l'Hôpital per risolvere forme indeterminate nel calcolo dei limiti.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Eseguire lo studio completo di una funzione",
+        "contenuti": [
+            { "label": "Seguire uno schema metodologico completo per lo studio di una funzione (dominio, segno, intersezioni, limiti, asintoti, derivata prima, monotonia, massimi/minimi, derivata seconda, concavità/convessità, flessi).", "checked": true },
+            { "label": "Tracciare il grafico qualitativo di funzioni algebriche e trascendenti elementari sulla base dello studio analitico.", "checked": true },
+            { "label": "Interpretare il grafico della derivata prima di una funzione per dedurre informazioni sulla monotonia e sugli estremi della funzione originaria.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Padroneggiare il calcolo dell'integrale indefinito",
+        "contenuti": [
+            { "label": "Comprendere il concetto di primitiva di una funzione e definire l'integrale indefinito.", "checked": false },
+            { "label": "Calcolare integrali indefiniti immediati e utilizzare la proprietà di linearità (integrazione per scomposizione).", "checked": false },
+            { "label": "Applicare le tecniche di integrazione per sostituzione e per funzioni composte.", "checked": false },
+            { "label": "Applicare la tecnica di integrazione per parti.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Comprendere e calcolare l'integrale definito e le sue applicazioni",
+        "contenuti": [
+            { "label": "Interpretare geometricamente l'integrale definito come area sottesa al grafico di una funzione (somme di Riemann).", "checked": false },
+            { "label": "Utilizzare le proprietà dell'integrale definito e il teorema fondamentale del calcolo integrale per calcolare integrali definiti.", "checked": false },
+            { "label": "Applicare l'integrale definito per calcolare aree di regioni piane e volumi di solidi di rotazione.", "checked": false }
+        ]
+    }
+]

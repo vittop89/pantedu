@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "pantedu.content.v1",
+    "title": "Pantedu Content Contract (v1)",
+    "description": "Schema per `.contract.json` archiviati in storage_objects. Validazione shallow (top-level + groups shape). Items + fragments lasciati non tipati per performance (deep validation su dataset grande = troppo lento). NOTA: gli item possono portare un blocco `ai` di provenienza (AI Act art. 50(2)) la cui forma e' descritta in $defs.aiProvenance; poiche' gli item non sono tipati la definizione e' documentale, non applicata dal validator.",
+    "type": "object",
+    "required": ["$schema", "groups"],
+    "additionalProperties": true,
+    "$defs": {
+        "aiProvenance": {
+            "type": "object",
+            "description": "Provenienza IA di un item — Reg. UE 2024/1689 art. 50(2). Presente SOLO se l'item contiene campi prodotti da operazioni generative (soluzioni, argomenti, traduzioni). Assente per contenuto trascritto dalla pagina (estrazione OCR/vision, conteggio difficolta'): quelle sono operazioni assistive, coperte dall'eccezione dell'art. 50(2). Scritto da ExerciseInserter, popolato da AiProvenance.",
+            "required": ["generated", "fields"],
+            "additionalProperties": true,
+            "properties": {
+                "generated": { "type": "boolean" },
+                "fields": {
+                    "type": "array",
+                    "description": "Campi dell'item generati: solution | category_label | question.",
+                    "items": { "type": "string" }
+                },
+                "ops": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "op":    { "type": "string", "enum": ["solutions", "topics", "translation"] },
+                            "model": { "type": "string" },
+                            "at":    { "type": "string" }
+                        }
+                    }
+                },
+                "human_reviewed": {
+                    "type": "boolean",
+                    "description": "L'inserimento avviene solo dopo lo step di revisione del docente in PDF-Import. Sostiene l'eccezione art. 50(4) 2o comma (controllo editoriale)."
+                }
+            }
+        }
+    },
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "const": "pantedu.content.v1"
+        },
+        "id": { "type": "string" },
+        "kind": {
+            "type": "string",
+            "enum": ["mappa", "esercizio", "lab", "verifica", "bes", "risdoc", "didattica"]
+        },
+        "title":         { "type": "string" },
+        "version":       { "type": "integer", "minimum": 0 },
+        "scope":         { "type": "object" },
+        "source":        { "type": "string" },
+        "original_href": { "type": "string" },
+        "generated_at":  { "type": "string" },
+        "meta":          { "type": ["object", "array"] },
+        "groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["type"],
+                "additionalProperties": true,
+                "properties": {
+                    "kind":  { "type": "string" },
+                    "type":  { "type": "string", "enum": ["Collect", "VF", "RM", "Text", "Mixed"] },
+                    "id":    { "type": "string" },
+                    "title": { "type": "string" },
+                    "intro": { "type": "string" },
+                    "items": { "type": "array" }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "CONOSCENZE",
+    "contenuti": [
+      {
+        "label": "Conoscere i fenomeni della riflessione e della rifrazione della luce e il funzionamento dei principali strumenti ottici.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le grandezze temperatura e quantità di calore, il concetto di equilibrio termico e i passaggi di stato.",
+        "checked": true
+      }
+    ]
+  }
+]

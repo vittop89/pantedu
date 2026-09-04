@@ -1,0 +1,31 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare il linguaggio e gli strumenti dell'algebra, della geometria e della statistica per interpretare, descrivere e modellizzare fenomeni e problemi, anche di contesti non matematici.",
+                "checked": false
+            },
+            {
+                "label": "Padroneggiare le procedure di calcolo aritmetico e algebrico, scegliendo in autonomia le strategie più efficaci per risolvere espressioni, equazioni, disequazioni e problemi.",
+                "checked": false
+            },
+            {
+                "label": "Riconoscere e costruire ragionamenti corretti, basati su ipotesi e nessi logici, e produrre semplici dimostrazioni in contesti geometrici, distinguendo tra assiomi, definizioni e teoremi.",
+                "checked": false
+            },
+            {
+                "label": "Analizzare figure geometriche nel piano, riconoscendone le proprietà, le relazioni e le trasformazioni (isometrie), e utilizzare il piano cartesiano come strumento per collegare concetti algebrici e geometrici.",
+                "checked": false
+            },
+            {
+                "label": "Raccogliere, organizzare, rappresentare e interpretare dati per trarre conclusioni e formulare giudizi, utilizzando indici di posizione e variabilità.",
+                "checked": false
+            },
+            {
+                "label": "Comunicare efficacemente i procedimenti seguiti e i risultati ottenuti, utilizzando con precisione e coerenza il linguaggio specifico della matematica (simboli, grafici, notazioni, terminologia).",
+                "checked": false
+            }
+        ]
+    }
+]

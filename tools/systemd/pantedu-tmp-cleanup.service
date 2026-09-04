@@ -1,0 +1,19 @@
+[Unit]
+# 2026-09-04 — pulizia oraria dei file temporanei dell'export.
+#
+# L'export di un documento passa dal server: il bundle TeX (con il testo
+# compilato dal docente) e l'eventuale PDF restano in storage/risdoc-tmp
+# finche' un altro export non ripulisce quelli piu' vecchi di un'ora. Se
+# nessuno esporta per giorni, restano per giorni. Con la compilazione "solo
+# nel browser" la promessa e' che sul server resti il solo modello: questo
+# timer la mantiene anche quando non esporta nessuno.
+Description=pantedu — pulizia dei file temporanei dell'export (piu' vecchi di un'ora)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=pantedu
+ExecStart=/usr/bin/find /var/www/pantedu/storage/risdoc-tmp -type f -mmin +60 -delete
+
+[Install]
+WantedBy=multi-user.target

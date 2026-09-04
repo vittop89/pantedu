@@ -1,0 +1,51 @@
+includes:
+    # Phase 25.A8 — baseline grandfather 79 legacy errors da livello 5/6.
+    # Rimossa progressivamente in iterazioni future quando legacy refactor.
+    - phpstan-baseline.neon
+
+parameters:
+    # Phase 25.A8 — bump a livello 6 con baseline (legacy errors grandfathered).
+    # Livello 7 next iteration; 8 (no-implicit-mixed) richiede full @param
+    # annotations su legacy → push out.
+    level: 6
+
+    paths:
+        - app
+        - tools
+        - tests/Unit
+
+    excludePaths:
+        analyseAndScan:
+            - app/Support/helpers.php  # global helpers, mixed types tollerati
+        analyse:
+            - tests/e2e            # JS, non PHP
+            - vendor
+
+    bootstrapFiles:
+        - app/bootstrap.php
+
+    # Ignora errori comuni in legacy code finché non viene refattorizzato.
+    # Ogni entry deve essere documentata con motivo + ticket di rimozione.
+    ignoreErrors:
+        # Legacy: PDO::FETCH_ASSOC ritornato come mixed quando PDOStatement
+        # non è strettamente tipizzato. Risolvibile con assertion helper.
+        - '#Cannot access offset .+ on mixed#'
+        - '#Parameter \#\d+ \$\w+ of method .+ expects array, mixed given\.#'
+
+        # @TODO Phase 25.A: rimuovere dopo cleanup typing repositories.
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+
+    # Errori ignored che potrebbero non matchare a livelli più alti (baseline copre già)
+    reportUnmatchedIgnoredErrors: false
+
+    # Performance + memoria
+    parallel:
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
+
+    # Symbol resolution
+    treatPhpDocTypesAsCertain: false
+
+    # Reporter: tabella per console, junit per CI
+    errorFormat: table

@@ -1,0 +1,24 @@
+[
+    {
+        "titolo": "Geometria",
+        "contenuti": [
+            { "label": "Apprendere i primi contenuti di geometria analitica dello spazio.", "checked": false },
+            { "label": "Apprendere la rappresentazione analitica di rette, piani e sfere.", "checked": false },
+            { "label": "Apprendere le proprietà dei principali solidi geometrici (in particolare dei poliedri).", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Relazioni e funzioni",
+        "contenuti": [
+            { "label": "Approfondire lo studio delle funzioni fondamentali dell’analisi anche attraverso esempi tratti dalla fisica o da altre discipline.", "checked": true },
+            { "label": "Acquisire il concetto di limite di una successione e di una funzione.", "checked": true },
+            { "label": "Apprendere a calcolare i limiti in casi semplici.", "checked": true },
+            { "label": "Acquisire i principali concetti del calcolo infinitesimale (continuità, derivabilità, integrabilità) anche in relazione con le problematiche in cui sono nati (velocità istantanea, tangente, calcolo di aree e volumi).", "checked": true },
+            { "label": "Saper derivare le funzioni già studiate, semplici prodotti, quozienti e composizioni di funzioni, le funzioni razionali (limitatamente, senza particolare addestramento tecnico).", "checked": true },
+            { "label": "Saper integrare funzioni polinomiali intere e altre funzioni elementari (limitatamente, senza particolare addestramento tecnico).", "checked": false },
+            { "label": "Saper determinare aree e volumi in casi semplici (limitatamente, senza particolare addestramento tecnico).", "checked": false },
+            { "label": "Comprendere il ruolo del calcolo infinitesimale come strumento concettuale fondamentale nella descrizione e modellizzazione di fenomeni fisici o di altra natura (obiettivo principale).", "checked": false },
+            { "label": "Conoscere l’idea generale di ottimizzazione e le sue applicazioni in numerosi ambiti.", "checked": false }
+        ]
+    }
+]

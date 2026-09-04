@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync CrowdSec community blocklist (ogni 2 ore)
+
+[Timer]
+# Ogni 2 ore, allineato a HH:00.
+OnCalendar=*-*-* 00/2:00:00
+Persistent=true
+RandomizedDelaySec=5min
+AccuracySec=1min
+Unit=pantedu-waf-threat-intel@crowdsec.service
+
+[Install]
+WantedBy=timers.target

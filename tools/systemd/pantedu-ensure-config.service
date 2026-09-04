@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu - Ensure .env + storage dirs before app start
+After=local-fs.target
+Before=php8.4-fpm.service nginx.service
+DefaultDependencies=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/pantedu-ensure-config.sh
+
+[Install]
+WantedBy=multi-user.target

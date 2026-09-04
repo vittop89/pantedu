@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "COMPETENZE",
+    "contenuti": [
+      {
+        "label": "Costruire semplici modelli di crescita o decrescita esponenziale e di andamenti periodici, anche in rapporto con lo studio delle altre discipline.",
+        "checked": true
+      },
+      {
+        "label": "Approfondire la comprensione della specificità dei due approcci (sintetico e analitico) allo studio della geometria.",
+        "checked": true
+      }
+    ]
+  }
+]

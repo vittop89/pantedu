@@ -1,0 +1,14 @@
+/* ════════════════════════════════════════════════════════════
+ * admin.css — EMPTIED 2026-05-24 (Sprint G).
+ *
+ * @deprecated TUTTO il contenuto è stato spostato in:
+ *   _admin-toolnav.css      (Sprint A3.1 — toolnav buttons)
+ *   _admin-tabs.css         (Sprint A3.2 — tabs+tools-table)
+ *   _admin-cards.css        (Sprint A3.3+B1 — cards/grid/pills/infra)
+ *   _dark-mode.css          (Sprint B2 — 67 blocchi body.fm-dark)
+ *   _admin-legacy.css       (Sprint G — residue: GDPR/Crypto/Backup/
+ *                            form-grid/meta-grid/status/badges/form-fields/
+ *                            collapsible/info-banner/monitoring-frame)
+ *
+ * Loader: shell.php tiene il <link> per evitare 404 (Phase 6 rimuove).
+ * ════════════════════════════════════════════════════════════ */

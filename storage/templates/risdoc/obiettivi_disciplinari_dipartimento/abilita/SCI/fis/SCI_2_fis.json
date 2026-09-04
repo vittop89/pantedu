@@ -1,0 +1,63 @@
+[
+    {
+        "titolo": "IL MOTO RETTILINEO UNIFORMEMENTE ACCELERATO",
+        "contenuti": [
+            { "label": "Definire e calcolare l'accelerazione media e comprendere il concetto di accelerazione istantanea.", "checked": true },
+            { "label": "Descrivere le caratteristiche del moto rettilineo uniformemente accelerato.", "checked": true },
+            { "label": "Scrivere e applicare le leggi orarie (velocità-tempo e spazio-tempo) per risolvere problemi sul moto rettilineo uniformemente accelerato, con velocità iniziale nulla o diversa da zero.", "checked": true },
+            { "label": "Rappresentare e interpretare i grafici spazio-tempo e velocità-tempo del moto uniformemente accelerato.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "I MOTI NEL PIANO",
+        "contenuti": [
+            { "label": "Descrivere il moto circolare uniforme e calcolarne periodo, frequenza, velocità tangenziale e accelerazione centripeta.", "checked": true },
+            { "label": "Definire e utilizzare la velocità angolare per descrivere il moto circolare.", "checked": true },
+            { "label": "Descrivere il moto armonico semplice come proiezione di un moto circolare uniforme e utilizzarne le equazioni.", "checked": true },
+            { "label": "Descrivere il moto del pendolo semplice e applicare la formula per il calcolo del suo periodo.", "checked": true },
+            { "label": "Analizzare il moto di un proiettile (parabolico) scomponendolo nelle sue componenti rettilinee (uniforme e uniformemente accelerato).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "I PRINCIPI DELLA DINAMICA",
+        "contenuti": [
+            { "label": "Enunciare e applicare il primo principio della dinamica (principio d'inerzia), distinguendo tra sistemi di riferimento inerziali e non inerziali.", "checked": true },
+            { "label": "Enunciare e applicare il secondo principio della dinamica (F=ma) per risolvere problemi su corpi singoli o sistemi di corpi.", "checked": true },
+            { "label": "Enunciare il terzo principio della dinamica (principio di azione e reazione) e identificare le coppie di forze azione-reazione.", "checked": true },
+            { "label": "Calcolare la forza centripeta necessaria per un moto circolare e distinguerla dalla forza centrifuga apparente.", "checked": true },
+            { "label": "Applicare i principi della dinamica per risolvere problemi che includono forze di attrito, forze elastiche e tensioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "IL LAVORO E L'ENERGIA",
+        "contenuti": [
+            { "label": "Definire e calcolare il lavoro di una forza costante e la potenza.", "checked": true },
+            { "label": "Interpretare graficamente il lavoro come area sottesa a un grafico forza-spostamento.", "checked": true },
+            { "label": "Definire e calcolare l'energia cinetica, l'energia potenziale gravitazionale e l'energia potenziale elastica.", "checked": true },
+            { "label": "Enunciare e applicare il teorema dell'energia cinetica.", "checked": true },
+            { "label": "Enunciare e applicare il principio di conservazione dell'energia meccanica in presenza di sole forze conservative.", "checked": true },
+            { "label": "Applicare il bilancio energetico generale in presenza di forze non conservative (forze d'attrito).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "L'ENERGIA TERMICA",
+        "contenuti": [
+            { "label": "Definire la temperatura, utilizzare le diverse scale termometriche (Celsius, Kelvin) e descriverne l'interpretazione microscopica.", "checked": true },
+            { "label": "Applicare le leggi della dilatazione termica (lineare e volumica) per calcolare la variazione di dimensioni di un corpo.", "checked": true },
+            { "label": "Distinguere tra calore e temperatura e applicare l'equazione fondamentale della calorimetria per risolvere problemi di equilibrio termico.", "checked": true },
+            { "label": "Descrivere i meccanismi di propagazione del calore: conduzione, convezione e irraggiamento.", "checked": true },
+            { "label": "Descrivere i cambiamenti di stato e calcolare il calore scambiato utilizzando il concetto di calore latente.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LA LUCE E GLI STRUMENTI OTTICI",
+        "contenuti": [
+            { "label": "Descrivere la propagazione rettilinea della luce e il modello dei raggi luminosi.", "checked": true },
+            { "label": "Applicare le leggi della riflessione per descrivere la formazione di immagini negli specchi piani e sferici.", "checked": true },
+            { "label": "Applicare la legge di Snell per descrivere il fenomeno della rifrazione e della riflessione totale.", "checked": true },
+            { "label": "Spiegare il fenomeno della dispersione della luce e la sua relazione con i colori.", "checked": true },
+            { "label": "Descrivere la formazione di immagini da parte di lenti sottili (convergenti e divergenti) utilizzando diagrammi e l'equazione delle lenti.", "checked": true },
+            { "label": "Descrivere il funzionamento dell'occhio umano e il principio di base di semplici strumenti ottici (lente d'ingrandimento, microscopio).", "checked": true }
+        ]
+    }
+]

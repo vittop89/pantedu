@@ -1,0 +1,20 @@
+[Unit]
+# 2026-09-04 — impronta giornaliera dei registri append-only.
+#
+# I trigger fermano l'utenza applicativa, non chi amministra il server: la
+# stessa persona che i registri dovrebbero controllare. L'impronta di ogni
+# giorno finisce nella cartella storage, che il backup cifrato delle 03:00
+# porta fuori dal server. Vedi tools/audit/export_audit_chain.php.
+Description=pantedu — catena di hash dei registri di audit
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/audit/export_audit_chain.php
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

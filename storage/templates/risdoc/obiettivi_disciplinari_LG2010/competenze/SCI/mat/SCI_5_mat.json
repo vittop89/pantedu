@@ -1,0 +1,19 @@
+[
+  {
+    "titolo": "COMPETENZE",
+    "contenuti": [
+      {
+        "label": "Sviluppare la capacità di costruire e analizzare esempi di modelli matematici, in particolare nell'ambito delle scienze applicate, tecnologiche, sociali, economiche e ingegneristiche.",
+        "checked": true
+      },
+      {
+        "label": "Approfondire la comprensione del metodo assiomatico e la sua utilità concettuale e metodologica anche dal punto di vista della modellizzazione matematica.",
+        "checked": true
+      },
+      {
+        "label": "Applicare i procedimenti caratteristici del pensiero matematico e le metodologie di costruzione di modelli per la soluzione di problemi.",
+        "checked": true
+      }
+    ]
+  }
+]

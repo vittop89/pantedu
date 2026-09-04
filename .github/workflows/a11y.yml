@@ -1,0 +1,162 @@
+name: A11y WCAG 2.2 AA
+
+# Phase D.1 — accessibility gate via Community-Access/accessibility-agents
+# (MIT, v5.4.0, auditata in docs/security/third-party-tools/).
+#
+# Strategy "fail only on regression":
+#   - Esegue scan completo su PR + push.
+#   - Confronta SARIF result vs baseline checked-in (a11y-baseline.sarif).
+#   - Fail solo se ci sono NUOVI finding rispetto alla baseline.
+#   - Issue legacy (presenti in baseline) NON bloccano la pipeline.
+#   - Quando deliberatamente accettiamo nuovi finding, aggiorniamo baseline.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  # 2026-05-26 — rimosso il trigger su `push: main`: girava a ogni push e
+  # falliva in modo intermittente per errori TRANSIENTI di GitHub (download
+  # action da codeload.github.com), generando email "workflow failed" fuorvianti
+  # (il deploy reale via webhook VPS è separato e sano). Mantiene la copertura
+  # su PR + run notturna + trigger manuale.
+  schedule:
+    - cron: "0 3 * * *"   # nightly 03:00 UTC
+
+# Cancel run precedenti dello stesso branch quando arriva un nuovo push.
+concurrency:
+  group: a11y-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  axe-baseline:
+    name: axe-core (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install JS deps
+        run: npm ci || npm install
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, openssl, pdo_mysql, json, curl, gd, zip
+
+      - name: Composer install
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Start dev server
+        run: |
+          mkdir -p log/admin log/auth log/errors log/logout log/security
+          # Minimal env per server avviabile in CI (no DB richiesto per pagine pubbliche)
+          cp .env.example .env || echo "APP_URL=http://127.0.0.1:8000" > .env
+          # css/ js/ build/ vivono nella ROOT del repo (in prod li serve nginx
+          # via alias). Sotto `php -S -t public/` andrebbero in 404 → la pagina
+          # sarebbe SENZA CSS e il test a11y NON rappresentativo. Symlink in
+          # public/ così il server di test serve gli asset reali.
+          npm run build || echo "build JS non riuscita — continuo"
+          ln -sfn "$PWD/css"   public/css
+          ln -sfn "$PWD/js"    public/js
+          ln -sfn "$PWD/build" public/build 2>/dev/null || true
+          php -S 127.0.0.1:8000 -t public/ > /tmp/php-server.log 2>&1 &
+          sleep 2
+          curl -fs http://127.0.0.1:8000/css/main.css >/dev/null || (echo "CSS non servita!"; cat /tmp/php-server.log; exit 1)
+          curl -fs http://127.0.0.1:8000/.well-known/security.txt || (cat /tmp/php-server.log; exit 1)
+
+      - name: Run a11y suite (axe-core)
+        env:
+          FM_E2E_BASE_URL: http://127.0.0.1:8000
+        # Gate reale: una violazione WCAG serious/critical (o un test a11y
+        # rotto) FA FALLIRE la pipeline → monitoraggio continuo che intercetta
+        # le regressioni prima del rilascio (requisito EAA). Suite verde al
+        # 2026-06-21 (10/10). Se serve un bypass temporaneo, farlo
+        # esplicitamente in un commit dedicato, non lasciando passare i rossi.
+        run: npm run e2e:a11y
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-a11y-report
+          path: playwright-report/
+          retention-days: 14
+
+  agents-scan:
+    name: accessibility-agents WCAG 2.2 AA scan
+    # Solo su PR — su push diretto a main skip per non rallentare.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # per upload SARIF a Code Scanning
+      pull-requests: write    # per PR annotations
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run accessibility-agents scan
+        id: a11y
+        # Pinniamo il tag esatto per supply-chain safety (no @main floating)
+        uses: Community-Access/accessibility-agents/action@v5.4.0
+        with:
+          scan-type: web
+          profile: moderate
+          fail-on: none           # Non fallire qui: la regressione e' valutata sotto
+          sarif-file: a11y-results.sarif
+          upload-sarif: true
+
+      - name: Compute regressions vs baseline
+        if: always()
+        run: |
+          # "Fingerprint" minimal di un finding = ruleId + first location uri
+          # Baseline e' checked-in come a11y-baseline.sarif. Se assente, treat
+          # come baseline vuota (TODO Phase D.1 follow-up: snapshot iniziale).
+          if [ ! -f a11y-baseline.sarif ]; then
+            echo '{"runs":[{"results":[]}]}' > a11y-baseline.sarif
+            echo "::warning::a11y-baseline.sarif missing - creating empty baseline. Run baseline-update job to seed."
+          fi
+
+          NEW_COUNT=$(jq -r --slurpfile bl a11y-baseline.sarif '
+            (.runs[0].results // []) as $current
+            | (.runs[0].results // []) as $unused
+            | ($current | map(
+                (.ruleId // "?") + ":" +
+                (.locations[0].physicalLocation.artifactLocation.uri // "?")
+              )) as $cur_keys
+            | (($bl[0].runs[0].results // []) | map(
+                (.ruleId // "?") + ":" +
+                (.locations[0].physicalLocation.artifactLocation.uri // "?")
+              )) as $base_keys
+            | [$cur_keys[] | select(. as $k | $base_keys | index($k) | not)]
+            | length
+          ' a11y-results.sarif)
+
+          echo "New regressions: $NEW_COUNT"
+          echo "## Accessibility scan result" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **New regressions (not in baseline)**: $NEW_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- Total violations: ${{ steps.a11y.outputs.violations }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Critical: ${{ steps.a11y.outputs.critical }}, Serious: ${{ steps.a11y.outputs.serious }}" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$NEW_COUNT" -gt 0 ]; then
+            echo "::error::Accessibility regression: $NEW_COUNT new issue(s) introduced by this PR. Review SARIF report uploaded to Code Scanning, or accept by updating a11y-baseline.sarif."
+            exit 1
+          fi
+          echo "✅ No new a11y regressions vs baseline"
+
+      - name: Upload SARIF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-sarif
+          path: a11y-results.sarif
+          retention-days: 30

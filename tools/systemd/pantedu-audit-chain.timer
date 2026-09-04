@@ -1,0 +1,12 @@
+[Unit]
+Description=pantedu — timer giornaliero per la catena di hash dei registri
+
+[Timer]
+# Alle 02:50: dopo le cancellazioni dovute (02:40) e prima del backup (03:00),
+# così che l'impronta del giorno viaggi con la copia della stessa notte.
+OnCalendar=*-*-* 02:50:00
+Persistent=true
+Unit=pantedu-audit-chain.service
+
+[Install]
+WantedBy=timers.target

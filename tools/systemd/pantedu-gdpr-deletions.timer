@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — timer giornaliero per le cancellazioni art. 17 dovute
+
+[Timer]
+# Ogni giorno alle 02:40, prima del backup delle 03:00: la copia della notte
+# non deve contenere un account la cui cancellazione era già dovuta.
+OnCalendar=*-*-* 02:40:00
+Persistent=true
+RandomizedDelaySec=5min
+Unit=pantedu-gdpr-deletions.service
+
+[Install]
+WantedBy=timers.target

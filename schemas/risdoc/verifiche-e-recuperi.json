@@ -1,0 +1,75 @@
+{
+    "$id": "verifiche-e-recuperi",
+    "title": "Linee guida su verifiche, valutazioni e recuperi",
+    "category": "ALTRO",
+    "origin": "strcomp",
+    "body_class": "fm-studio-strcomp",
+    "_g23_status": "implemented (page-doc accordion+staticContent gerarchico, ADR-020)",
+    "body_pt_seed_ref": "schemas/risdoc/_pt/seeds/verifiche-e-recuperi.pt.json",
+    "_g23_sprint_4": "Seed splittato gerarchicamente: 1 accordion top-level (PARTE I, PARTE II) con body_pt nested accordion per sub-sezioni h3 (A/B/C). Parser intelligente in tools/scripts/extract-seed-from-fismapant.php.",
+    "sections": [
+        {
+            "type": "header",
+            "title": "LINEE GUIDA SU VERIFICHE, VALUTAZIONI E RECUPERI",
+            "selectors": []
+        },
+        {
+            "type": "static-content",
+            "name": "parte_1",
+            "format": "html",
+            "title": "PARTE I. NORME GENERALI SU VERIFICHE E VALUTAZIONI",
+            "items": [
+                {
+                    "type": "static-content",
+                    "name": "parte_1_a",
+                    "format": "html",
+                    "title": "A. Registrazione e datazione dei voti nel Registro Elettronico (RE)",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#parte-1-a"
+                },
+                {
+                    "type": "static-content",
+                    "name": "parte_1_b",
+                    "format": "html",
+                    "title": "B. Indicazioni Generali sulle Verifiche",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#parte-1-b"
+                }
+            ]
+        },
+        {
+            "type": "static-content",
+            "name": "parte_2",
+            "format": "html",
+            "title": "PARTE II. NORME SUI RECUPERI E SULLA COMPENSAZIONE ORALE",
+            "items": [
+                {
+                    "type": "static-content",
+                    "name": "parte_2_a",
+                    "format": "html",
+                    "title": "A. Recuperi delle verifiche (regole generali)",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#parte-2-a"
+                },
+                {
+                    "type": "static-content",
+                    "name": "parte_2_b",
+                    "format": "html",
+                    "title": "B. Recuperi delle verifiche (integrazioni per studenti con BES/DSA)",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#parte-2-b"
+                },
+                {
+                    "type": "static-content",
+                    "name": "parte_2_c",
+                    "format": "html",
+                    "title": "C. Compensazione orale delle verifiche scritte (per studenti con BES/DSA)",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#parte-2-c"
+                },
+                {
+                    "type": "static-content",
+                    "name": "esempio_verifica",
+                    "format": "html",
+                    "title": "ESEMPIO DI VERIFICA SCRITTA CON POSSIBILE COMPENSAZIONE ORALE",
+                    "body_ref": "1.0_SBA-Verifiche_e_Recuperi-ALTRO.php#esempio"
+                }
+            ]
+        }
+    ]
+}
