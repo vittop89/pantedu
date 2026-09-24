@@ -1,0 +1,45 @@
+[Unit]
+# Avviso quando un'unità del progetto fallisce.
+#
+# Si aggancia con `OnFailure=pantedu-avviso@%n.service` sull'unità da
+# sorvegliare: systemd sostituisce %n con il nome dell'unità fallita e lo
+# passa qui come istanza (%i).
+#
+# Perché esiste: fino all'8 settembre 2026 un rilascio fallito lasciava
+# `pantedu-deploy.service` in stato `failed` e non lo diceva a nessuno. La
+# verifica di quel giorno ha trovato due unità ferme in `failed` da ore senza
+# che nessuno se ne fosse accorto. Le reti c'erano; mancava il campanello.
+#
+# Non tenta ripristini. Manda una email e basta: la decisione di tornare
+# indietro resta a una persona.
+Description=pantedu — avviso di guasto per %i
+Documentation=file:///var/www/pantedu/tools/ops/avvisa_guasto.php
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+
+# `journalctl -u` senza privilegi legge solo il proprio giornale: serve stare
+# nel gruppo che può leggere quello di sistema, altrimenti l'avviso parte ma
+# senza le righe che servono a capire.
+SupplementaryGroups=systemd-journal
+
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/ops/avvisa_guasto.php %i
+
+# Se l'avviso stesso non riesce, questa unità va in `failed` e ci resta.
+#
+# 2026-09-08 — qui c'era `SuccessExitStatus=0 1`, scritto con l'idea che un
+# avviso fallito non dovesse «trascinarsi dietro nient'altro». È lo stesso
+# ragionamento che ha tenuto muto il rilascio per mesi: se non si riesce a
+# dire che qualcosa è rotto, quello è il momento in cui serve di più che
+# resti scritto da qualche parte. Lo stato `failed` è l'unico posto rimasto,
+# visto che il canale per avvisare è proprio quello che non ha funzionato.
+TimeoutStartSec=60
+
+# Superficie minima: legge il repository, non scrive niente.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true

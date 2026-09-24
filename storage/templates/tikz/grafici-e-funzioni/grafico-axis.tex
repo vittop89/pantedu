@@ -1,0 +1,537 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\pagestyle{empty}
+
+% ==================================================
+% GRAFICO DI FUNZIONE (pgfplots, ambiente axis)
+% ==================================================
+% Un disegno = uno o più GRAFICI (assi cartesiani di pgfplots) con le
+% funzioni, le rette verticali, i punti con le loro proiezioni e le
+% etichette; ogni grafico si disegna da solo alla chiusura:
+%
+%   \begin{Grafico}{spostamento x}
+%     \FunSet{...}  \tikzset{fun ...}   (facoltativi: valgono solo qui)
+%     \SetFunzioni{...} \SetVerticali{...} \SetPunti{...}
+%     \SetProiezioni{...} \SetEtichette{...}
+%   \end{Grafico}
+%
+% spostamento x: di quanto (in cm) il grafico è spostato a destra (0 se
+% il grafico è uno solo). Ciò che si imposta FUORI dai grafici vale per
+% tutti, DENTRO un grafico vale solo per quel grafico.
+%
+% Liste: campi separati da /, voci separate da virgola, in numero libero.
+% Gli spazi intorno alle / e le righe vuote (fra le voci, e in \FunSet)
+% non contano.
+% Un campo che contiene una virgola o una / va tra graffe: {red, dashed},
+% {$(\frac{9}{2},5)$}. Ogni voce deve avere TUTTI i campi (anche vuoti):
+% se ne manca uno il disegno si ferma con un errore che dice quale lista
+% e quale voce. Un campo vuoto prende il valore scritto qui sotto
+% («vuoto = ...»); i campi senza valore predefinito (le coordinate, il
+% nome e l'espressione) vanno scritti.
+% L'ultimo campo è sempre «mostra»: 1 = disegna, 0 = nascondi (vuoto = 1).
+%
+% Curve, rette e tratteggi si fermano al bordo della finestra; le scritte
+% (etichette e «zero») no: una scritta che esce dalla finestra si vede
+% intera, e il disegno si allarga quanto serve.
+%
+% --- FUNZIONI y = f(x) ---
+% \SetFunzioni{espressione/da/a/colore/stile/etichetta/x etichetta/
+%              y etichetta/legenda/mostra, ...}
+%   espressione  in x (sintassi pgfplots), es. {-(1/3)*x - 1}, {x^2-2};
+%                sin, cos e tan lavorano in RADIANTI: {sin(x)}
+%                (deg non si usa: {sin(deg(x))} si ferma con un errore)
+%   da, a        dominio (vuoti = x min, x max)
+%   colore       vuoto = black; stile: es. dashed, {dashed, very thick},
+%                {samples=1000} (campioni di questa sola curva)
+%   etichetta    scritta centrata nel punto (x etichetta, y etichetta):
+%                se c'è l'etichetta vanno scritti tutti e due; vuota = niente
+%   legenda      testo della voce di legenda (vuoto = nessuna voce)
+%   Curve che escono molto dalla finestra (1/x, tan x, ln x, x^6...): la
+%   curva si interrompe da sola dove va oltre un'altezza di finestra,
+%   sopra o sotto, e così non unisce i due rami di un asintoto. Se in un
+%   grafico resta un tratto verticale fra due rami (capita con finestre
+%   molto alte), si scrive una voce per ramo con il dominio che si ferma
+%   poco prima dell'asintoto: {1/x}/-4/-0.01/..., {1/x}/0.01/6/...
+%   Una retta così ripida da sembrare verticale (es. 2000*x in una
+%   finestra 10 x 10) può non vedersi: va in \SetVerticali.
+%
+% --- RETTE VERTICALI x = c (da y min a y max) ---
+% \SetVerticali{x/colore/stile/etichetta/x etichetta/y etichetta/legenda/mostra, ...}
+%   colore vuoto = black; etichetta, legenda: come per le funzioni
+%
+% --- PUNTI (con nome) ---
+% \SetPunti{nome/x/y/colore/mostra, ...}           (colore vuoto = black)
+%
+% --- PROIEZIONI (tratteggio dal punto all'asse) ---
+% \SetProiezioni{punto/asse/stile/mostra, ...}
+%   punto  nome di un punto di \SetPunti; asse x (verticale fino
+%          all'asse x), y (orizzontale fino all'asse y) oppure xy
+%          (vuoto = xy). Colore: quello del punto, se lo stile (il campo o
+%          fun proiezione) non ne dice un altro
+%
+% --- ETICHETTE DEI PUNTI (del colore del punto) ---
+% \SetEtichette{punto/dove/testo/posizione/mostra, ...}
+%   dove   p = accanto al punto (vuoto = p), x = sull'asse x sotto il
+%          punto, y = sull'asse y alla sua altezza. L'asse è dove lo
+%          disegna pgfplots: nello 0, o sul bordo se la finestra non
+%          contiene lo 0 (es. x min=1)
+%   posizione  es. left, below, {above left}, {below, xshift=2pt}
+%
+% --- CHIAVI (\FunSet{chiave=valore, ...}) ---
+% x min, x max, y min, y max     finestra
+% larghezza, altezza             misure del grafico, scritte comprese: il
+%                                riquadro degli assi è 45pt più piccolo
+%                                (lo spazio che pgfplots tiene per le scritte)
+% proporzioni (1/0)              1 = la stessa unità su x e su y: la misura
+%                                più piccola comanda, l'altra segue le
+%                                proporzioni della finestra; 0 = larghezza e
+%                                altezza tutte e due come scritte (es. un
+%                                grafico v-t con t fino a 10 e v fino a 30)
+% griglia (1/0), numeri (1/0), tacche (1/0), passo x, passo y
+%                                tacche, numeri e righe della griglia cadono
+%                                sui multipli del passo (0 compreso), prima
+%                                di max (a max c'è la freccia); la griglia
+%                                ha una riga anche sui bordi della finestra
+% etichetta x, etichetta y       nomi degli assi
+% zero                           testo nell'origine (vuoto = niente); si
+%                                scrive solo se la finestra contiene l'origine;
+%                                con numeri=1 sta nella riga dei numeri, subito
+%                                a sinistra dell'asse y
+% campioni                       punti calcolati per curva (500: tanti
+%                                servono anche a spezzare la curva sugli
+%                                asintoti)
+% legenda                        posizione della legenda, es. outer north east
+%
+% --- STILI ---
+% delle scritte e delle linee: \tikzset{fun .../.style={...}}
+%   fun funzione, fun verticale, fun proiezione, fun griglia,
+%   fun punto (la marca: es. {mark size=4pt}, {mark=square*}),
+%   fun zero (lo «zero» senza numeri), fun zero numeri (con numeri=1),
+%   fun etichetta (funzioni e verticali), fun etichetta p,
+%   fun etichetta x, fun etichetta y
+% degli assi (chiavi di pgfplots): \pgfplotsset{fun assi/.style={...}}
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+\pgfkeys{
+  /fun/.is family, /fun,
+  % finestra
+  x min/.initial=-4, x max/.initial=6,
+  y min/.initial=-4, y max/.initial=6,
+  % dimensioni desiderate
+  larghezza/.initial=8cm, altezza/.initial=8cm,
+  proporzioni/.initial=1,
+  % tacche, numeri, griglia
+  griglia/.initial=0,
+  numeri/.initial=0,
+  tacche/.initial=0,
+  passo x/.initial=1, passo y/.initial=1,
+  % scritte
+  etichetta x/.initial={$x$},
+  etichetta y/.initial={$y$},
+  zero/.initial={$0$},
+  % varie
+  campioni/.initial=500,
+  legenda/.initial={outer north east},
+}
+
+% Stili grafici
+\tikzset{
+  fun funzione/.style={thick},
+  fun verticale/.style={thick},
+  fun proiezione/.style={dashed, thin},
+  fun punto/.style={mark size=3pt},
+  fun griglia/.style={dotted, gray},
+  fun zero/.style={anchor=north east, xshift=-3pt, yshift=-3pt},
+  fun zero numeri/.style={anchor=north east, inner xsep=2pt},
+  % etichette di funzioni e verticali: centrate nel loro punto e senza
+  % margine, così una scritta vicina al bordo allarga il disegno solo
+  % quanto è larga lei
+  fun etichetta/.style={inner sep=0pt},
+  fun etichetta p/.style={anchor=south west},
+  fun etichetta x/.style={anchor=north},
+  fun etichetta y/.style={anchor=east},
+}
+\pgfplotsset{fun assi/.style={}}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- pulizia dei dati (expl3, nel nucleo di LaTeX) ---
+\ExplSyntaxOn
+% \funTogliPar\lista: toglie le righe vuote (\par) dalla lista; lo
+% spazio dell'a capo che le precede resta, e basta a separare
+\cs_new_protected:Npn \funTogliPar #1 { \tl_replace_all:Nnn #1 { \par } { } }
+% \funTrim{\a/\b/...}: toglie a ogni campo gli spazi in testa e in coda
+% e, se il campo è tutto fra graffe, le graffe: « red » vale «red»,
+% « » e « {} » valgono vuoto
+\seq_new:N \l__fun_campi_seq
+\cs_new_protected:Npn \funTrim #1
+  {
+    \seq_set_split:Nnn \l__fun_campi_seq { / } {#1}
+    \seq_map_function:NN \l__fun_campi_seq \__fun_trim:N
+  }
+\cs_new_protected:Npn \__fun_trim:N #1
+  {
+    \tl_trim_spaces:N #1
+    \tl_if_single:NT #1
+      {
+        \exp_args:No \tl_if_head_is_group:nT {#1}
+          {
+            \tl_set:Ne #1 { \exp_args:No \tl_head:n {#1} }
+            \tl_trim_spaces:N #1
+          }
+      }
+  }
+% \funSeContiene{\macro}{testo}{se lo contiene}{se no}
+\cs_new_protected:Npn \funSeContiene #1#2#3#4 { \tl_if_in:NnTF #1 {#2} {#3} {#4} }
+% \funCalcola{espressione}: il valore (espandibile), con l3fp: decimali
+% esatti (0.1 è 0.1) e numeri anche oltre 16000; un confronto dà 1 o 0
+\cs_new:Npn \funCalcola #1 { \fp_eval:n {#1} }
+\ExplSyntaxOff
+
+% --- dati (vuoti per default) ---
+\newcommand{\SetFunzioni}[1]{\def\FunFunzioniData{#1}\funTogliPar\FunFunzioniData}
+\newcommand{\SetVerticali}[1]{\def\FunVerticaliData{#1}\funTogliPar\FunVerticaliData}
+\newcommand{\SetPunti}[1]{\def\FunPuntiData{#1}\funTogliPar\FunPuntiData}
+\newcommand{\SetProiezioni}[1]{\def\FunProiezioniData{#1}\funTogliPar\FunProiezioniData}
+\newcommand{\SetEtichette}[1]{\def\FunEtichetteData{#1}\funTogliPar\FunEtichetteData}
+\SetFunzioni{}
+\SetVerticali{}
+\SetPunti{}
+\SetProiezioni{}
+\SetEtichette{}
+
+\makeatletter
+% --- chiavi: \FunSet{chiave=valore, ...} (anche con righe vuote) ---
+\newcommand{\FunSet}[1]{\def\fun@chiavi{#1}\funTogliPar\fun@chiavi
+  \edef\fun@tmp{\noexpand\pgfqkeys{/fun}{\fun@u\fun@chiavi}}\fun@tmp}
+\newcommand{\funget}[1]{\pgfkeysvalueof{/fun/#1}}
+% --- utilità ---
+% \funSeVuota{\macro}{se vuota}{se piena}   (espandibile)
+\newcommand{\funSeVuota}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \funDefault{\macro}{valore}: se \macro è vuota le assegna il valore
+\newcommand{\funDefault}[2]{\funSeVuota{#1}{\edef#1{#2}}{}}
+% \fun@u\macro: il contenuto della macro, senza espanderlo (dentro \edef)
+\def\fun@u#1{\unexpanded\expandafter{#1}}
+% conta i campi (separati da / fuori dalle graffe) della voce in #1
+\newcount\fun@n
+\def\fun@stop{\relax}
+\def\fun@stopm{\fun@stop}
+\newcommand{\funContaCampi}[1]{\fun@n=0 \expandafter\fun@cc#1/\fun@stop/}
+\def\fun@cc#1/{\def\fun@t{#1}%
+  \ifx\fun@t\fun@stopm\else\advance\fun@n by 1 \expandafter\fun@cc\fi}
+% \funScorri{\lista}{numero campi}{nome della lista}{\a/\b/...}{corpo}:
+% il corpo trova i campi già senza spazi in testa e in coda
+\newcommand{\funScorri}[5]{%
+  \foreach \fun@voce [count=\fun@k] in #1 {%
+    \funSeVuota{\fun@voce}{}{%
+      \funContaCampi{\fun@voce}%
+      \ifnum\fun@n=#2\relax
+        \foreach #4 in \fun@voce {\funTrim{#4}#5}%
+      \else
+        \PackageError{grafico}{#3, voce \fun@k: ha \the\fun@n\space campi
+          invece di #2}{Ogni voce della lista ha #2 campi separati da /,
+          anche vuoti. Un campo con virgole o / va tra graffe.}%
+      \fi}%
+  }%
+}
+\newcount\fun@num
+\def\fun@asx{x}\def\fun@asy{y}\def\fun@asxy{xy}\def\fun@asp{p}
+% il punto #1 esiste in questo grafico? altrimenti errore (#2 = lista)
+\newcommand{\fun@puntoesiste}[2]{%
+  \ifcsname fun@x@\the\fun@num @#1\endcsname\else
+    \PackageError{grafico}{#2: il punto '#1' non c'e' in \string\SetPunti\space
+      di questo grafico (o ha mostra=0)}{}%
+  \fi}
+\def\fun@px#1{\csname fun@x@\the\fun@num @#1\endcsname}
+\def\fun@py#1{\csname fun@y@\the\fun@num @#1\endcsname}
+\def\fun@pc#1{\csname fun@c@\the\fun@num @#1\endcsname}
+% un'etichetta di funzione o di verticale ha bisogno delle sue coordinate
+% (#1 = lista): senza, errore in italiano invece di quello di pgfmath
+\newcommand{\fun@servexy}[1]{%
+  \funSeVuota{\fn@lx}{\fun@mancaxy{#1}{x etichetta}}{}%
+  \funSeVuota{\fn@ly}{\fun@mancaxy{#1}{y etichetta}}{}}
+\newcommand{\fun@mancaxy}[2]{%
+  \PackageError{grafico}{#1, voce \fun@k: c'e' l'etichetta ma manca #2}{%
+    Un'etichetta si scrive nel punto (x etichetta, y etichetta):
+    scrivi tutti e due i campi, oppure togli l'etichetta.}}
+
+% --- opzioni delle tacche (griglia, numeri, tacche) ---
+% \fun@listatacche{min}{max}{passo}\macro: in \macro, fra graffe, le
+% tacche sui multipli del passo da min compreso a max escluso (a max c'è
+% la freccia), oppure \empty se non ce n'è nessuna. I multipli, e non
+% min + passo, perché griglia e numeri passino per lo 0 anche con min
+% dispari e passo 2
+\newcommand{\fun@listatacche}[4]{%
+  \edef\fun@ta{\funCalcola{ceil((#1)/(#3)-0.001)*(#3)}}%
+  \edef\fun@tb{\funCalcola{\fun@ta+(#3)}}%
+  \edef\fun@tp{\funCalcola{(ceil((#2)/(#3)-0.001)-1)*(#3)}}%
+  \ifnum\funCalcola{\fun@ta>\fun@tp}>0 \def#4{\noexpand\empty}%
+  \else\ifnum\funCalcola{\fun@tb>\fun@tp}>0 \edef#4{{\fun@ta}}%
+  \else \edef#4{{\fun@ta,\fun@tb,...,\fun@tp}}%
+  \fi\fi}
+% \fun@listabordi{min}{max}{passo}\macro: dove la griglia chiude la
+% finestra: a max sempre, a min se min non è già una tacca
+\newcommand{\fun@listabordi}[4]{%
+  \ifnum\funCalcola{abs((#1)/(#3)-round((#1)/(#3)))>0.001}>0
+    \edef#4{{#1,#2}}\else\edef#4{{#2}}\fi}
+\newcommand{\fun@opzionitacche}{%
+  \pgfmathtruncatemacro\fun@servono{\funget{griglia}+\funget{numeri}+\funget{tacche}}%
+  \ifnum\fun@servono>0
+    \fun@listatacche{\fun@xmin}{\fun@xmax}{\funget{passo x}}\fun@xt
+    \fun@listatacche{\fun@ymin}{\fun@ymax}{\funget{passo y}}\fun@yt
+    \edef\fun@tmp{\noexpand\pgfplotsset{fun@tacche/.style={%
+      xtick=\fun@xt, ytick=\fun@yt}}}\fun@tmp
+    \ifnum\funget{griglia}>0
+      % righe della griglia anche sui bordi, senza tacca e senza numero
+      \fun@listabordi{\fun@xmin}{\fun@xmax}{\funget{passo x}}\fun@xe
+      \fun@listabordi{\fun@ymin}{\fun@ymax}{\funget{passo y}}\fun@ye
+      \edef\fun@tmp{\noexpand\pgfplotsset{fun@tacche/.append style={%
+        grid=major, grid style={fun griglia},
+        extra x ticks=\fun@xe, extra y ticks=\fun@ye,
+        extra x tick labels={}, extra y tick labels={},
+        extra tick style={major tick length=0pt}}}}\fun@tmp
+    \fi
+    \ifnum\funget{numeri}=0
+      \pgfplotsset{fun@tacche/.append style={xticklabels={}, yticklabels={}}}%
+    \fi
+    \ifnum\funget{tacche}=0
+      \pgfplotsset{fun@tacche/.append style={major tick length=0pt}}%
+    \fi
+  \else
+    \pgfplotsset{fun@tacche/.style={xtick=\empty, ytick=\empty}}%
+  \fi
+}
+
+% --- il grafico ---
+\newcommand{\fun@disegna}{%
+  \edef\fun@xmin{\funget{x min}}\edef\fun@xmax{\funget{x max}}%
+  \edef\fun@ymin{\funget{y min}}\edef\fun@ymax{\funget{y max}}%
+  % dove passano gli assi: nello 0, o sul bordo se la finestra non lo
+  % contiene (come li disegna pgfplots con axis lines=center)
+  \edef\fun@ox{\funCalcola{max(\fun@xmin,min(\fun@xmax,0))}}%
+  \edef\fun@oy{\funCalcola{max(\fun@ymin,min(\fun@ymax,0))}}%
+  % lo «zero» si scrive solo se l'origine è nella finestra
+  \edef\fun@conzero{\funCalcola{\fun@xmin<=0 && \fun@xmax>=0
+    && \fun@ymin<=0 && \fun@ymax>=0}}%
+  % le curve tengono i campioni fino a un'altezza di finestra sopra e
+  % sotto; oltre, la curva si interrompe: così un asintoto verticale non
+  % diventa un tratto che unisce i due rami
+  \edef\fun@rmin{\funCalcola{2*(\fun@ymin)-(\fun@ymax)}}%
+  \edef\fun@rmax{\funCalcola{2*(\fun@ymax)-(\fun@ymin)}}%
+  % dimensioni del riquadro degli assi: la misura chiesta meno i 45pt che
+  % pgfplots tiene per le scritte; con proporzioni=1 la più piccola
+  % comanda e l'altra segue le proporzioni della finestra
+  \pgfmathsetmacro\fun@lar{\funget{larghezza}-45pt}%
+  \pgfmathsetmacro\fun@alt{\funget{altezza}-45pt}%
+  \ifdim\fun@lar pt>0pt\else
+    \PackageError{grafico}{larghezza troppo piccola: deve superare 45pt
+      (circa 1.6cm), lo spazio delle scritte}{}\fi
+  \ifdim\fun@alt pt>0pt\else
+    \PackageError{grafico}{altezza troppo piccola: deve superare 45pt
+      (circa 1.6cm), lo spazio delle scritte}{}\fi
+  \ifnum\funget{proporzioni}>0
+    \edef\fun@aspetto{\funCalcola{(\fun@xmax-(\fun@xmin))/(\fun@ymax-(\fun@ymin))}}%
+    \ifdim\fun@lar pt>\fun@alt pt\relax
+      \pgfmathsetmacro\fun@lar{\fun@aspetto*\fun@alt}%
+    \else
+      \pgfmathsetmacro\fun@alt{\fun@lar/\fun@aspetto}%
+    \fi
+  \fi
+  \fun@opzionitacche
+  % punti: coordinate e colori (servono a proiezioni ed etichette)
+  \funScorri{\FunPuntiData}{5}{Punti}{\fn@pn/\fn@px/\fn@py/\fn@pc/\fn@pm}{%
+    \funDefault{\fn@pm}{1}%
+    \ifnum\fn@pm>0
+      \funDefault{\fn@pc}{black}%
+      \expandafter\xdef\csname fun@x@\the\fun@num @\fn@pn\endcsname{\fn@px}%
+      \expandafter\xdef\csname fun@y@\the\fun@num @\fn@pn\endcsname{\fn@py}%
+      \expandafter\xdef\csname fun@c@\the\fun@num @\fn@pn\endcsname{\fn@pc}%
+    \fi}%
+  \begin{axis}[
+      name=grafico\the\fun@num,
+      at={(\FunSpostamento cm,0cm)},   % senza unità pgfplots lo ignora
+      xmin=\fun@xmin, xmax=\fun@xmax,
+      ymin=\fun@ymin, ymax=\fun@ymax,
+      axis lines=center,
+      xlabel={\funget{etichetta x}},
+      ylabel={\funget{etichetta y}},
+      fun@tacche,
+      scale only axis,
+      height=\fun@alt pt,
+      width=\fun@lar pt,
+      enlarge x limits=false,
+      enlarge y limits=false,
+      samples=\funget{campioni},
+      domain=\fun@xmin:\fun@xmax,
+      % ogni curva si ritaglia alla finestra da sola: le scritte no
+      clip mode=individual,
+      % sin, cos, tan in radianti; un campione infinito o troppo fuori
+      % dalla finestra spezza la curva
+      trig format plots=rad,
+      unbounded coords=jump,
+      restrict y to domain=\fun@rmin:\fun@rmax,
+      legend pos=\funget{legenda},
+      fun assi]
+    % pgfplots disegna tutto alla fine dell'asse: ogni comando è
+    % costruito con \edef, così porta con sé i valori e non i nomi
+    \pgfkeysgetvalue{/fun/zero}\fun@z
+    \ifnum\fun@conzero>0
+      \ifnum\funget{numeri}>0 \def\fun@zs{fun zero numeri}\else\def\fun@zs{fun zero}\fi
+      \funSeVuota{\fun@z}{}{%
+        \edef\fun@cmd{\noexpand\node[\fun@zs] at (axis cs:0,0) {\fun@u\fun@z};}\fun@cmd}%
+    \fi
+    % funzioni
+    \funScorri{\FunFunzioniData}{10}{Funzioni}%
+      {\fn@f/\fn@da/\fn@a/\fn@c/\fn@s/\fn@l/\fn@lx/\fn@ly/\fn@g/\fn@m}{%
+      \funDefault{\fn@m}{1}%
+      \ifnum\fn@m>0
+        \funSeContiene{\fn@f}{deg(}{%
+          \PackageError{grafico}{Funzioni, voce \fun@k: qui sin, cos e tan
+            lavorano in radianti, si scrive sin(x) e non sin(deg(x))}{}}{}%
+        \funDefault{\fn@da}{\fun@xmin}\funDefault{\fn@a}{\fun@xmax}%
+        \funDefault{\fn@c}{black}%
+        \edef\fun@cmd{\noexpand\addplot[fun funzione, \fn@c, \fun@u\fn@s,
+          domain=\fn@da:\fn@a\funSeVuota{\fn@g}{, forget plot}{}] {\fun@u\fn@f};}%
+        \fun@cmd
+        \funSeVuota{\fn@g}{}{%
+          \edef\fun@cmd{\noexpand\addlegendentry{\fun@u\fn@g}}\fun@cmd}%
+        \funSeVuota{\fn@l}{}{%
+          \fun@servexy{Funzioni}%
+          \edef\fun@cmd{\noexpand\node[fun etichetta, \fn@c]
+            at (axis cs:\fn@lx,\fn@ly) {\fun@u\fn@l};}\fun@cmd}%
+      \fi}%
+    % rette verticali
+    \funScorri{\FunVerticaliData}{8}{Verticali}%
+      {\fn@vx/\fn@c/\fn@s/\fn@l/\fn@lx/\fn@ly/\fn@g/\fn@m}{%
+      \funDefault{\fn@m}{1}%
+      \ifnum\fn@m>0
+        \funDefault{\fn@c}{black}%
+        \edef\fun@cmd{\noexpand\addplot[fun verticale, \fn@c, \fun@u\fn@s
+          \funSeVuota{\fn@g}{, forget plot}{}]
+          coordinates {(\fn@vx, \fun@ymin) (\fn@vx, \fun@ymax)};}%
+        \fun@cmd
+        \funSeVuota{\fn@g}{}{%
+          \edef\fun@cmd{\noexpand\addlegendentry{\fun@u\fn@g}}\fun@cmd}%
+        \funSeVuota{\fn@l}{}{%
+          \fun@servexy{Verticali}%
+          \edef\fun@cmd{\noexpand\node[fun etichetta, \fn@c]
+            at (axis cs:\fn@lx,\fn@ly) {\fun@u\fn@l};}\fun@cmd}%
+      \fi}%
+    % proiezioni (sotto i punti): fino all'asse, dove è disegnato; il
+    % colore del punto viene prima dello stile, che così lo può cambiare
+    \funScorri{\FunProiezioniData}{4}{Proiezioni}{\fn@q/\fn@as/\fn@s/\fn@m}{%
+      \funDefault{\fn@m}{1}%
+      \ifnum\fn@m>0
+        \fun@puntoesiste{\fn@q}{Proiezioni}%
+        \funDefault{\fn@as}{xy}%
+        \edef\fn@x{\fun@px\fn@q}\edef\fn@y{\fun@py\fn@q}\edef\fn@c{\fun@pc\fn@q}%
+        \def\fn@vert{0}\def\fn@oriz{0}%
+        \ifx\fn@as\fun@asx \def\fn@vert{1}\else
+        \ifx\fn@as\fun@asy \def\fn@oriz{1}\else
+        \ifx\fn@as\fun@asxy \def\fn@vert{1}\def\fn@oriz{1}\else
+          \PackageError{grafico}{Proiezioni: asse '\fn@as' non valido
+            (si scrive x, y oppure xy)}{}%
+        \fi\fi\fi
+        \ifnum\fn@vert>0
+          \edef\fun@cmd{\noexpand\addplot[\fn@c, fun proiezione, \fun@u\fn@s, forget plot]
+            coordinates {(\fn@x,\fun@oy) (\fn@x,\fn@y)};}\fun@cmd
+        \fi
+        \ifnum\fn@oriz>0
+          \edef\fun@cmd{\noexpand\addplot[\fn@c, fun proiezione, \fun@u\fn@s, forget plot]
+            coordinates {(\fun@ox,\fn@y) (\fn@x,\fn@y)};}\fun@cmd
+        \fi
+      \fi}%
+    % punti: la marca piena sta nel comando, lo stile la può cambiare
+    \funScorri{\FunPuntiData}{5}{Punti}{\fn@pn/\fn@px/\fn@py/\fn@pc/\fn@pm}{%
+      \funDefault{\fn@pm}{1}%
+      \ifnum\fn@pm>0
+        \funDefault{\fn@pc}{black}%
+        \edef\fun@cmd{\noexpand\addplot[only marks, mark=*, fun punto, \fn@pc, forget plot]
+          coordinates {(\fn@px,\fn@py)};}\fun@cmd
+      \fi}%
+    % etichette dei punti: x e y sugli assi, dove sono disegnati
+    \funScorri{\FunEtichetteData}{5}{Etichette}{\fn@q/\fn@d/\fn@l/\fn@pos/\fn@m}{%
+      \funDefault{\fn@m}{1}%
+      \ifnum\fn@m>0
+        \fun@puntoesiste{\fn@q}{Etichette}%
+        \funDefault{\fn@d}{p}%
+        \edef\fn@x{\fun@px\fn@q}\edef\fn@y{\fun@py\fn@q}\edef\fn@c{\fun@pc\fn@q}%
+        \ifx\fn@d\fun@asp
+          \edef\fun@cmd{\noexpand\node[\fn@c, fun etichetta p, \fun@u\fn@pos]
+            at (axis cs:\fn@x,\fn@y) {\fun@u\fn@l};}\fun@cmd
+        \else\ifx\fn@d\fun@asx
+          \edef\fun@cmd{\noexpand\node[\fn@c, fun etichetta x, \fun@u\fn@pos]
+            at (axis cs:\fn@x,\fun@oy) {\fun@u\fn@l};}\fun@cmd
+        \else\ifx\fn@d\fun@asy
+          \edef\fun@cmd{\noexpand\node[\fn@c, fun etichetta y, \fun@u\fn@pos]
+            at (axis cs:\fun@ox,\fn@y) {\fun@u\fn@l};}\fun@cmd
+        \else
+          \PackageError{grafico}{Etichette: posto '\fn@d' non valido
+            (si scrive p, x oppure y)}{}%
+        \fi\fi\fi
+      \fi}%
+  \end{axis}
+}
+
+% --- il grafico: {spostamento x} ---
+\newenvironment{Grafico}[1]{%
+  \def\FunSpostamento{#1}%
+}{%
+  \global\advance\fun@num by 1
+  \fun@disegna
+}
+\makeatother
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  \begin{Grafico}{0}
+    \FunSet{x min=-4, x max=6, y min=-4, y max=6,
+      larghezza=8cm, altezza=8cm,
+      griglia=0, numeri=0, tacche=0}
+
+    % espressione/da/a/colore/stile/etichetta/x et./y et./legenda/mostra
+    % (legenda, es. {$y=-\frac{1}{3}x-1$}; la posizione è la chiave «legenda»)
+    \SetFunzioni{
+      {-(1/3)*x - 1}///red//$r$/5.8/-2.7//1,
+      {(2/3)*x + 2}///blue//$s$/1/3//1
+    }
+    % x/colore/stile/etichetta/x et./y et./legenda/mostra
+    \SetVerticali{
+      4.5/black//$t$/4/5.5//1
+    }
+    % nome/x/y/colore/mostra
+    \SetPunti{
+      P/4.5/5/blue/1,
+      Q/0/2/blue/1
+    }
+    % punto/asse (x, y, xy)/stile/mostra
+    \SetProiezioni{
+      P/x//0,
+      P/y//1,
+      Q/x//0,
+      Q/y//0
+    }
+    % punto/dove (p = sul punto, x = asse x, y = asse y)/testo/posizione/mostra
+    \SetEtichette{
+      P/p/{$(\frac{9}{2},5)$}/left/0,
+      P/x/$\frac{9}{2}$/below/0,
+      P/y/$5$/above left/1,
+      Q/p/{$(0,2)$}/below left/0,
+      Q/x/$0$/below/0,
+      Q/y/$2$/above left/1
+    }
+  \end{Grafico}
+
+\end{tikzpicture}
+\end{document}

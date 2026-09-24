@@ -1,0 +1,20 @@
+[Unit]
+Description=pantedu — timer giornaliero per le cancellazioni art. 17 dovute
+
+[Timer]
+# Ogni giorno alle 02:10, prima della copia cifrata della notte
+# (pantedu-backup-encrypted, 02:30 più fino a 10 minuti a caso) e del
+# salvataggio delle chiavi dei docenti (pantedu-backup-chiavi, 03:00): le
+# copie di quella notte non contengono più l'account la cui cancellazione era
+# dovuta.
+#
+# Fino al 24/9/2026 era alle 02:40, cioè DOPO la copia cifrata, mentre questo
+# commento diceva «prima del backup delle 03:00»: la copia della notte
+# dell'esecuzione conteneva ancora l'account e la sua chiave.
+OnCalendar=*-*-* 02:10:00
+Persistent=true
+RandomizedDelaySec=5min
+Unit=pantedu-gdpr-deletions.service
+
+[Install]
+WantedBy=timers.target

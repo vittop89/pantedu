@@ -1,0 +1,101 @@
+# Phase 25.R.21 — Auto-deploy service triggered by pantedu-deploy.path.
+#
+# Eseguito da systemd quando /var/lib/pantedu-deploy/trigger viene
+# modificato (notifica inotify dalla Path unit gemella).
+#
+# Replay protection: legge il delivery UUID dal trigger e lo confronta
+# con /var/lib/pantedu-deploy/last-uuid. Se identico, skip (idempotenza
+# anti-replay). Garantito dal pre-exec script.
+#
+# Type=oneshot: il service è terminato quando lo script ritorna 0.
+# Path unit può triggerare nuovamente solo dopo che service è inactive.
+#
+# 2026-09-08 — passato al rilascio a container.
+#
+# `ExecStart` non è più `pantedu-deploy.sh` (git reset --hard sulla directory
+# servita) ma `pantedu-deploy-container.sh`, che costruisce a fianco, controlla
+# e scambia. La differenza che conta: fino allo scambio la produzione non si
+# accorge di niente, mentre prima fra il reset e la fine delle migrazioni
+# c'erano decine di secondi di codice nuovo su schema vecchio.
+#
+# Il resto della catena non cambia: stesso marcatore, stesso `.path`, stessa
+# protezione contro i doppioni, stesso avviso quando fallisce. Per tornare
+# indietro basta rimettere `pantedu-deploy.sh` qui e il vhost di prima.
+#
+# Permission boundary: PHP-FPM (www-data) NON ha accesso a questo service.
+# Solo il watcher Path unit (kernel inotify) può triggerarlo.
+
+[Unit]
+Description=Pantedu auto-deploy (triggered by webhook flag file)
+Documentation=https://github.com/vittop89/pantedu/blob/master_vps/tools/webhook/README.md
+After=network-online.target
+Wants=network-online.target
+
+# 2026-09-08 — se questo rilascio fallisce, qualcuno lo deve sapere.
+# Prima il guasto restava nel giornale e nello stato dell'unita', che nessuno
+# legge: la verifica di quel giorno ha trovato due unita' in `failed` da ore
+# senza che nessuno se ne fosse accorto.
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+# Hardening minimo. Lo script di deploy fa git operations + reload php-fpm +
+# rsync, serve quasi tutto. ProtectSystem=full sarebbe troppo restrittivo
+# (deploy modifica /var/www/pantedu). Lascio i default ma con timeout
+# e logging.
+# 900 e non 300: quando l'immagine non arriva dal registro viene costruita
+# qui, e `npm ci` + `vite build` + `composer install` su due CPU non stanno in
+# cinque minuti. Un rilascio ucciso a metà dal timeout lascerebbe un container
+# nuovo avviato e nessuno a scambiarlo.
+TimeoutStartSec=900
+StandardOutput=append:/var/log/pantedu-deploy.log
+StandardError=append:/var/log/pantedu-deploy.log
+
+# Pre-exec: replay protection via delivery UUID.
+# Script separato per evitare hell di escaping bash/systemd inline.
+# Installato da install_auto_deploy.sh in /usr/local/bin/.
+ExecStartPre=/usr/local/bin/pantedu-deploy-trigger.sh
+
+ExecStart=/usr/local/bin/pantedu-deploy-container.sh
+
+# SuccessExitStatus 3: ExecStartPre esce 3 quando riconosce un replay, e
+# quello non e' un guasto.
+#
+# 2026-09-08 — qui c'era `SuccessExitStatus=1`, e l'1 e' il codice con cui
+# `deploy.sh` esce quando il rilascio E' fallito (istantanea del database non
+# riuscita, migrazioni in errore, il sito che non risponde). Cioe': ogni
+# rilascio andato male veniva registrato come riuscito, l'unita' non finiva
+# mai in `failed`, e nessun `OnFailure=` avrebbe potuto scattare. Il replay ha
+# adesso un codice suo (3) e l'1 torna a voler dire guasto.
+SuccessExitStatus=3
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Questa unità gira come **root**, quindi il contenimento conta più che
+# altrove — e proprio per questo va scelto una direttiva alla volta,
+# guardando cosa il programma fa davvero. Un elenco copiato da una guida si
+# scopre sbagliato di notte, quando il lavoro fallisce e il sito resta
+# indietro.
+#
+# Qui si può poco, e le due esclusioni sono obbligate:
+#
+# `NoNewPrivileges` **no**: lo script usa `sudo` cinque volte per fare le
+# operazioni git come `pantedu` e le prove come `www-data` — cioè per
+# *scendere* di privilegi, che è il motivo per cui è scritto così. `sudo` è
+# setuid, e con quella direttiva fallisce.
+#
+# `ProtectSystem=full` **no**: renderebbe `/usr` in sola lettura, e questo
+# script si reinstalla in `/usr/local/bin` a ogni giro in cui è cambiato.
+#
+# Restano le direttive che non c'entrano con quello che fa: non carica moduli
+# del kernel, non cambia l'orologio, non ha bisogno del tempo reale.
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

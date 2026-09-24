@@ -1,0 +1,73 @@
+{
+    "aggiornato": "2026-09-23",
+    "perche_esiste": "wiki/decisions/ADR-049-confini-degli-strati.md scrive la regola: il SQL sta nei repository e nei servizi con PDO iniettato, `php://input` si legge solo con l'helper di ADR-034, l'ambiente si legge solo in app/Config. Fino al 23/9/2026 nessun controllo la sorvegliava (revisione architetturale del 23/9/2026, A-10, A-34): questi tre elenchi fissano lo stato di quel giorno, e tests/Unit/Architettura/ConfiniDegliStratiTest.php li ricalcola a ogni corsa.",
+    "come_si_aggiorna": "Il cricchetto scatta in un verso solo: un file nuovo in un elenco (o un elenco più lungo di quanto c'è scritto qui) fa fallire la prova col nome del file e la regola violata. Un file tolto dall'elenco perché corretto fa fallire l'altro verso, per ricordare di toglierlo da qui: altrimenti un file corretto lascerebbe spazio a uno nuovo con lo stesso peso, e il cricchetto smetterebbe di stringere. Non si aggiungono voci per far passare un ramo che introduce il difetto: quello si corregge.",
+    "controller_con_sql": {
+        "criterio": "File PHP sotto app/Controllers/ (ricorsivo) il cui codice, tolti i commenti e i docblock col tokenizer PHP (token_get_all, si scartano T_COMMENT e T_DOC_COMMENT), contiene '->prepare(', '->query(', '->exec(' oppure 'Database::connection()'. Il tokenizer evita i falsi positivi di un grep testuale: un commento che nomina 'Database::connection()' (misurato in AdminMigrateController.php il 23/9/2026) non conta.",
+        "quanti": 45,
+        "elenco": [
+            "app/Controllers/AccountController.php",
+            "app/Controllers/Admin/AdminAdozioniController.php",
+            "app/Controllers/Admin/AdminBackupController.php",
+            "app/Controllers/Admin/AdminCatalogoController.php",
+            "app/Controllers/Admin/AdminCryptoStatusController.php",
+            "app/Controllers/Admin/AdminGdprController.php",
+            "app/Controllers/Admin/AdminInstitutesController.php",
+            "app/Controllers/Admin/AdminLogsController.php",
+            "app/Controllers/Admin/AdminSectionsController.php",
+            "app/Controllers/Admin/AdminSidebarConfigController.php",
+            "app/Controllers/Admin/AdminSystemController.php",
+            "app/Controllers/Admin/AdminTakedownController.php",
+            "app/Controllers/Admin/AdminTosLogController.php",
+            "app/Controllers/Admin/VerificaFilesAdminController.php",
+            "app/Controllers/Admin/WafAdminController.php",
+            "app/Controllers/AuthController.php",
+            "app/Controllers/ContentExportController.php",
+            "app/Controllers/ContentStudyController.php",
+            "app/Controllers/CurriculumController.php",
+            "app/Controllers/DpoContactController.php",
+            "app/Controllers/ExerciseStudyController.php",
+            "app/Controllers/HealthController.php",
+            "app/Controllers/ImportBundleController.php",
+            "app/Controllers/IstitutoController.php",
+            "app/Controllers/MapsController.php",
+            "app/Controllers/MetricsController.php",
+            "app/Controllers/Risdoc/TeacherTexCommonController.php",
+            "app/Controllers/Risdoc/TemplateController.php",
+            "app/Controllers/Risdoc/TemplateViewController.php",
+            "app/Controllers/SelfServiceController.php",
+            "app/Controllers/SidebarConfigController.php",
+            "app/Controllers/SidepageController.php",
+            "app/Controllers/StudyHeaderController.php",
+            "app/Controllers/TeacherCategoryLabelController.php",
+            "app/Controllers/TeacherContentController.php",
+            "app/Controllers/TeacherController.php",
+            "app/Controllers/TeacherSyncCleanupController.php",
+            "app/Controllers/TeacherUncategorizedController.php",
+            "app/Controllers/TeacherVerificaFilesController.php",
+            "app/Controllers/TotpController.php",
+            "app/Controllers/UserProfileController.php",
+            "app/Controllers/UsersAdminController.php",
+            "app/Controllers/VerificaBatchController.php",
+            "app/Controllers/VerificaSharedHelpersTrait.php",
+            "app/Controllers/VerificaSyncController.php"
+        ]
+    },
+    "php_input_fuori_helper": {
+        "criterio": "File PHP sotto app/Controllers/ (ricorsivo) il cui codice, tolti i commenti col tokenizer, chiama file_get_contents('php://input') o file_get_contents(\"php://input\") direttamente invece di passare da Request::rawBody()/json()/body() (ADR-034). app/Core/Request.php, che ospita l'unica lettura ammessa, non è sotto app/Controllers e non entra nella scansione. Dal 23/9/2026 (A-52) l'elenco è vuoto: ogni lettura del corpo passa da Request (json(), jsonObbligatorio(), body(), rawBody()), e un file nuovo che legge php://input fa fallire la prova.",
+        "quanti": 0,
+        "elenco": []
+    },
+    "ambiente_fuori_da_config": {
+        "criterio": "File PHP sotto app/ e views/ (ricorsivo, esclusa la cartella app/Config/) il cui codice, tolti i commenti e i docblock col tokenizer, contiene '$_ENV[' o 'getenv('. $_SERVER da solo non è cercato: nel repository ogni uso di $_SERVER come ripiego di una variabile d'ambiente accompagna sempre $_ENV o getenv sulla stessa chiave (verificato il 23/9/2026), mentre un $_SERVER isolato è sempre dato della richiesta HTTP (HTTPS, SERVER_PORT, ...), non configurazione. app/Core/Config.php (il caricatore, deve risolvere PANTEDU_DATA_PATH prima che app/Config/ sia caricato, e dal 23/9/2026 ospita le due letture comuni che i file di app/Config chiamano, booleanoDallAmbiente e testoDallAmbiente) e app/Core/Database.php (credenziali di manutenzione e del migratore, tenute fuori dalla configurazione in memoria) sono l'eccezione scritta in ADR-049 e non entrano nella scansione.",
+        "quanti": 6,
+        "elenco": [
+            "app/Controllers/Admin/WafAdminController.php",
+            "app/Services/Crypto/ChiaveMadre.php",
+            "app/Services/InfrastructureMonitorService.php",
+            "app/Services/Waf/EdgeContext.php",
+            "app/Services/Waf/WafCrowdSecBouncerService.php",
+            "app/Support/Storage/StorageFactory.php"
+        ]
+    }
+}

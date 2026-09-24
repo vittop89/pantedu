@@ -1,0 +1,48 @@
+[Unit]
+Description=pantedu — daily encrypted backup (DB + storage + config) to remote
+After=network-online.target mysql.service
+Wants=network-online.target
+
+# 2026-09-08 — avvisa se fallisce: una copia di sicurezza che smette in silenzio e' il modo classico di
+# scoprire troppo tardi di non averne.
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=root
+EnvironmentFile=-/etc/pantedu/backup.env
+ExecStart=/usr/local/bin/pantedu-backup-encrypted.sh
+TimeoutStartSec=3600
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Questa unità gira come **root**, quindi il contenimento conta più che
+# altrove — e proprio per questo va scelto una direttiva alla volta,
+# guardando cosa il programma fa davvero. Un elenco copiato da una guida si
+# scopre sbagliato di notte, quando il lavoro fallisce e il sito resta
+# indietro.
+#
+# Qui si può quasi tutto: lo script non usa `sudo` (verificato: zero
+# occorrenze), legge `/etc/pantedu/backup.env`, `/root/.my.cnf` e la chiave
+# della storage box, e **scrive solo sotto `/var`**.
+#
+# `ProtectSystem=full` rende `/usr`, `/boot` ed `/etc` in sola lettura: le
+# letture restano, le scritture sono altrove.
+#
+# `ProtectHome` invece **no**: `/root/.config/rclone/rclone.conf` è dove sta
+# la chiave B2, e senza quella la copia offsite non parte. Meglio una
+# direttiva in meno che un backup che smette di uscire dalla macchina.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,731 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\pagestyle{empty}
+
+% ==================================================
+% GRAFICI DI FUNZIONE IN PANNELLI AFFIANCATI (TikZ puro)
+% ==================================================
+% Una figura = più PANNELLI cartesiani affiancati. Ogni pannello ha la sua
+% finestra, la sua scala, griglia, assi, titolo e gli elementi elencati con
+% i comandi \Set...; il pannello si disegna da solo alla chiusura.
+%
+%   \begin{Pannello}{spostamento x}{titolo}
+%     \GrafSet{...}  \tikzset{graf ...}   (facoltativi: valgono solo qui)
+%     \SetCurve{...} \SetPunti{...} \SetTacche{...} ...
+%   \end{Pannello}
+%
+% spostamento x: di quanto (in cm) il pannello è spostato a destra.
+% Tutto ciò che si imposta FUORI dai pannelli vale per tutti i pannelli;
+% DENTRO un pannello vale solo per quel pannello.
+%
+% Liste: campi separati da /, voci separate da virgola, in numero libero.
+% Un campo che contiene una virgola o una / va tra graffe: {red, dashed}.
+% Gli spazi attorno a un campo non contano: «3 / 5 / blue» = «3/5/blue».
+% Un campo lasciato vuoto prende il valore predefinito (dove indicato).
+% Ogni voce deve avere TUTTI i campi (anche vuoti): se ne manca uno il
+% disegno si ferma con un errore che dice quale lista e quale voce.
+% L'ultimo campo è sempre «mostra»: 1 = disegna, 0 = nascondi, vuoto = 1
+% (un altro valore ferma il disegno con un errore).
+%
+% Etichette, titoli e didascalie vanno a capo con \\ (righe centrate; per
+% allinearle a sinistra: align=left nelle opzioni etichetta o nello stile).
+% Il testo di un'etichetta ha sempre il colore della voce; gli stili
+% comuni (graf etichetta curva, punto, tacca) e le opzioni etichetta
+% possono darle un fondo (graf sfondo, fill=...) o un bordo (draw).
+%
+% --- CURVE y = f(x) ---
+% \SetCurve{formula/da/a/colore/stile/etichetta/x etichetta/y etichetta/
+%           opzioni etichetta/estremi/taglio sx/taglio dx/mostra, ...}
+%   formula   in \x, es. {\x*\x-2}, {sin(deg(\x))}  (tra graffe se ha virgole)
+%   da, a     dominio (vuoti = x min, x max del pannello)
+%   colore    della curva e dell'etichetta (vuoto = black)
+%   stile     opzioni in più della linea, es. {thick, dashed}
+%   etichetta testo scritto nel punto (x etichetta, y etichetta); vuota = niente
+%   opzioni etichetta  es. graf sfondo (fondo bianco), {above left}
+%   estremi   1 = tratteggio a puntini su tutto il dominio (graf estremi)
+%   taglio sx, taglio dx  quanto accorciare la parte continua (vuoti = 0)
+%
+% --- CIRCONFERENZE ---
+% \SetCirconferenze{x centro/y centro/raggio/colore/stile/etichetta/
+%                   x etichetta/y etichetta/opzioni etichetta/mostra, ...}
+%
+% --- RETTE VERTICALI x = c ---
+% \SetVerticali{x/y da/y a/colore/stile/etichetta/x etichetta/y etichetta/
+%               opzioni etichetta/mostra, ...}      (y da, y a vuoti = y min, y max)
+%
+% --- PUNTI ---
+% \SetPunti{x/y/colore/riempimento/dimensione/etichetta/posizione/
+%           opzioni etichetta/proiezioni/mostra, ...}
+%   riempimento  campo vuoto o la parola pieno = pallino pieno del colore;
+%                la parola vuoto = pallino bianco con il bordo del colore;
+%                un altro colore = bordo del colore e fondo di quel colore
+%                (es. yellow)
+%   dimensione   diametro, es. 0.3cm; un numero senza unità vale in cm
+%                (vuoto = dimensione punto)
+%   posizione    above, below, left, right, above left, above right,
+%                below left, below right: l'etichetta parte dal BORDO del
+%                pallino e non lo copre (vuota = above right). Vale anche
+%                con una distanza (above=4pt) o con altre opzioni
+%                ({above, xshift=2pt}); se non c'è nessuna delle otto
+%                parole (es. anchor=west) l'etichetta parte dal centro.
+%   proiezioni   x = tratteggio verso l'asse x, y = verso l'asse y,
+%                xy = tutte e due, vuoto = nessuna
+%
+% --- TACCHE SUGLI ASSI (con numero o testo) ---
+% \SetTacche{asse/valore/etichetta/colore/posizione/opzioni etichetta/mostra, ...}
+%   asse x o y; posizione vuota = below (asse x), left (asse y).
+%   Dove c'è una tacca il numerino della griglia non si scrive (vedi
+%   «numeri sotto tacche»).
+%
+% --- CHIAVI (\GrafSet{chiave=valore, ...}) ---
+% x min, x max, y min, y max   finestra, anche con estremi decimali:
+%                              griglia e numerini stanno sugli interi e la
+%                              griglia si chiude sul bordo della finestra.
+%                              Se la finestra non contiene lo 0, gli assi
+%                              si allungano fino a incontrarsi nell'origine
+%                              (la griglia resta sulla finestra).
+% scala x, scala y             cm per unità
+% griglia (1/0), numeri (1/0 numerini della griglia),
+% numeri sotto tacche (1 = scrivili anche dove c'è una tacca)
+% margine assi                 quanto gli assi escono dalla griglia
+% ritaglio (1/0)               curve, circonferenze e verticali tagliate al
+%                              riquadro del pannello
+% margine ritaglio             quanto il riquadro esce dalla griglia
+% etichetta x, etichetta y, zero (testo nell'origine; vuoto = niente)
+% titolo dx, titolo dy         spostamento del titolo (unità del pannello)
+%                              dal centro della finestra, sopra y max.
+%                              Se il titolo arriva sull'etichetta dell'asse
+%                              y si sposta di lato; se ha più righe non
+%                              scende sulla griglia.
+% titolo evita y (1/0)         0 = il titolo resta dove dicono dx e dy
+% didascalia, didascalia dx, didascalia dy, didascalia allinea
+%                              didascalia dy = distanza fra y min e il
+%                              centro delle prime due righe (della riga, se
+%                              è una): dalla terza riga in giù le righe
+%                              scendono e restano sotto la fine dell'asse y.
+%                              Con una o due righe la didascalia resta dove
+%                              dice didascalia dy (solo, non sale sulla
+%                              griglia): se la fine dell'asse y tocca la
+%                              prima riga, si aumenta didascalia dy.
+% distanza minima              spazio minimo lasciato fra il titolo e
+%                              l'etichetta y, e fra didascalia, griglia e
+%                              asse y (una lunghezza, es. 2pt)
+% separatore                   linea verticale a questa distanza dopo la fine
+%                              dell'asse x (vuoto = nessuna linea)
+% campioni, dimensione punto (senza unità vale in cm),
+% tacca (mezza lunghezza della tacca, con unità: 2.5pt)
+% etichetta dal bordo (1 = etichetta dei punti fuori dal pallino,
+%                      0 = dal centro, come il vecchio modello)
+%
+% --- STILI (\tikzset{graf .../.style={...}}) ---
+% graf asse, graf etichetta asse x, graf etichetta asse y, graf zero,
+% graf griglia, graf numeri, graf numero x, graf numero y, graf titolo,
+% graf didascalia, graf separatore, graf curva, graf estremi,
+% graf etichetta curva, graf circonferenza, graf verticale,
+% graf proiezione, graf punto, graf etichetta punto, graf tacca,
+% graf etichetta tacca, graf sfondo
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+\pgfkeys{
+  /graf/.is family, /graf,
+  % finestra e scala
+  x min/.initial=-3, x max/.initial=7,
+  y min/.initial=-4, y max/.initial=7,
+  scala x/.initial=0.45, scala y/.initial=0.45,
+  % griglia
+  griglia/.initial=1,
+  numeri/.initial=0,
+  numeri sotto tacche/.initial=0,
+  % assi
+  margine assi/.initial=0.5,
+  etichetta x/.initial={$x$},
+  etichetta y/.initial={$y$},
+  zero/.initial={$0$},
+  % ritaglio delle curve al riquadro del pannello
+  ritaglio/.initial=1,
+  margine ritaglio/.initial=0.5,
+  % titolo (rispetto al centro della finestra, sopra y max)
+  titolo dx/.initial=0,
+  titolo dy/.initial=1.0,
+  % 1 = se il titolo tocca l'etichetta dell'asse y si sposta di lato
+  titolo evita y/.initial=1,
+  % didascalia sotto il pannello (vuota = niente); \\ va a capo
+  didascalia/.initial={},
+  didascalia dx/.initial=0,
+  didascalia dy/.initial=1.3,
+  didascalia allinea/.initial=left,
+  % separatore verticale a destra (vuoto = nessuno)
+  separatore/.initial={},
+  % varie
+  campioni/.initial=120,
+  dimensione punto/.initial=0.18cm,
+  tacca/.initial=2.5pt,
+  etichetta dal bordo/.initial=1,
+  % spazio minimo fra il titolo e l'etichetta dell'asse y, e fra la
+  % didascalia e la fine dell'asse y
+  distanza minima/.initial=2pt,
+}
+\newcommand{\GrafSet}[1]{\pgfkeys{/graf/.cd,#1}}
+\newcommand{\grafget}[1]{\pgfkeysvalueof{/graf/#1}}
+
+% Stili grafici
+\tikzset{
+  graf asse/.style={->, thick},
+  graf etichetta asse x/.style={right},
+  graf etichetta asse y/.style={above},
+  graf zero/.style={below left},
+  graf griglia/.style={help lines, gray},
+  graf numeri/.style={font=\tiny, gray},
+  graf numero x/.style={below},
+  graf numero y/.style={left},
+  graf titolo/.style={font=\small},
+  graf didascalia/.style={},
+  graf separatore/.style={gray, line width=0.35pt},
+  graf curva/.style={thick},
+  graf estremi/.style={dotted},
+  graf etichetta curva/.style={},
+  graf circonferenza/.style={},
+  graf verticale/.style={},
+  graf proiezione/.style={dashed, thin},
+  graf punto/.style={},
+  graf etichetta punto/.style={},
+  graf tacca/.style={thick},
+  graf etichetta tacca/.style={},
+  % da usare nel campo «opzioni etichetta» di un'etichetta che cade su
+  % una linea (o in uno stile comune, per tutte): la linea si interrompe
+  % sotto il testo
+  graf sfondo/.style={fill=white, inner sep=1pt},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- dati (vuoti per default) ---
+\newcommand{\SetCurve}[1]{\def\GrafCurveData{#1}}
+\newcommand{\SetCirconferenze}[1]{\def\GrafCirconferenzeData{#1}}
+\newcommand{\SetVerticali}[1]{\def\GrafVerticaliData{#1}}
+\newcommand{\SetPunti}[1]{\def\GrafPuntiData{#1}}
+\newcommand{\SetTacche}[1]{\def\GrafTaccheData{#1}}
+\SetCurve{}
+\SetCirconferenze{}
+\SetVerticali{}
+\SetPunti{}
+\SetTacche{}
+
+\makeatletter
+% --- utilità ---
+% \grafSeVuota{\macro}{se vuota}{se piena}
+\newcommand{\grafSeVuota}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \grafDefault{\macro}{valore}: se \macro è vuota le assegna il valore
+\newcommand{\grafDefault}[2]{\grafSeVuota{#1}{\edef#1{#2}}{}}
+% \grafStile{nome}{\campo}: il contenuto del campo (anche più opzioni
+% separate da virgola) diventa lo stile TikZ «nome»
+\newcommand{\grafStile}[2]{\expandafter\graf@stile\expandafter{#2}{#1}}
+\def\graf@stile#1#2{\tikzset{#2/.style={#1}}}
+% conta i campi (separati da / fuori dalle graffe) della voce in #1
+\newcount\graf@n
+\def\graf@stop{\relax}
+\def\graf@stopm{\graf@stop}
+\newcommand{\grafContaCampi}[1]{\graf@n=0 \expandafter\graf@cc#1/\graf@stop/}
+\def\graf@cc#1/{\def\graf@t{#1}%
+  \ifx\graf@t\graf@stopm\else\advance\graf@n by 1 \expandafter\graf@cc\fi}
+% \grafTrim\macro: toglie gli spazi attorno al contenuto (e le graffe
+% che lo racchiudono tutto): «3 / 5 / blue» vale come «3/5/blue»
+\newcommand{\grafTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+% ripulisce ogni campo della voce; l'ultimo campo è «mostra»: vuoto vale 1,
+% altrimenti deve essere 1 o 0
+\def\graf@fine{\graf@fine}
+\def\graf@uno{1}
+\def\graf@zero{0}
+\def\graf@pulisci#1{\def\graf@lista{#1}\graf@pul}
+\def\graf@pul#1/{%
+  \ifx#1\graf@fine
+    \expandafter\graf@mostra\graf@ultimo
+  \else
+    \grafTrim#1\def\graf@ultimo{#1}%
+    \expandafter\graf@pul
+  \fi}
+\def\graf@mostra#1{%
+  \grafDefault{#1}{1}%
+  \ifx#1\graf@uno\else\ifx#1\graf@zero\else
+    \PackageError{grafici}{\graf@lista, voce \graf@k: il campo mostra vale
+      '#1' (si scrive 1 = disegna, 0 = nascondi, o si lascia vuoto)}{}%
+    \def#1{1}%
+  \fi\fi}
+% \grafScorri{\lista}{numero campi}{nome della lista}{\a/\b/...}{corpo}:
+% per ogni voce controlla il numero dei campi, ripulisce i campi, poi
+% esegue il corpo
+\newcommand{\grafScorri}[5]{%
+  \foreach \graf@voce [count=\graf@k] in #1 {%
+    \grafSeVuota{\graf@voce}{}{%
+      \grafContaCampi{\graf@voce}%
+      \ifnum\graf@n=#2\relax
+        \foreach #4 in \graf@voce {\graf@pulisci{#3}#4/\graf@fine/#5}%
+      \else
+        \PackageError{grafici}{#3, voce \graf@k: ha \the\graf@n\space campi
+          invece di #2}{Ogni voce della lista ha #2 campi separati da /,
+          anche vuoti. Un campo con virgole o / va tra graffe.}%
+      \fi}%
+  }%
+}
+% angolo del bordo del pallino da cui parte l'etichetta
+\@namedef{graf@ang@right}{0}
+\@namedef{graf@ang@above right}{45}
+\@namedef{graf@ang@above}{90}
+\@namedef{graf@ang@above left}{135}
+\@namedef{graf@ang@left}{180}
+\@namedef{graf@ang@below left}{225}
+\@namedef{graf@ang@below}{270}
+\@namedef{graf@ang@below right}{315}
+% \graf@trovaangolo\posizione: cerca fra le opzioni della posizione una
+% delle otto parole, anche con una distanza (above=4pt) o accanto ad altre
+% opzioni ({above, xshift=2pt}); se non ce n'è nessuna \graf@ang resta vuoto
+\def\graf@trovaangolo#1{%
+  \def\graf@ang{}%
+  \pgfutil@for\graf@it:=#1\do{%
+    \expandafter\graf@primaparte\graf@it=\graf@fine
+    \ifcsname graf@ang@\graf@dir\endcsname
+      \edef\graf@ang{\csname graf@ang@\graf@dir\endcsname}%
+    \fi}}
+\def\graf@primaparte#1=#2\graf@fine{\def\graf@dir{#1}\grafTrim\graf@dir}
+% --- nodi misurati: si costruiscono, si misurano, poi si posano ---
+% {\pgfpositionnodelater{\graf@presa}\node...;} costruisce il nodo senza
+% metterlo nel disegno; \graf@presa ne salva la scatola e il riquadro del
+% TESTO (il riquadro del nodo meno inner sep), in pt assoluti:
+% \graf@nminx, \graf@nmaxx, \graf@nminy, \graf@nmaxy.
+% \graf@posa{dx}{dy} lo mette nel disegno spostato di (dx,dy) (in pt).
+\newbox\graf@nbox
+\def\graf@presa{%
+  \global\setbox\graf@nbox=\box\pgfpositionnodelaterbox
+  \global\let\graf@lnome\pgfpositionnodelatername
+  \global\let\graf@lminx\pgfpositionnodelaterminx
+  \global\let\graf@lmaxx\pgfpositionnodelatermaxx
+  \global\let\graf@lminy\pgfpositionnodelaterminy
+  \global\let\graf@lmaxy\pgfpositionnodelatermaxy
+  \pgfmathsetlength\pgf@xa{\pgfkeysvalueof{/pgf/inner xsep}}%
+  \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+  \pgf@xb=\pgfpositionnodelaterminx\advance\pgf@xb by\pgf@xa
+  \xdef\graf@nminx{\the\pgf@xb}%
+  \pgf@xb=\pgfpositionnodelatermaxx\advance\pgf@xb by-\pgf@xa
+  \xdef\graf@nmaxx{\the\pgf@xb}%
+  \pgf@yb=\pgfpositionnodelaterminy\advance\pgf@yb by\pgf@ya
+  \xdef\graf@nminy{\the\pgf@yb}%
+  \pgf@yb=\pgfpositionnodelatermaxy\advance\pgf@yb by-\pgf@ya
+  \xdef\graf@nmaxy{\the\pgf@yb}}
+\def\graf@posa#1#2{{%
+  \let\pgfpositionnodelaterbox\graf@nbox
+  \let\pgfpositionnodelatername\graf@lnome
+  \let\pgfpositionnodelaterminx\graf@lminx
+  \let\pgfpositionnodelatermaxx\graf@lmaxx
+  \let\pgfpositionnodelaterminy\graf@lminy
+  \let\pgfpositionnodelatermaxy\graf@lmaxy
+  \pgftransformreset
+  \pgfpositionnodenow{\pgfqpoint{#1}{#2}}}}
+% \graf@assoluto{x}{y}: il punto (x,y) del pannello in pt assoluti, in
+% \graf@ax e \graf@ay
+\def\graf@assoluto#1#2{%
+  \pgfpointtransformed{\pgfpointxy{#1}{#2}}%
+  \edef\graf@ax{\the\pgf@x}\edef\graf@ay{\the\pgf@y}}
+% \graf@contarighe\testo: quante righe (\\ fuori dalle graffe, più uno)
+\newcount\graf@nr
+\def\graf@contarighe#1{\graf@nr=1 \expandafter\graf@cr#1\\\graf@fine}
+\def\graf@cr#1\\#2\graf@fine{\def\graf@t{#2}%
+  \ifx\graf@t\pgfutil@empty\else\advance\graf@nr by 1 \graf@cr#2\graf@fine\fi}
+\def\graf@pieno{pieno}
+\def\graf@vuoto{vuoto}
+\def\graf@asx{x}
+\def\graf@asy{y}
+\def\graf@pxy{xy}
+\newcount\graf@pannello
+
+% --- valore normalizzato (per riconoscere le tacche sulla griglia) ---
+\newcommand{\graf@segnatacca}[2]{% #1 asse, #2 valore
+  \pgfmathsetmacro\graf@v{#2}%
+  \expandafter\gdef\csname graf@t@\the\graf@pannello @#1@\graf@v\endcsname{}}
+
+% --- contenuto del pannello (nel sistema di coordinate del pannello) ---
+\newcommand{\graf@disegna}{%
+  \edef\gf@gxmin{\grafget{x min}}\edef\gf@gxmax{\grafget{x max}}%
+  \edef\gf@gymin{\grafget{y min}}\edef\gf@gymax{\grafget{y max}}%
+  \edef\gf@gm{\grafget{margine assi}}%
+  \edef\gf@gr{\grafget{margine ritaglio}}%
+  % origine
+  \pgfkeysgetvalue{/graf/zero}{\graf@z}%
+  \grafSeVuota{\graf@z}{}{\node[graf zero] at (0,0) {\graf@z};}
+  % tacche: si segnano prima, per non scrivere lì i numerini
+  \grafScorri{\GrafTaccheData}{7}{Tacche}{\gf@ta/\gf@tv/\gf@tl/\gf@tc/\gf@tp/\gf@to/\gf@tm}{%
+    \ifnum\gf@tm>0 \graf@segnatacca{\gf@ta}{\gf@tv}\fi}%
+  % griglia e numerini: sugli interi della finestra (con estremi decimali
+  % la griglia parte dal primo intero e si chiude sul bordo della finestra)
+  \pgfmathtruncatemacro\gf@ixmin{ceil(\gf@gxmin)}%
+  \pgfmathtruncatemacro\gf@ixmax{floor(\gf@gxmax)}%
+  \pgfmathtruncatemacro\gf@iymin{ceil(\gf@gymin)}%
+  \pgfmathtruncatemacro\gf@iymax{floor(\gf@gymax)}%
+  \ifnum\grafget{griglia}>0
+    \ifnum\gf@ixmin>\gf@ixmax\else
+      \foreach \gf@gx in {\gf@ixmin,...,\gf@ixmax}{
+        \draw[graf griglia] (\gf@gx,\gf@gymin) -- (\gf@gx,\gf@gymax);
+      }
+    \fi
+    \pgfmathtruncatemacro\graf@b{abs(\gf@gxmin-\gf@ixmin)>0.0001}%
+    \ifnum\graf@b=1 \draw[graf griglia] (\gf@gxmin,\gf@gymin) -- (\gf@gxmin,\gf@gymax);\fi
+    \pgfmathtruncatemacro\graf@b{abs(\gf@gxmax-\gf@ixmax)>0.0001}%
+    \ifnum\graf@b=1 \draw[graf griglia] (\gf@gxmax,\gf@gymin) -- (\gf@gxmax,\gf@gymax);\fi
+    \ifnum\gf@iymin>\gf@iymax\else
+      \foreach \gf@gy in {\gf@iymin,...,\gf@iymax}{
+        \draw[graf griglia] (\gf@gxmin,\gf@gy) -- (\gf@gxmax,\gf@gy);
+      }
+    \fi
+    \pgfmathtruncatemacro\graf@b{abs(\gf@gymin-\gf@iymin)>0.0001}%
+    \ifnum\graf@b=1 \draw[graf griglia] (\gf@gxmin,\gf@gymin) -- (\gf@gxmax,\gf@gymin);\fi
+    \pgfmathtruncatemacro\graf@b{abs(\gf@gymax-\gf@iymax)>0.0001}%
+    \ifnum\graf@b=1 \draw[graf griglia] (\gf@gxmin,\gf@gymax) -- (\gf@gxmax,\gf@gymax);\fi
+  \fi
+  \ifnum\grafget{numeri}>0
+    \ifnum\gf@ixmin>\gf@ixmax\else
+    \foreach \gf@gx in {\gf@ixmin,...,\gf@ixmax}{
+      \pgfmathsetmacro\graf@v{\gf@gx}%
+      \pgfmathtruncatemacro\graf@zero{abs(\gf@gx)<0.0001}%
+      \ifnum\graf@zero=0
+        \ifcsname graf@t@\the\graf@pannello @x@\graf@v\endcsname
+          \ifnum\grafget{numeri sotto tacche}>0
+            \node[graf numeri, graf numero x] at (\gf@gx,0) {\gf@gx};
+          \fi
+        \else
+          \node[graf numeri, graf numero x] at (\gf@gx,0) {\gf@gx};
+        \fi
+      \fi
+    }
+    \fi
+    \ifnum\gf@iymin>\gf@iymax\else
+    \foreach \gf@gy in {\gf@iymin,...,\gf@iymax}{
+      \pgfmathsetmacro\graf@v{\gf@gy}%
+      \pgfmathtruncatemacro\graf@zero{abs(\gf@gy)<0.0001}%
+      \ifnum\graf@zero=0
+        \ifcsname graf@t@\the\graf@pannello @y@\graf@v\endcsname
+          \ifnum\grafget{numeri sotto tacche}>0
+            \node[graf numeri, graf numero y] at (0,\gf@gy) {\gf@gy};
+          \fi
+        \else
+          \node[graf numeri, graf numero y] at (0,\gf@gy) {\gf@gy};
+        \fi
+      \fi
+    }
+    \fi
+  \fi
+  % assi: passano per l'origine e arrivano sempre a incontrarsi, anche se
+  % la finestra non contiene lo 0 (allora si allungano fino all'origine)
+  \pgfmathsetmacro\gf@axmin{min(\gf@gxmin,0)-\gf@gm}%
+  \pgfmathsetmacro\gf@axmax{max(\gf@gxmax,0)+\gf@gm}%
+  \pgfmathsetmacro\gf@aymin{min(\gf@gymin,0)-\gf@gm}%
+  \pgfmathsetmacro\gf@aymax{max(\gf@gymax,0)+\gf@gm}%
+  \draw[graf asse] (\gf@axmin,0) -- (\gf@axmax,0)
+    node[graf etichetta asse x] {\grafget{etichetta x}};
+  % l'asse y ha l'etichetta misurata: il titolo non deve coprirla
+  {\pgfpositionnodelater{\graf@presa}%
+   \draw[graf asse] (0,\gf@aymin) -- (0,\gf@aymax)
+     node[graf etichetta asse y] (graf@ey) {\grafget{etichetta y}};}%
+  \let\graf@eminx\graf@nminx \let\graf@emaxx\graf@nmaxx
+  \let\graf@eminy\graf@nminy \let\graf@emaxy\graf@nmaxy
+  \let\graf@eLminx\graf@lminx \let\graf@eLmaxx\graf@lmaxx
+  \graf@posa{0pt}{0pt}%
+  % titolo: al centro della finestra più titolo dx, sopra y max di titolo
+  % dy. Poi due controlli, sul testo (senza inner sep):
+  % - se il testo scende a meno di «distanza minima» dalla griglia (titolo
+  %   di più righe), sale;
+  % - se arriva a meno di «distanza minima» dall'etichetta dell'asse y (o
+  %   dalla freccia sotto di lei), si sposta di lato: a destra se il suo
+  %   centro è a destra dell'asse o sull'asse, a sinistra altrimenti, fin
+  %   dove il suo riquadro tocca quello dell'etichetta (come «right=0pt
+  %   of» di TikZ) e comunque con almeno «distanza minima» fra i testi.
+  \pgfmathsetmacro{\graf@tx}{(\gf@gxmin+\gf@gxmax)/2}%
+  \edef\graf@tdx{\grafget{titolo dx}}\edef\graf@tdy{\grafget{titolo dy}}%
+  {\pgfpositionnodelater{\graf@presa}%
+   \node[align=center, graf titolo] (graf@titolo)
+     at (\graf@tx + \graf@tdx,\gf@gymax + \graf@tdy) {\GrafTitolo};}%
+  \pgfmathsetlength\pgf@xc{\grafget{distanza minima}}%
+  \edef\graf@dm{\the\pgf@xc}%
+  \def\graf@sx{0pt}\def\graf@sy{0pt}%
+  \graf@assoluto{0}{\gf@gymax}%
+  \grafSeVuota{\GrafTitolo}{}{%
+    \ifdim\dimexpr\graf@nminy-\graf@dm<\graf@ay\relax
+      \edef\graf@sy{\the\dimexpr\graf@ay+\graf@dm-\graf@nminy\relax}%
+      \edef\graf@nminy{\the\dimexpr\graf@nminy+\graf@sy\relax}%
+      \edef\graf@nmaxy{\the\dimexpr\graf@nmaxy+\graf@sy\relax}%
+    \fi}%
+  % l'etichetta y vale da lì in giù fino alla griglia (c'è la freccia)
+  \ifdim\graf@ay<\graf@eminy\relax \let\graf@eminy\graf@ay \fi
+  \ifnum\grafget{titolo evita y}>0
+    \pgfkeysgetvalue{/graf/etichetta y}{\graf@z}%
+    \grafSeVuota{\graf@z}{}{\grafSeVuota{\GrafTitolo}{}{%
+      \ifdim\dimexpr\graf@nminx-\graf@dm<\graf@emaxx\relax
+      \ifdim\dimexpr\graf@nmaxx+\graf@dm>\graf@eminx\relax
+      \ifdim\dimexpr\graf@nminy-\graf@dm<\graf@emaxy\relax
+      \ifdim\dimexpr\graf@nmaxy+\graf@dm>\graf@eminy\relax
+        \ifdim\dimexpr\graf@nminx+\graf@nmaxx\relax<\dimexpr\graf@eminx+\graf@emaxx\relax
+          \edef\graf@sx{\the\dimexpr\graf@eminx-\graf@dm-\graf@nmaxx\relax}%
+          \ifdim\dimexpr\graf@eLminx-\graf@lmaxx\relax<\graf@sx\relax
+            \edef\graf@sx{\the\dimexpr\graf@eLminx-\graf@lmaxx\relax}\fi
+        \else
+          \edef\graf@sx{\the\dimexpr\graf@emaxx+\graf@dm-\graf@nminx\relax}%
+          \ifdim\dimexpr\graf@eLmaxx-\graf@lminx\relax>\graf@sx\relax
+            \edef\graf@sx{\the\dimexpr\graf@eLmaxx-\graf@lminx\relax}\fi
+        \fi
+      \fi\fi\fi\fi}}%
+  \fi
+  \graf@posa{\graf@sx}{\graf@sy}%
+  % curve, circonferenze e verticali, tagliate al riquadro
+  \begin{scope}
+    \ifnum\grafget{ritaglio}>0
+      \clip (\gf@gxmin-\gf@gr,\gf@gymin-\gf@gr) rectangle (\gf@gxmax+\gf@gr,\gf@gymax+\gf@gr);
+    \fi
+    \grafScorri{\GrafCurveData}{13}{Curve}%
+      {\gf@cf/\gf@cda/\gf@ca/\gf@cc/\gf@cs/\gf@cl/\gf@clx/\gf@cly/\gf@clo/\gf@ce/\gf@ctsx/\gf@ctdx/\gf@cm}{%
+      \ifnum\gf@cm>0
+        \grafDefault{\gf@cda}{\gf@gxmin}\grafDefault{\gf@ca}{\gf@gxmax}%
+        \grafDefault{\gf@cc}{black}%
+        \grafDefault{\gf@ce}{0}\grafDefault{\gf@ctsx}{0}\grafDefault{\gf@ctdx}{0}%
+        \ifnum\gf@ce>0
+          \draw[graf curva, \gf@cc, graf estremi, domain=\gf@cda:\gf@ca,
+            samples=\grafget{campioni}] plot (\x,{\gf@cf});
+        \fi
+        \grafStile{graf tmp}{\gf@cs}%
+        \draw[graf curva, \gf@cc, graf tmp, domain=\gf@cda+\gf@ctsx:\gf@ca-\gf@ctdx,
+          samples=\grafget{campioni}] plot (\x,{\gf@cf});
+      \fi}%
+    \grafScorri{\GrafCirconferenzeData}{10}{Circonferenze}%
+      {\gf@ox/\gf@oy/\gf@orr/\gf@oc/\gf@os/\gf@ol/\gf@olx/\gf@oly/\gf@olo/\gf@om}{%
+      \ifnum\gf@om>0
+        \grafDefault{\gf@oc}{black}%
+        \grafStile{graf tmp}{\gf@os}%
+        \draw[graf circonferenza, \gf@oc, graf tmp] (\gf@ox,\gf@oy) circle[radius=\gf@orr];
+      \fi}%
+    \grafScorri{\GrafVerticaliData}{10}{Verticali}%
+      {\gf@vx/\gf@vda/\gf@va/\gf@vc/\gf@vs/\gf@vl/\gf@vlx/\gf@vly/\gf@vlo/\gf@vm}{%
+      \ifnum\gf@vm>0
+        \grafDefault{\gf@vda}{\gf@gymin}\grafDefault{\gf@va}{\gf@gymax}%
+        \grafDefault{\gf@vc}{black}%
+        \grafStile{graf tmp}{\gf@vs}%
+        \draw[graf verticale, \gf@vc, graf tmp] (\gf@vx,\gf@vda) -- (\gf@vx,\gf@va);
+      \fi}%
+  \end{scope}
+  % etichette di curve, circonferenze e verticali (non tagliate)
+  \grafScorri{\GrafCurveData}{13}{Curve}%
+    {\gf@cf/\gf@cda/\gf@ca/\gf@cc/\gf@cs/\gf@cl/\gf@clx/\gf@cly/\gf@clo/\gf@ce/\gf@ctsx/\gf@ctdx/\gf@cm}{%
+    \ifnum\gf@cm>0 \grafSeVuota{\gf@cl}{}{%
+      \grafDefault{\gf@cc}{black}\grafStile{graf tmp}{\gf@clo}%
+      \node[align=center, \gf@cc, graf etichetta curva, text=\gf@cc, graf tmp] at (\gf@clx,\gf@cly) {\gf@cl};}\fi}%
+  \grafScorri{\GrafCirconferenzeData}{10}{Circonferenze}%
+    {\gf@ox/\gf@oy/\gf@orr/\gf@oc/\gf@os/\gf@ol/\gf@olx/\gf@oly/\gf@olo/\gf@om}{%
+    \ifnum\gf@om>0 \grafSeVuota{\gf@ol}{}{%
+      \grafDefault{\gf@oc}{black}\grafStile{graf tmp}{\gf@olo}%
+      \node[align=center, \gf@oc, graf etichetta curva, text=\gf@oc, graf tmp] at (\gf@olx,\gf@oly) {\gf@ol};}\fi}%
+  \grafScorri{\GrafVerticaliData}{10}{Verticali}%
+    {\gf@vx/\gf@vda/\gf@va/\gf@vc/\gf@vs/\gf@vl/\gf@vlx/\gf@vly/\gf@vlo/\gf@vm}{%
+    \ifnum\gf@vm>0 \grafSeVuota{\gf@vl}{}{%
+      \grafDefault{\gf@vc}{black}\grafStile{graf tmp}{\gf@vlo}%
+      \node[align=center, \gf@vc, graf etichetta curva, text=\gf@vc, graf tmp] at (\gf@vlx,\gf@vly) {\gf@vl};}\fi}%
+  % punti, prima passata: proiezioni sugli assi (sotto i pallini)
+  \grafScorri{\GrafPuntiData}{10}{Punti}%
+    {\gf@px/\gf@py/\gf@pc/\gf@pf/\gf@pd/\gf@pl/\gf@pp/\gf@po/\gf@pj/\gf@pm}{%
+    \ifnum\gf@pm>0
+      \grafDefault{\gf@pc}{black}%
+      \grafSeVuota{\gf@pj}{}{%
+        \coordinate (graf@q) at (\gf@px,\gf@py);
+        \ifx\gf@pj\graf@pxy
+          \draw[graf proiezione, \gf@pc] ([yshift=-\grafget{tacca}]\gf@px,0) -- (graf@q);
+          \draw[graf proiezione, \gf@pc] ([xshift=-\grafget{tacca}]0,\gf@py) -- (graf@q);
+        \else\ifx\gf@pj\graf@asx
+          \draw[graf proiezione, \gf@pc] ([yshift=-\grafget{tacca}]\gf@px,0) -- (graf@q);
+        \else\ifx\gf@pj\graf@asy
+          \draw[graf proiezione, \gf@pc] ([xshift=-\grafget{tacca}]0,\gf@py) -- (graf@q);
+        \else
+          \PackageError{grafici}{Punti, voce \graf@k: proiezioni '\gf@pj' non valide
+            (si scrive x, y, xy o si lascia vuoto)}{}%
+        \fi\fi\fi}%
+    \fi}%
+  % punti, seconda passata: pallini ed etichette
+  \grafScorri{\GrafPuntiData}{10}{Punti}%
+    {\gf@px/\gf@py/\gf@pc/\gf@pf/\gf@pd/\gf@pl/\gf@pp/\gf@po/\gf@pj/\gf@pm}{%
+    \ifnum\gf@pm>0
+      \grafDefault{\gf@pc}{black}%
+      \grafDefault{\gf@pd}{\grafget{dimensione punto}}%
+      % un numero senza unità vale in cm (come 0.18cm del valore iniziale)
+      \pgfmathparse{\gf@pd}%
+      \ifpgfmathunitsdeclared\else\edef\gf@pd{\pgfmathresult cm}\fi
+      \grafDefault{\gf@pp}{above right}%
+      \grafSeVuota{\gf@pf}{\def\gf@pf{pieno}}{}%
+      \ifx\gf@pf\graf@pieno
+        \node[graf punto, circle, fill=\gf@pc, inner sep=0pt, minimum size=\gf@pd]
+          (graf@p) at (\gf@px,\gf@py) {};
+      \else\ifx\gf@pf\graf@vuoto
+        \node[graf punto, circle, draw=\gf@pc, fill=white, inner sep=0pt,
+          minimum size=\gf@pd] (graf@p) at (\gf@px,\gf@py) {};
+      \else
+        \node[graf punto, circle, draw=\gf@pc, fill=\gf@pf, inner sep=0pt,
+          minimum size=\gf@pd] (graf@p) at (\gf@px,\gf@py) {};
+      \fi\fi
+      \grafSeVuota{\gf@pl}{}{%
+        \grafStile{graf tmp pos}{\gf@pp}\grafStile{graf tmp}{\gf@po}%
+        \def\graf@ang{}%
+        \ifnum\grafget{etichetta dal bordo}>0 \graf@trovaangolo\gf@pp\fi
+        \grafSeVuota{\graf@ang}{%
+          \node[align=center, \gf@pc, graf etichetta punto, text=\gf@pc, graf tmp pos, graf tmp]
+            at (\gf@px,\gf@py) {\gf@pl};}{%
+          \node[align=center, \gf@pc, graf etichetta punto, text=\gf@pc, graf tmp pos, graf tmp]
+            at (graf@p.\graf@ang) {\gf@pl};}}%
+    \fi}%
+  % tacche con il loro testo
+  \grafScorri{\GrafTaccheData}{7}{Tacche}{\gf@ta/\gf@tv/\gf@tl/\gf@tc/\gf@tp/\gf@to/\gf@tm}{%
+    \ifnum\gf@tm>0
+      \grafDefault{\gf@tc}{black}\grafStile{graf tmp}{\gf@to}%
+      \ifx\gf@ta\graf@asx
+        \grafDefault{\gf@tp}{below}\grafStile{graf tmp pos}{\gf@tp}%
+        \coordinate (graf@q) at (\gf@tv,0);
+        \node[align=center, \gf@tc, graf etichetta tacca, text=\gf@tc, graf tmp pos, graf tmp] at (graf@q) {\gf@tl};
+        \draw[graf tacca, \gf@tc] ([yshift=-\grafget{tacca}]graf@q)
+          -- ([yshift=\grafget{tacca}]graf@q);
+      \else\ifx\gf@ta\graf@asy
+        \grafDefault{\gf@tp}{left}\grafStile{graf tmp pos}{\gf@tp}%
+        \coordinate (graf@q) at (0,\gf@tv);
+        \node[align=center, \gf@tc, graf etichetta tacca, text=\gf@tc, graf tmp pos, graf tmp] at (graf@q) {\gf@tl};
+        \draw[graf tacca, \gf@tc] ([xshift=-\grafget{tacca}]graf@q)
+          -- ([xshift=\grafget{tacca}]graf@q);
+      \else
+        \PackageError{grafici}{Tacche, voce \graf@k: l'asse '\gf@ta' non esiste
+          (si scrive x oppure y)}{}%
+      \fi\fi
+    \fi}%
+  % didascalia
+  \pgfkeysgetvalue{/graf/didascalia}{\graf@d}%
+  % didascalia dy è la distanza fra y min e il centro delle prime due righe
+  % (della riga, se è una sola): dalla terza riga in giù le righe in più
+  % scendono invece di spingere in su le prime, e il testo resta anche
+  % sotto la fine dell'asse y. Il testo non sale mai a meno di «distanza
+  % minima» dalla griglia.
+  \grafSeVuota{\graf@d}{}{%
+    \pgfmathsetmacro{\graf@cx}{(\gf@gxmin+\gf@gxmax)/2 + \grafget{didascalia dx}}%
+    \edef\graf@cdy{\grafget{didascalia dy}}%
+    {\pgfpositionnodelater{\graf@presa}%
+     \node[graf didascalia, align=\grafget{didascalia allinea}] (graf@didascalia)
+       at (\graf@cx,\gf@gymin-\graf@cdy) {\grafget{didascalia}};}%
+    \graf@contarighe\graf@d
+    \pgfmathsetlength\pgf@yc{\grafget{distanza minima}}%
+    \edef\graf@dm{\the\pgf@yc}%
+    \graf@assoluto{0}{\gf@gymin}\let\graf@lim\graf@ay
+    \def\graf@sy{0pt}%
+    \ifnum\graf@nr>2
+      % le prime due righe restano dove sarebbero da sole
+      \edef\graf@sy{\the\dimexpr(\graf@nminy-\graf@nmaxy)
+        *\numexpr\graf@nr-2\relax/\numexpr2*\graf@nr\relax\relax}%
+      % e il testo sta sotto la fine dell'asse y, se l'asse gli passa sopra
+      \graf@assoluto{0}{\gf@aymin}%
+      \ifdim\dimexpr\graf@nminx-\graf@dm<\graf@ax\relax
+      \ifdim\dimexpr\graf@nmaxx+\graf@dm>\graf@ax\relax
+      \ifdim\graf@ay<\graf@lim\relax \let\graf@lim\graf@ay \fi
+      \fi\fi
+    \fi
+    \ifdim\dimexpr\graf@nmaxy+\graf@sy+\graf@dm>\graf@lim\relax
+      \edef\graf@sy{\the\dimexpr\graf@lim-\graf@dm-\graf@nmaxy\relax}%
+    \fi
+    \graf@posa{0pt}{\graf@sy}}
+  % separatore
+  \edef\graf@sep{\grafget{separatore}}%
+  \grafSeVuota{\graf@sep}{}{%
+    \draw[graf separatore] (\gf@axmax+\graf@sep,\gf@aymin)
+      -- (\gf@axmax+\graf@sep,\gf@aymax);}
+}
+
+% --- il pannello: {spostamento x}{titolo} ---
+\newenvironment{Pannello}[2]{%
+  \def\GrafSpostamento{#1}%
+  \def\GrafTitolo{#2}%
+}{%
+  \global\advance\graf@pannello by 1
+  \begin{scope}[shift={(\GrafSpostamento,0)},
+      xscale=\grafget{scala x}, yscale=\grafget{scala y}]
+    \graf@disegna
+  \end{scope}
+}
+\makeatother
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTI I PANNELLI ============
+  % (ogni chiave si può ridefinire dentro un singolo pannello)
+  \GrafSet{titolo dy=1.0, margine assi=0.5, ritaglio=1}
+  % stili: \tikzset{graf zero/.style={below left, xshift=-2pt}}
+
+  % ============ GRAFICO 1 ============
+  \begin{Pannello}{0}{Grafico 1}
+    \GrafSet{x min=-3, x max=7, y min=-4, y max=7,
+      scala x=0.45, scala y=0.45, griglia=1, numeri=0,
+      separatore=3.725,
+      didascalia={$y=-\frac{1}{3}x-1$\\$y=\frac{1}{2}x+1$}}
+    % formula/da/a/colore/stile/etichetta/x et./y et./opzioni et./estremi/taglio sx/taglio dx/mostra
+    \SetCurve{
+      {0.5*\x+1}/-3/6/blue/thick/$s$/4.6/3.2/graf sfondo/0/0/0/1
+    }
+    % x/y/colore/riempimento/dimensione/etichetta/posizione/opzioni et./proiezioni/mostra
+    \SetPunti{
+      3/5/blue/yellow/1cm/{$(3,5)$}/above right//xy/1,
+      5/2/red////right//x/1
+    }
+    % asse/valore/etichetta/colore/posizione/opzioni et./mostra
+    \SetTacche{
+      x/3/$3$/blue///1,
+      y/5/$5$/blue///1,
+      x/5/$5$/red///1,
+      y/2/$2$/red///1
+    }
+  \end{Pannello}
+
+  % ============ GRAFICO 2 ============
+  \begin{Pannello}{7.2}{Grafico 2}
+    \GrafSet{x min=-2, x max=4, y min=-4, y max=7,
+      scala x=0.43, scala y=0.43, griglia=1, numeri=1,
+      separatore=1.065,
+      titolo dx=1.2}   % titolo a destra dell'asse y, come nel grafico 1
+    % qui «0» sotto a sinistra toccherebbe il «-1» della tacca: va sopra
+    \tikzset{graf zero/.style={above left}}
+    \SetCurve{
+      {\x*\x-2}/-2/4/teal/thick/$f$/2.8/3.1//0/0/0/1,
+      {\x-1}/-2/4/orange/thick/$g$/3.0/2.0/graf sfondo/0/0/0/1
+    }
+    % x/y da/y a/colore/stile/etichetta/x et./y et./opzioni et./mostra
+    \SetVerticali{
+      1///purple/thick/$x=1$/1.55/6.2/graf sfondo/1
+    }
+    \SetPunti{
+      1/-1/purple////right///1
+    }
+    % il «1» sotto l'asse starebbe sulla retta x=1: va sopra a sinistra
+    \SetTacche{
+      x/1/$1$/purple/above left//1,
+      y/-1/$-1$/purple//graf sfondo/1
+    }
+  \end{Pannello}
+
+  % ============ GRAFICO 3 ============
+  \begin{Pannello}{14.4}{Grafico 3}
+    \GrafSet{x min=-6, x max=6, y min=-2, y max=2,
+      scala x=0.32, scala y=1.1, griglia=1, numeri=0}
+    \SetCurve{
+      {sin(deg(\x))}/-6.28/6.28/blue/thick/$h$/5.0/1.5//0/0/0/1,
+      {0.5*cos(deg(\x))}/-6.28/6.28/red/thick/$k$/4.7/-1.4//0/0/0/1
+    }
+  \end{Pannello}
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,32 @@
+# I pacchetti Debian del servizio TeX, come sono installati sul VPS.
+#
+# Misurati il 14 settembre 2026 sul server (Debian 13, trixie) con
+# `dpkg-query -W 'texlive*' librsvg2-bin`. Li legge `provision.sh`, che
+# installa il servizio in produzione, e li legge il `Dockerfile` accanto, che
+# lo fa girare in locale: un elenco solo, così i due non divergono.
+#
+# Prima di questo file `provision.sh` aveva il suo elenco, e non era più
+# quello vero: installava `texlive-lang-italian` e non installava
+# `texlive-extra-utils` (da cui viene `latexindent`, che `/format-tex` usa) né
+# `librsvg2-bin` (da cui viene `rsvg-convert`, che `/svg-to-pdf` usa). Sul VPS
+# quei due programmi c'erano, messi a mano: una macchina nuova rifatta con
+# lo script sarebbe partita senza.
+#
+# Una riga, un pacchetto. Le righe che cominciano con # non contano.
+librsvg2-bin
+texlive-base
+texlive-binaries
+texlive-extra-utils
+texlive-fonts-extra
+texlive-fonts-recommended
+texlive-lang-european
+texlive-lang-greek
+texlive-latex-base
+texlive-latex-extra
+texlive-latex-recommended
+texlive-luatex
+texlive-pictures
+texlive-plain-generic
+texlive-pstricks
+texlive-science
+texlive-xetex

@@ -1,0 +1,375 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+
+% ==================================================
+% MOLLA IN PIÙ STATI — MODULARE
+% ==================================================
+% Una figura = più STATI impilati dall'alto: in ognuno un muro, una molla,
+% un blocco appoggiato su un piano. Uno stato fa da RIFERIMENTO (chiave
+% riferimento): dal bordo sinistro del suo blocco scende la linea
+% punteggiata dello zero, con la sua quota sopra (es. x_i = 0). Negli altri
+% stati la quota è una freccia dal bordo del blocco alla linea dello zero,
+% con il testo.
+%
+%   \SetStati{nome/etichetta/centro del blocco/quota/opzioni/mostra, ...}
+%     nome      = come si cita lo stato (chiave riferimento); ogni stato
+%                 ha un nome suo: un nome ripetuto è un errore
+%     etichetta = testo a sinistra del muro (A, B, ...); un'etichetta
+%                 lunga si sposta da sola a sinistra, fuori dal muro
+%     centro del blocco = ascissa del centro del blocco (il muro è in 0):
+%                 più grande = molla più allungata
+%     quota     = testo della quota; vuoto = niente freccia (e niente
+%                 testo). Blocco esattamente sulla linea dello zero
+%                 (spostamento nullo): niente freccia, il testo accanto
+%                 alla linea (stile «molla testo quota zero»)
+%     opzioni   = chiavi di \MollaSet valide solo per questo stato, tra
+%                 graffe: {passo=1.2, colore blocco=blue!20}; vuoto = nessuna
+%     mostra    = 1 disegna, 0 nascondi (lo spazio dello stato resta);
+%                 vuoto = 1
+%   (campi separati da /, stati separati da virgola; un campo con virgole
+%   o / va tra graffe; righe vuote fra gli stati e una virgola dopo
+%   l'ultimo stato non danno fastidio)
+%
+% Il blocco poggia sempre sul piano e le quote stanno sopra il blocco,
+% anche cambiando «lato blocco» o «altezza piano» (il piano cresce verso
+% il basso). Il piano si allunga da solo fino a «margine piano» oltre il
+% blocco più a destra (e più a sinistra) di tutta la figura.
+% La linea dello zero va dal primo all'ultimo stato visibile e sale di
+% «rif alto» sopra il blocco del primo. Passa sotto i blocchi di tutti
+% gli stati (anche di quelli prima del riferimento) e sotto i piani,
+% tranne quello del primo stato; molle e frecce le passano sopra. Uno
+% stato di riferimento nascosto non
+% disegna la linea, ma le frecce degli altri la usano lo stesso. Con
+% riferimento vuoto non c'è né la linea dello zero né alcuna freccia.
+% Se il riferimento non è il primo stato, la sua quota (in cima alla
+% linea) può toccare quella del primo stato: alza «rif alto».
+% Nelle opzioni di uno stato, «distanza stati» è la sua distanza dallo
+% stato sopra; «rif alto» conta nelle opzioni dello stato di riferimento.
+% passo e ampiezza sono misure alla scala 1: con scale=0.6 nella prima
+% riga della figura la molla si rimpicciolisce con il resto e, con passo
+% vuoto, ha sempre «spire» spire. passo=0 (o negativo) vale come vuoto.
+% Testo di una quota più largo della sua freccia: la linea dello zero lo
+% attraversa; \tikzset{molla testo quota/.style={above, fill=white}}.
+%
+% CHIAVI (\MollaSet{chiave=valore, ...}): vedi VARIABILI / PARAMETRI.
+% STILI (\tikzset{molla .../.style={...}}): vedi sotto le chiavi.
+% NODI con nome: muro-NOME, piano-NOME, blocco-NOME, etichetta-NOME.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri (si cambiano con \MollaSet{chiave=valore, ...}; misure in cm
+% se non è detto altro)
+\pgfkeys{
+  /molla/.is family, /molla,
+  distanza stati/.initial=2.4,  % distanza verticale fra gli stati
+  riferimento/.initial=A,       % nome dello stato dello zero
+  % etichetta
+  distanza etichetta/.initial=0.4, % dal bordo sinistro del muro al
+                                   % centro dell'etichetta
+  margine etichetta/.initial=0.2,  % spazio minimo fra etichetta e muro
+  % muro
+  x muro/.initial=0,
+  larghezza muro/.initial=0.8,
+  altezza muro/.initial=1.6,
+  colore muro/.initial=gray!40,
+  % piano
+  x piano/.initial=2,           % ascissa del centro del piano
+  larghezza piano/.initial=4.5, % (si allunga da solo: margine piano)
+  margine piano/.initial=0.4,   % quanto il piano sporge oltre i blocchi
+  altezza piano/.initial=0.2226,% spessore: cresce verso il basso
+  colore piano/.initial=brown!40,
+  % blocco (poggia sul piano)
+  lato blocco/.initial=0.64,
+  altezza molla/.initial=0.27,  % altezza della molla sopra il piano
+                                % (al più metà lato del blocco)
+  stacco blocco/.initial=0.0187,% spazio fra piano e blocco (0.0187: i
+                                % contorni, spessi 0.4pt, si sfiorano)
+  colore blocco/.initial=brown!20,
+  % molla
+  ampiezza/.initial=1.5,        % mm alla scala 1
+  passo/.initial={},            % mm alla scala 1; vuoto = dalle spire
+  spire/.initial=15,            % spire intere (più mezza) se passo è vuoto
+  % quote: altezze sopra la CIMA DEL BLOCCO del proprio stato
+  rif alto/.initial=0.53,       % cima della linea dello zero (sopra il
+                                % blocco del primo stato visibile)
+  quota y/.initial=0.33,        % freccia
+  testo y/.initial=0.43,        % testo della quota
+  guida alto/.initial=0.63,     % cima del tratteggio dal bordo del blocco
+  guida basso/.initial=0,       % fondo del tratteggio: sopra la MOLLA
+}
+\newcommand{\MollaSet}[1]{\def\mollaChiavi{#1}\mollaTogliPar\mollaChiavi
+  \expandafter\mollaSetAux\expandafter{\mollaChiavi}}
+\newcommand{\mollaSetAux}[1]{\pgfkeys{/molla/.cd,#1}}
+\newcommand{\mollaget}[1]{\pgfkeysvalueof{/molla/#1}}
+
+% Stili grafici (si cambiano con \tikzset{molla ... /.style={...}})
+\tikzset{
+  molla etichetta/.style={},
+  molla muro/.style={draw=black},
+  molla piano/.style={draw=brown!80!black},
+  molla blocco/.style={draw=black},
+  molla spirale/.style={decorate, decoration={coil, aspect=0.5}},
+  molla riferimento/.style={dotted},     % linea dello zero
+  molla testo riferimento/.style={above},
+  molla quota/.style={<->},
+  molla guida/.style={dotted},           % tratteggio dal bordo del blocco
+  molla testo quota/.style={above},
+  molla testo quota zero/.style={anchor=south west, xshift=2pt},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- utilità ---
+% \mollaIfEmpty{\macro}{se vuota}{se piena}
+\newcommand{\mollaIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+\makeatletter
+% \mollaTrim\macro: toglie gli spazi attorno al contenuto
+\newcommand{\mollaTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+% \mollaLarghezza{testo}: larghezza del testo, nel font dello stile
+% «molla etichetta», in \mollaW (pt)
+\newcommand{\mollaLarghezza}[1]{%
+  \begingroup
+    \tikzset{molla etichetta}%
+    \setbox0=\hbox{\pgfinterruptpicture\tikz@textfont#1\endpgfinterruptpicture}%
+    \xdef\mollaW{\the\wd0}%
+  \endgroup}
+\makeatother
+% \mollaShow\campo: un «mostra» vuoto vale 1
+\newcommand{\mollaShow}[1]{\mollaTrim#1\mollaIfEmpty{#1}{\def#1{1}}{}}
+% \mollaTogliPar\macro: una riga vuota nei dati è un \par, che \foreach e
+% \pgfkeys non accettano: le righe vuote, con gli spazi attorno, diventano
+% un solo spazio (anche dentro le graffe)
+\ExplSyntaxOn
+\cs_new_protected:Npn \mollaTogliPar #1
+  { \regex_replace_all:nnN { (?: \s* \c{par} )+ \s* } { \cS\  } #1 }
+\ExplSyntaxOff
+
+% \mollaBlocco: il blocco di uno stato (da \scentro, \my e dalle chiavi):
+% \mbordo = bordo sinistro, \mfondo e \mcima = fondo e cima, \mbloccoY =
+% centro. Il fondo sta ad «altezza molla» sotto la molla, ma mai più di
+% metà lato: la molla si attacca sempre al blocco
+\newcommand{\mollaBlocco}{%
+  \pgfmathsetmacro{\mbordo}{\scentro-\mollaget{lato blocco}/2}%
+  \pgfmathsetmacro{\mfondo}{\my-min(\mollaget{altezza molla},\mollaget{lato blocco}/2)}%
+  \pgfmathsetmacro{\mcima}{\mfondo+\mollaget{lato blocco}}%
+  \pgfmathsetmacro{\mbloccoY}{\mfondo+\mollaget{lato blocco}/2}}
+
+% --- dati ---
+\newcommand{\SetStati}[1]{\def\MollaStatiData{#1}\mollaTogliPar\MollaStatiData}
+\SetStati{}
+\newcount\mollaUltimo
+\newcount\mollaPrimo
+\newcount\mollaDisegni
+
+\newcommand{\MollaDisegna}{%
+  \global\advance\mollaDisegni by 1
+  \pgfkeysgetvalue{/molla/riferimento}{\mollaRif}%
+  \global\let\mollaXrif\relax
+  \gdef\mollaRifShow{0}%
+  \global\mollaUltimo=0
+  \global\mollaPrimo=0
+  \gdef\mollaYprec{}%
+  \gdef\mollaMinBlocco{}%
+  \gdef\mollaMaxBlocco{}%
+  % prima passata: controlli sui dati, altezza di ogni stato (ognuno a
+  % «distanza stati» sotto il precedente, con le sue opzioni), dov'è il
+  % riferimento, primo e ultimo stato visibile, estremi dei blocchi
+  \mollaIfEmpty{\MollaStatiData}{}{%
+    \foreach \snome/\setich/\scentro/\squota/\sopz/\sshow [count=\sk] in \MollaStatiData {
+      \mollaTrim\snome
+      \mollaTrim\scentro
+      \mollaShow\sshow
+      \def\mollaSalta{0}%
+      \mollaIfEmpty{\snome}{\mollaIfEmpty{\scentro}{\def\mollaSalta{1}}{}}{}%
+      \ifnum\mollaSalta=1
+        % stato vuoto (una virgola in più): si salta
+        \expandafter\gdef\csname molla@salta@\the\mollaDisegni @\sk\endcsname{}%
+      \else
+        \expandafter\MollaSet\expandafter{\sopz}%
+        \mollaIfEmpty{\scentro}{\PackageError{molla}{Stato '\snome': manca
+          il centro del blocco}{}}{}%
+        \mollaIfEmpty{\snome}{}{%
+          \expandafter\ifx\csname molla@nome@\the\mollaDisegni @\snome\endcsname\relax
+            \expandafter\gdef\csname molla@nome@\the\mollaDisegni @\snome\endcsname{}%
+          \else
+            \PackageError{molla}{Stato '\snome': il nome e' ripetuto in
+              \string\SetStati\space (ogni stato vuole un nome suo)}{}%
+          \fi}%
+        \mollaIfEmpty{\mollaYprec}{\def\my{0}}{%
+          \pgfmathsetmacro{\my}{\mollaYprec-\mollaget{distanza stati}}}%
+        \global\let\mollaYprec\my
+        \expandafter\xdef\csname molla@y@\the\mollaDisegni @\sk\endcsname{\my}%
+        \mollaBlocco
+        \mollaIfEmpty{\mollaRif}{}{%
+          \ifnum\pdfstrcmp{\snome}{\mollaRif}=0
+            \global\let\mollaXrif\mbordo
+            \xdef\mollaRifAlto{\mollaget{rif alto}}%
+            \global\let\mollaRifQuota\squota
+            \xdef\mollaRifShow{\sshow}%
+          \fi}%
+        \ifnum\sshow>0
+          \global\mollaUltimo=\sk\relax
+          \ifnum\mollaPrimo=0
+            \global\mollaPrimo=\sk\relax
+            \global\let\mollaCimaPrimo\mcima
+          \fi
+          \let\mollaSx\mbordo
+          \pgfmathsetmacro{\mollaDx}{\mbordo+\mollaget{lato blocco}}%
+          \mollaIfEmpty{\mollaMinBlocco}{}{%
+            \pgfmathsetmacro{\mollaSx}{min(\mollaSx,\mollaMinBlocco)}%
+            \pgfmathsetmacro{\mollaDx}{max(\mollaDx,\mollaMaxBlocco)}}%
+          \global\let\mollaMinBlocco\mollaSx
+          \global\let\mollaMaxBlocco\mollaDx
+        \fi
+      \fi
+    }%
+  }%
+  \mollaIfEmpty{\mollaRif}{}{%
+    \ifx\mollaXrif\relax
+      \PackageError{molla}{Riferimento: lo stato '\mollaRif' non c'e' in
+        \string\SetStati}{}%
+      \gdef\mollaRif{}%
+    \fi}%
+  \ifnum\mollaUltimo>0
+    \edef\mollaYfondo{\csname molla@y@\the\mollaDisegni @\the\mollaUltimo\endcsname}%
+    \mollaIfEmpty{\mollaRif}{}{%
+      \pgfmathsetmacro{\mollaTop}{\mollaCimaPrimo+\mollaRifAlto}}%
+  \fi
+  % seconda passata: il disegno, stato per stato
+  \mollaIfEmpty{\MollaStatiData}{}{%
+    \foreach \snome/\setich/\scentro/\squota/\sopz/\sshow [count=\sk] in \MollaStatiData {
+      \mollaTrim\snome
+      \mollaTrim\scentro
+      \mollaShow\sshow
+      \expandafter\ifx\csname molla@salta@\the\mollaDisegni @\sk\endcsname\relax
+      \ifnum\sshow>0
+        \expandafter\MollaSet\expandafter{\sopz}%
+        \edef\my{\csname molla@y@\the\mollaDisegni @\sk\endcsname}%
+        \mollaBlocco
+        \pgfmathsetmacro{\mattacco}{\mollaget{x muro}+\mollaget{larghezza muro}/2}%
+        % piano: la cima a «stacco blocco» sotto il blocco; va almeno da
+        % x piano - larghezza/2 a x piano + larghezza/2, e fino a «margine
+        % piano» oltre i blocchi di tutta la figura
+        \pgfmathsetmacro{\mpianoSx}{min(\mollaget{x piano}-\mollaget{larghezza piano}/2,
+          \mollaMinBlocco-\mollaget{margine piano})}%
+        \pgfmathsetmacro{\mpianoDx}{max(\mollaget{x piano}+\mollaget{larghezza piano}/2,
+          \mollaMaxBlocco+\mollaget{margine piano})}%
+        \pgfmathsetmacro{\mpianoX}{(\mpianoSx+\mpianoDx)/2}%
+        \pgfmathsetmacro{\mpianoL}{\mpianoDx-\mpianoSx}%
+        \pgfmathsetmacro{\mpianoY}{\mfondo-\mollaget{stacco blocco}-\mollaget{altezza piano}/2}%
+        % passo e ampiezza sono misure alla scala 1: si moltiplicano per la
+        % scala della figura, perché la decorazione lavora sul percorso
+        % già scalato
+        \pgfgettransformentries{\mta}{\mtb}{\mtc}{\mtd}{\mtx}{\mty}%
+        \pgfmathsetmacro{\mscala}{sqrt((\mta)^2+(\mtb)^2)}%
+        \pgfmathsetmacro{\mamp}{\mollaget{ampiezza}*\mscala}%
+        \pgfkeysgetvalue{/molla/passo}{\mpasso}%
+        \mollaTrim\mpasso
+        \mollaIfEmpty{\mpasso}{}{%
+          \pgfmathtruncatemacro{\mollaTmp}{\mpasso>0}%
+          \ifnum\mollaTmp=0 \def\mpasso{}\fi}%
+        \def\mmolla{1}%
+        % passo automatico: la decorazione coil disegna spire intere, poi
+        % mezza spira larga passo/2 + ampiezza (con aspect=0.5), poi tira
+        % dritto fino al blocco. Perché non resti un tratto dritto:
+        % lunghezza = spire*passo + passo/2 + ampiezza (+0.01 di margine)
+        \mollaIfEmpty{\mpasso}{%
+          \pgfmathsetmacro{\mpasso}{((\mbordo-\mattacco)*10*\mscala-\mamp)/(\mollaget{spire}+0.51)}%
+          \pgfmathtruncatemacro{\mollaTmp}{\mpasso>0}%
+          \ifnum\mollaTmp=0
+            \def\mmolla{0}%
+            \PackageError{molla}{Stato '\snome': il blocco e' troppo vicino
+              al muro, la molla non ci sta}{Allontana il blocco dal muro
+              (centro piu' grande) o riduci ampiezza.}%
+          \fi}{%
+          \pgfmathsetmacro{\mpasso}{\mpasso*\mscala}}%
+        % piano, linea dello zero (solo nel primo stato visibile: sopra il
+        % suo piano, sotto tutti i blocchi), blocco, molla, muro, etichetta
+        \node[fill=\mollaget{colore piano}, inner sep=0pt,
+          minimum width=\mpianoL cm,
+          minimum height=\mollaget{altezza piano} cm, molla piano]
+          (piano-\snome) at (\mpianoX,\mpianoY) {};
+        \ifnum\sk=\mollaPrimo
+          \mollaIfEmpty{\mollaRif}{}{%
+            \ifnum\mollaRifShow>0
+              \draw[molla riferimento] (\mollaXrif,\mollaTop) -- (\mollaXrif,\mollaYfondo);
+            \fi}%
+        \fi
+        \node[fill=\mollaget{colore blocco}, inner sep=0pt,
+          minimum width=\mollaget{lato blocco} cm,
+          minimum height=\mollaget{lato blocco} cm, molla blocco]
+          (blocco-\snome) at (\scentro,\mbloccoY) {};
+        \ifnum\mmolla>0
+          \draw[molla spirale, decoration={segment length=\mpasso mm,
+              amplitude=\mamp mm}]
+            (\mattacco,\my) -- (\mbordo,\my);
+        \fi
+        \node[fill=\mollaget{colore muro}, inner sep=0pt,
+          minimum width=\mollaget{larghezza muro} cm,
+          minimum height=\mollaget{altezza muro} cm, molla muro]
+          (muro-\snome) at (\mollaget{x muro},\my) {};
+        % etichetta: centro a «distanza etichetta» dal bordo sinistro del
+        % muro; se è lunga, si sposta a sinistra fino a restare a «margine
+        % etichetta» dal muro
+        \mollaLarghezza{\setich}%
+        \pgfmathsetmacro{\mmuroSx}{\mollaget{x muro}-\mollaget{larghezza muro}/2}%
+        \pgfmathsetmacro{\metich}{min(\mmuroSx-\mollaget{distanza etichetta},
+          \mmuroSx-\mollaget{margine etichetta}-\mollaW/1cm/2)}%
+        \node[molla etichetta] (etichetta-\snome) at (\metich,\my) {\setich};
+        % quota (non nello stato di riferimento)
+        \mollaIfEmpty{\mollaRif}{}{%
+          \ifnum\pdfstrcmp{\snome}{\mollaRif}=0 \else
+            \mollaIfEmpty{\squota}{}{%
+              \pgfmathtruncatemacro{\mnullo}{abs(\mbordo-\mollaXrif)<0.0005}%
+              \ifnum\mnullo=0
+                \draw[molla quota] (\mbordo,\mcima+\mollaget{quota y})
+                  -- (\mollaXrif,\mcima+\mollaget{quota y});
+                \draw[molla guida] (\mbordo,\mcima+\mollaget{guida alto})
+                  -- (\mbordo,\my+\mollaget{guida basso});
+                \pgfmathsetmacro{\mmezzo}{(\mollaXrif+\mbordo)/2}%
+                \node[molla testo quota] at (\mmezzo,\mcima+\mollaget{testo y}) {\squota};
+              \else
+                % spostamento nullo: niente freccia né guida, il testo
+                % accanto alla linea dello zero
+                \node[molla testo quota, molla testo quota zero]
+                  at (\mollaXrif,\mcima+\mollaget{testo y}) {\squota};
+              \fi}%
+          \fi}%
+      \fi
+      \fi
+    }%
+  }%
+  % quota del riferimento, in cima alla linea: per ultima, sopra tutto
+  \mollaIfEmpty{\mollaRif}{}{%
+    \ifnum\mollaRifShow>0
+      \mollaIfEmpty{\mollaRifQuota}{}{%
+        \node[molla testo riferimento] at (\mollaXrif,\mollaTop) {\mollaRifQuota};}%
+    \fi}%
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}[scale=1, transform shape]
+
+  % ============ IMPOSTAZIONI DI TUTTA LA FIGURA ============
+  \MollaSet{riferimento=A, distanza stati=2.4, ampiezza=1.5,
+    colore blocco=brown!20, colore muro=gray!40}
+  % stili: \tikzset{molla quota/.style={<->, blue}}
+
+  % nome/etichetta/centro del blocco/quota/opzioni/mostra
+  \SetStati{
+    A/A/3.5/$x_i=0$/{passo=1.75}/1,
+    B/B/2.5/$x$/{passo=1.25, guida alto=0.73, guida basso=0.1}/1,
+    C/C/3.1/$x$/{passo=1.86}/1
+  }
+  \MollaDisegna
+
+\end{tikzpicture}
+\end{document}

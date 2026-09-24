@@ -1,0 +1,76 @@
+[Unit]
+# 2026-09-23 — pulizia giornaliera della tabella `rate_limits`.
+#
+# Il limitatore delle richieste scrive in `rate_limits` un colpo per richiesta,
+# con l'IP in chiaro: anche quello degli studenti che entrano con la credenziale
+# di classe. Registro dei trattamenti (B.6) e DPIA dichiarano una «pulizia
+# giornaliera», e `tools/rate_limit_cleanup.php` esiste dalla fase 19 — ma
+# nessuna unità o workflow del repository lo lanciava: la sua intestazione
+# suggeriva un cron che nessuno aveva creato, e gli IP si accumulavano senza
+# termine (A-84 e DOC-30 della revisione architetturale del 23/9/2026). Con
+# questa unità, installata e accesa, i due documenti tornano veri.
+#
+# Toglie le righe più vecchie di un'ora (RateLimitStore::CONSERVAZIONE_SECONDI):
+# nessuna finestra dichiarata da una rotta è più lunga, e una riga resta al più
+# fino alla pulizia del giorno dopo, come dice il registro.
+#
+# Senza database lo script esce 1 e lo dice: fino al 23/9 diceva «Removed 0» e
+# usciva 0, cioè una pulizia che non aveva guardato niente sembrava riuscita.
+Description=pantedu — pulizia giornaliera di rate_limits (IP del limitatore)
+After=network-online.target mariadb.service
+Wants=network-online.target
+Requires=mariadb.service
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/rate_limit_cleanup.php
+# Una DELETE per intervallo sull'indice idx_rl_ts. Il primo giro toglie tutto
+# l'arretrato: in produzione, misurato il 23/9/2026 in sola lettura, 6.380
+# righe, tutte più vecchie di un'ora, la più vecchia del 19/4. I giri dopo,
+# un giorno di righe. Cinque minuti sono larghi, e non lasciano un processo
+# appeso se il database si impunta.
+TimeoutStartSec=300
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

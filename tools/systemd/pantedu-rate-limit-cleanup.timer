@@ -1,0 +1,16 @@
+[Unit]
+Description=pantedu — timer della pulizia giornaliera di rate_limits
+
+[Timer]
+# Le 03:15, l'orario che l'intestazione dello script suggeriva dalla fase 19.
+OnCalendar=*-*-* 03:15:00
+
+# Se la macchina era spenta, la pulizia si fa all'avvio: saltarla vuol dire
+# tenere gli IP oltre il termine dichiarato nel registro dei trattamenti.
+Persistent=true
+
+RandomizedDelaySec=10min
+Unit=pantedu-rate-limit-cleanup.service
+
+[Install]
+WantedBy=timers.target

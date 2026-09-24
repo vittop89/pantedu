@@ -1,0 +1,60 @@
+[Unit]
+# 2026-09-04 — impronta giornaliera dei registri append-only.
+#
+# I trigger fermano l'utenza applicativa, non chi amministra il server: la
+# stessa persona che i registri dovrebbero controllare. L'impronta di ogni
+# giorno finisce nella cartella storage, che il backup cifrato delle 03:00
+# porta fuori dal server. Vedi tools/audit/export_audit_chain.php.
+Description=pantedu — catena di hash dei registri di audit
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+# 2026-09-08 — avvisa se fallisce: e' la catena di hash che rende il registro di audit verificabile:
+# se si interrompe, il registro perde valore probatorio.
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/audit/export_audit_chain.php
+TimeoutStartSec=900
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

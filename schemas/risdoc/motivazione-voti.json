@@ -1,0 +1,523 @@
+{
+    "$id": "motivazione-voti",
+    "title": "Motivazioni del voto",
+    "category": "RISORSE",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Motivazioni del voto",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina"
+            ]
+        },
+        {
+            "type": "grade-selector",
+            "name": "gradeSelector",
+            "label": "Voto Complessivo",
+            "options": [
+                {
+                    "id": "vuoto",
+                    "value": "",
+                    "label": "-- Seleziona Voto --"
+                },
+                {
+                    "id": "dieci",
+                    "value": "10",
+                    "label": "10"
+                },
+                {
+                    "id": "nove",
+                    "value": "9",
+                    "label": "9"
+                },
+                {
+                    "id": "otto",
+                    "value": "8",
+                    "label": "8"
+                },
+                {
+                    "id": "sette",
+                    "value": "7",
+                    "label": "7"
+                },
+                {
+                    "id": "sei",
+                    "value": "6",
+                    "label": "6"
+                },
+                {
+                    "id": "cinque",
+                    "value": "5",
+                    "label": "5"
+                },
+                {
+                    "id": "quattro",
+                    "value": "4",
+                    "label": "4"
+                },
+                {
+                    "id": "pot",
+                    "value": "POTENZIATO",
+                    "label": "POTENZIATO"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "giudizio-group",
+            "title": "AREA ATTIVITA'",
+            "items": [
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_partecipazione",
+                    "description": "PARTECIPAZIONE E COLLABORAZIONE ALLE ATTIVITA' IN PRESENZA E IN DAD:",
+                    "options": [
+                        {
+                            "id": "opt_attPar_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_attPar_nonRilevabile",
+                            "value": "Non rilevabile per assenza",
+                            "label": "Non rilevabile per assenza (Partecipazione)"
+                        },
+                        {
+                            "id": "opt_attPar_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Partecipazione)"
+                        },
+                        {
+                            "id": "opt_attPar_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Partecipazione)"
+                        },
+                        {
+                            "id": "opt_attPar_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Partecipazione)"
+                        },
+                        {
+                            "id": "opt_attPar_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Partecipazione)"
+                        },
+                        {
+                            "id": "opt_attPar_pot_gruppoOttimo",
+                            "value": "OTTIMO (Partecipazione Gruppo)",
+                            "label": "PARTECIPAZIONE ALLE ATTIVITA' DI GRUPPO: OTTIMO (Potenziato)"
+                        }
+                    ]
+                },
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_puntualita",
+                    "description": "PUNTUALITA' NELLA CONSEGNA DEI MATERIALI O DEI LAVORI ASSEGNATI:",
+                    "options": [
+                        {
+                            "id": "opt_attPun_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_attPun_nonRilevabile",
+                            "value": "Non rilevabile per assenza",
+                            "label": "Non rilevabile per assenza (Puntualità)"
+                        },
+                        {
+                            "id": "opt_attPun_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Puntualità)"
+                        },
+                        {
+                            "id": "opt_attPun_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Puntualità)"
+                        },
+                        {
+                            "id": "opt_attPun_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Puntualità)"
+                        },
+                        {
+                            "id": "opt_attPun_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Puntualità)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "giudizio-group",
+            "title": "AREA LINGUISTICA E COMUNICATIVA",
+            "items": [
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_efficacia",
+                    "description": "EFFICACIA COMUNICATIVA NELL'ESPOSIZIONE-RAPPRESENTAZIONE-ESPRESSIONE-ESECUZIONE:",
+                    "options": [
+                        {
+                            "id": "opt_lingEff_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_lingEff_nonRilevabile",
+                            "value": "Non rilevabile per assenza",
+                            "label": "Non rilevabile (Efficacia Comunicativa)"
+                        },
+                        {
+                            "id": "opt_lingEff_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Efficacia Comunicativa)"
+                        },
+                        {
+                            "id": "opt_lingEff_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Efficacia Comunicativa)"
+                        },
+                        {
+                            "id": "opt_lingEff_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Efficacia Comunicativa)"
+                        },
+                        {
+                            "id": "opt_lingEff_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Efficacia Comunicativa)"
+                        },
+                        {
+                            "id": "opt_lingEff_pot_contribOttimo",
+                            "value": "OTTIMO (Considerazione Contributi)",
+                            "label": "CONSIDERAZIONE DEL CONTRIBUTI DEGLI ALTRI: OTTIMO (Potenziato)"
+                        }
+                    ]
+                },
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_padronanza",
+                    "description": "PADRONANZA DELLE TECNICHE ESECUTIVE E DEI LINGUAGGI SPECIFICI DELLE DISCIPLINE:",
+                    "options": [
+                        {
+                            "id": "opt_lingPad_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_lingPad_nonRilevabile",
+                            "value": "Non rilevabile per assenze",
+                            "label": "Non rilevabile (Padronanza Tecniche)"
+                        },
+                        {
+                            "id": "opt_lingPad_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Padronanza Tecniche)"
+                        },
+                        {
+                            "id": "opt_lingPad_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Padronanza Tecniche)"
+                        },
+                        {
+                            "id": "opt_lingPad_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Padronanza Tecniche)"
+                        },
+                        {
+                            "id": "opt_lingPad_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Padronanza Tecniche)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "giudizio-group",
+            "title": "AREA LOGICO ARGOMENTATIVA",
+            "items": [
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_tesi",
+                    "description": "CAPACITA' DI SOSTENERE UNA PROPRIA TESI:",
+                    "options": [
+                        {
+                            "id": "opt_logTesi_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_logTesi_nonRilevabile",
+                            "value": "Non rilevabile per assenze",
+                            "label": "Non rilevabile (Sostenere Tesi)"
+                        },
+                        {
+                            "id": "opt_logTesi_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Sostenere Tesi)"
+                        },
+                        {
+                            "id": "opt_logTesi_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Sostenere Tesi)"
+                        },
+                        {
+                            "id": "opt_logTesi_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Sostenere Tesi)"
+                        },
+                        {
+                            "id": "opt_logTesi_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Sostenere Tesi)"
+                        }
+                    ]
+                },
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_analisi",
+                    "description": "CAPACITA' DI ANALIZZARE E SINTETIZZARE ARGOMENTI, BRANI, CONCETTI:",
+                    "options": [
+                        {
+                            "id": "opt_logAna_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_logAna_nonRilevabile",
+                            "value": "Non rilevabile per assenze",
+                            "label": "Non rilevabile (Analisi/Sintesi)"
+                        },
+                        {
+                            "id": "opt_logAna_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Analisi/Sintesi)"
+                        },
+                        {
+                            "id": "opt_logAna_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Analisi/Sintesi)"
+                        },
+                        {
+                            "id": "opt_logAna_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Analisi/Sintesi)"
+                        },
+                        {
+                            "id": "opt_logAna_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Analisi/Sintesi)"
+                        },
+                        {
+                            "id": "opt_logAna_pot_lavoroOttimo",
+                            "value": "OTTIMO (Contributo Lavoro)",
+                            "label": "CONTRIBUTO AL LAVORO DI GRUPPO: OTTIMO (Potenziato)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "giudizio-group",
+            "title": "AREA DISCIPLINARE",
+            "items": [
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_contenuti",
+                    "description": "POSSEDERE I CONTENUTI DELLA DISCIPLINA PADRONEGGIANDONE LE PROCEDURE E I METODI PROPRI:",
+                    "options": [
+                        {
+                            "id": "opt_discCon_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_discCon_nonRilevabile",
+                            "value": "Non rilevabile per assenza",
+                            "label": "Non rilevabile (Contenuti Disciplina)"
+                        },
+                        {
+                            "id": "opt_discCon_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Contenuti Disciplina)"
+                        },
+                        {
+                            "id": "opt_discCon_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Contenuti Disciplina)"
+                        },
+                        {
+                            "id": "opt_discCon_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Contenuti Disciplina)"
+                        },
+                        {
+                            "id": "opt_discCon_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Contenuti Disciplina)"
+                        },
+                        {
+                            "id": "opt_discCon_pot_pertinenzaOttimo",
+                            "value": "OTTIMO (Pertinenza Tema)",
+                            "label": "PERTINENZA AL TEMA: OTTIMO (Potenziato)"
+                        }
+                    ]
+                },
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_ricerca",
+                    "description": "SAPER RICERCARE, SELEZIONARE E RIELABORARE DATI E INFORMAZIONI:",
+                    "options": [
+                        {
+                            "id": "opt_discRic_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_discRic_nonRilevabile",
+                            "value": "Non rilevabile per assenza",
+                            "label": "Non rilevabile (Ricerca Dati)"
+                        },
+                        {
+                            "id": "opt_discRic_insufficiente",
+                            "value": "Insufficiente",
+                            "label": "Insufficiente (Ricerca Dati)"
+                        },
+                        {
+                            "id": "opt_discRic_sufficiente",
+                            "value": "Sufficiente",
+                            "label": "Sufficiente (Ricerca Dati)"
+                        },
+                        {
+                            "id": "opt_discRic_intermedio",
+                            "value": "Intermedio",
+                            "label": "Intermedio (Ricerca Dati)"
+                        },
+                        {
+                            "id": "opt_discRic_avanzato",
+                            "value": "Avanzato",
+                            "label": "Avanzato (Ricerca Dati)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "giudizio-group",
+            "title": "Altra Motivazione (Opzionale)",
+            "items": [
+                {
+                    "type": "giudizio-item",
+                    "name": "risposta_altro",
+                    "description": "Valutazione aggiuntiva:",
+                    "options": [
+                        {
+                            "id": "opt_altro_default",
+                            "value": "",
+                            "label": "-- Seleziona --"
+                        },
+                        {
+                            "id": "opt_altro_nonSpecificato",
+                            "value": "Non specificato",
+                            "label": "Non specificato"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "nota_alunno",
+            "label": "Riepilogo Selezioni e Giudizio Libero"
+        }
+    ],
+    "grade_mappings": {
+        "10": {
+            "risposta_partecipazione": "Avanzato",
+            "risposta_puntualita": "Avanzato",
+            "risposta_efficacia": "Avanzato",
+            "risposta_padronanza": "Avanzato",
+            "risposta_tesi": "Avanzato",
+            "risposta_analisi": "Avanzato",
+            "risposta_contenuti": "Avanzato",
+            "risposta_ricerca": "Avanzato"
+        },
+        "9": {
+            "risposta_partecipazione": "Avanzato",
+            "risposta_puntualita": "Avanzato",
+            "risposta_efficacia": "Avanzato",
+            "risposta_padronanza": "Avanzato",
+            "risposta_tesi": "Intermedio",
+            "risposta_analisi": "Avanzato",
+            "risposta_contenuti": "Avanzato",
+            "risposta_ricerca": "Avanzato"
+        },
+        "8": {
+            "risposta_partecipazione": "Avanzato",
+            "risposta_puntualita": "Avanzato",
+            "risposta_efficacia": "Avanzato",
+            "risposta_padronanza": "Avanzato",
+            "risposta_tesi": "Intermedio",
+            "risposta_analisi": "Intermedio",
+            "risposta_contenuti": "Avanzato",
+            "risposta_ricerca": "Intermedio"
+        },
+        "7": {
+            "risposta_partecipazione": "Intermedio",
+            "risposta_puntualita": "Intermedio",
+            "risposta_efficacia": "Intermedio",
+            "risposta_padronanza": "Intermedio",
+            "risposta_tesi": "Intermedio",
+            "risposta_analisi": "Intermedio",
+            "risposta_contenuti": "Intermedio",
+            "risposta_ricerca": "Intermedio"
+        },
+        "6": {
+            "risposta_partecipazione": "Sufficiente",
+            "risposta_puntualita": "Sufficiente",
+            "risposta_efficacia": "Sufficiente",
+            "risposta_padronanza": "Sufficiente",
+            "risposta_tesi": "Sufficiente",
+            "risposta_analisi": "Sufficiente",
+            "risposta_contenuti": "Sufficiente",
+            "risposta_ricerca": "Sufficiente"
+        },
+        "5": {
+            "risposta_partecipazione": "Insufficiente",
+            "risposta_puntualita": "Insufficiente",
+            "risposta_efficacia": "Sufficiente",
+            "risposta_padronanza": "Insufficiente",
+            "risposta_tesi": "Insufficiente",
+            "risposta_analisi": "Sufficiente",
+            "risposta_contenuti": "Insufficiente",
+            "risposta_ricerca": "Sufficiente"
+        },
+        "4": {
+            "risposta_partecipazione": "Insufficiente",
+            "risposta_puntualita": "Insufficiente",
+            "risposta_efficacia": "Insufficiente",
+            "risposta_padronanza": "Insufficiente",
+            "risposta_tesi": "Insufficiente",
+            "risposta_analisi": "Insufficiente",
+            "risposta_contenuti": "Insufficiente",
+            "risposta_ricerca": "Insufficiente"
+        },
+        "POTENZIATO": {
+            "risposta_partecipazione": "OTTIMO (Partecipazione Gruppo)",
+            "risposta_efficacia": "OTTIMO (Considerazione Contributi)",
+            "risposta_analisi": "OTTIMO (Contributo Lavoro)",
+            "risposta_contenuti": "OTTIMO (Pertinenza Tema)"
+        }
+    }
+}

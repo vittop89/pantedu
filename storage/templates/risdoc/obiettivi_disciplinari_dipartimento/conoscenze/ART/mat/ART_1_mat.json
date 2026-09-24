@@ -1,0 +1,235 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "1",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Numeri naturali e numeri interi",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "L'insieme N", "checked": true },
+            { "label": "Le quattro operazioni in N", "checked": true },
+            { "label": "Le potenze in N", "checked": true },
+            { "label": "Multipli e divisori", "checked": true },
+            { "label": "L'insieme Z", "checked": true },
+            { "label": "Le quattro operazioni in Z", "checked": true },
+            { "label": "Le potenze in Z", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "2",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Numeri razionali e introduzione ai numeri reali",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Le frazioni", "checked": true },
+            { "label": "Il calcolo con le frazioni", "checked": true },
+            { "label": "Rappresentazioni di frazioni tramite numeri decimali", "checked": true },
+            { "label": "Rapporti, proporzioni e percentuali", "checked": true },
+            { "label": "L'insieme Q dei numeri razionali", "checked": true },
+            { "label": "Le quattro operazioni in Q", "checked": true },
+            { "label": "Le potenze in Q", "checked": true },
+            { "label": "Notazione scientifica e ordine di grandezza", "checked": true },
+            { "label": "Introduzione ai numeri reali", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "3",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Insiemi e logica",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Gli insiemi e le loro rappresentazioni", "checked": true },
+            { "label": "I sottoinsiemi", "checked": true },
+            { "label": "L'intersezione, l'unione e la differenza fra insiemi", "checked": true },
+            { "label": "Il prodotto cartesiano", "checked": true },
+            { "label": "Gli insiemi come modello per risolvere problemi", "checked": true },
+            { "label": "La logica", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "4",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Monomi",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il calcolo letterale e le espressioni algebriche", "checked": true },
+            { "label": "I monomi", "checked": true },
+            { "label": "Addizione e sottrazione di monomi", "checked": true },
+            { "label": "Moltiplicazione, potenza e divisione di monomi", "checked": true },
+            { "label": "Massimo comune divisore e minimo comune multiplo tra monomi", "checked": true },
+            { "label": "Il calcolo letterale e i monomi per risolvere problemi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "5",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Polinomi",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "I polinomi", "checked": true },
+            { "label": "Le operazioni tra polinomi", "checked": true },
+            { "label": "I prodotti notevoli", "checked": true },
+            { "label": "I polinomi per risolvere problemi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "6",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Introduzione alla scomposizione di polinomi",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Le scomposizioni e i raccoglimenti", "checked": true },
+            { "label": "Scomposizioni mediante prodotti notevoli", "checked": true },
+            { "label": "Scomposizione di particolari trinomi di secondo grado", "checked": true },
+            { "label": "Massimo comune divisore e minimo comune multiplo tra polinomi", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "7",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Funzioni",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione alle funzioni", "checked": true },
+            { "label": "Le funzioni di variabile reale", "checked": true },
+            { "label": "Il piano cartesiano e il grafico di una funzione", "checked": true },
+            { "label": "Le funzioni di proporzionalità diretta e inversa", "checked": true },
+            { "label": "La funzione lineare", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "8",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Equazioni di primo grado numeriche intere",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione alle equazioni", "checked": true },
+            { "label": "Principi di equivalenza per le equazioni", "checked": true },
+            { "label": "Equazioni numeriche intere di primo grado", "checked": true },
+            { "label": "Equazioni e funzioni", "checked": true },
+            { "label": "Problemi che hanno come modello un'equazione di primo grado", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "9",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Disequazioni di primo grado numeriche intere",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Disuguaglianze numeriche", "checked": true },
+            { "label": "Introduzione alle disequazioni", "checked": true },
+            { "label": "Principi di equivalenza per le disequazioni", "checked": true },
+            { "label": "Disequazioni numeriche intere di primo grado", "checked": true },
+            { "label": "Sistemi di disequazioni", "checked": true },
+            { "label": "Disequazioni e funzioni", "checked": true },
+            { "label": "Problemi che hanno come modello disequazioni e sistemi di disequazioni", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "10",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Statistica",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione alla statistica", "checked": true },
+            { "label": "Distribuzioni di frequenze", "checked": true },
+            { "label": "Rappresentazioni grafiche", "checked": true },
+            { "label": "Gli indici di posizione: media aritmetica, mediana e moda", "checked": true },
+            { "label": "La variabilità e gli indici di dispersione", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "11",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Piano euclideo",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Introduzione alla geometria", "checked": true },
+            { "label": "I concetti primitivi e i primi assiomi della geometria euclidea", "checked": true },
+            { "label": "Le parti della retta e le poligonali", "checked": true },
+            { "label": "Semipiani e angoli", "checked": true },
+            { "label": "I poligoni", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "12",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Dalla congruenza alla misura",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "La congruenza", "checked": true },
+            { "label": "La congruenza e i segmenti", "checked": true },
+            { "label": "La congruenza e gli angoli", "checked": true },
+            { "label": "Misura di segmenti e di angoli", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "13",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Congruenza nei triangoli",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Triangoli e criteri di congruenza", "checked": true },
+            { "label": "Dimostrazioni dei teoremi", "checked": true },
+            { "label": "Proprietà dei triangoli isosceli", "checked": true },
+            { "label": "Proprietà relative agli angoli: angolo esterno e classificazione dei triangoli rispetto agli angoli", "checked": true },
+            { "label": "Disuguaglianze tra gli elementi di un triangolo", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "14",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Rette perpendicolari e parallele e introduzione alle isometrie",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Rette perpendicolari", "checked": true },
+            { "label": "Rette parallele", "checked": true },
+            { "label": "Criteri di parallelismo", "checked": true },
+            { "label": "Proprietà degli angoli nei poligoni", "checked": true },
+            { "label": "Congruenza dei triangoli rettangoli", "checked": true },
+            { "label": "Trasformazioni geometriche e isometrie", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "15",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "Quadrilateri",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Terminologia relativa ai quadrilateri", "checked": true },
+            { "label": "Trapezi", "checked": true },
+            { "label": "Parallelogrammi", "checked": true },
+            { "label": "Rettangoli, rombi e quadrati", "checked": true },
+            { "label": "Il piccolo teorema di Talete", "checked": true }
+        ]
+    }
+]

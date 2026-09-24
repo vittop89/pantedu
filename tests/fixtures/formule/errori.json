@@ -1,0 +1,209 @@
+{
+  "casi": [
+    {
+      "nome": "divisione-per-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=1/0"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#DIV/0!",
+          "value": null,
+          "error": "#DIV/0!"
+        }
+      }
+    },
+    {
+      "nome": "zero-diviso-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=0/0"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#DIV/0!",
+          "value": null,
+          "error": "#DIV/0!"
+        }
+      }
+    },
+    {
+      "nome": "resto-per-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=RESTO(5;0)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#DIV/0!",
+          "value": null,
+          "error": "#DIV/0!"
+        }
+      }
+    },
+    {
+      "nome": "radice-di-negativo",
+      "griglia": [
+        [
+          {
+            "formula": "=RADQ(-4)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#VALUE!",
+          "value": null,
+          "error": "#VALUE!"
+        }
+      }
+    },
+    {
+      "nome": "riferimento-a-riga-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=A0"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#REF!",
+          "value": null,
+          "error": "#REF!"
+        }
+      }
+    },
+    {
+      "nome": "funzione-sconosciuta",
+      "griglia": [
+        [
+          {
+            "formula": "=PIPPO(1)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#NAME?",
+          "value": null,
+          "error": "#NAME?"
+        }
+      }
+    },
+    {
+      "nome": "formula-incompleta",
+      "griglia": [
+        [
+          {
+            "formula": "=1+"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#ERR!",
+          "value": null,
+          "error": "#ERR!"
+        }
+      }
+    },
+    {
+      "nome": "parentesi-non-chiusa",
+      "griglia": [
+        [
+          {
+            "formula": "=(1+2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#ERR!",
+          "value": null,
+          "error": "#ERR!"
+        }
+      }
+    },
+    {
+      "nome": "testo-in-aritmetica",
+      "griglia": [
+        [
+          {
+            "formula": "=\"abc\"+1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#VALUE!",
+          "value": null,
+          "error": "#VALUE!"
+        }
+      }
+    },
+    {
+      "nome": "riferimento-circolare",
+      "griglia": [
+        [
+          {
+            "formula": "=B1"
+          },
+          {
+            "formula": "=A1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "#CIRC!",
+          "value": null,
+          "error": "#CIRC!"
+        },
+        "0,1": {
+          "display": "#CIRC!",
+          "value": null,
+          "error": "#CIRC!"
+        }
+      }
+    },
+    {
+      "nome": "media-senza-argomenti-numerici",
+      "griglia": [
+        [
+          {
+            "raw": "testo"
+          }
+        ],
+        [
+          {
+            "formula": "=MEDIA(A1:A1)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "testo",
+          "value": 0,
+          "error": null
+        },
+        "1,0": {
+          "display": "#DIV/0!",
+          "value": null,
+          "error": "#DIV/0!"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+[
+    {
+        "titolo": "Unità 1: Le grandezze fisiche",
+        "contenuti": [
+            { "label": "Le grandezze fisiche e le unità di misura", "checked": true },
+            { "label": "La notazione scientifica", "checked": true },
+            { "label": "Le misure di lunghezza, area, volume", "checked": true },
+            { "label": "Le misure di tempo, massa, densità", "checked": true },
+            { "label": "L'incertezza della misura", "checked": true },
+            { "label": "Le misure indirette", "checked": true },
+            { "label": "Le leggi fisiche", "checked": true },
+            { "label": "Le relazioni tra due grandezze", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 2: I vettori e le forze",
+        "contenuti": [
+            { "label": "Le grandezze vettoriali", "checked": true },
+            { "label": "Le componenti di un vettore", "checked": true },
+            { "label": "Le forze e la loro misura", "checked": true },
+            { "label": "Il principio di azione e reazione", "checked": true },
+            { "label": "La forza peso", "checked": true },
+            { "label": "La forza elastica", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 3: L'equilibrio dei corpi",
+        "contenuti": [
+            { "label": "L'equilibrio del punto materiale e la forza normale", "checked": true },
+            { "label": "L'attrito radente", "checked": true },
+            { "label": "La tensione e il piano inclinato", "checked": true },
+            { "label": "L'equilibrio rispetto alle rotazioni", "checked": true },
+            { "label": "L'equilibrio dei corpi estesi", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 4: L'equilibrio dei fluidi",
+        "contenuti": [
+            { "label": "La pressione", "checked": false },
+            { "label": "I fluidi", "checked": false },
+            { "label": "La legge di Stevin e il principio di Pascal", "checked": false },
+            { "label": "I vasi comunicanti e la misura della pressione", "checked": false },
+            { "label": "La legge di Archimede", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 5: I moti in una dimensione",
+        "contenuti": [
+            { "label": "Introduzione al moto", "checked": true },
+            { "label": "Il moto e la velocità", "checked": true },
+            { "label": "Il moto rettilineo uniforme", "checked": true },
+            { "label": "Il moto e l'accelerazione", "checked": true },
+            { "label": "Il moto rettilineo uniformemente accelerato", "checked": true },
+            { "label": "La caduta libera", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 6: I moti in due dimensioni",
+        "contenuti": [
+            { "label": "I vettori spostamento, velocità e accelerazione", "checked": true },
+            { "label": "Il moto di un proiettile", "checked": true },
+            { "label": "Il moto circolare uniforme", "checked": true },
+            { "label": "Il moto armonico", "checked": false }
+        ]
+    }
+]

@@ -1,0 +1,216 @@
+{
+    "_leggimi": "Modelli TikZ versionati: il rilascio li porta nella biblioteca dell'istanza (ADR-050, storage/templates/tikz/LEGGIMI.md). Quando si cambia un .tex, l'impronta della versione di prima va aggiunta a «sostituisce»: senza, l'istanza la tiene e il rilascio la segnala come cambiata dal pannello.",
+    "modelli": [
+        {
+            "gruppo": "gruppo-FISICA",
+            "etichetta": "cinematica 1D",
+            "tipo": "tikz",
+            "file": "fisica/cinematica-1d.tex",
+            "sostituisce": [
+                "831d1dd95ae450a7e18b69dfcd97a425394c902c6c2373e25bb71b7a43dbe09e",
+                "6289d761856a87e73947c84a5a3adcfd742f507625b7a70465fe30da4507f340",
+                "f3fe1f7104facd5b0054e3d3ccc0c945122fd650b62be4fc418d212114635806"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "cinematica 1D",
+            "tipo": "tikz",
+            "file": "fisica/cinematica-1d.tex",
+            "sostituisce": [
+                "831d1dd95ae450a7e18b69dfcd97a425394c902c6c2373e25bb71b7a43dbe09e",
+                "6289d761856a87e73947c84a5a3adcfd742f507625b7a70465fe30da4507f340",
+                "f3fe1f7104facd5b0054e3d3ccc0c945122fd650b62be4fc418d212114635806"
+            ]
+        },
+        {
+            "gruppo": "gruppo-geometria",
+            "etichetta": "poligono",
+            "tipo": "tikz",
+            "file": "geometria/poligono.tex",
+            "sostituisce": [
+                "6941a706dbfbad2dd4012ba0cc864116e142bdd71826036efae385cc0f179db5"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "poligono",
+            "tipo": "tikz",
+            "file": "geometria/poligono.tex",
+            "sostituisce": [
+                "6941a706dbfbad2dd4012ba0cc864116e142bdd71826036efae385cc0f179db5"
+            ]
+        },
+        {
+            "gruppo": "gruppo-FISICA",
+            "etichetta": "molla 3 stati",
+            "tipo": "tikz",
+            "file": "fisica/molla-3-stati.tex",
+            "sostituisce": [
+                "1ad271990b01cf95484a24e185f008c019891c6fde091600d106e8c1d1653096"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "molla 3 stati",
+            "tipo": "tikz",
+            "file": "fisica/molla-3-stati.tex",
+            "sostituisce": [
+                "1ad271990b01cf95484a24e185f008c019891c6fde091600d106e8c1d1653096"
+            ]
+        },
+        {
+            "gruppo": "gruppo-equ. di 2° grado",
+            "etichetta": "auto-2step",
+            "tipo": "tikz",
+            "file": "equazioni-2-grado/auto-2step.tex",
+            "sostituisce": [
+                "624bb6fd90042a3c017a9d232e5ddf07dab3b3a2326990c71759919dc8e096d9"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "auto-2step",
+            "tipo": "tikz",
+            "file": "equazioni-2-grado/auto-2step.tex",
+            "sostituisce": [
+                "624bb6fd90042a3c017a9d232e5ddf07dab3b3a2326990c71759919dc8e096d9"
+            ]
+        },
+        {
+            "gruppo": "gruppo-matrici-e-tabelle",
+            "etichetta": "Laccio di scarpa",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/laccio-di-scarpa.tex",
+            "sostituisce": [
+                "487bb548dc9e3b339f49900496e7454bccf2db177f8089caa69e10e35a2ea1b2"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "Laccio di scarpa",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/laccio-di-scarpa.tex",
+            "sostituisce": [
+                "487bb548dc9e3b339f49900496e7454bccf2db177f8089caa69e10e35a2ea1b2"
+            ]
+        },
+        {
+            "gruppo": "gruppo-matrici-e-tabelle",
+            "etichetta": "soluzioni sistemi",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/soluzioni-sistemi.tex",
+            "sostituisce": [
+                "a505a41136872961f37a50dedf5b7ad49163a848234e6b7d7c610b3f9ce5f131"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "soluzioni sistemi",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/soluzioni-sistemi.tex",
+            "sostituisce": [
+                "a505a41136872961f37a50dedf5b7ad49163a848234e6b7d7c610b3f9ce5f131"
+            ]
+        },
+        {
+            "gruppo": "gruppo-matrici-e-tabelle",
+            "etichetta": "studio del segno - multi (param)",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/studio-del-segno-multi.tex",
+            "sostituisce": [
+                "c709a174dd44528dd754cd0392c12124fc952e31171cb202d153fd703ab47431"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "studio del segno - multi (param)",
+            "tipo": "tikz",
+            "file": "matrici-e-tabelle/studio-del-segno-multi.tex",
+            "sostituisce": [
+                "c709a174dd44528dd754cd0392c12124fc952e31171cb202d153fd703ab47431"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "2x1",
+            "tipo": "tikz",
+            "file": "studio-del-valabs/2x1.tex",
+            "sostituisce": [
+                "4412e913f08a0deb4bb29a8f9b96c4f317b7546e77ffcab0b660951a2577f79d"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "2x2",
+            "tipo": "tikz",
+            "file": "studio-del-valabs/2x2.tex",
+            "sostituisce": [
+                "54c013803cf357abba59f3bd17dca80ba2ae9201454d095f37b31b1f7b1b655e"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "2x3",
+            "tipo": "tikz",
+            "file": "studio-del-valabs/2x3.tex",
+            "sostituisce": [
+                "85ce17f8ecd8615a23f257863daadef7801ef3c8c001e6639f18e2262a7ede35"
+            ]
+        },
+        {
+            "gruppo": "gruppo-grafici e funzioni",
+            "etichetta": "grafico di funzione (axis)",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/grafico-axis.tex",
+            "sostituisce": [
+                "04ee67da1730a9e02aefacf7d96d1ee9b6ec8d20ab30dfe7ee963c773b71b2b1"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "grafico di funzione (axis)",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/grafico-axis.tex",
+            "sostituisce": [
+                "04ee67da1730a9e02aefacf7d96d1ee9b6ec8d20ab30dfe7ee963c773b71b2b1"
+            ]
+        },
+        {
+            "gruppo": "gruppo-grafici e funzioni",
+            "etichetta": "grafico di funzione - multi (TikzPure)",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/grafico-multi.tex",
+            "sostituisce": [
+                "c4a2ade34d6a7126f4942806b8fcd6308d91ca642dea57825e9f1b8c622d3c6e"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "grafico di funzione - multi (TikzPure)",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/grafico-multi.tex",
+            "sostituisce": [
+                "c4a2ade34d6a7126f4942806b8fcd6308d91ca642dea57825e9f1b8c622d3c6e"
+            ]
+        },
+        {
+            "gruppo": "gruppo-grafici e funzioni",
+            "etichetta": "parte di piano",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/parte-di-piano.tex",
+            "sostituisce": [
+                "778977cb4a0675431f33c59cbfb2b632f4cf32930be0fb9bf4ce0c6de6332dc7"
+            ]
+        },
+        {
+            "gruppo": "gruppo-studio del ValAbs",
+            "etichetta": "parte di piano",
+            "tipo": "tikz",
+            "file": "grafici-e-funzioni/parte-di-piano.tex",
+            "sostituisce": [
+                "778977cb4a0675431f33c59cbfb2b632f4cf32930be0fb9bf4ce0c6de6332dc7"
+            ]
+        }
+    ]
+}

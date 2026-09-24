@@ -1,0 +1,26 @@
+[Unit]
+Description=pantedu — timer per la ripresa dei lavori di compilazione
+
+[Timer]
+# Ogni cinque minuti, non ogni minuto come faceva il crontab.
+#
+# Il caso normale non passa di qui: `compileAsync` compila già dentro la
+# richiesta. Questo raccoglie solo i falliti, che arrivano col contagocce —
+# in tre mesi ne sono rimasti indietro due. Un minuto era tarato su un'idea
+# diversa, in cui la coda era la via principale.
+#
+# Cinque minuti è anche il ritardo massimo che un docente vedrebbe: chiede il
+# PDF, il primo tentativo fallisce, e nel peggiore dei casi il secondo parte
+# cinque minuti dopo. Con un minuto si guadagnerebbero quattro minuti in un
+# caso raro, pagando 1440 esecuzioni al giorno invece di 288.
+OnCalendar=*:0/5
+
+# Se la macchina è stata giù, non serve recuperare i giri saltati: il
+# prossimo passa comunque entro cinque minuti e prende tutto quello che c'è.
+Persistent=false
+
+RandomizedDelaySec=30
+Unit=pantedu-compile-jobs.service
+
+[Install]
+WantedBy=timers.target

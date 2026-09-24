@@ -1,0 +1,510 @@
+{
+  "casi": [
+    {
+      "nome": "contase-numerico",
+      "griglia": [
+        [
+          {
+            "raw": "5"
+          }
+        ],
+        [
+          {
+            "raw": "10"
+          }
+        ],
+        [
+          {
+            "raw": "15"
+          }
+        ],
+        [
+          {
+            "raw": "20"
+          }
+        ],
+        [
+          {
+            "formula": "=CONTA.SE(A1:A4;\">10\")"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "5",
+          "value": 5,
+          "error": null
+        },
+        "1,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        },
+        "2,0": {
+          "display": "15",
+          "value": 15,
+          "error": null
+        },
+        "3,0": {
+          "display": "20",
+          "value": 20,
+          "error": null
+        },
+        "4,0": {
+          "display": "2",
+          "value": 2,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "sommase-con-intervallo-somma",
+      "griglia": [
+        [
+          {
+            "raw": "5"
+          },
+          {
+            "raw": "1"
+          }
+        ],
+        [
+          {
+            "raw": "10"
+          },
+          {
+            "raw": "2"
+          }
+        ],
+        [
+          {
+            "raw": "15"
+          },
+          {
+            "raw": "3"
+          }
+        ],
+        [
+          {
+            "raw": "20"
+          },
+          {
+            "raw": "4"
+          }
+        ],
+        [
+          {
+            "formula": "=SOMMA.SE(A1:A4;\">10\";B1:B4)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "5",
+          "value": 5,
+          "error": null
+        },
+        "0,1": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        },
+        "1,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        },
+        "1,1": {
+          "display": "2",
+          "value": 2,
+          "error": null
+        },
+        "2,0": {
+          "display": "15",
+          "value": 15,
+          "error": null
+        },
+        "2,1": {
+          "display": "3",
+          "value": 3,
+          "error": null
+        },
+        "3,0": {
+          "display": "20",
+          "value": 20,
+          "error": null
+        },
+        "3,1": {
+          "display": "4",
+          "value": 4,
+          "error": null
+        },
+        "4,0": {
+          "display": "7",
+          "value": 7,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "mediana-dispari",
+      "griglia": [
+        [
+          {
+            "formula": "=MEDIANA(1;2;3)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "2",
+          "value": 2,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "mediana-pari",
+      "griglia": [
+        [
+          {
+            "formula": "=MEDIANA(1;2;3;4)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "2,5",
+          "value": 2.5,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "arrotonda-base",
+      "griglia": [
+        [
+          {
+            "formula": "=ARROTONDA(3.14159;2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "3,14",
+          "value": 3.14,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "arrotonda-a-centinaia",
+      "griglia": [
+        [
+          {
+            "formula": "=ARROTONDA(1235;-2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1200",
+          "value": 1200,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "arrotonda-per-dif-negativo",
+      "griglia": [
+        [
+          {
+            "formula": "=ARROTONDA.PER.DIF(-2.7;0)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "-2",
+          "value": -2,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "arrotonda-per-ecc-negativo",
+      "griglia": [
+        [
+          {
+            "formula": "=ARROTONDA.PER.ECC(-2.3;0)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "-3",
+          "value": -3,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "se-vero-testo",
+      "griglia": [
+        [
+          {
+            "formula": "=SE(1;\"si\";\"no\")"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "si",
+          "value": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "se-falso-senza-else",
+      "griglia": [
+        [
+          {
+            "formula": "=SE(0;99)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "seerrore-cattura",
+      "griglia": [
+        [
+          {
+            "formula": "=SE.ERRORE(1/0;\"errore\")"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "errore",
+          "value": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "seerrore-passa",
+      "griglia": [
+        [
+          {
+            "formula": "=SE.ERRORE(5;\"errore\")"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "5",
+          "value": 5,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "e-vero",
+      "griglia": [
+        [
+          {
+            "formula": "=E(1;1)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "o-falso",
+      "griglia": [
+        [
+          {
+            "formula": "=O(0;0)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "non-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=NON(0)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "prodotto-con-zero",
+      "griglia": [
+        [
+          {
+            "formula": "=PRODOTTO(2;0;5)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "potenza-e-radice",
+      "griglia": [
+        [
+          {
+            "formula": "=POTENZA(2;10)"
+          }
+        ],
+        [
+          {
+            "formula": "=RADQ(16)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1024",
+          "value": 1024,
+          "error": null
+        },
+        "1,0": {
+          "display": "4",
+          "value": 4,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "intero-negativo",
+      "griglia": [
+        [
+          {
+            "formula": "=INTERO(-7.9)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "-8",
+          "value": -8,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "resto-negativo",
+      "griglia": [
+        [
+          {
+            "formula": "=RESTO(-7;3)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "2",
+          "value": 2,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "testo-numero-decimali",
+      "griglia": [
+        [
+          {
+            "formula": "=TESTO(3.14159;2)"
+          }
+        ],
+        [
+          {
+            "formula": "=TESTO(5)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "3,14",
+          "value": 3.14,
+          "error": null
+        },
+        "1,0": {
+          "display": "5",
+          "value": 5,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "percentuale-senza-decimali",
+      "griglia": [
+        [
+          {
+            "formula": "=PERCENTUALE(14.2857)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "14,29%",
+          "value": 14.29,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "percentuale-con-decimali",
+      "griglia": [
+        [
+          {
+            "formula": "=PERCENTUALE(10;2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "10,00%",
+          "value": 10,
+          "error": null
+        }
+      }
+    }
+  ]
+}

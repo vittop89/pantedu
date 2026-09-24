@@ -1,0 +1,41 @@
+{
+    "ci": {
+        "collect": {
+            "settings": {
+                "preset": "desktop",
+                "throttling": {
+                    "rttMs": 40,
+                    "throughputKbps": 10240,
+                    "cpuSlowdownMultiplier": 1
+                },
+                "skipAudits": ["uses-http2", "redirects-http"]
+            },
+            "numberOfRuns": 3,
+            "url": [
+                "http://127.0.0.1:8000/",
+                "http://127.0.0.1:8000/login",
+                "http://127.0.0.1:8000/accessibility"
+            ]
+        },
+        "assert": {
+            "//": "Focus accessibilità: il server di test è `php -S` (dev), quindi le metriche di performance/caching/minificazione NON sono rappresentative (in prod le gestiscono Cloudflare + bundle Vite) e sono escluse. Gating sull'accessibilità.",
+            "assertions": {
+                "categories:accessibility":   ["error", { "minScore": 0.95 }],
+
+                "color-contrast":             ["error", { "minScore": 1 }],
+                "html-has-lang":              ["error", { "minScore": 1 }],
+                "image-alt":                  ["error", { "minScore": 1 }],
+                "label":                      ["error", { "minScore": 1 }],
+                "link-name":                  ["error", { "minScore": 1 }],
+                "list":                       ["error", { "minScore": 1 }],
+                "meta-viewport":              ["error", { "minScore": 1 }],
+                "tabindex":                   ["error", { "minScore": 1 }],
+                "valid-lang":                 ["error", { "minScore": 1 }],
+                "target-size":                ["error", { "minScore": 1 }]
+            }
+        },
+        "upload": {
+            "target": "temporary-public-storage"
+        }
+    }
+}

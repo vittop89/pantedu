@@ -1,0 +1,546 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+
+% ==================================================
+% SOLUZIONI DI UN SISTEMA DI DISEQUAZIONI — MODULARE
+% ==================================================
+% Una figura = uno o più CASI affiancati. Ogni caso ha una retta con le
+% colonne dei valori notevoli, una riga per ogni disequazione e, in fondo,
+% la riga S delle soluzioni comuni (sotto la linea punteggiata).
+%
+%   \begin{Caso}{indice}{mostra}{titolo}
+%     \SistSet{...}  \tikzset{sist ...}   (facoltativi: valgono solo qui)
+%     \SetColonne{...}  \SetRighe{...}  \SetIntervalli{...}
+%   \end{Caso}
+%
+% indice: 0 = primo caso a sinistra, 1 = secondo, ...
+%         (x = indice * distanza casi, o più a destra: vedi sotto)
+% mostra: 1 (o vuoto) = disegna, 0 = nascondi (lo spazio del caso resta)
+%
+% Tutto ciò che si imposta FUORI dai casi vale per l'intera figura;
+% DENTRO un caso vale solo per quel caso.
+%
+% LISTE (campi separati da /, elementi separati da virgola; un campo che
+% contiene una virgola o una / va tra graffe; gli spazi attorno alle / non
+% contano, si possono incolonnare i campi; un campo vuoto prende il valore
+% predefinito, e un «mostra» vuoto vale 1):
+%
+%   \SetColonne{valore/x/mostra, ...}
+%     valore = testo sopra la colonna; x = ascissa (vuoto = numero d'ordine
+%     della colonna: 1, 2, 3, ...). Le colonne si citano col numero d'ordine
+%     e possono stare in qualunque ordine: la retta va dalla colonna più a
+%     sinistra alla più a destra, e lì stanno i due «infiniti».
+%
+%   \SetRighe{etichetta/mostra, ...}
+%     una riga per disequazione, dall'alto; si citano col numero 1, 2, ...
+%     mostra=0 nasconde etichetta e intervalli, lo spazio resta.
+%
+%   \SetIntervalli{riga/da/estremo da/a/estremo a/colore/stile/mostra, ...}
+%     riga    = numero della riga, oppure S per la riga delle soluzioni
+%     da, a   = numero della colonna; vuoto o 0 = infinito (da = bordo
+%               sinistro, a = bordo destro), e lì l'estremo non si disegna
+%     estremo = pieno | aperto | nessuno | nome di uno stile
+%               «sist estremo NOME» definito da te; vuoto = chiave estremo
+%     colore  = vuoto: chiave colore (righe) o colore soluzione (riga S)
+%     stile   = opzioni TikZ in più per la linea, es. dashed o {dashed, thin}
+%   L'ordine della lista è l'ordine di disegno (conta dove si sovrappongono);
+%   in ogni intervallo si disegnano prima la linea, poi i pallini sopra.
+%
+% TESTI: in ogni testo (valori, etichette, titolo, scritta della riga S,
+% soluzione, insieme) si va a capo con \\ .
+%
+% CHIAVI (\SistSet{chiave=valore, ...}): vedi VARIABILI / PARAMETRI.
+% STILI (\tikzset{sist .../.style={...}}): vedi sotto le chiavi.
+%
+% POSIZIONI AUTOMATICHE (nessun testo finisce sopra un altro):
+% - i casi non si sovrappongono: se un caso, con le sue etichette e i suoi
+%   testi, entrerebbe nel caso disegnato prima, si sposta a destra quanto
+%   basta a lasciare «stacco casi»; distanza casi è quindi la distanza
+%   minima. Etichette lunghe allargano la figura: accorciale o vai a capo.
+%   Scrivi i casi da sinistra a destra: ognuno si confronta con il caso
+%   scritto subito prima (un caso scritto dopo ma più a sinistra non si
+%   sposta, e allora può sovrapporsi);
+% - il titolo sale sopra i valori delle colonne quando sono più alti
+%   (frazioni, tacca alta), lasciando almeno «stacco titolo»;
+% - un testo della soluzione più alto di una riga (più righe, frazioni)
+%   cresce verso il basso, e l'insieme scende per restare almeno
+%   «stacco insieme» sotto di lui.
+%
+% La scritta della riga S (chiave etichetta soluzione) sta a sinistra del
+% PRIMO caso disegnato (mostra etichetta soluzione=prima), perché i casi
+% affiancati sono vicini e la scritta ripetuta li allontanerebbe. Con
+% =tutti la si ripete in ogni caso (i casi si spostano da soli per farle
+% posto); con =nessuno non compare; un altro valore è un errore. Se i casi
+% hanno un numero diverso di righe, la riga S non è alla stessa altezza:
+% usa =tutti.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri (si cambiano con \SistSet{chiave=valore, ...})
+\pgfkeys{
+  /sist/.is family, /sist,
+  % impaginazione
+  distanza casi/.initial=6,       % distanza orizzontale (minima) fra i casi
+  margine/.initial=1,             % retta oltre la prima e l'ultima colonna
+  tacca/.initial=0.2,             % colonne sopra la retta
+  prima riga/.initial=0.5,        % distanza della prima riga dalla retta
+  passo righe/.initial=1,         % distanza fra le righe
+  y titolo/.initial=1,            % altezza (minima) del titolo sopra la retta
+  distanza soluzione/.initial=1,  % dalla riga S al testo della soluzione
+  distanza insieme/.initial=0.5,  % dalla soluzione all'insieme (fra i centri)
+  % spazi minimi fra i testi (in pt, mm, ...)
+  stacco casi/.initial=1pt,       % fra un caso e quello disegnato prima
+  stacco titolo/.initial=3pt,     % fra i valori delle colonne e il titolo
+  stacco insieme/.initial=3pt,    % fra il testo della soluzione e l'insieme
+  % estremi e colori
+  raggio/.initial=5pt,            % raggio dei pallini degli estremi
+  estremo/.initial=aperto,        % estremo predefinito (campo vuoto)
+  colore/.initial=black,          % colore predefinito degli intervalli
+  colore soluzione/.initial=red,  % colore predefinito della riga S
+  % riga delle soluzioni
+  riga soluzione/.initial=1,      % 1 = c'è la riga S (e la punteggiata)
+  etichetta soluzione/.initial={SOLUZIONI COMUNI},
+  mostra etichetta soluzione/.initial=prima, % prima | tutti | nessuno
+  % testi del caso (di solito si danno dentro il caso)
+  soluzione/.initial={},          % testo sotto la riga S
+  insieme/.initial={},            % testo più in basso (es. S = ...)
+}
+\newcommand{\SistSet}[1]{\pgfkeys{/sist/.cd,#1}}
+\newcommand{\sistget}[1]{\pgfkeysvalueof{/sist/#1}}
+
+% Stili grafici (si cambiano con \tikzset{sist ... /.style={...}})
+% (align serve ad andare a capo con \\ nei testi: per cambiare uno stile
+% dei testi tenendo l'a capo usa /.append style, o rimetti align)
+\tikzset{
+  sist asse/.style={},                     % la retta
+  sist colonna/.style={},                  % le linee verticali
+  sist valore/.style={above, align=center},% i valori sopra le colonne
+  sist etichetta/.style={left, align=right},% le disequazioni
+  sist etichetta soluzione/.style={left, align=right, text=red, font=\bfseries},
+  sist intervallo/.style={line width=0.8mm},
+  sist soluzione/.style={line width=1mm},  % ripassata delle linee della riga S
+  sist estremo/.style={line width=0.4mm},  % base di ogni pallino
+  sist estremo aperto/.style={draw},
+  sist estremo pieno/.style={fill},
+  sist separatore/.style={dotted},         % linea sopra la riga S
+  sist titolo/.style={align=center},
+  sist testo soluzione/.style={align=center},
+  sist insieme/.style={align=center},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+\makeatletter
+% --- dati (vuoti per default) ---
+\newcommand{\SetColonne}[1]{\def\SistColonneData{#1}}
+\newcommand{\SetRighe}[1]{\def\SistRigheData{#1}}
+\newcommand{\SetIntervalli}[1]{\def\SistIntervalliData{#1}}
+\SetColonne{}
+\SetRighe{}
+\SetIntervalli{}
+
+% --- utilità ---
+% \sistIfEmpty{\macro}{se vuota}{se piena}
+\newcommand{\sistIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \sistDefault{\macro}{valore}: se \macro è vuota le assegna il valore
+\newcommand{\sistDefault}[2]{\sistIfEmpty{#1}{\edef#1{#2}}{}}
+% \sistTrim\campo: toglie gli spazi attorno al contenuto del campo (e le
+% graffe che lo racchiudono tutto)
+\newcommand{\sistTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+% \sistShow\campo: il campo «mostra» senza spazi; vuoto vale 1
+\newcommand{\sistShow}[1]{\sistTrim#1\sistDefault{#1}{1}}
+% \sistStyle{nome}{\campo}: il contenuto di un campo diventa lo stile «nome»
+\newcommand{\sistStyle}[2]{\expandafter\sistStyleAux\expandafter{#2}{#1}}
+\newcommand{\sistStyleAux}[2]{\tikzset{#2/.style={#1}}}
+% \sistMin{\macro}{espressione}, \sistMax{...}: minimo e massimo (globali)
+\newcommand{\sistMin}[2]{%
+  \pgfmathsetmacro{\sistMinTmp}{min(#1,#2)}\xdef#1{\sistMinTmp}}
+\newcommand{\sistMax}[2]{%
+  \pgfmathsetmacro{\sistMinTmp}{max(#1,#2)}\xdef#1{\sistMinTmp}}
+\def\sistZero{0}
+\def\sistS{S}
+\def\sistNessuno{nessuno}
+\def\sistPrima{prima}
+\def\sistTutti{tutti}
+\newcount\sistCaso    % numero progressivo del caso (nomi interni)
+\newcount\sistConta
+\newif\ifsistEtichettaFatta
+\newif\ifsistPrec     % c'è già un caso disegnato (per non sovrapporsi)
+% ogni figura riparte da capo
+\tikzset{every picture/.append style={execute at begin picture={%
+  \global\sistEtichettaFattafalse\global\sistPrecfalse}}}
+
+% --- misure (per non sovrapporre i testi) ---
+% Le misure sono in pt sulla tela, cioè nel disegno finito, e non
+% dipendono da scale o spostamenti della figura.
+% \sistTela{x}{y}: in \sistTx e \sistTy la posizione sulla tela del punto
+% (x,y) del caso
+\newcommand{\sistTela}[2]{%
+  \pgfpointtransformed{\pgfpointxy{#1}{#2}}%
+  \edef\sistTx{\pgf@sys@tonumber\pgf@x}%
+  \edef\sistTy{\pgf@sys@tonumber\pgf@y}}
+% \sistMisura{stile}{testo}: prepara, senza disegnarlo, il nodo
+% \node[stile]{testo} e mette in \sistMminx, \sistMmaxx, \sistMminy,
+% \sistMmaxy il riquadro del solo testo (senza il margine interno),
+% rispetto al punto d'ancoraggio del nodo
+\newcommand{\sistMisuraSalva}{%
+  \xdef\sistMisuraBox{{\pgfpositionnodelaterminx}{\pgfpositionnodelatermaxx}%
+    {\pgfpositionnodelaterminy}{\pgfpositionnodelatermaxy}}}
+\newcommand{\sistMisuraNodo}[2]{%
+  {\pgftransformreset\pgfpositionnodelater{\sistMisuraSalva}%
+    \node[#1] at (0,0) {#2};}}
+\newcommand{\sistMisura}[2]{%
+  \sistMisuraNodo{#1}{#2}\expandafter\sistMisuraA\sistMisuraBox
+  \sistMisuraNodo{#1, inner sep=0pt}{#2}\expandafter\sistMisuraB\sistMisuraBox}
+\def\sistMisuraA#1#2#3#4{%
+  \def\sistMa{#1}\def\sistMb{#2}\def\sistMc{#3}\def\sistMd{#4}}
+\def\sistMisuraB#1#2#3#4{%
+  % il margine interno è metà della differenza fra nodo e solo testo
+  \pgfmathsetmacro{\sistMsx}{((\sistMb-\sistMa)-(#2-#1))/2}%
+  \pgfmathsetmacro{\sistMsy}{((\sistMd-\sistMc)-(#4-#3))/2}%
+  \pgfmathsetmacro{\sistMminx}{\sistMa+\sistMsx}%
+  \pgfmathsetmacro{\sistMmaxx}{\sistMb-\sistMsx}%
+  \pgfmathsetmacro{\sistMminy}{\sistMc+\sistMsy}%
+  \pgfmathsetmacro{\sistMmaxy}{\sistMd-\sistMsy}}
+% \sistNodoTela{stile}{x}{y}{testo}: il nodo con l'ancoraggio nel punto
+% (x,y) della tela (pt)
+\newcommand{\sistNodoTela}[4]{%
+  {\pgftransformreset\node[#1] at (#2pt,#3pt) {#4};}}
+
+% \sistEstremoX{\campo}{bordo}: in \sistX l'ascissa della colonna citata,
+% in \sistFinito 1 se è una colonna, 0 se è l'infinito (campo vuoto o 0)
+\newcommand{\sistEstremoX}[2]{%
+  \def\sistFinito{1}%
+  \edef\sistTmp{#1}%
+  \sistIfEmpty{\sistTmp}{\def\sistFinito{0}}{%
+    \ifx\sistTmp\sistZero \def\sistFinito{0}\fi}%
+  \ifnum\sistFinito=0
+    \edef\sistX{#2}%
+  \else
+    \expandafter\ifx\csname sist@x@\the\sistCaso @\sistTmp\endcsname\relax
+      \PackageError{sistemi}{Intervallo: la colonna '\sistTmp' non c'e'
+        (il caso ha le colonne da 1 a \sistNColonne; vuoto o 0 =
+        infinito)}{}%
+      \def\sistFinito{0}\edef\sistX{#2}%
+    \else
+      \edef\sistX{\csname sist@x@\the\sistCaso @\sistTmp\endcsname}%
+    \fi
+  \fi}
+
+% \sistPallino{estremo}{x}{y}{colore}: il pallino di un estremo
+\newcommand{\sistPallino}[4]{%
+  \edef\sistTipo{#1}%
+  \sistIfEmpty{\sistTipo}{\edef\sistTipo{\sistget{estremo}}}{}%
+  \ifx\sistTipo\sistNessuno\else
+    \pgfkeysifdefined{/tikz/sist estremo \sistTipo/.@cmd}{%
+      \path[sist estremo, color=#4, sist estremo \sistTipo]
+        (#2,-#3) circle (\sistget{raggio});
+    }{%
+      \PackageError{sistemi}{Intervallo: estremo '\sistTipo' sconosciuto
+        (usa pieno, aperto, nessuno o uno stile 'sist estremo
+        \sistTipo')}{}%
+    }%
+  \fi}
+
+% --- il disegno di un caso ---
+\newcommand{\SistRender}{%
+  % colonne: ascissa di ciascuna, minima e massima
+  \global\sistConta=0
+  \xdef\sistXmin{1}\xdef\sistXmax{1}%
+  \sistIfEmpty{\SistColonneData}{%
+    \PackageError{sistemi}{Caso '\SistTitolo': mancano le colonne
+      (\string\SetColonne)}{}%
+  }{%
+    \foreach \cval/\cx/\cshow [count=\ci] in \SistColonneData {
+      \sistTrim\cx \sistDefault{\cx}{\ci}
+      \expandafter\xdef\csname sist@x@\the\sistCaso @\ci\endcsname{\cx}
+      \ifnum\ci=1 \xdef\sistXmin{\cx}\xdef\sistXmax{\cx}%
+      \else \sistMin{\sistXmin}{\cx}\sistMax{\sistXmax}{\cx}\fi
+      \global\sistConta=\ci
+    }%
+  }
+  \edef\sistNColonne{\the\sistConta}
+  \pgfmathsetmacro{\sistXsx}{\sistXmin-\sistget{margine}}
+  \pgfmathsetmacro{\sistXdx}{\sistXmax+\sistget{margine}}
+  \pgfmathsetmacro{\sistXc}{(\sistXsx+\sistXdx)/2}
+
+  % righe: quante sono (più la riga S), altezza di ognuna, altezze notevoli
+  \global\sistConta=0
+  \sistIfEmpty{\SistRigheData}{}{%
+    \foreach \rtesto/\rshow [count=\ri] in \SistRigheData {
+      \sistShow\rshow
+      \pgfmathsetmacro{\ry}{\sistget{prima riga}+(\ri-1)*\sistget{passo righe}}
+      \expandafter\xdef\csname sist@y@\the\sistCaso @\ri\endcsname{\ry}
+      \expandafter\xdef\csname sist@m@\the\sistCaso @\ri\endcsname{\rshow}
+      \global\sistConta=\ri
+    }%
+  }
+  \edef\sistNRighe{\the\sistConta}
+  \pgfmathtruncatemacro{\sistNTot}{\sistNRighe+\sistget{riga soluzione}}
+  \pgfmathsetmacro{\sistYult}{\sistget{prima riga}+(\sistNTot-1)*\sistget{passo righe}}
+  \pgfmathsetmacro{\sistYcol}{\sistYult+0.5*\sistget{passo righe}}
+  \pgfmathsetmacro{\sistYsep}{\sistYult-0.5*\sistget{passo righe}}
+  \pgfmathsetmacro{\sistYsol}{\sistYult+\sistget{distanza soluzione}}
+  \pgfmathsetmacro{\sistYins}{\sistYsol+\sistget{distanza insieme}}
+  \expandafter\xdef\csname sist@y@\the\sistCaso @S\endcsname{\sistYult}
+  \expandafter\xdef\csname sist@m@\the\sistCaso @S\endcsname{\sistget{riga soluzione}}
+
+  % la scritta della riga S: in questo caso sì o no
+  \def\sistScrivi{0}
+  \ifnum\sistget{riga soluzione}>0
+    \edef\sistModo{\sistget{mostra etichetta soluzione}}
+    \ifx\sistModo\sistTutti \def\sistScrivi{1}%
+    \else\ifx\sistModo\sistPrima
+      \ifsistEtichettaFatta\else\def\sistScrivi{1}\fi
+    \else\ifx\sistModo\sistNessuno
+    \else
+      \PackageError{sistemi}{mostra etichetta soluzione: il valore
+        '\sistModo' non esiste (usa prima, tutti o nessuno)}{}%
+    \fi\fi\fi
+  \fi
+
+  % misure: il punto più a sinistra del caso (\sistOvest), la cima dei
+  % valori (\sistValTop), la posizione dei testi (tutto sulla tela)
+  \sistTela{\sistXsx}{0}\let\sistSxTela\sistTx
+  \xdef\sistOvest{\sistSxTela}
+  \xdef\sistValTop{-16000}
+  \sistIfEmpty{\SistColonneData}{}{%
+    \foreach \cval/\cx/\cshow [count=\ci] in \SistColonneData {
+      \sistShow\cshow \sistTrim\cval
+      \ifnum\cshow>0
+        \sistMisura{sist valore}{\cval}
+        \sistTela{\csname sist@x@\the\sistCaso @\ci\endcsname}{\sistget{tacca}}
+        \sistMin{\sistOvest}{\sistTx+\sistMminx}
+        \sistMax{\sistValTop}{\sistTy+\sistMmaxy}
+      \fi
+    }%
+  }
+  \sistIfEmpty{\SistRigheData}{}{%
+    \foreach \rtesto/\rshow [count=\ri] in \SistRigheData {
+      \sistShow\rshow \sistTrim\rtesto
+      \ifnum\rshow>0
+        \sistMisura{sist etichetta}{\rtesto}
+        \sistMin{\sistOvest}{\sistSxTela+\sistMminx}
+      \fi
+    }%
+  }
+  \ifnum\sistScrivi>0
+    \sistMisura{sist etichetta soluzione}{\sistget{etichetta soluzione}}
+    \sistMin{\sistOvest}{\sistSxTela+\sistMminx}
+  \fi
+  % titolo: sale sopra i valori delle colonne
+  \sistTela{\sistXc}{\sistget{y titolo}}\let\sistXcTela\sistTx
+  \let\sistYtit\sistTy
+  \sistIfEmpty{\SistTitolo}{}{%
+    \sistMisura{sist titolo}{\SistTitolo}
+    \sistMin{\sistOvest}{\sistXcTela+\sistMminx}
+    \pgfmathsetmacro{\sistYtit}{max(\sistYtit,
+      \sistValTop+\sistget{stacco titolo}-\sistMminy)}
+  }
+  % soluzione: se è più alta di una riga cresce verso il basso
+  \sistTela{\sistXc}{-\sistYsol}\let\sistYsolT\sistTy
+  \pgfkeysgetvalue{/sist/soluzione}{\sistTesto}
+  \sistIfEmpty{\sistTesto}{}{%
+    \sistMisura{sist testo soluzione}{\strut}\let\sistRigaTop\sistMmaxy
+    \sistMisura{sist testo soluzione}{\sistTesto}
+    \sistMin{\sistOvest}{\sistXcTela+\sistMminx}
+    \pgfmathsetmacro{\sistYsolT}{\sistYsolT-max(0,\sistMmaxy-\sistRigaTop)}
+    \pgfmathsetmacro{\sistSolBasso}{\sistYsolT+\sistMminy}
+  }
+  % insieme: almeno «stacco insieme» sotto la soluzione
+  \sistTela{\sistXc}{-\sistYins}\let\sistYinsT\sistTy
+  \pgfkeysgetvalue{/sist/insieme}{\sistTestoIns}
+  \sistIfEmpty{\sistTestoIns}{}{%
+    \sistMisura{sist insieme}{\sistTestoIns}
+    \sistMin{\sistOvest}{\sistXcTela+\sistMminx}
+    \sistIfEmpty{\sistTesto}{}{%
+      \pgfmathsetmacro{\sistYinsT}{min(\sistYinsT,
+        \sistSolBasso-\sistget{stacco insieme}-\sistMmaxy)}}
+  }
+  % spinta: quanto spostare il caso a destra perché non entri nel caso
+  % disegnato prima (solo se questo sta alla sua destra)
+  \def\sistSpinta{0}
+  \ifsistPrec
+    \ifdim\sistSxTela pt>\sistInizioPrec pt
+      \pgfmathsetmacro{\sistSpinta}{max(0,
+        \sistBordoPrec+\sistget{stacco casi}-\sistOvest)}
+    \fi
+  \fi
+  \pgfgettransformentries{\sistTa}{\sistTb}{\sistTc}{\sistTd}{\sistTe}{\sistTf}
+  \pgfmathsetmacro{\sistSpintaLoc}{\sistSpinta/\sistTa}
+  \pgfmathsetmacro{\sistXcTela}{\sistXcTela+\sistSpinta}
+
+  \begin{scope}[xshift=\sistSpintaLoc pt, local bounding box=sist bb]
+  % retta, colonne e valori
+  \draw[sist asse] (\sistXsx,0) -- (\sistXdx,0);
+  \sistIfEmpty{\SistColonneData}{}{%
+    \foreach \cval/\cx/\cshow [count=\ci] in \SistColonneData {
+      \sistShow\cshow \sistTrim\cval
+      \ifnum\cshow>0
+        \edef\cx{\csname sist@x@\the\sistCaso @\ci\endcsname}
+        \draw[sist colonna] (\cx,\sistget{tacca}) -- (\cx,-\sistYcol);
+        \node[sist valore] at (\cx,\sistget{tacca}) {\cval};
+      \fi
+    }%
+  }
+
+  % etichette delle righe
+  \sistIfEmpty{\SistRigheData}{}{%
+    \foreach \rtesto/\rshow [count=\ri] in \SistRigheData {
+      \sistShow\rshow \sistTrim\rtesto
+      \ifnum\rshow>0
+        \edef\ry{\csname sist@y@\the\sistCaso @\ri\endcsname}
+        \node[sist etichetta] at (\sistXsx,-\ry) {\rtesto};
+      \fi
+    }%
+  }
+  % riga S
+  \ifnum\sistScrivi>0
+    \node[sist etichetta soluzione] at (\sistXsx,-\sistYult)
+      {\sistget{etichetta soluzione}};
+    \global\sistEtichettaFattatrue
+  \fi
+
+  % intervalli: riga/da/estremo da/a/estremo a/colore/stile/mostra
+  \sistIfEmpty{\SistIntervalliData}{}{%
+    \foreach \ir/\ida/\iea/\ia/\ieb/\icol/\isty/\ishow in \SistIntervalliData {
+      \sistShow\ishow
+      \ifnum\ishow>0
+        \sistTrim\ir \sistTrim\ida \sistTrim\iea
+        \sistTrim\ia \sistTrim\ieb \sistTrim\icol
+        \expandafter\ifx\csname sist@y@\the\sistCaso @\ir\endcsname\relax
+          \PackageError{sistemi}{Intervallo: la riga '\ir' non c'e' (il caso
+            ha le righe da 1 a \sistNRighe, e S per le soluzioni)}{}%
+        \else
+          \edef\iy{\csname sist@y@\the\sistCaso @\ir\endcsname}
+          \edef\im{\csname sist@m@\the\sistCaso @\ir\endcsname}
+          \edef\irS{\ir}
+          \ifnum\im>0
+            \sistIfEmpty{\icol}{%
+              \ifx\irS\sistS \edef\icol{\sistget{colore soluzione}}%
+              \else \edef\icol{\sistget{colore}}\fi}{}
+            \sistStyle{sist tmp}{\isty}
+            \sistEstremoX{\ida}{\sistXsx}
+            \let\ixa\sistX \let\ifa\sistFinito
+            \sistEstremoX{\ia}{\sistXdx}
+            \let\ixb\sistX \let\ifb\sistFinito
+            % prima la linea (e la ripassata della riga S), poi i pallini
+            % sopra: così un pallino aperto con fill=white copre la linea
+            \draw[sist intervallo, sist tmp, color=\icol] (\ixa,-\iy) -- (\ixb,-\iy);
+            \ifx\irS\sistS
+              \draw[sist intervallo, sist tmp, color=\icol, sist soluzione]
+                (\ixa,-\iy) -- (\ixb,-\iy);
+            \fi
+            \ifnum\ifa>0 \sistPallino{\iea}{\ixa}{\iy}{\icol}\fi
+            \ifnum\ifb>0 \sistPallino{\ieb}{\ixb}{\iy}{\icol}\fi
+          \fi
+        \fi
+      \fi
+    }%
+  }
+
+  % punteggiata, testi (nelle posizioni misurate sopra)
+  \ifnum\sistget{riga soluzione}>0
+    \draw[sist separatore] (\sistXsx,-\sistYsep) -- (\sistXdx,-\sistYsep);
+  \fi
+  \sistIfEmpty{\sistTesto}{}{%
+    \sistNodoTela{sist testo soluzione}{\sistXcTela}{\sistYsolT}{\sistTesto}}
+  \sistIfEmpty{\SistTitolo}{}{%
+    \sistNodoTela{sist titolo}{\sistXcTela}{\sistYtit}{\SistTitolo}}
+  \sistIfEmpty{\sistTestoIns}{}{%
+    \sistNodoTela{sist insieme}{\sistXcTela}{\sistYinsT}{\sistTestoIns}}
+  \end{scope}
+
+  % per il caso dopo: dove comincia e fin dove arriva questo
+  {\pgftransformreset\pgfpointanchor{sist bb}{east}%
+    \xdef\sistBordoPrec{\pgf@sys@tonumber\pgf@x}}
+  \pgfmathsetmacro{\sistMinTmp}{\sistSxTela+\sistSpinta}
+  \xdef\sistInizioPrec{\sistMinTmp}
+  \global\sistPrectrue
+}
+\makeatother
+
+% --- il caso: {indice}{mostra}{titolo} ---
+\newenvironment{Caso}[3]{%
+  \begin{scope}
+  \global\advance\sistCaso by 1
+  \def\SistIndice{#1}%
+  \def\SistMostra{#2}%
+  \def\SistTitolo{#3}%
+}{%
+  \sistShow\SistMostra
+  \ifnum\SistMostra>0
+    \pgfmathsetmacro{\sistDx}{\SistIndice*\sistget{distanza casi}}
+    \begin{scope}[shift={(\sistDx,0)}]
+      \SistRender
+    \end{scope}
+  \fi
+  \end{scope}
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTA LA FIGURA ============
+  % (ogni chiave si può anche ridefinire dentro un singolo caso)
+  \SistSet{
+    distanza casi=6, margine=1,
+    prima riga=0.5, passo righe=1,
+    estremo=aperto, raggio=5pt,
+    etichetta soluzione={SOLUZIONI COMUNI},
+    mostra etichetta soluzione=prima,
+  }
+  % stili: \tikzset{sist estremo aperto/.style={draw, fill=white}}
+
+  % ============ CASO 1 ============
+  \begin{Caso}{0}{1}{Caso 1}
+    % valore/x/mostra   (x vuoto = 1, 2, 3, ...)
+    \SetColonne{-3//1, 3//1, 6//1, 7//1}
+    % etichetta/mostra
+    \SetRighe{$-3<x<3$/1, $x\ge6$/1}
+    % riga/da/estremo da/a/estremo a/colore/stile/mostra
+    \SetIntervalli{
+      1/1/aperto/2/aperto///1,
+      1/2/aperto/3/aperto/blue//1,
+      1/3/aperto/4/aperto///1,
+      2/3/pieno//aperto///1,
+      S///3/pieno///1
+    }
+    \SistSet{soluzione={$\not\exists x\in\mathbb{R}$}, insieme={$S=\varnothing$}}
+  \end{Caso}
+
+  % ============ CASO 2 ============
+  \begin{Caso}{1}{1}{Caso 2}
+    \SetColonne{0//1, 2//1, 5//1}
+    \SetRighe{$x\ge0$/1, $x>2$/1}
+    \SetIntervalli{
+      1/1/pieno//aperto///1,
+      2/2/aperto//aperto///1,
+      S/2/aperto//aperto///1
+    }
+    \SistSet{soluzione={$x>2$}, insieme={$S=(2,+\infty)$}}
+  \end{Caso}
+
+  % ============ CASO 3 ============
+  \begin{Caso}{2}{1}{Caso 3}
+    \SetColonne{-4//1, -1//1, 3//1}
+    \SetRighe{$x<-1$/1, $-4<x<3$/1}
+    \SetIntervalli{
+      1///2/aperto///1,
+      2/1/aperto/3/aperto///1,
+      S/1/aperto/2/aperto///1
+    }
+    \SistSet{soluzione={$-4<x<-1$}, insieme={$S=(-4,-1)$}}
+  \end{Caso}
+
+\end{tikzpicture}
+\end{document}

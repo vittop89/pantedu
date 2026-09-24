@@ -1,0 +1,141 @@
+# Compliance / sicurezza per la pubblicazione open-source (Developers Italia).
+# Gate: conformità REUSE/SPDX e validità publiccode.yml.
+# Gira su main (push + PR) e on-demand.
+#
+# 2026-09-07 — la scansione dei segreti stava anche qui, con lo stesso nome del
+# job di ci.yml: due check identici sulla stessa PR, e solo uno dei due veniva
+# corretto quando si toccava l'altro. Il doppione era un residuo dell'epoca in
+# cui ci.yml ascoltava `master` e non girava mai (voce A1, corretta il
+# 2026-09-04). Adesso la scansione sta solo in ci.yml, dove gira su ogni push
+# e ogni PR.
+
+name: Compliance (publication readiness)
+
+# 2026-09-08 — via dalle pull request.
+#
+# Due minuti a giro, ma girava sia sulla PR sia sulla spinta: quattro minuti
+# per unione per un controllo che verifica la prontezza alla pubblicazione,
+# cioe' una cosa che si guarda quando si pubblica, non a ogni commit.
+on:
+    schedule:
+        - cron: "0 4 * * 0"
+    workflow_dispatch:
+
+concurrency:
+    group: compliance-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  reuse-lint:
+    name: REUSE / SPDX compliance
+    # Dove gira: la macchina di casa, o quelle di GitHub.
+    #
+    # `vars.RUNNER` e' una variabile del repository (Settings -> Secrets and
+    # variables -> Actions -> Variables). Se vale `pantedu` -- l'etichetta del
+    # runner registrato in WSL -- i giri vanno li' e non consumano minuti. Se la
+    # cancelli, tutto torna sui computer di GitHub senza toccare una riga di
+    # codice: e' l'interruttore per quando il PC e' spento o sei fuori casa.
+    #
+    # Il caso scomodo da conoscere: variabile impostata e PC spento vuol dire
+    # lavori **in coda**, non falliti. La pull request non diventa verde e basta.
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # 2026-09-09 — via l'azione `fsfe/reuse-action`, dentro il container a
+      # mano. Stesso trattamento già dato a semgrep in ci.yml, per le stesse
+      # due ragioni.
+      #
+      # **Girava come root.** Un'azione Docker monta lo spazio di lavoro
+      # dentro un container che parte come root: tutto ciò che scrive resta di
+      # root, e il `checkout` del lavoro successivo non riesce più a
+      # cancellarlo. Sul runner di casa questo si manifesta come un guasto in
+      # un lavoro che non c'entra niente. Con `--user "$(id -u):$(id -g)"` il
+      # problema non esiste.
+      #
+      # **Costruiva l'immagine a ogni giro.** L'azione ha un `Dockerfile`, non
+      # un'immagine: ogni esecuzione faceva `docker build`, scaricava
+      # `fsfe/reuse:5` e ci costruiva sopra. Riferendo il digest si scarica e
+      # basta, e — soprattutto — si sa **quale** versione ha girato: `:5` è
+      # un'etichetta mobile, il digest no.
+      #
+      # Verificato in locale prima di scriverlo: stesso esito dell'azione,
+      # 2237 file su 2237 con licenza e copyright, uscita 0.
+      - name: Docker c'è e risponde
+        run: |
+          set -euo pipefail
+          command -v docker >/dev/null 2>&1 \
+              || { echo '::error::docker non è nel percorso: sul runner di casa avvia Docker Desktop e rilancia.'; exit 1; }
+          docker info >/dev/null 2>&1 \
+              || { echo '::error::Docker non risponde: apri Docker Desktop, aspetta «Engine running», rilancia.'; exit 1; }
+          echo "docker: $(docker --version)"
+
+      - name: REUSE lint
+        run: |
+          set -euo pipefail
+          docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -v "$PWD:/data" \
+              -w /data \
+              --entrypoint reuse \
+              fsfe/reuse@sha256:11eb8a423ea82776bc2890bb255b61736bec277ef6e2141f8c91d6d88864f9da \
+              lint
+
+  publiccode:
+    name: publiccode.yml validation
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate publiccode.yml (YAML + campi obbligatori)
+        run: |
+          python3 - <<'PY'
+          import sys, yaml
+          with open("publiccode.yml", encoding="utf-8") as f:
+              d = yaml.safe_load(f)
+          required = ["publiccodeYmlVersion", "name", "url", "softwareType",
+                      "platforms", "categories", "developmentStatus",
+                      "description", "legal", "maintenance"]
+          missing = [k for k in required if k not in d]
+          assert not missing, f"Campi obbligatori mancanti: {missing}"
+          assert d.get("legal", {}).get("license"), "legal.license mancante"
+          desc = d.get("description", {})
+          assert any(("shortDescription" in v) for v in desc.values()), "shortDescription mancante"
+          print("publiccode.yml valido — versione", d["publiccodeYmlVersion"],
+                "licenza", d["legal"]["license"])
+          PY
+
+  # 2026-09-09 — l'avviso quando il giro programmato e' rosso.
+  #
+  # Un giro notturno fallisce quando non c'e' nessuno a guardare: e' il suo
+  # mestiere. GitHub manda una mail a chi ha toccato per ultimo il file, e
+  # quella mail finisce insieme a tutte le altre. La suite E2E della notte
+  # dell'8 settembre 2026 era caduta con sei test rossi e non se n'era accorto
+  # nessuno per un giorno intero.
+  #
+  # `always()` e non `failure()`: serve girare anche quando il giro e' verde,
+  # perche' e' cosi' che la segnalazione aperta si **chiude** da sola. Un
+  # elenco che dice cosa era rotto la settimana scorsa non serve a niente.
+  #
+  # Solo su `schedule`: sulle pull request il rosso si vede gia' nell'elenco
+  # dei controlli, e chi ha spinto sta guardando.
+  #
+  # 2026-09-23 — l'esito è quello dei due lavori insieme. Dipendeva solo da
+  # `reuse-lint`: un `publiccode.yml` non valido faceva rosso il giro della
+  # domenica senza aprire la segnalazione (revisione architetturale, A-28).
+  # Rosso se uno dei due è rosso; annullato se uno è annullato e nessuno è
+  # rosso, e l'avviso non lo segnala; verde solo se tutti e due sono verdi.
+  avviso:
+    needs: [reuse-lint, publiccode]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    uses: ./.github/workflows/avvisa-guasto.yml
+    permissions:
+      issues: write
+      contents: read
+    with:
+      giro: "Conformita' (REUSE/SPDX e publiccode.yml)"
+      esito: ${{ contains(needs.*.result, 'failure') && 'failure' || (contains(needs.*.result, 'cancelled') && 'cancelled' || (contains(needs.*.result, 'skipped') && 'skipped' || 'success')) }}

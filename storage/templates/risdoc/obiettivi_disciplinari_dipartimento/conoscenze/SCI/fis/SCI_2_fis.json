@@ -1,0 +1,104 @@
+[
+    {
+        "check_uda": true,
+        "N_uda": "8",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "IL MOTO RETTILINEO UNIFORMEMENTE ACCELERATO",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "L'accelerazione media e accelerazione istantanea", "checked": true },
+            { "label": "Il moto rettilineo uniformemente accelerato con v₀ = 0 m/s", "checked": true },
+            { "label": "La legge oraria del moto rettilineo uniformemente accelerato con v₀ ≠ 0 m/s", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "9",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "I MOTI NEL PIANO",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il moto circolare uniforme", "checked": true },
+            { "label": "La frequenza", "checked": true },
+            { "label": "Il moto angolare", "checked": true },
+            { "label": "Il moto armonico", "checked": true },
+            { "label": "Il pendolo semplice", "checked": true },
+            { "label": "Il moto parabolico", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "10",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "I PRINCIPI DELLA DINAMICA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il primo principio della dinamica", "checked": true },
+            { "label": "I sistemi di riferimento", "checked": true },
+            { "label": "Il secondo principio della dinamica", "checked": true },
+            { "label": "Considerazioni sul secondo principio", "checked": true },
+            { "label": "Il terzo principio della dinamica", "checked": true },
+            { "label": "Forza centripeta e forza centrifuga", "checked": true },
+            { "label": "Forze applicate al movimento", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "11",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "IL LAVORO E L'ENERGIA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "Il lavoro", "checked": true },
+            { "label": "La rappresentazione grafica del lavoro", "checked": true },
+            { "label": "La potenza", "checked": true },
+            { "label": "L'energia", "checked": true },
+            { "label": "L'energia cinetica", "checked": true },
+            { "label": "L'energia potenziale gravitazionale", "checked": true },
+            { "label": "L'energia potenziale elastica", "checked": true },
+            { "label": "Il principio di conservazione dell'energia meccanica", "checked": true },
+            { "label": "La molla e la conservazione dell'energia meccanica", "checked": true },
+            { "label": "La conservazione dell'energia", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "12",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "L'ENERGIA TERMICA",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "La temperatura", "checked": true },
+            { "label": "L'interpretazione microscopica della temperatura", "checked": true },
+            { "label": "La dilatazione lineare dei solidi", "checked": true },
+            { "label": "La dilatazione volumica", "checked": true },
+            { "label": "Il calore e l'esperimento di Joule", "checked": true },
+            { "label": "L'equazione fondamentale della calorimetria", "checked": true },
+            { "label": "Il calorimetro", "checked": true },
+            { "label": "La propagazione del calore", "checked": true },
+            { "label": "I cambiamenti di stato", "checked": true }
+        ]
+    },
+    {
+        "check_uda": true,
+        "N_uda": "13",
+        "num_ore": "",
+        "periodo": "",
+        "titolo": "LA LUCE E GLI STRUMENTI OTTICI",
+        "altre_disc": "",
+        "contenuti": [
+            { "label": "La propagazione della luce", "checked": true },
+            { "label": "La riflessione", "checked": true },
+            { "label": "La rifrazione", "checked": true },
+            { "label": "La dispersione della luce: i colori", "checked": true },
+            { "label": "Le lenti", "checked": true },
+            { "label": "L'occhio", "checked": true },
+            { "label": "Gli strumenti ottici", "checked": true }
+        ]
+    }
+]

@@ -1,0 +1,166 @@
+name: Avviso di guasto
+
+# Apre (o aggiorna) una segnalazione quando un giro programmato fallisce, o
+# quando fallisce la suite end-to-end dopo un'unione su `main` (dal 23/9/2026).
+#
+# Perché serve. I giri notturni e settimanali falliscono quando non c'è
+# nessuno a guardare — è il loro mestiere. GitHub manda una mail a chi ha
+# toccato per ultimo il file del workflow, e quella mail finisce insieme a
+# tutte le altre: il 9 settembre 2026 la suite E2E della notte prima era
+# fallita con **sei test rossi** e non se n'era accorto nessuno.
+#
+# Perché una segnalazione e non un'altra mail. Una segnalazione **resta**
+# finché qualcuno non la chiude, si vede aprendo il repository senza doverla
+# cercare, e soprattutto si può **aggiornare invece di duplicare**: se il giro
+# fallisce cinque domeniche di fila, resta una segnalazione con cinque
+# commenti, non cinque segnalazioni. Una mail al giorno diventa rumore da
+# filtrare; una segnalazione aperta è una cosa da chiudere.
+#
+# Si chiude da sola quando il giro torna verde: chiamare questo workflow con
+# `esito: success` chiude la segnalazione aperta, così l'elenco dice sempre
+# cosa è rotto **adesso**, non cosa lo era.
+#
+# Uso, dentro un altro workflow:
+#
+#     avviso:
+#         needs: [il-job-vero]
+#         if: ${{ always() && github.event_name == 'schedule' }}
+#         uses: ./.github/workflows/avvisa-guasto.yml
+#         permissions:
+#             issues: write
+#             contents: read
+#         with:
+#             giro: "Suite E2E notturna"
+#             esito: ${{ needs['il-job-vero'].result }}
+#
+# Attenzione al nome del job con il trattino: `needs.il-job-vero.result` GitHub
+# lo legge come una **sottrazione** fra `needs.il`, `job` e `vero.result`, e
+# l'espressione vale vuoto senza dare errore. Con un nome che contiene un
+# trattino serve la forma `needs['il-job-vero'].result`.
+
+on:
+    workflow_call:
+        inputs:
+            giro:
+                description: "Nome leggibile del giro, usato nel titolo della segnalazione."
+                required: true
+                type: string
+            esito:
+                description: "Esito del job da sorvegliare: success, failure, cancelled…"
+                required: true
+                type: string
+
+    # Si può lanciare a mano, e serve.
+    #
+    # Un allarme che nessuno ha mai fatto suonare è un allarme di cui non si sa
+    # niente. Questo dipende da un permesso — `issues: write` — che il
+    # repository potrebbe non concedere: il predefinito qui è `contents: read`,
+    # e nel caso di `gitleaks-action` un blocco `permissions:` non era bastato
+    # ad andare oltre quel tetto. Se succedesse anche qui, l'avviso fallirebbe
+    # con un 403 la prima domenica utile — cioè proprio quando serve.
+    #
+    # Con questo si prova subito:
+    #   gh workflow run avvisa-guasto.yml -f giro="prova" -f esito="failure"
+    # e poi si chiude la segnalazione con `-f esito="success"`.
+    workflow_dispatch:
+        inputs:
+            giro:
+                description: "Nome del giro (per una prova, scrivi «prova»)."
+                required: true
+                type: string
+                default: "prova dell'avviso"
+            esito:
+                description: "failure per aprire la segnalazione, success per chiuderla."
+                required: true
+                type: choice
+                default: failure
+                options: [failure, success]
+
+permissions:
+    issues: write
+    contents: read
+
+jobs:
+    avviso:
+        name: Avviso
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            # Non sul runner di casa: se il guasto fosse **del** runner di casa,
+            # un avviso che gira lì non partirebbe mai. Un allarme deve stare
+            # su un pezzo diverso da quello che sorveglia.
+            - name: Apri, aggiorna o chiudi la segnalazione
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  # 2026-09-14 — senza, `gh issue list` cerca il repository nel
+                  # checkout, che qui non c'è («fatal: not a git repository»):
+                  # la domenica del 13/9 l'avviso è caduto così in a11y,
+                  # compliance, lighthouse ed e2e, anche con i controlli verdi,
+                  # e ogni giro risultava rosso per colpa dell'allarme.
+                  GH_REPO: ${{ github.repository }}
+                  GIRO: ${{ inputs.giro }}
+                  ESITO: ${{ inputs.esito }}
+                  URL_GIRO: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              run: |
+                  set -euo pipefail
+
+                  # 2026-09-23 — «Giro rosso», non più «Giro programmato rosso»:
+                  # la suite end-to-end avvisa anche dopo ogni unione su `main`
+                  # (A-28). Cambiato con nessuna segnalazione aperta, quindi
+                  # nessuna è rimasta orfana del suo titolo.
+                  TITOLO="Giro rosso: $GIRO"
+
+                  # Cerca fra le segnalazioni aperte una con questo titolo
+                  # esatto. `--search` fa una ricerca a parole; il confronto
+                  # esatto lo facciamo noi con jq, così un titolo simile non
+                  # viene scambiato per questo.
+                  NUMERO=$(gh issue list --state open --limit 100 \
+                      --json number,title \
+                      --jq "map(select(.title == \"$TITOLO\")) | .[0].number // empty")
+
+                  if [ "$ESITO" = "success" ]; then
+                      if [ -n "$NUMERO" ]; then
+                          gh issue comment "$NUMERO" --body \
+                              "Il giro è tornato verde: $URL_GIRO"
+                          gh issue close "$NUMERO" --reason completed
+                          echo "segnalazione #$NUMERO chiusa: il giro è tornato verde."
+                      else
+                          echo "verde, e non c'era niente di aperto."
+                      fi
+                      exit 0
+                  fi
+
+                  # `cancelled` non è un guasto: succede quando si annulla un
+                  # giro a mano, o quando `concurrency` ne sostituisce uno
+                  # vecchio. Segnalarlo insegnerebbe a ignorare le segnalazioni.
+                  if [ "$ESITO" = "cancelled" ] || [ "$ESITO" = "skipped" ]; then
+                      echo "esito '$ESITO': non è un guasto, non segnalo niente."
+                      exit 0
+                  fi
+
+                  # Niente heredoc: dentro un `run:` indentato il terminatore
+                  # dovrebbe stare a inizio riga, e le righe del corpo
+                  # porterebbero dentro la segnalazione la loro indentazione,
+                  # che Markdown legge come blocco di codice.
+                  CORPO=$(printf '%s\n' \
+                      "Il giro **$GIRO** è fallito." \
+                      "" \
+                      "- Esito: \`$ESITO\`" \
+                      "- Registro: $URL_GIRO" \
+                      "- Quando: $(date -u '+%Y-%m-%d %H:%M UTC')" \
+                      "" \
+                      "Questa segnalazione si chiude da sola quando il giro torna verde." \
+                      "" \
+                      "Se il rosso non viene dal codice ma dalla macchina — un runner spento" \
+                      "a metà giro, un file di proprietà sbagliata — vale la pena scriverlo" \
+                      "qui prima di chiuderla: è la differenza fra «i test sono rotti» e" \
+                      "«l'infrastruttura ha interrotto i test», e da fuori le due cose si" \
+                      "assomigliano.")
+
+                  if [ -n "$NUMERO" ]; then
+                      gh issue comment "$NUMERO" --body "$CORPO"
+                      echo "segnalazione #$NUMERO aggiornata (il giro è rosso di nuovo)."
+                  else
+                      gh issue create --title "$TITOLO" --body "$CORPO" \
+                          | sed 's/^/  /'
+                  fi

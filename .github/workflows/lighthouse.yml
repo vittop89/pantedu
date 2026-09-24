@@ -1,0 +1,155 @@
+# Lighthouse CI — Phase Roadmap.
+# Audit performance + a11y su 3 route principali a ogni push/PR.
+# Soft gate (warn) per perf score (90/95+ ambizioso ma raggiungibile);
+# error gate su a11y (WCAG 2.2 AA non negotiable).
+
+name: lighthouse
+
+# 2026-09-08 — via dalle pull request, e settimanale invece che notturno.
+#
+# Quattro minuti di Actions su ogni PR, per un punteggio che non blocca niente
+# e che nessuno legge a ogni giro. Con la quota mensile al 90% e' il primo
+# taglio da fare: il valore di lighthouse e' vedere una tendenza, non un numero
+# per commit.
+on:
+    schedule:
+        # Domenica alle 3, dopo la suite.
+        - cron: "0 3 * * 0"
+    workflow_dispatch:
+
+concurrency:
+    group: lighthouse-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lhci:
+    # Dove gira: la macchina di casa, o quelle di GitHub.
+    #
+    # `vars.RUNNER` e' una variabile del repository (Settings -> Secrets and
+    # variables -> Actions -> Variables). Se vale `pantedu` -- l'etichetta del
+    # runner registrato in WSL -- i giri vanno li' e non consumano minuti. Se la
+    # cancelli, tutto torna sui computer di GitHub senza toccare una riga di
+    # codice: e' l'interruttore per quando il PC e' spento o sei fuori casa.
+    #
+    # Il caso scomodo da conoscere: variabile impostata e PC spento vuol dire
+    # lavori **in coda**, non falliti. La pull request non diventa verde e basta.
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        # 2026-09-23 — anche sul runner di casa: il Node lo sceglie `.nvmrc`,
+        # non quello installato sulla macchina. setup-node lo cerca nella cache
+        # degli strumenti del runner (`_work/_tool`) e lo scarica solo la prima
+        # volta. Fino a quel giorno in casa questo passo si saltava e girava il
+        # Node di sistema di prepara-runner.sh: cambiare `.nvmrc` voleva un passo
+        # a mano su ogni macchina prima dell'unione (revisione architetturale,
+        # D-5). La cache di npm solo sui runner di GitHub: in casa `~/.npm` resta
+        # sulla macchina, e `actions/cache` farebbe un giro di rete per niente.
+        with:
+          node-version-file: ".nvmrc"
+          cache: ${{ !vars.RUNNER && 'npm' || '' }}
+
+      # 2026-09-23 — erano `npm ci … || npm install …` e `npm run build ||
+      # echo "Build failed …"`: un'installazione diversa dal lockfile, o un
+      # punteggio misurato su pagine senza il loro JavaScript, con il giro
+      # verde (revisione architetturale, A-27 e D-20).
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build assets
+        run: npm run build
+
+      # 2026-09-23 — il Chrome di Linux, detto per nome. Sul runner di casa
+      # chrome-launcher si accorge di essere in WSL e apre il Chrome di
+      # **Windows**, con il profilo nella cartella dell'utente Windows: il
+      # giro del 20/9 è morto con «Unable to connect to Chrome» e, con
+      # `continue-on-error`, è risultato verde. Con CHROME_PATH usa il
+      # Chromium di Playwright; provato in WSL con lighthouse 12.8.2 (esito 0,
+      # punteggio letto). Lo scarica già a11y.yml, come qui.
+      - name: Chromium per Lighthouse
+        run: |
+          if [ -n "${{ vars.RUNNER }}" ]; then
+              npx playwright install chromium
+          else
+              npx playwright install --with-deps chromium
+          fi
+          CHROME="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          test -x "$CHROME" || { echo "::error::Chromium di Playwright non trovato: $CHROME"; exit 1; }
+          echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
+        # Saltato in casa. PHP e le sue estensioni sono gia' installati sul runner di casa
+        # (tools/ci/prepara-runner.sh): reinstallarli da zero costava piu' di venti
+        # minuti per job, tanto da far scattare il tetto di tempo.
+        if: ${{ !vars.RUNNER }}
+        with:
+          php-version: "8.4"
+          extensions: mbstring, openssl, pdo_mysql, json, curl, gd, zip
+
+      - name: Composer install
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Porta e registro del server di questo job
+        # I runner di casa condividono rete e /tmp: con la porta 8000 fissa un
+        # job ha interrogato il server di un altro (14/9/2026). La porta la
+        # sceglie il sistema, il registro sta in RUNNER_TEMP: tools/ci/server-php.sh.
+        run: bash tools/ci/server-php.sh scegli
+
+      - name: Start dev server
+        run: |
+          mkdir -p log/admin log/auth log/errors log/logout log/security
+          cp .env.example .env
+          # Symlink degli asset (css/js/build vivono nella root, serviti da nginx
+          # in prod) così `php -S -t public/` li serve e la pagina è stilizzata.
+          ln -sfn "$PWD/css"   public/css
+          ln -sfn "$PWD/js"    public/js
+          ln -sfn "$PWD/build" public/build 2>/dev/null || true
+          bash tools/ci/server-php.sh avvia
+          # lighthouserc.json elenca le pagine su 127.0.0.1:8000: se ne scrive
+          # una copia con la porta di questo job.
+          sed "s|http://127\.0\.0\.1:8000|$URL_SERVER|g" lighthouserc.json > "$RUNNER_TEMP/lighthouserc.json"
+          grep -q "$URL_SERVER/" "$RUNNER_TEMP/lighthouserc.json" || { echo "::error::la copia di lighthouserc.json non ha la porta del job"; exit 1; }
+
+      # 2026-09-23 — senza `continue-on-error`: con quello il giro era verde
+      # anche quando Chrome non partiva, e un calo di accessibilità non apriva
+      # mai la segnalazione settimanale (revisione architetturale, A-27).
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18  # v12
+        with:
+          configPath: ${{ runner.temp }}/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # 2026-09-09 — l'avviso quando il giro programmato e' rosso.
+  #
+  # Un giro notturno fallisce quando non c'e' nessuno a guardare: e' il suo
+  # mestiere. GitHub manda una mail a chi ha toccato per ultimo il file, e
+  # quella mail finisce insieme a tutte le altre. La suite E2E della notte
+  # dell'8 settembre 2026 era caduta con sei test rossi e non se n'era accorto
+  # nessuno per un giorno intero.
+  #
+  # `always()` e non `failure()`: serve girare anche quando il giro e' verde,
+  # perche' e' cosi' che la segnalazione aperta si **chiude** da sola. Un
+  # elenco che dice cosa era rotto la settimana scorsa non serve a niente.
+  #
+  # Solo su `schedule`: sulle pull request il rosso si vede gia' nell'elenco
+  # dei controlli, e chi ha spinto sta guardando.
+  avviso:
+    needs: [lhci]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    uses: ./.github/workflows/avvisa-guasto.yml
+    permissions:
+      issues: write
+      contents: read
+    with:
+      giro: "Lighthouse"
+      esito: ${{ needs.lhci.result }}

@@ -1,0 +1,20 @@
+[Unit]
+Description=pantedu — timer del salvataggio delle chiavi dei docenti
+
+[Timer]
+# Le 03:00, l'ora che aveva nel crontab. Attorno c'è già traffico — il
+# salvataggio cifrato alle 02:35, la catena di audit alle 02:50, la
+# sincronizzazione con Drive alle 03:40, il controllo d'integrità alle 04:00 —
+# ma questo dura pochi secondi e legge una tabella sola.
+OnCalendar=03:00
+
+# Se la macchina era spenta, il salvataggio va fatto comunque: sono le chiavi
+# con cui si decifrano i dati dei docenti, e un giorno saltato è un giorno di
+# lavoro che non si recupera.
+Persistent=true
+
+RandomizedDelaySec=5min
+Unit=pantedu-backup-chiavi.service
+
+[Install]
+WantedBy=timers.target

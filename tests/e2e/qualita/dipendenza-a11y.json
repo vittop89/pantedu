@@ -1,0 +1,33 @@
+{
+  "_perche": "Quanti elementi, su ogni pagina, hanno un nome accessibile (o una struttura di lista valida) solo perche' js/modules/a11y/form-labels.js gliel'ha dato dopo il rendering. Misurato l'8 settembre 2026, voce 79 del debito. Il numero puo' solo scendere: la prova dipendenza-dal-correttore-a11y.spec.js fallisce se sale, e fallisce anche se scende senza che il tetto venga abbassato.",
+  "_come_si_corregge": "Nominando i controlli all'origine: `for`/`id` fra label e campo, oppure `aria-label` scritto dal generatore. Le liste: `<ol>`/`<ul>` con figli `<li>`, o un `<div>` se lista non e'.",
+
+  "/": 0,
+  "/login": 0,
+  "/register": 0,
+  "/legal/tos": 0,
+  "/legal/aup": 0,
+  "/privacy/informativa": 0,
+  "/accessibility": 0,
+  "/security": 0,
+  "/dpo-contact": 0,
+  "/segnalazione-contenuti": 0,
+  "/tos-acceptance": 0,
+
+  "/area-docente/profilo": 1,
+  "/area-docente/dashboard": 0,
+  "/area-docente/sposta-di-classe": 0,
+  "/me/change-password": 0,
+
+  "/admin/dashboard": 0,
+  "/admin/waf/dashboard": 0,
+  "/admin/waf/config": 0,
+  "/admin/templates": 0,
+  "/admin/sidebar-config": 47,
+  "/admin/institutes": 0,
+  "/admin/sections": 0,
+  "/admin/system/deployment": 0,
+
+  "studio/esercizio (un gruppo aperto)": 21,
+  "home del docente": 0
+}

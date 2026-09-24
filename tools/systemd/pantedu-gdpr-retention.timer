@@ -1,0 +1,23 @@
+[Unit]
+Description=pantedu — timer giornaliero per la conservazione GDPR (account inattivi, domande di iscrizione)
+
+[Timer]
+# 2026-09-24 — ogni giorno, non più il primo del mese.
+#
+# Fino a quel giorno il giro era mensile, pensato per la soglia dei 730 giorni
+# degli account inattivi. Ma lo stesso lavoro applica anche i 30 giorni delle
+# domande di iscrizione in attesa: con un giro al mese una domanda del 2
+# restava fino al primo del mese dopo il successivo, cioè fino a circa 60
+# giorni. Il giro è idempotente, e ripeterlo ogni notte non cambia niente per
+# chi non ha niente di scaduto.
+#
+# Alle 02:05, con al più dieci minuti di ritardo: prima del salvataggio
+# notturno delle 02:30, così la copia della notte non contiene una domanda già
+# scaduta.
+OnCalendar=*-*-* 02:05:00
+Persistent=true
+RandomizedDelaySec=10min
+Unit=pantedu-gdpr-retention.service
+
+[Install]
+WantedBy=timers.target

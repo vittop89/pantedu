@@ -1,0 +1,73 @@
+[Unit]
+# Ripresa dei lavori di compilazione rimasti indietro.
+#
+# Quando un docente chiede il PDF di una verifica, `compileAsync` accoda il
+# lavoro **e prova subito a farlo** («trigger-on-request»): il caso normale si
+# chiude in quella richiesta, senza aspettare nessuno. Questo servizio serve
+# per l'altro caso — quando quel tentativo fallisce e il lavoro resta in
+# `retry`.
+#
+# Senza, un fallimento resta lì per sempre: il docente non riceve il PDF e
+# nessuno lo sa. In `verifica_compile_jobs` ce n'erano **due fermi dal 4
+# giugno 2026**.
+#
+# Perché non c'era. C'era: era una riga nel crontab di un utente che ha
+# smesso di esistere col rinominamento del progetto. Cron salta l'intero
+# crontab di un utente che non c'è più, e lo annuncia come
+# `ORPHAN (no passwd entry)` a ogni riavvio — un messaggio che nessuno legge.
+# Rifatto come unità systemd proprio per questo: un crontab si può orfanare di
+# nuovo, un'unità no, e con `OnFailure=` un guasto si sente.
+Description=pantedu — ripresa dei lavori di compilazione in attesa
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/cron/process_compile_jobs.php
+# La compilazione parla con il servizio TeX, che può metterci: cinque minuti
+# bastano per il lotto predefinito (cinque lavori) e non lasciano un processo
+# appeso se il servizio non risponde.
+TimeoutStartSec=300
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

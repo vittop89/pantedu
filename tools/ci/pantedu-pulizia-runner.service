@@ -1,0 +1,27 @@
+[Unit]
+# Pulizia mensile della macchina che ospita i runner di GitHub Actions.
+#
+# Non è per il VPS: là la potatura la fa il rilascio, a ogni giro. Qui non
+# c'è nessuno che la faccia, e su un runner in casa niente si butta via da
+# solo — le immagini, la cache dei build e i container fermi si accumulano
+# finché il disco non finisce.
+#
+# Installazione (dentro WSL, come root):
+#   install -m 755 tools/ci/pulizia-runner.sh /usr/local/bin/pantedu-pulizia-runner.sh
+#   install -m 644 tools/ci/pantedu-pulizia-runner.{service,timer} /etc/systemd/system/
+#   systemctl daemon-reload && systemctl enable --now pantedu-pulizia-runner.timer
+Description=pantedu — pulizia mensile di Docker sulla macchina dei runner
+Documentation=file:///docs/ops/runner-self-hosted.md
+After=docker.service
+
+[Service]
+Type=oneshot
+# Come l'utente dei runner, non come root: tocca solo Docker, e Docker ce l'ha
+# lui. Un servizio di pulizia che gira da root è più potere di quanto serva.
+User=operatore
+ExecStart=/usr/local/bin/pantedu-pulizia-runner.sh
+# Il registro finisce nel giornale: `journalctl -u pantedu-pulizia-runner`.
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=multi-user.target

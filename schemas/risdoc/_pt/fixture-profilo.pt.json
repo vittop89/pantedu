@@ -1,0 +1,30 @@
+[
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      { "_type": "span", "text": "Gli alunni della classe ", "marks": [] },
+      { "_type": "fieldRef", "name": "classe" },
+      { "_type": "span", "text": " ", "marks": [] },
+      { "_type": "fieldRef", "name": "sezione" },
+      { "_type": "span", "text": " adottano un comportamento", "marks": [] }
+    ]
+  },
+  {
+    "_type": "checkboxGroup",
+    "items": [
+      { "state": "x", "label": "corretto" },
+      { "state": "_", "label": "adeguato" },
+      { "state": "_", "label": "poco corretto non" }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      { "_type": "span", "text": "permettendo un ", "marks": [] },
+      { "_type": "span", "text": "regolare svolgimento", "marks": ["strong"] },
+      { "_type": "span", "text": " delle lezioni.", "marks": [] }
+    ]
+  }
+]

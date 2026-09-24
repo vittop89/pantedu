@@ -1,0 +1,193 @@
+name: A11y WCAG 2.2 AA
+
+# Phase D.1 — axe-core dentro Playwright, contro un server PHP senza
+# database. Una violazione WCAG serious/critical fa fallire QUESTO workflow
+# (requisito EAA) — ma non è un contesto obbligatorio della protezione di
+# `main` (corretto il 2026-09-23, DOC-4: il commento qui sotto diceva il
+# contrario). Una pull request con violazioni gravi si può unire lo stesso;
+# il segno rosso resta visibile a chi rivede. wiki/dev-workflow.md, «Il
+# cancello su `main`», elenca i due soli contesti che bloccano davvero.
+#
+# 2026-09-07 — il secondo scanner (`accessibility-agents`, con la strategia
+# «fallisci solo sulle regressioni» e la baseline SARIF) è stato tolto: non è
+# mai riuscito a partire. La ragione per esteso è in fondo al file.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  # 2026-05-26 — rimosso il trigger su `push: main`: girava a ogni push e
+  # falliva in modo intermittente per errori TRANSIENTI di GitHub (download
+  # action da codeload.github.com), generando email "workflow failed" fuorvianti
+  # (il deploy reale via webhook VPS è separato e sano). Mantiene la copertura
+  # su PR + run notturna + trigger manuale.
+  schedule:
+    # Settimanale invece che notturna: sulle PR gira comunque (non bloccante,
+    # vedi la nota in testa al file).
+    - cron: "0 5 * * 0"   # nightly 03:00 UTC
+
+# Cancel run precedenti dello stesso branch quando arriva un nuovo push.
+concurrency:
+  group: a11y-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permessi del gettone dei workflow: il minimo, scritto.
+#
+# Senza questo blocco vale il predefinito del repository, che puo'
+# essere piu' largo di quanto serva e cambiare sotto i piedi da una
+# impostazione altrove. I job che hanno bisogno di piu' se lo
+# dichiarano da se' (vedi `packages: write` dove si pubblica).
+permissions:
+    contents: read
+
+jobs:
+  axe-baseline:
+    name: axe-core (Playwright)
+    # Dove gira: la macchina di casa, o quelle di GitHub.
+    #
+    # `vars.RUNNER` e' una variabile del repository (Settings -> Secrets and
+    # variables -> Actions -> Variables). Se vale `pantedu` -- l'etichetta del
+    # runner registrato in WSL -- i giri vanno li' e non consumano minuti. Se la
+    # cancelli, tutto torna sui computer di GitHub senza toccare una riga di
+    # codice: e' l'interruttore per quando il PC e' spento o sei fuori casa.
+    #
+    # Il caso scomodo da conoscere: variabile impostata e PC spento vuol dire
+    # lavori **in coda**, non falliti. La pull request non diventa verde e basta.
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        # 2026-09-23 — anche sul runner di casa: il Node lo sceglie `.nvmrc`,
+        # non quello installato sulla macchina. setup-node lo cerca nella cache
+        # degli strumenti del runner (`_work/_tool`) e lo scarica solo la prima
+        # volta. Fino a quel giorno in casa questo passo si saltava e girava il
+        # Node di sistema di prepara-runner.sh: cambiare `.nvmrc` voleva un passo
+        # a mano su ogni macchina prima dell'unione (revisione architetturale,
+        # D-5). La cache di npm solo sui runner di GitHub: in casa `~/.npm` resta
+        # sulla macchina, e `actions/cache` farebbe un giro di rete per niente.
+        with:
+          node-version-file: ".nvmrc"
+          cache: ${{ !vars.RUNNER && 'npm' || '' }}
+
+      # 2026-09-23 — era `npm ci || npm install`: un lockfile che non
+      # combacia diventava un'installazione diversa da quella provata altrove,
+      # in silenzio (revisione architetturale, A-27 e D-20). Se `npm ci`
+      # fallisce, il lavoro è rosso.
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: |
+            # `--with-deps` invoca `sudo apt-get`. Sul runner di casa, che
+            # gira senza sudo automatico, fallirebbe a ogni giro: le librerie
+            # di sistema sono gia' installate li' una volta per tutte.
+            if [ -n "${{ vars.RUNNER }}" ]; then
+                npx playwright install chromium
+            else
+                npx playwright install --with-deps chromium
+            fi
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
+        # Saltato in casa. PHP e le sue estensioni sono gia' installati sul runner di casa
+        # (tools/ci/prepara-runner.sh): reinstallarli da zero costava piu' di venti
+        # minuti per job, tanto da far scattare il tetto di tempo.
+        if: ${{ !vars.RUNNER }}
+        with:
+          php-version: "8.4"
+          extensions: mbstring, openssl, pdo_mysql, json, curl, gd, zip
+
+      - name: Composer install
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Porta e registro del server di questo job
+        # I runner di casa condividono rete e /tmp: con la porta 8000 fissa un
+        # job ha interrogato il server di un altro (14/9/2026). La porta la
+        # sceglie il sistema, il registro sta in RUNNER_TEMP: tools/ci/server-php.sh.
+        run: bash tools/ci/server-php.sh scegli
+
+      - name: Start dev server
+        run: |
+          mkdir -p log/admin log/auth log/errors log/logout log/security
+          # Minimal env per server avviabile in CI (no DB richiesto per pagine pubbliche).
+          # 2026-09-23 — senza più il ripiego `|| echo "APP_URL=…" > .env`:
+          # `.env.example` è versionato e `npm run env:check` lo controlla.
+          cp .env.example .env
+          # css/ js/ build/ vivono nella ROOT del repo (in prod li serve nginx
+          # via alias). Sotto `php -S -t public/` andrebbero in 404 → la pagina
+          # sarebbe SENZA CSS e il test a11y NON rappresentativo. Symlink in
+          # public/ così il server di test serve gli asset reali.
+          # 2026-09-23 — era `npm run build || echo "… continuo"`: con il build
+          # rotto la suite provava pagine senza il loro JavaScript (A-27).
+          npm run build
+          ln -sfn "$PWD/css"   public/css
+          ln -sfn "$PWD/js"    public/js
+          ln -sfn "$PWD/build" public/build 2>/dev/null || true
+          # Si ferma se il server non prende la sua porta: non si prova il
+          # server di un altro job.
+          bash tools/ci/server-php.sh avvia
+          curl -fs "$URL_SERVER/css/main.css" >/dev/null || (echo "CSS non servita!"; cat "$REGISTRO_SERVER"; exit 1)
+
+      - name: Run a11y suite (axe-core)
+        env:
+          FM_E2E_BASE_URL: ${{ env.URL_SERVER }}
+        # Gate reale: una violazione WCAG serious/critical (o un test a11y
+        # rotto) FA FALLIRE la pipeline → monitoraggio continuo che intercetta
+        # le regressioni prima del rilascio (requisito EAA). Suite verde al
+        # 2026-06-21 (10/10). Se serve un bypass temporaneo, farlo
+        # esplicitamente in un commit dedicato, non lasciando passare i rossi.
+        run: npm run e2e:a11y
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-a11y-report
+          path: playwright-report/
+          retention-days: 14
+
+  # ── Il secondo scanner, tolto il 2026-09-07 ────────────────────────────────
+  #
+  # C'era un job `agents-scan` che girava sulle pull request con
+  # `Community-Access/accessibility-agents`, produceva un SARIF e lo confrontava
+  # con `a11y-baseline.sarif` per fallire solo sulle regressioni.
+  #
+  # Non ha mai girato: questa e' la prima PR del repository, e il job muore in
+  # «Set up job», prima di qualunque passo, con
+  #   Could not find file .../claude-code-plugin/SECURITY.md
+  # perche' quella repository contiene symlink che GitHub non riesce a
+  # materializzare quando prepara l'azione. Succede uguale su v5.4.0 e su
+  # v6.0.0: e' un difetto del pacchetto a monte, non della configurazione, e da
+  # qui non e' correggibile.
+  #
+  # Il gate vero dell'accessibilita' resta il job `axe-baseline` qui sopra, che
+  # fallisce su ogni violazione WCAG serious/critical ed e' verde. Il file
+  # `a11y-baseline.sarif` resta nel repository per quando l'azione tornera'
+  # utilizzabile. Voce 74 del registro del debito.
+
+  # 2026-09-09 — l'avviso quando il giro programmato e' rosso.
+  #
+  # Un giro notturno fallisce quando non c'e' nessuno a guardare: e' il suo
+  # mestiere. GitHub manda una mail a chi ha toccato per ultimo il file, e
+  # quella mail finisce insieme a tutte le altre. La suite E2E della notte
+  # dell'8 settembre 2026 era caduta con sei test rossi e non se n'era accorto
+  # nessuno per un giorno intero.
+  #
+  # `always()` e non `failure()`: serve girare anche quando il giro e' verde,
+  # perche' e' cosi' che la segnalazione aperta si **chiude** da sola. Un
+  # elenco che dice cosa era rotto la settimana scorsa non serve a niente.
+  #
+  # Solo su `schedule`: sulle pull request il rosso si vede gia' nell'elenco
+  # dei controlli, e chi ha spinto sta guardando.
+  avviso:
+    needs: [axe-baseline]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    uses: ./.github/workflows/avvisa-guasto.yml
+    permissions:
+      issues: write
+      contents: read
+    with:
+      giro: "Accessibilita' (axe-core)"
+      esito: ${{ needs['axe-baseline'].result }}

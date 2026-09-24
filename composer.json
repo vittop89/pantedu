@@ -1,0 +1,98 @@
+{
+    "name": "pantedu/site",
+    "description": "Pantedu didactic platform",
+    "type": "project",
+    "license": "EUPL-1.2",
+    "homepage": "https://pantedu.eu",
+    "authors": [
+        {
+            "name": "Vittorio Pantaleo",
+            "email": "vittop89@users.noreply.github.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "email": "vittop89@users.noreply.github.com",
+        "issues": "https://github.com/vittop89/pantedu/issues",
+        "security": "https://github.com/vittop89/pantedu/security/policy",
+        "source": "https://github.com/vittop89/pantedu"
+    },
+    "require": {
+        "php": "^8.3",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-fileinfo": "*",
+        "ext-iconv": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-zip": "*",
+        "enshrined/svg-sanitize": "^0.22",
+        "ezyang/htmlpurifier": "^4.17",
+        "geoip2/geoip2": "^3.3",
+        "google/apiclient": "^2.18",
+        "guzzlehttp/guzzle": "^7.4.5",
+        "justinrainbow/json-schema": "^6.8",
+        "psr/log": "^3.0",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "league/openapi-psr7-validator": "^0.22.0",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.0",
+        "squizlabs/php_codesniffer": "^4.0",
+        "symfony/yaml": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --testdox --colors=always",
+        "test:unit": "phpunit --testsuite=unit --fail-on-empty-test-suite --testdox",
+        "stan": "phpstan analyse --memory-limit=1G",
+        "stan:baseline": "phpstan analyse --generate-baseline=phpstan-baseline.neon --memory-limit=1G",
+        "cs": "phpcs --standard=PSR12 --extensions=php --ignore=vendor,storage,public/build --runtime-set ignore_warnings_on_exit 1 app",
+        "cs:fix": "phpcbf --standard=PSR12 --extensions=php --ignore=vendor,storage,public/build app",
+        "openapi:generate": "php tools/api/generate_openapi.php > docs/api/openapi.yaml",
+        "openapi:merge": "php tools/api/merge_openapi.php > docs/api/openapi.full.yaml",
+        "openapi:build": [
+            "@openapi:generate",
+            "@openapi:merge"
+        ],
+        "openapi:validate": "php tools/api/validate_openapi.php",
+        "wiki:check": "php tools/wiki/strip_code_links.php --check",
+        "wiki:fix": "php tools/wiki/strip_code_links.php",
+        "audit:php": "composer audit --locked",
+        "licenses:php": "composer licenses --no-dev --format=json",
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup",
+        "ci": [
+            "@cs",
+            "@stan",
+            "@audit:php",
+            "@test"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "platform": {
+            "php": "8.3.0"
+        }
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive"
+        ]
+    }
+}

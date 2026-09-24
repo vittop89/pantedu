@@ -1,0 +1,129 @@
+[
+    {
+        "titolo": "Numeri reali e radicali",
+        "contenuti": [
+            { "label": "Distinguere numeri razionali e irrazionali e ordinarli sulla retta reale.", "checked": false },
+            { "label": "Definire e calcolare radici n-esime, determinandone le condizioni di esistenza e il segno.", "checked": false },
+            { "label": "Applicare la proprietà invariantiva per semplificare un radicale e ridurre più radicali allo stesso indice.", "checked": false },
+            { "label": "Eseguire le quattro operazioni, l'elevamento a potenza e il trasporto di fattori dentro/fuori dal segno di radice.", "checked": false },
+            { "label": "Razionalizzare il denominatore di una frazione contenente radicali (casi semplici e con binomi).", "checked": false },
+            { "label": "Risolvere semplici equazioni, disequazioni e sistemi contenenti radicali.", "checked": false },
+            { "label": "Applicare la relazione tra radicali ad indice pari e il valore assoluto.", "checked": false },
+            { "label": "Utilizzare le potenze con esponente razionale e comprendere il loro legame con i radicali.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Sistemi lineari",
+        "contenuti": [
+            { "label": "Riconoscere un sistema di equazioni lineari, la sua forma normale e le sue soluzioni.", "checked": false },
+            { "label": "Risolvere sistemi lineari 2x2 con i metodi di sostituzione, confronto e riduzione.", "checked": false },
+            { "label": "Analizzare un sistema lineare per determinare se è determinato, indeterminato o impossibile, anche tramite il criterio del rapporto dei coefficienti.", "checked": false },
+            { "label": "Risolvere sistemi lineari 3x3 con il metodo di sostituzione.", "checked": false },
+            { "label": "Tradurre un problema in un modello basato su un sistema lineare e risolverlo.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Rette nel piano cartesiano",
+        "contenuti": [
+            { "label": "Calcolare la distanza tra due punti e le coordinate del punto medio di un segmento.", "checked": false },
+            { "label": "Scrivere le equazioni di semplici isometrie (simmetrie assiali e centrali) nel piano cartesiano.", "checked": false },
+            { "label": "Scrivere l'equazione di una retta in forma esplicita e implicita e rappresentarla graficamente.", "checked": false },
+            { "label": "Applicare le condizioni di parallelismo e perpendicolarità per analizzare la posizione reciproca tra rette.", "checked": false },
+            { "label": "Determinare il punto di intersezione tra due rette risolvendo il sistema associato.", "checked": false },
+            { "label": "Calcolare la distanza di un punto da una retta utilizzando la formula specifica.", "checked": false },
+            { "label": "Utilizzare modelli lineari per risolvere problemi di scelta, interpretando il punto di intersezione.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Frazioni algebriche",
+        "contenuti": [
+            { "label": "Definire una frazione algebrica e determinarne le condizioni di esistenza.", "checked": false },
+            { "label": "Semplificare una frazione algebrica scomponendo numeratore e denominatore.", "checked": false },
+            { "label": "Eseguire addizioni e sottrazioni tra frazioni algebriche, calcolando il m.c.m. tra i denominatori.", "checked": false },
+            { "label": "Eseguire moltiplicazioni, divisioni ed elevamento a potenza con le frazioni algebriche.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Equazioni di primo grado frazionarie e letterali",
+        "contenuti": [
+            { "label": "Risolvere equazioni numeriche frazionarie, determinando le condizioni di esistenza e verificando l'accettabilità delle soluzioni.", "checked": false },
+            { "label": "Risolvere e discutere equazioni letterali intere e fratte al variare del parametro.", "checked": false },
+            { "label": "Impostare e risolvere problemi che hanno come modello equazioni frazionarie o letterali.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Disequazioni frazionarie",
+        "contenuti": [
+            { "label": "Risolvere disequazioni frazionarie studiando il segno del numeratore e del denominatore.", "checked": false },
+            { "label": "Risolvere disequazioni di grado superiore al primo scomponendole in fattori e studiando il segno del prodotto.", "checked": false },
+            { "label": "Risolvere sistemi di disequazioni, anche contenenti disequazioni frazionarie o di grado superiore al primo.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Probabilità",
+        "contenuti": [
+            { "label": "Definire lo spazio campionario e gli eventi, utilizzando la terminologia e le operazioni insiemistiche.", "checked": false },
+            { "label": "Calcolare la probabilità di un evento secondo l'impostazione classica.", "checked": false },
+            { "label": "Applicare i teoremi della probabilità dell'evento contrario e della probabilità totale (per eventi incompatibili).", "checked": false },
+            { "label": "Comprendere la definizione frequentista di probabilità e la legge dei grandi numeri.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Area",
+        "contenuti": [
+            { "label": "Comprendere il concetto di equivalenza tra figure piane e la loro equiscomponibilità.", "checked": false },
+            { "label": "Enunciare e applicare i teoremi di equivalenza per parallelogrammi e triangoli.", "checked": false },
+            { "label": "Calcolare l'area dei principali poligoni (triangoli, quadrilateri, poligoni regolari) utilizzando le relative formule.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Teorema di Pitagora",
+        "contenuti": [
+            { "label": "Enunciare e applicare il teorema di Pitagora e il suo inverso per risolvere problemi sui triangoli rettangoli.", "checked": false },
+            { "label": "Applicare il teorema di Pitagora a varie figure geometriche piane per calcolare lunghezze, perimetri e aree.", "checked": false },
+            { "label": "Impostare e risolvere problemi geometrici tramite equazioni algebriche derivanti dall'applicazione del teorema di Pitagora.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Teorema di Talete",
+        "contenuti": [
+            { "label": "Impostare proporzioni tra segmenti.", "checked": false },
+            { "label": "Enunciare e applicare il teorema di Talete e il suo corollario relativo a un fascio di rette parallele tagliate da due trasversali.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Similitudine",
+        "contenuti": [
+            { "label": "Riconoscere figure simili e comprendere il significato del rapporto di similitudine.", "checked": false },
+            { "label": "Enunciare e applicare i tre criteri di similitudine dei triangoli.", "checked": false },
+            { "label": "Enunciare e applicare i due teoremi di Euclide come conseguenza della similitudine nei triangoli rettangoli.", "checked": false },
+            { "label": "Risolvere problemi geometrici utilizzando la similitudine e i teoremi di Euclide.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Omotetie e similitudini",
+        "contenuti": [
+            { "label": "Definire un'omotetia e costruirne l'immagine di una figura dato il centro e il rapporto.", "checked": false },
+            { "label": "Scrivere e applicare le equazioni dell'omotetia nel piano cartesiano.", "checked": false },
+            { "label": "Riconoscere una similitudine come composizione di un'omotetia e un'isometria.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Divisibilità di polinomi e applicazioni alle scomposizioni",
+        "contenuti": [
+            { "label": "Eseguire la divisione tra polinomi.", "checked": false },
+            { "label": "Applicare la regola di Ruffini per la divisione di un polinomio per un binomio del tipo (x-a).", "checked": false },
+            { "label": "Utilizzare il teorema del resto e la regola di Ruffini per scomporre un polinomio in fattori.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Circonferenza e poligoni inscritti e circoscritti",
+        "contenuti": [
+            { "label": "Riconoscere gli elementi fondamentali della circonferenza e del cerchio e le proprietà delle corde.", "checked": false },
+            { "label": "Analizzare le posizioni reciproche tra una retta e una circonferenza e tra due circonferenze.", "checked": false },
+            { "label": "Applicare i teoremi sugli angoli al centro e alla circonferenza.", "checked": false },
+            { "label": "Riconoscere le proprietà dei poligoni inscritti e circoscritti a una circonferenza.", "checked": false },
+            { "label": "Calcolare la lunghezza della circonferenza e l'area del cerchio e delle sue parti (archi, settori circolari).", "checked": false }
+        ]
+    }
+]

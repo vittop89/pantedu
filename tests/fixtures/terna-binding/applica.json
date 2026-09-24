@@ -1,0 +1,446 @@
+{
+  "casi": [
+    {
+      "nome": "select-e-textfield-di-base",
+      "ternaKey": "SCI-1A-MAT",
+      "blocchi": [
+        {
+          "_type": "select",
+          "name": "corso",
+          "value": "",
+          "options": [
+            {
+              "value": "a",
+              "label": "A"
+            },
+            {
+              "value": "b",
+              "label": "B"
+            }
+          ]
+        },
+        {
+          "_type": "textField",
+          "name": "nome",
+          "value": ""
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "SCI-1A-MAT": {
+              "corso": "b",
+              "nome": "Rossi"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "select",
+          "name": "corso",
+          "value": "b",
+          "options": [
+            {
+              "value": "a",
+              "label": "A"
+            },
+            {
+              "value": "b",
+              "label": "B"
+            }
+          ]
+        },
+        {
+          "_type": "textField",
+          "name": "nome",
+          "value": "Rossi"
+        }
+      ]
+    },
+    {
+      "nome": "campo-fisso-non-tocca",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "textField",
+          "name": "etichetta",
+          "value": "NON CAMBIA",
+          "binding": "fixed"
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "etichetta": "valore-nel-store-ignorato"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "textField",
+          "name": "etichetta",
+          "value": "NON CAMBIA",
+          "binding": "fixed"
+        }
+      ]
+    },
+    {
+      "nome": "checkboxgroup-espande-dal-store",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "checkboxGroup",
+          "name": "obiettivi",
+          "items": []
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "obiettivi": [
+                "o1",
+                "o3"
+              ]
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "checkboxGroup",
+          "name": "obiettivi",
+          "items": [
+            {
+              "state": "x",
+              "value": "o1",
+              "label": "o1"
+            },
+            {
+              "state": "x",
+              "value": "o3",
+              "label": "o3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "formcheckbox-e-rawtex",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "formCheckbox",
+          "name": "presente",
+          "checked": false
+        },
+        {
+          "_type": "rawTex",
+          "name": "nota",
+          "content": ""
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "presente": true,
+              "nota": "testo tex"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "formCheckbox",
+          "name": "presente",
+          "checked": true
+        },
+        {
+          "_type": "rawTex",
+          "name": "nota",
+          "content": "testo tex"
+        }
+      ]
+    },
+    {
+      "nome": "cella-tabella-con-widget",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "Voce",
+            "Valore"
+          ],
+          "rows": [
+            [
+              {
+                "text": "Totale",
+                "cid": "c0"
+              },
+              {
+                "cid": "c1",
+                "widget": {
+                  "_type": "textField",
+                  "value": ""
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "tbl#c1": "42"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "Voce",
+            "Valore"
+          ],
+          "rows": [
+            [
+              {
+                "text": "Totale",
+                "cid": "c0"
+              },
+              {
+                "cid": "c1",
+                "widget": {
+                  "_type": "textField",
+                  "value": "42"
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "cella-tabella-con-formula-esclusa",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A",
+            "B"
+          ],
+          "rows": [
+            [
+              {
+                "raw": "1"
+              },
+              {
+                "formula": "=A1*2"
+              }
+            ]
+          ]
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "tbl#c1": "999"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A",
+            "B"
+          ],
+          "rows": [
+            [
+              {
+                "raw": "1"
+              },
+              {
+                "formula": "=A1*2"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "cella-testo-senza-marcatura-resta-condivisa",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "text": "ETICHETTA",
+                "cid": "c1"
+              }
+            ]
+          ]
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "tbl#c1": "valore ignorato"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "text": "ETICHETTA",
+                "cid": "c1"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "cella-testo-marcata-terna",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "text": "vecchio",
+                "cid": "c1",
+                "binding": "terna"
+              }
+            ]
+          ]
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "tbl#c1": "valore applicato"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "text": "valore applicato",
+                "cid": "c1",
+                "binding": "terna"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "accordion-annidato",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "accordion",
+          "items": [
+            {
+              "title": "Sez 1",
+              "body_pt": [
+                {
+                  "_type": "textField",
+                  "name": "campo",
+                  "value": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "K": {
+              "campo": "dentro accordion"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "accordion",
+          "items": [
+            {
+              "title": "Sez 1",
+              "body_pt": [
+                {
+                  "_type": "textField",
+                  "name": "campo",
+                  "value": "dentro accordion"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "chiave-terna-assente-lascia-vuoto",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "textField",
+          "name": "campo",
+          "value": "vecchio"
+        },
+        {
+          "_type": "ternaStore",
+          "store": {
+            "ALTRA-CHIAVE": {
+              "campo": "altro valore"
+            }
+          }
+        }
+      ],
+      "atteso": [
+        {
+          "_type": "textField",
+          "name": "campo",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

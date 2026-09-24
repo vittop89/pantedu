@@ -1,0 +1,76 @@
+[Unit]
+# 2026-09-09 — chiede al sistema di dimostrare che sta funzionando davvero.
+#
+# I guasti dell'8 e 9 settembre avevano tutti la stessa forma: qualcosa non
+# funzionava e il fallimento assomigliava al normale. Un controllo di sicurezza
+# verde che non scansionava niente, quattro funzioni che rispondevano 403 da
+# mesi perche' il client mandava un gettone vuoto, il blocco geografico spento
+# perche' i file GeoIP configurati non esistevano, `/version` che dichiarava un
+# commit e ne serviva un altro.
+#
+# Nessuno di questi si vede guardando se il sito risponde: si vedono solo
+# chiedendo a ogni pezzo di dimostrare di essere nello stato che dichiara.
+# E' quello che fa tools/ops/diagnostica.php.
+#
+# La Description non elenca i controlli: l'elenco cresce (diciassette al
+# 23/9/2026, e qui ne comparivano dieci). Stanno in docs/ops/diagnostica.md.
+Description=pantedu — diagnostica degli invarianti
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+# Se un invariante non regge, deve arrivare una mail: e' l'unico modo perche'
+# un guasto silenzioso smetta di essere silenzioso.
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/ops/diagnostica.php
+TimeoutStartSec=300
+
+# 19/9/2026 — i file che crea restano scrivibili dal gruppo. La diagnostica
+# scrive il registro delle anomalie, che scrive anche il container come
+# www-data (solo nel gruppo): con la umask predefinita (0022) un registro nato
+# da qui usciva 0644, e il container non ci scriveva più. Anomalia lo apre al
+# gruppo quando lo crea; questa riga vale per quello che la classe non vede.
+UMask=0007
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

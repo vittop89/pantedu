@@ -1,0 +1,1049 @@
+{
+    "$id": "relazione-finale-classe-docente",
+    "title": "Relazione Finale Classe (Docente)",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Relazione Finale Classe (Docente)",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore"
+            ]
+        },
+        {
+            "type": "nota-textarea",
+            "name": "sintesi_classe",
+            "label": "Sintetica relazione sulla classe",
+            "placeholder": "Inserire qui la relazione sulla classe...",
+            "tex_source": {
+                "file": "MODELLI/tex/3.1_DOC-Relazione_finale_classe_(docente)-MODELLI.tex",
+                "section": "Sintetica relazione sulla classe"
+            },
+            "default": [
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "%[BeginFis] ",
+                            "marks": []
+                        },
+                        {
+                            "_type": "span",
+                            "text": "Analisi delle Competenze Specifiche e Capacità di Interpretazione",
+                            "marks": [
+                                "strong"
+                            ]
+                        },
+                        {
+                            "_type": "span",
+                            "text": "\\\\ Relativamente alla disciplina, nonostante la novità e le problematicità specialmente a inizio anno,",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "x",
+                            "label": "quasi tutti gli studenti hanno"
+                        },
+                        {
+                            "state": "_",
+                            "label": "la maggioranza degli studenti ha"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una parte significativa degli studenti ha"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una parte degli studenti ha"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "dimostrato di saper descrivere e analizzare i fenomeni fisici identificando variabili e leggi, e di saper applicare principi e leggi per la risoluzione di semplici problemi, sebbene a livelli",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "generalmente omogenei"
+                        },
+                        {
+                            "state": "_",
+                            "label": "piuttosto diversificati"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "\\xcheckbox{talvolta eterogenei}. Tra questi, alcuni studenti, in relazione alle proprie capacità e attitudini, sono riusciti ad appropriarsi in modo",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "consapevole ed autonomo"
+                        },
+                        {
+                            "state": "x",
+                            "label": "generalmente autonomo"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parzialmente autonomo"
+                        },
+                        {
+                            "state": "_",
+                            "label": "ancora guidato"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "delle teorie e dei modelli interpretativi introdotti, e sono capaci di riconoscere i limiti di validità degli stessi, dimostrando di aver acquisito",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "solide"
+                        },
+                        {
+                            "state": "x",
+                            "label": "buone"
+                        },
+                        {
+                            "state": "_",
+                            "label": "discrete"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parziali"
+                        },
+                        {
+                            "state": "_",
+                            "label": "iniziali"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "abilità di analisi e di interpretazione dei fenomeni osservati.\\\\ \\\\ %[EndFis] %[BeginMat] ",
+                            "marks": []
+                        },
+                        {
+                            "_type": "span",
+                            "text": "Analisi delle Competenze Specifiche e Capacità di Interpretazione",
+                            "marks": [
+                                "strong"
+                            ]
+                        },
+                        {
+                            "_type": "span",
+                            "text": "\\\\ Relativamente alla disciplina matematica, nonostante la sua astrattezza e le difficoltà concettuali specialmente a inizio anno,",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "x",
+                            "label": "quasi tutti gli studenti hanno"
+                        },
+                        {
+                            "state": "_",
+                            "label": "la maggioranza degli studenti ha"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una parte significativa degli studenti ha"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una parte degli studenti ha"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "dimostrato di saper riconoscere e descrivere concetti, strutture e relazioni matematiche, identificando dati, incognite, proprietà e regole fondamentali, e di saper applicare definizioni, teoremi, procedure di calcolo e strategie logiche per la risoluzione di problemi di varia natura, sebbene a livelli",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "generalmente omogenei"
+                        },
+                        {
+                            "state": "_",
+                            "label": "piuttosto diversificati"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "\\xcheckbox{talvolta eterogenei}. Tra questi, alcuni studenti, in relazione alle proprie capacità e attitudini, sono riusciti ad appropriarsi in modo",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "consapevole ed autonomo"
+                        },
+                        {
+                            "state": "x",
+                            "label": "generalmente autonomo"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parzialmente autonomo"
+                        },
+                        {
+                            "state": "_",
+                            "label": "ancora guidato"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "dei concetti teorici, dei modelli matematici e delle diverse rappresentazioni (simboliche, grafiche, verbali) introdotte, e sono capaci di riconoscere l'ambito di validità di un teorema, la coerenza di un procedimento o i limiti di un modello, dimostrando di aver acquisito",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "solide"
+                        },
+                        {
+                            "state": "x",
+                            "label": "buone"
+                        },
+                        {
+                            "state": "_",
+                            "label": "discrete"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parziali"
+                        },
+                        {
+                            "state": "_",
+                            "label": "iniziali"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "abilità di ragionamento logico-deduttivo, di argomentazione, di calcolo e di interpretazione dei risultati ottenuti.\\\\ \\\\ %[EndMat] ",
+                            "marks": []
+                        },
+                        {
+                            "_type": "span",
+                            "text": "Bilancio Didattico Complessivo e Raggiungimento degli Obiettivi",
+                            "marks": [
+                                "strong"
+                            ]
+                        },
+                        {
+                            "_type": "span",
+                            "text": "\\\\ Si può ritenere",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "positivo"
+                        },
+                        {
+                            "state": "_",
+                            "label": "sostanzialmente positivo"
+                        },
+                        {
+                            "state": "x",
+                            "label": "globalmente adeguato"
+                        },
+                        {
+                            "state": "_",
+                            "label": "globalmente accettabile"
+                        },
+                        {
+                            "state": "_",
+                            "label": "appena sufficiente"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "il bilancio complessivo della classe dal punto di vista didattico. Infatti,",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "x",
+                            "label": "la quasi totalità"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una buona parte"
+                        },
+                        {
+                            "state": "_",
+                            "label": "la maggioranza"
+                        },
+                        {
+                            "state": "_",
+                            "label": "una parte minoritaria ma consistente"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "degli studenti, anche se in modo",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "generalmente omogeneo"
+                        },
+                        {
+                            "state": "x",
+                            "label": "piuttosto diversificato"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "\\checkbox{talvolta discontinuo}, ha conseguito gli obiettivi educativi e disciplinari fissati. Tuttavia,",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "non tutti gli studenti hanno"
+                        },
+                        {
+                            "state": "x",
+                            "label": "alcuni studenti non hanno"
+                        },
+                        {
+                            "state": "_",
+                            "label": "un gruppo ristretto di studenti non ha"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "raggiunto pienamente gli obiettivi necessari ad affrontare l’anno successivo con sufficiente autonomia; si rileva infatti la presenza di alcuni studenti che hanno raggiunto tali obiettivi solo in modo",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "x",
+                            "label": "frammentario e non del tutto sufficiente"
+                        },
+                        {
+                            "state": "_",
+                            "label": "appena sufficiente"
+                        },
+                        {
+                            "state": "_",
+                            "label": "non hanno ancora pienamente consolidato"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "gli obiettivi indicati, malgrado le strategie messe in campo per il recupero e gli interventi mirati predisposti. Questi ultimi hanno permesso di recuperare",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "efficacemente"
+                        },
+                        {
+                            "state": "_",
+                            "label": "generalmente bene"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parzialmente"
+                        },
+                        {
+                            "state": "_",
+                            "label": "in misura limitata"
+                        },
+                        {
+                            "state": "x",
+                            "label": "non sempre in modo risolutivo"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "le varie carenze dimostrate durante l’anno scolastico.\\\\ \\\\ ",
+                            "marks": []
+                        },
+                        {
+                            "_type": "span",
+                            "text": "Valutazione Finale del Percorso Formativo e e Prospettive Future",
+                            "marks": [
+                                "strong"
+                            ]
+                        },
+                        {
+                            "_type": "span",
+                            "text": "\\\\",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "Un numero significativo"
+                        },
+                        {
+                            "state": "x",
+                            "label": "Diversi"
+                        },
+                        {
+                            "state": "_",
+                            "label": "Alcuni"
+                        },
+                        {
+                            "state": "_",
+                            "label": "Solo pochi"
+                        },
+                        {
+                            "state": "_",
+                            "label": "Un nucleo di"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "studenti hanno mostrato una piena consapevolezza nei riguardi della disciplina e delle sue metodologie. In definitiva, gli obiettivi generali sono stati perseguiti giungendo a risultati",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "in netta evoluzione positiva"
+                        },
+                        {
+                            "state": "_",
+                            "label": "in positiva evoluzione"
+                        },
+                        {
+                            "state": "x",
+                            "label": "con progressi apprezzabili"
+                        },
+                        {
+                            "state": "_",
+                            "label": "con progressi modesti ma costanti"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "\\checkbox{con progressi ancora iniziali}, in relazione ai diversi livelli di partenza e alle capacità individuali. Gli obiettivi formativi e disciplinari perseguiti nel corso dell'anno sono stati coerenti con i bisogni",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "di quasi tutti gli"
+                        },
+                        {
+                            "state": "x",
+                            "label": "della maggioranza degli"
+                        },
+                        {
+                            "state": "_",
+                            "label": "di una buona parte degli"
+                        },
+                        {
+                            "state": "_",
+                            "label": "di non tutti gli"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "studenti, si sono rivelati",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "adeguati"
+                        },
+                        {
+                            "state": "x",
+                            "label": "generalmente adeguati"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parzialmente adeguati"
+                        },
+                        {
+                            "state": "_",
+                            "label": "a tratti impegnativi"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "per le capacità della maggioranza degli studenti, sono stati",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "pienamente raggiunti"
+                        },
+                        {
+                            "state": "x",
+                            "label": "in buona parte raggiunti"
+                        },
+                        {
+                            "state": "_",
+                            "label": "parzialmente raggiunti"
+                        },
+                        {
+                            "state": "_",
+                            "label": "solo in parte raggiunti"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "e rappresentano una base",
+                            "marks": []
+                        }
+                    ]
+                },
+                {
+                    "_type": "checkboxGroup",
+                    "items": [
+                        {
+                            "state": "_",
+                            "label": "solida"
+                        },
+                        {
+                            "state": "x",
+                            "label": "adeguata"
+                        },
+                        {
+                            "state": "_",
+                            "label": "discreta"
+                        },
+                        {
+                            "state": "_",
+                            "label": "sufficiente, ma da consolidare ulteriormente,"
+                        },
+                        {
+                            "state": "_",
+                            "label": "ancora da potenziare"
+                        }
+                    ]
+                },
+                {
+                    "_type": "block",
+                    "style": "normal",
+                    "children": [
+                        {
+                            "_type": "span",
+                            "text": "per il passaggio all'anno successivo.",
+                            "marks": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Obiettivi disciplinari raggiunti",
+            "name": "obiettivi_raggiunti",
+            "description": "Fare riferimento alle Linee Guida Nazionali dei Licei (2010) e, se presenti, ai curricoli verticali di Dipartimento.",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_lg2010_competenze",
+                    "title": "LG 2010 - COMPETENZE",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_LG2010/competenze"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_lg2010_abilita",
+                    "title": "LG 2010 - ABILITA",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_LG2010/abilita"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_lg2010_conoscenze",
+                    "title": "LG 2010 - CONOSCENZE",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_LG2010/conoscenze"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_dipart_competenze",
+                    "title": "Dipartimento - COMPETENZE (recupero da classi precedente/successiva)",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_dipartimento/competenze"
+                    }
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_dipart_abilita",
+                    "title": "Dipartimento - ABILITA (recupero da classi precedente/successiva)",
+                    "options": [],
+                    "options_source": {
+                        "folder": "obiettivi_disciplinari_dipartimento/abilita"
+                    }
+                },
+                {
+                    "type": "text-section",
+                    "name": "obiettivi_dipart_conoscenze_nota",
+                    "title": "Dipartimento - CONOSCENZE",
+                    "description": "Elencate nei contenuti effettivamente svolti del programma"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "giudizio_sospeso",
+            "label": "Numero alunni con giudizio sospeso nella propria disciplina",
+            "placeholder": "Indicare numero alunni..."
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Contenuti effettivamente svolti del programma",
+            "name": "programma_svolto",
+            "description": "Recupero conoscenze da classi precedente/successiva",
+            "options": [],
+            "items": [
+                {
+                    "type": "nota-textarea",
+                    "name": "programma_considerazioni",
+                    "label": "Considerazioni in merito se presenti",
+                    "placeholder": "Considerazioni..."
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Metodi, Spazi, Strumenti e Materiali, Prove di Verifica",
+            "name": "metodi_strumenti",
+            "description": "Per i Metodi, gli Spazi, gli Strumenti e Materiali, le Prove di Verifica si fa riferimento alla programmazione iniziale del docente.",
+            "items": [
+                {
+                    "type": "nota-textarea",
+                    "name": "cambiamenti_anno",
+                    "label": "Eventuali cambiamenti in corso d'anno",
+                    "placeholder": "Eventuali altri cambiamenti o osservazioni..."
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "metodologie_didattiche",
+                    "title": "METODOLOGIE DIDATTICHE",
+                    "options": [
+                        {
+                            "value": "Lezione frontale",
+                            "label": "Lezione frontale"
+                        },
+                        {
+                            "value": "Lezione dialogata",
+                            "label": "Lezione dialogata"
+                        },
+                        {
+                            "value": "Attività laboratoriali",
+                            "label": "Attività laboratoriali"
+                        },
+                        {
+                            "value": "Ricerca individuale",
+                            "label": "Ricerca individuale"
+                        },
+                        {
+                            "value": "Lavoro di gruppo",
+                            "label": "Lavoro di gruppo"
+                        },
+                        {
+                            "value": "Esercizi",
+                            "label": "Esercizi"
+                        },
+                        {
+                            "value": "Soluzione di problemi",
+                            "label": "Soluzione di problemi"
+                        },
+                        {
+                            "value": "Discussione di casi",
+                            "label": "Discussione di casi"
+                        },
+                        {
+                            "value": "Esercitazioni pratiche",
+                            "label": "Esercitazioni pratiche"
+                        },
+                        {
+                            "value": "Realizzazione di progetti",
+                            "label": "Realizzazione di progetti"
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "strumenti_didattici",
+                    "title": "STRUMENTI DIDATTICI",
+                    "options": [
+                        {
+                            "value": "Libro/i di testo",
+                            "label": "Libro/i di testo"
+                        },
+                        {
+                            "value": "Altri testi",
+                            "label": "Altri testi"
+                        },
+                        {
+                            "value": "Dispense",
+                            "label": "Dispense"
+                        },
+                        {
+                            "value": "Laboratorio di fisica",
+                            "label": "Laboratorio di fisica"
+                        },
+                        {
+                            "value": "Biblioteca",
+                            "label": "Biblioteca"
+                        },
+                        {
+                            "value": "Palestra",
+                            "label": "Palestra"
+                        },
+                        {
+                            "value": "LIM",
+                            "label": "LIM"
+                        },
+                        {
+                            "value": "Strumenti informatici",
+                            "label": "Strumenti informatici"
+                        },
+                        {
+                            "value": "Audioregistratore",
+                            "label": "Audioregistratore"
+                        },
+                        {
+                            "value": "Videoproiettore",
+                            "label": "Videoproiettore"
+                        },
+                        {
+                            "value": "DVD",
+                            "label": "DVD"
+                        },
+                        {
+                            "value": "CD audio",
+                            "label": "CD audio"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "dynamic-table",
+            "name": "interdisciplinari_table",
+            "title": "Attività interdisciplinari realizzate",
+            "columns": [
+                "Discipline coinvolte",
+                "Argomenti"
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Attività di recupero",
+            "name": "attivita_recupero",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "recupero_curricolare",
+                    "title": "MODALITÀ DI RECUPERO CURRICOLARE",
+                    "options": [
+                        {
+                            "value": "Ripresa delle conoscenze essenziali.",
+                            "label": "Ripresa delle conoscenze essenziali."
+                        },
+                        {
+                            "value": "Riproposizione delle conoscenze in forma semplificata.",
+                            "label": "Riproposizione delle conoscenze in forma semplificata."
+                        },
+                        {
+                            "value": "Percorsi graduati per il recupero di abilità.",
+                            "label": "Percorsi graduati per il recupero di abilità."
+                        },
+                        {
+                            "value": "Esercitazioni per migliorare il metodo di studio.",
+                            "label": "Esercitazioni per migliorare il metodo di studio."
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive in classe.",
+                            "label": "Esercitazioni aggiuntive in classe."
+                        },
+                        {
+                            "value": "Esercitazioni aggiuntive a casa.",
+                            "label": "Esercitazioni aggiuntive a casa."
+                        },
+                        {
+                            "value": "Attività in classe per gruppi di livello .",
+                            "label": "Attività in classe per gruppi di livello ."
+                        },
+                        {
+                            "value": "Peer Education (educazione tra pari).",
+                            "label": "Peer Education (educazione tra pari)."
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox-group",
+                    "name": "recupero_extracurricolare",
+                    "title": "MODALITÀ DI RECUPERO EXTRA-CURRICOLARE",
+                    "options": [
+                        {
+                            "value": "Ripresa delle conoscenze essenziali.",
+                            "label": "Ripresa delle conoscenze essenziali."
+                        },
+                        {
+                            "value": "Riproposizione delle conoscenze in forma semplificata.",
+                            "label": "Riproposizione delle conoscenze in forma semplificata."
+                        },
+                        {
+                            "value": "Percorsi graduati per il recupero di abilità.",
+                            "label": "Percorsi graduati per il recupero di abilità."
+                        },
+                        {
+                            "value": "Esercitazioni per migliorare il metodo di studio.",
+                            "label": "Esercitazioni per migliorare il metodo di studio."
+                        },
+                        {
+                            "value": "Sportello didattico individuale o per piccoli gruppi.",
+                            "label": "Sportello didattico individuale o per piccoli gruppi."
+                        },
+                        {
+                            "value": "Corso di recupero per piccoli gruppi omogenei.",
+                            "label": "Corso di recupero per piccoli gruppi omogenei."
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "title": "Attività di potenziamento",
+            "name": "potenziamento",
+            "options": [
+                {
+                    "value": "Corsi di preparazione e partecipazione a gare, olimpiadi e concorsi.",
+                    "label": "Corsi di preparazione e partecipazione a gare, olimpiadi e concorsi."
+                },
+                {
+                    "value": "Corsi di approfondimento.",
+                    "label": "Corsi di approfondimento."
+                },
+                {
+                    "value": "Esercitazioni aggiuntive in classe.",
+                    "label": "Esercitazioni aggiuntive in classe."
+                },
+                {
+                    "value": "Esercitazioni aggiuntive a casa.",
+                    "label": "Esercitazioni aggiuntive a casa."
+                },
+                {
+                    "value": "Attività in classe per gruppi di livello.",
+                    "label": "Attività in classe per gruppi di livello."
+                },
+                {
+                    "value": "Attività didattiche su piattaforma e-learning.",
+                    "label": "Attività didattiche su piattaforma e-learning."
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "nota-textarea",
+            "name": "educazione_civica",
+            "label": "Attività di educazione civica",
+            "placeholder": "Descrivere attività di educazione civica...",
+            "default": "Nessuna."
+        }
+    ]
+}

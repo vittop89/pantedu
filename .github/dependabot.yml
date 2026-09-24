@@ -1,0 +1,172 @@
+# Aggiornamento delle dipendenze.
+#
+# ── Perché, e perché così ─────────────────────────────────────────────────
+#
+# Fino al 9 settembre 2026 niente teneva d'occhio le versioni. `npm audit` e
+# `composer audit` girano in CI, ma rispondono a una domanda diversa —
+# «qualcuna ha una vulnerabilità pubblicata?» — e non a «quale è ferma a due
+# anni fa». Una dipendenza vecchia non è un guasto finché non lo diventa, e
+# quando lo diventa l'aggiornamento non è più di una riga.
+#
+# Il rischio di questo file è l'opposto: **venti pull request al mese che
+# nessuno guarda**. Un elenco di cose da fare che non si riesce a smaltire
+# smette di essere un elenco di cose da fare, e in tre settimane si torna al
+# punto di partenza — con in più l'abitudine a ignorare le notifiche del
+# repository, che serviranno per altro.
+#
+# Da qui le tre scelte contro-intuitive qui sotto: poche PR aperte per volta,
+# aggiornamenti raggruppati in una sola, e cadenza settimanale invece che
+# giornaliera. Meglio una PR al lunedì che si unisce, che cinque al giorno che
+# si accumulano.
+#
+# ── Cosa NON è coperto ────────────────────────────────────────────────────
+#
+# I pacchetti di sistema del VPS: quelli non passano da qui. Li guarda
+# `tools/ops/versioni-indietro.sh`, che gira una volta al mese sul server e
+# controlla soprattutto **che gli aggiornamenti automatici stiano davvero
+# funzionando** — la domanda che conta.
+# ── L'attesa prima di prendere una versione nuova ─────────────────────────
+#
+# Ogni ecosistema qui sotto ha un `cooldown`: sette giorni, trenta per i major.
+#
+# La via più comoda per infilare codice ostile in un progetto non è bucarne il
+# server — è pubblicare una versione compromessa di qualcosa che il progetto
+# usa già. Quando succede, quella versione viene ritirata nel giro di ore o
+# giorni; ma chi l'ha presa la prima notte se l'è già portata in casa.
+#
+# Sette giorni non costano niente: nessuno di questi aggiornamenti è urgente.
+# Quelli che lo sono davvero — le vulnerabilità pubblicate — passano da
+# `npm audit` e `composer audit` in CI, che non aspettano.
+#
+# Trenta per i major, che oltre al rischio di catena portano anche quello di
+# rompere qualcosa.
+#
+# Nota di percorso: non ci avevo pensato. L'ha segnalato semgrep con la regola
+# `dependabot-missing-cooldown`, e il cancello del censimento si è rifiutato di
+# far passare una regola nuova senza una decisione scritta. Ha funzionato
+# esattamente come doveva.
+
+version: 2
+
+updates:
+    # ── Le azioni GitHub ──────────────────────────────────────────────────
+    #
+    # Sono l'unica categoria in cui un aggiornamento non fatto è anche un
+    # rischio di catena: un'azione di terze parti esegue codice arbitrario nel
+    # runner, che qui è **il PC di casa**, con accesso al repository e ai
+    # segreti del giro.
+    #
+    # Le azioni di terze parti sono già pinnate al digest; quelle di `actions/`
+    # per tag. Dependabot aggiorna entrambe le forme.
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "07:00"
+          timezone: "Europe/Rome"
+      open-pull-requests-limit: 3
+      commit-message:
+          prefix: "deps"
+      # L'attesa prima di prendere una versione nuova: vedi in cima al file.
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+      groups:
+          # Tutto insieme in una PR sola: sono aggiornamenti che si guardano
+          # con lo stesso sguardo, e separarli moltiplica i giri di CI senza
+          # aggiungere informazione.
+          azioni:
+              patterns: ["*"]
+
+    # ── PHP ───────────────────────────────────────────────────────────────
+    - package-ecosystem: "composer"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "07:00"
+          timezone: "Europe/Rome"
+      open-pull-requests-limit: 3
+      commit-message:
+          prefix: "deps"
+      # L'attesa prima di prendere una versione nuova: vedi in cima al file.
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+      groups:
+          # Patch e minori insieme: sono la maggioranza e quasi sempre si
+          # uniscono senza pensarci. I major restano singoli, perché quelli
+          # vanno letti.
+          php-minori:
+              update-types: ["minor", "patch"]
+
+    # ── JavaScript ────────────────────────────────────────────────────────
+    - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "07:00"
+          timezone: "Europe/Rome"
+      open-pull-requests-limit: 3
+      commit-message:
+          prefix: "deps"
+      # L'attesa prima di prendere una versione nuova: vedi in cima al file.
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+      groups:
+          js-minori:
+              update-types: ["minor", "patch"]
+      ignore:
+          # Playwright si aggiorna insieme ai suoi browser, e il runner deve
+          # scaricarli: un aggiornamento non coordinato fa fallire la suite
+          # end-to-end con un messaggio che parla d'altro. Resta da fare a
+          # mano, con `npx playwright install` subito dopo.
+          - dependency-name: "@playwright/test"
+            update-types: ["version-update:semver-major"]
+
+    # ── Il servizio TeX (Python) ─────────────────────────────────────────
+    #
+    # `tools/tex-compile-vps/app` va in produzione (compila LaTeX/TikZ per
+    # ogni contenuto pubblicato) e fino ad oggi nessuno strumento sorvegliava
+    # le sue dipendenze: i pin venivano da un'unica scansione di giugno (D-4).
+    - package-ecosystem: "pip"
+      directory: "/tools/tex-compile-vps/app"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "07:00"
+          timezone: "Europe/Rome"
+      open-pull-requests-limit: 2
+      commit-message:
+          prefix: "deps"
+      # L'attesa prima di prendere una versione nuova: vedi in cima al file.
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
+      groups:
+          tex-minori:
+              update-types: ["minor", "patch"]
+
+    # ── L'immagine di base del container ──────────────────────────────────
+    #
+    # È la categoria con la vita più lunga e il rischio più silenzioso:
+    # l'immagine si ricostruisce a ogni rilascio, ma sempre dalla stessa base.
+    # Se quella base ha una falla, la si porta dietro per mesi senza che niente
+    # lo dica — la CI non guarda dentro l'immagine.
+    - package-ecosystem: "docker"
+      directory: "/docker"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "07:00"
+          timezone: "Europe/Rome"
+      open-pull-requests-limit: 2
+      commit-message:
+          prefix: "deps"
+      # L'attesa prima di prendere una versione nuova: vedi in cima al file.
+      cooldown:
+          default-days: 7
+          semver-major-days: 30

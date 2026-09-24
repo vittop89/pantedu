@@ -1,0 +1,73 @@
+[Unit]
+# Pulizia delle sessioni di importazione PDF terminali.
+#
+# Cancella le sessioni chiuse da più di `PDF_IMPORT_JOBS_PURGE_D` giorni
+# (predefinito quattordici). Al 9 settembre 2026 la tabella
+# `pdf_import_sessions` è **vuota**: la funzione non è ancora in uso, quindi
+# oggi questo giro non fa niente. Resta acceso perché il giorno in cui
+# servirà, servirà senza che nessuno si ricordi di accenderlo.
+#
+# Nota per quel giorno: lo script è nato per fare anche il lavoro vero — pesca
+# le sessioni in `rasterized`/`retry` e ne completa l'estrazione — e la sua
+# intestazione consiglia di lanciarlo **ogni minuto**. Qui gira una volta al
+# giorno con `--purge-only`, cioè solo la pulizia. Se le sessioni cominciano ad
+# accumularsi in quegli stati, manca il worker, non questo.
+#
+# Perché non è più un cron: come gli altri, girava da root, non lasciava
+# nessuno stato, e il suo `php` faceva scattare tutte le notti l'allarme sulle
+# letture di `.env.local` (misurato: un evento per esecuzione).
+Description=pantedu — pulizia delle sessioni di importazione PDF
+After=network-online.target mariadb.service
+Wants=network-online.target
+Requires=mariadb.service
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/cron/process_pdf_import_jobs.php --purge-only
+StandardOutput=append:/var/lib/pantedu-data/storage/logs/pdf_import_purge.log
+StandardError=append:/var/lib/pantedu-data/storage/logs/pdf_import_purge.log
+TimeoutStartSec=600
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

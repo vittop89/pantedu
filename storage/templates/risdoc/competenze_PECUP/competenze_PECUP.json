@@ -1,0 +1,42 @@
+[
+    {
+        "titolo": "Asse dei Linguaggi (PECUP Licei)",
+        "contenuti": [
+            { "label": "Padroneggiare pienamente la lingua italiana, dominando la scrittura, la lettura e la capacità di produrre testi argomentati e corretti.", "checked": false },
+            { "label": "Aver acquisito competenze comunicative in due lingue straniere moderne (livello B2 per la prima lingua e B1 per la seconda).", "checked": false },
+            { "label": "Utilizzare con padronanza i linguaggi specifici e le metodologie delle diverse discipline studiate.", "checked": false },
+            { "label": "Utilizzare criticamente le tecnologie dell'informazione e della comunicazione (TIC) per ricercare, analizzare e rielaborare informazioni.", "checked": false },
+            { "label": "Apprezzare e fruire del patrimonio artistico e letterario, comprendendone il valore culturale e storico.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Asse Matematico (PECUP Licei)",
+        "contenuti": [
+            { "label": "Utilizzare il linguaggio e i metodi della matematica per organizzare e valutare adeguatamente informazioni qualitative e quantitative.", "checked": false },
+            { "label": "Utilizzare le strategie del pensiero razionale (procedure logiche, induttive, deduttive) per analizzare situazioni, individuare problemi e possibili soluzioni.", "checked": false },
+            { "label": "Possedere i concetti e i metodi essenziali della matematica, sia nella tradizione classica sia nelle prospettive più recenti, per descrivere e risolvere problemi.", "checked": false },
+            { "label": "Comprendere il ruolo del pensiero matematico e scientifico nello sviluppo della cultura e della società.", "checked": false },
+            { "label": "Utilizzare strumenti informatici e di calcolo per la rappresentazione di dati, la modellizzazione di problemi e la loro risoluzione.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Asse Scientifico-Tecnologico (PECUP Licei)",
+        "contenuti": [
+            { "label": "Comprendere i procedimenti dimostrativi e i metodi di indagine della matematica e delle scienze sperimentali, sapendo applicare modelli per analizzare la realtà.", "checked": false },
+            { "label": "Possedere una solida conoscenza dei concetti fondamentali delle scienze naturali (Fisica, Chimica, Biologia, Scienze della Terra) e saperli contestualizzare.", "checked": false },
+            { "label": "Utilizzare gli strumenti di calcolo e di rappresentazione grafica per l'analisi dei dati e la risoluzione di problemi.", "checked": false },
+            { "label": "Essere consapevoli delle implicazioni etiche, sociali e culturali dello sviluppo scientifico e tecnologico.", "checked": false },
+            { "label": "Saper cogliere l'interazione tra scienza, tecnologia e società e comprendere come queste dimensioni si influenzino a vicenda.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Asse Storico-Sociale (PECUP Licei)",
+        "contenuti": [
+            { "label": "Avere una solida conoscenza degli eventi storici e delle prospettive storiografiche, sapendo collocare i fenomeni in dimensione diacronica e sincronica.", "checked": false },
+            { "label": "Comprendere criticamente le radici storiche e culturali del presente e del dibattito contemporaneo.", "checked": false },
+            { "label": "Aver acquisito i principi fondamentali del diritto e dell'economia, comprendendo le istituzioni politiche e il sistema socio-economico.", "checked": false },
+            { "label": "Esercitare la cittadinanza attiva e consapevole, conoscendo i principi della Costituzione italiana e della cultura europea.", "checked": false },
+            { "label": "Riconoscere e rispettare la diversità delle culture e dei punti di vista, promuovendo il dialogo interculturale.", "checked": false }
+        ]
+    }
+]

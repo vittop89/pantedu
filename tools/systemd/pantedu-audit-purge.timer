@@ -1,0 +1,18 @@
+[Unit]
+Description=pantedu — timer della purga dei registri di audit
+
+[Timer]
+# Ogni notte alle 03:00 (dal 24/9/2026). Prima girava il primo del mese: una
+# riga di waf_logs, dichiarata per 30 giorni, restava fino a 61, e i
+# tentativi di accesso falliti, tenuti un giorno, fino a un mese.
+OnCalendar=*-*-* 03:00:00
+
+# Se la macchina era spenta, la purga va fatta comunque: saltarla vuol dire
+# tenere dati oltre il termine dichiarato.
+Persistent=true
+
+RandomizedDelaySec=5min
+Unit=pantedu-audit-purge.service
+
+[Install]
+WantedBy=timers.target

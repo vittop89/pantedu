@@ -1,0 +1,86 @@
+[Unit]
+# Salvataggio giornaliero della tabella delle chiavi di cifratura dei docenti.
+#
+# Era una riga nel crontab di root. Tre ragioni per spostarlo qui, e nessuna
+# delle tre e' cosmetica.
+#
+# **1. Un cron che fallisce non lascia nessuna traccia di stato.** Non va in
+# `failed`, non ha `OnFailure=`, non compare in `systemctl`. Questo lavoro e'
+# rimasto fermo **dal 18 agosto al 9 settembre 2026** — tre settimane — perche'
+# git teneva lo script come `100644` e il primo `git reset --hard` del rilascio
+# lo ricreava non eseguibile. L'unica traccia era `Permission denied` dentro
+# `storage/logs/backup.log`, un file che non legge nessuno e che allora non
+# aveva nemmeno le date. Con `OnFailure=` un guasto si sente.
+#
+# **2. Girava come root senza averne bisogno.** Legge `.env.local` (di cui
+# `pantedu` e' proprietario) e scrive in `storage/backups` (gruppo `www-data`,
+# scrivibile dal gruppo, e `pantedu` e' nel gruppo). Non serve altro. I file
+# prodotti da root restavano `root:root`, cioe' illeggibili all'applicazione.
+#
+# **3. Faceva scattare l'allarme sui segreti tutte le notti.** Lo script fa
+# `source .env.local`, e auditd registra le letture di quel file da parte di
+# una sessione di login. Un cron **ha** una sessione di login — PAM gli
+# assegna un `auid` — mentre un servizio systemd no. Da cron, quindi, questo
+# salvataggio avrebbe segnalato «qualcuno ha letto i segreti» ogni notte, e in
+# una settimana avrebbe insegnato a ignorare quell'allarme. Da qui, no.
+#
+# Vedi anche `tools/ops/audit-pantedu.rules` e `tools/ops/aide-check.sh`.
+Description=pantedu — salvataggio delle chiavi di cifratura dei docenti
+After=network-online.target mariadb.service
+Wants=network-online.target
+Requires=mariadb.service
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/var/www/pantedu/tools/crypto/backup_teacher_keys.sh
+# Il registro resta dov'era, per non spezzare la storia; ma adesso c'e' anche
+# il giornale di systemd, che le date ce le ha.
+StandardOutput=append:/var/www/pantedu/storage/logs/backup.log
+StandardError=append:/var/www/pantedu/storage/logs/backup.log
+# Un `mysqldump` di una tabella sola: dieci minuti sono larghi, e non lasciano
+# un processo appeso se il database non risponde.
+TimeoutStartSec=600
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

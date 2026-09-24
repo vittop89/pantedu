@@ -1,0 +1,119 @@
+# Quello che non serve a servire una richiesta non entra nell'immagine.
+#
+# Non è solo peso: ogni file dentro l'immagine è un file che può essere servito
+# per sbaglio da una configurazione futura, o letto da chi ottiene un accesso.
+# Le prove, i documenti e gli strumenti di sviluppo non hanno niente da fare su
+# una macchina che risponde a Internet — e finora ci stavano, perché il
+# rilascio era un `git reset --hard` dell'intero repository.
+
+# ── Il repository stesso ──────────────────────────────────────────────────
+.git
+.github
+.gitignore
+.gitattributes
+.claude
+.vscode
+.idea
+
+# ── Prove ─────────────────────────────────────────────────────────────────
+tests
+playwright.config.js
+playwright-report
+test-results
+vitest.config.*
+phpunit.xml*
+.phpunit.cache
+phpstan.neon*
+phpcs.xml*
+.eslintrc*
+eslint.config.*
+stylelint.config.*
+lighthouserc.json
+
+# ── Documenti ─────────────────────────────────────────────────────────────
+# `docs/` NON e' tutta documentazione: alcune parti sono **contenuto
+# dell'applicazione**, letto a runtime dai controller. Escluderla per intero
+# mandava in 404 tutte le pagine legali — informativa, termini, regole d'uso,
+# dichiarazione di accessibilita' — con la pagina che si disegnava lo stesso e
+# diceva «Documento non disponibile». Trovato dalla prova delle rotte sul
+# container, non da un ragionamento.
+#
+# L'informativa e' UNA PER SCENARIO (`DeploymentScenario::informativaFile`):
+# tutte e tre entrano nell'immagine, non solo quella dello scenario attivo,
+# perche' cambiare scenario dal pannello non la ricostruisce. Dal 13 settembre
+# 2026 `docker/verifica-avvio.php` si rifiuta di far partire il container se
+# ne manca una: il 12 settembre la terza (quella dello scenario 1, cioe' della
+# produzione) era arrivata senza la riga qui sotto, e nessuna prova se ne
+# sarebbe accorta prima del rilascio.
+docs
+!docs/legal
+!docs/privacy/informativa.md
+!docs/privacy/informativa-personale.md
+!docs/privacy/informativa-istituto.md
+# Il piano per le violazioni: dal 22 settembre 2026 `/admin/data-breach/piano`
+# lo consegna a chi apre un incidente. Senza questa riga la rotta risponde 404
+# proprio nel momento in cui serve, e la pagina non lo direbbe.
+!docs/privacy/data_breach_runbook.md
+!docs/curriculum
+wiki
+*.md
+!README.md
+LICENSES
+REUSE.toml
+
+# ── Strumenti che non girano in produzione ────────────────────────────────
+# `tools/` NON è escluso per intero: i lavori a orario (GDPR, catena di
+# controllo, intelligence del WAF, pulizia) girano dentro il container, e
+# `tools/migrate.php` serve al rilascio. Si tolgono i pezzi che sono di
+# sviluppo o d'archivio.
+tools/archive
+tools/dev
+tools/ci
+tools/audit/css-baseline.mjs
+tools/publish
+tools/tex-compile-vps
+# `tools/build` resta: `npm run build` lo usa (`prebuild` → vendor-assets.mjs).
+# Escluderlo romperebbe lo stadio degli asset, che gira sullo stesso contesto.
+
+# ── Strumenti d'accesso al server ─────────────────────────────────────────
+# 23/9/2026 (A-85). La console di accesso (`pantedu.exe`, il suo avvio e il
+# sorgente) e la cassetta degli attrezzi della postazione descrivono **come
+# si entra** nel server: host del tunnel, alias SSH, percorsi, il secchio dei
+# salvataggi. La copia pubblica li toglie per questo
+# (tools/publish/sanitize-for-publication.php, fra i segni «strumenti
+# d'accesso»), e finora l'immagine li portava dentro. Nessuno li serviva via
+# web — la radice è `public/`, e `tools/` è negato in docker/nginx.conf — ma
+# chi ottiene un accesso al container, o all'immagine nel registro, trovava la
+# mappa. Il Dockerfile non li usa. Se il sanitizer ne toglie uno nuovo e qui
+# manca, tests/ops/strumenti-accesso-fuori-immagine.test.sh diventa rosso.
+pantedu.exe
+pantedu.bat
+tools/pantedu
+tools/postazione
+
+# ── Costruito o scaricato, che si rifà negli stadi ────────────────────────
+node_modules
+vendor
+public/build
+# L'editor drawio lo installa lo stadio `drawio` del Dockerfile, verificato:
+# una copia locale (145 MB) non deve entrare nel contesto né nell'immagine.
+public/drawio-app
+storage/cache
+storage/logs
+storage/sessions
+storage/risdoc-tmp
+storage/backups
+storage/geoip
+storage/objects
+storage/htmlpurifier-cache
+
+# ── Segreti e roba locale ─────────────────────────────────────────────────
+# `.env.local` si monta, non si copia: un segreto dentro un'immagine è un
+# segreto dentro ogni copia dell'immagine, compreso il registro.
+.env
+.env.*
+!.env.example
+*.log
+*.sqlite
+*.db
+Soluzioni-PC

@@ -1,0 +1,1018 @@
+name: CI
+
+# Phase 25.E1 — pipeline di qualità che gira su ogni pull request.
+#
+# Nessuno di questi job blocca il deploy, che parte dal webhook sul VPS a ogni
+# push su main (tools/webhook/). A bloccare il merge è la protezione del ramo,
+# che richiede verdi i job dichiarati qui sotto.
+#
+# 2026-09-04 — il ramo di lavoro si chiama `main` da giugno; questa pipeline
+# ascoltava ancora `master` e non girava da allora (revisione architetturale
+# 2026-09, rilievo A1). Da qui riparte.
+#
+# 2026-09-08 — tolti i rami di lavoro dal trigger `push`.
+#
+# C'erano entrambi, `pull_request` e `push` sui prefissi `feat/**`,
+# `refactor/**`, `fix/**`: una pull request da uno di quei rami faceva partire
+# questa pipeline **due volte sullo stesso commit**. Il blocco `concurrency`
+# non li annulla a vicenda, perché `refs/heads/fix/x` e `refs/pull/N/merge`
+# sono riferimenti diversi e finiscono in due gruppi.
+#
+# 2026-09-08 (2) — da nove job a tre.
+#
+# La ragione è il modo in cui GitHub fattura: **per job, arrotondato al minuto
+# intero**. Misurato su un giro vero: 432 secondi di lavoro effettivo,
+# **undici minuti fatturati**. Sei job stavano sotto il minuto e ne pagavano
+# uno ciascuno, e la preparazione (checkout + setup + `npm ci` o `composer
+# install`) si pagava nove volte invece di due — da sola erano circa metà del
+# conto. Con la quota mensile al 90% e ventitré giorni davanti, non reggeva.
+#
+# Cosa si perde e come si compensa. Prima, se ESLint falliva, Vitest girava lo
+# stesso — erano job diversi — e si vedevano tutti i guasti in un colpo. Dentro
+# un job solo, un passo rotto fermerebbe i successivi. Per questo ogni passo
+# porta `if: ${{ !cancelled() }}`: girano tutti comunque, e il job risulta
+# rosso alla fine. Si perde solo la granularità dei nomi nell'elenco dei
+# controlli; quale passo è caduto lo dice il registro del job.
+on:
+    pull_request:
+        branches: [main]
+    # Niente giro su `push: main`: duplicherebbe esattamente quello della pull
+    # request, visto che `main` è protetto e niente ci arriva senza esser
+    # passato di lì. Si perde il controllo su una spinta diretta — la via
+    # d'emergenza da amministratore — e chi la usa sa perché.
+
+# Cancel run precedenti dello stesso branch quando arriva un nuovo push.
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+# Permessi del gettone dei workflow: il minimo, scritto.
+#
+# Senza questo blocco vale il predefinito del repository, che puo'
+# essere piu' largo di quanto serva e cambiare sotto i piedi da una
+# impostazione altrove. I job che hanno bisogno di piu' se lo
+# dichiarano da se' (vedi `packages: write` dove si pubblica).
+permissions:
+    contents: read
+
+jobs:
+    # ═══════════════════════════════════════════════════════════════════════
+    # 1. Tutto quello che ha bisogno di Node
+    # ═══════════════════════════════════════════════════════════════════════
+    # Erano quattro job (ESLint, Vitest, Build, Guardie), ognuno con il proprio
+    # `npm ci`. Il lavoro vero era diciannove secondi in tutto; la preparazione
+    # centoquaranta.
+    front-end:
+        name: "Front-end: lint, test, build, guardie"
+        # Dove gira: la macchina di casa, o quelle di GitHub.
+        #
+        # `vars.RUNNER` e' una variabile del repository (Settings -> Secrets and
+        # variables -> Actions -> Variables). Se vale `pantedu` -- l'etichetta del
+        # runner registrato in WSL -- i giri vanno li' e non consumano minuti. Se la
+        # cancelli, tutto torna sui computer di GitHub senza toccare una riga di
+        # codice: e' l'interruttore per quando il PC e' spento o sei fuori casa.
+        #
+        # Il caso scomodo da conoscere: variabile impostata e PC spento vuol dire
+        # lavori **in coda**, non falliti. La pull request non diventa verde e basta.
+        runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  # 2026-09-23 — la storia intera: `legal:pdf` confronta la data
+                  # dell'ultimo commit di ogni sorgente con quella del suo PDF, e
+                  # con un solo commit le date sono tutte uguali e non può
+                  # fallire. Su un checkout superficiale la guardia ora si ferma
+                  # da sola (revisione architetturale del 23/9/2026, A-25).
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              # 2026-09-23 — anche sul runner di casa: il Node lo sceglie `.nvmrc`,
+              # non quello installato sulla macchina. setup-node lo cerca nella cache
+              # degli strumenti del runner (`_work/_tool`) e lo scarica solo la prima
+              # volta. Fino a quel giorno in casa questo passo si saltava e girava il
+              # Node di sistema di prepara-runner.sh: cambiare `.nvmrc` voleva un passo
+              # a mano su ogni macchina prima dell'unione (revisione architetturale,
+              # D-5). La cache di npm solo sui runner di GitHub: in casa `~/.npm` resta
+              # sulla macchina, e `actions/cache` farebbe un giro di rete per niente.
+              with:
+                  node-version-file: ".nvmrc"
+                  cache: ${{ !vars.RUNNER && 'npm' || '' }}
+
+            - run: npm ci --no-audit --no-fund
+
+            # 2026-09-23 — il Node che gira è quello di .nvmrc. Il bundle lo
+            # costruisce Node 22 (docker/Dockerfile), mentre Vitest, ESLint e il
+            # build di prova giravano su Node 20, fuori supporto dal 30/4/2026
+            # (revisione architetturale, D-5). Lo mette davanti nel PATH
+            # setup-node, su tutti i runner, anche su quelli di casa; questo
+            # passo misura che sia davvero lui a girare, e se no fa rosso il
+            # lavoro invece di lasciarlo provare con un'altra versione. Dopo
+            # `npm ci`, così gli altri passi girano lo stesso e il registro dice
+            # tutto in un giro.
+            - name: Node è quello di .nvmrc
+              if: ${{ !cancelled() }}
+              run: |
+                  atteso="$(tr -d '[:space:]v' < .nvmrc)"
+                  trovato="$(node -p 'process.versions.node.split(".")[0]')"
+                  if [ "$trovato" != "$atteso" ]; then
+                      echo "::error::Node $(node -v) da $(command -v node), ma .nvmrc chiede $atteso: il passo setup-node non è girato o non l'ha messo davanti nel PATH."
+                      exit 1
+                  fi
+                  echo "Node $(node -v), come chiede .nvmrc"
+
+            - name: ESLint
+              if: ${{ !cancelled() }}
+              run: npm run lint -- --format=stylish
+
+            # 2026-09-07 — mancavano tutti e due: gli 82 test di vitest
+            # (tests/js-unit) e il controllo dei tipi del supporto E2E
+            # (tests/e2e/support, TypeScript strict) giravano solo sulla
+            # macchina di chi sviluppa.
+            - name: Vitest (tests/js-unit)
+              if: ${{ !cancelled() }}
+              run: npm test
+
+            - name: Tipi del supporto E2E
+              if: ${{ !cancelled() }}
+              run: npm run e2e:typecheck
+
+            - name: Vite build
+              if: ${{ !cancelled() }}
+              run: npm run build
+
+            # 2026-09-23 — stava solo in `npm run ci`, che nessun workflow
+            # esegue: il banner dei Termini poteva uscire di nuovo dal fascio
+            # con la CI verde (A-25). Dopo il build, che è ciò che guarda.
+            - name: I moduli attesi sono nel fascio principale
+              if: ${{ !cancelled() }}
+              run: npm run moduli:fascio
+
+            - name: Bundle size budget
+              if: ${{ !cancelled() }}
+              run: npm run bundle:budget
+
+            # ─── Le guardie del progetto ───
+            # 2026-09-07 — stavano nello script aggregato `npm run ci` ma
+            # nessun workflow le eseguiva: giravano solo se qualcuno se le
+            # ricordava a mano. Durano pochi secondi e difendono invarianti
+            # veri.
+            - name: Niente CSS iniettato da JavaScript
+              if: ${{ !cancelled() }}
+              run: npm run css:no-injection
+
+            - name: Niente gestori in linea (CSP)
+              if: ${{ !cancelled() }}
+              run: npm run csp:no-inline-handlers
+
+            - name: La guardia dei gestori in linea scatta, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # 23/9/2026 (revisione architetturale A-19): la guardia qui
+                  # sopra guarda views/, app/ e js/, e anche la forma
+                  # setAttribute("onclick", …). Si prova su alberi usa e getta
+                  # che scatta dove deve (vista, classe PHP, modulo JS, .html
+                  # oltre il tetto, eccezione morta) e non su un albero pulito.
+                  bash tests/ops/gestori-in-linea.test.sh
+
+            - name: Versioni dei documenti legali allineate
+              if: ${{ !cancelled() }}
+              run: npm run legal:versions
+
+            # 2026-09-23 — `legal:pdf` e `percorsi:dati` stavano solo in
+            # `npm run ci`: un PDF legale indietro rispetto al suo sorgente, o
+            # una cartella dei dati costruita dalla radice del codice,
+            # arrivavano su `main` con la CI verde (A-25). Che ogni guardia di
+            # `npm run ci` compaia in un workflow lo controlla ora
+            # `check-workflows.mjs`.
+            - name: I PDF legali non sono più vecchi del loro sorgente
+              if: ${{ !cancelled() }}
+              run: npm run legal:pdf
+
+            - name: Nessuna cartella dei dati dalla radice del codice
+              if: ${{ !cancelled() }}
+              run: npm run percorsi:dati
+
+            # 2026-09-09 — nove punti del front-end leggevano
+            # `meta[name="csrf-token"]`, che nessuna vista emette: partiva una
+            # stringa vuota e quattro funzioni rispondevano 403 da mesi. I due
+            # lati stanno in cartelle diverse, quindi nessuna lettura di un
+            # file solo poteva svelarlo: serviva confrontare le due liste.
+            - name: Nessun <meta> letto e mai emesso
+              if: ${{ !cancelled() }}
+              run: npm run meta:letti
+
+            # 2026-09-09 — git teneva `backup_teacher_keys.sh` come `100644`.
+            # Il primo `git reset --hard` del rilascio lo ricreava inerte, il
+            # cron delle 03:00 rispondeva «Permission denied» dentro un log che
+            # non legge nessuno, e il salvataggio delle chiavi di cifratura dei
+            # docenti e' rimasto fermo tre settimane. Uno shebang e' una
+            # promessa: se git non la conosce, ogni copia fresca la tradisce.
+            - name: Gli script con shebang sono eseguibili anche in git
+              if: ${{ !cancelled() }}
+              run: npm run script:eseguibili
+
+            - name: .env.example completo
+              if: ${{ !cancelled() }}
+              run: npm run env:check
+
+            # 2026-09-23 — il .env.example del servizio TeX non elencava cinque
+            # variabili che il servizio legge (revisione architetturale, A-43).
+            # Stessa regola del passo sopra, per tools/tex-compile-vps.
+            - name: .env.example del servizio TeX completo
+              if: ${{ !cancelled() }}
+              run: npm run env:tex
+
+            - name: Migrazioni distruttive dichiarate
+              if: ${{ !cancelled() }}
+              run: npm run db:migrations
+
+            - name: Rilascio coerente con le unità systemd
+              if: ${{ !cancelled() }}
+              run: npm run deploy:units
+
+            - name: "Workflow: niente chiavi ripetute, azioni fissate"
+              if: ${{ !cancelled() }}
+              run: npm run ci:workflows
+
+            - name: Sintassi degli script di sistema
+              if: ${{ !cancelled() }}
+              run: |
+                  # `bash -n` non esegue niente: legge e basta. Uno script del
+                  # rilascio con un errore di sintassi si scoprirebbe altrimenti
+                  # solo mentre il rilascio è in corso.
+                  #
+                  # 2026-09-14 — anche `tools/dev/wsl` (fra cui il VPS in locale)
+                  # e `tools/tex-compile-vps`, il cui `provision.sh` installa il
+                  # servizio TeX in produzione e si lancia di rado.
+                  for f in tools/webhook/*.sh tools/systemd/*.sh tools/publish/*.sh tools/ops/*.sh tools/dev/wsl/*.sh tools/dev/hooks/*.sh tools/tex-compile-vps/*.sh; do
+                      [ -f "$f" ] || continue
+                      bash -n "$f" || { echo "sintassi rotta: $f"; exit 1; }
+                  done
+                  echo "OK: sintassi degli script di sistema"
+
+            - name: shellcheck sugli script del rilascio
+              if: ${{ !cancelled() }}
+              run: |
+                  # Solo gli script che toccano la produzione. `-S warning` per
+                  # non trasformare ogni stilistica in un blocco.
+                  #
+                  # 2026-09-09 — aggiunti il salvataggio cifrato e i due script
+                  # dell'integrità. «Toccano la produzione» li comprendeva già
+                  # per come è scritta la regola: girano come root, ogni notte,
+                  # e uno dei due custodisce le chiavi di cifratura dei docenti.
+                  # Non c'erano, e infatti dentro il backup è rimasto per mesi
+                  # un `if ... | tail` che faceva stampare «✓ uploaded» anche
+                  # quando il caricamento non avveniva.
+                  #
+                  # 2026-09-23 — aggiunti il salvataggio delle chiavi dei docenti
+                  # (ogni notte), i due script che creano le utenze del database
+                  # (da root) e le funzioni che passano loro le credenziali.
+                  shellcheck -S warning \
+                      tools/webhook/deploy.sh \
+                      tools/webhook/deploy-container.sh \
+                      tools/webhook/passa-ai-container.sh \
+                      tools/systemd/pantedu-deploy-trigger.sh \
+                      tools/systemd/pantedu-deploy-differito.sh \
+                      tools/systemd/pantedu-finestra-rilascio.sh \
+                      tools/backup/encrypted_backup.sh \
+                      tools/ops/aide-check.sh \
+                      tools/ops/aide-spiega.sh \
+                      tools/ops/ingressi-container.sh \
+                      tools/ops/prova-ingressi-container.sh \
+                      tools/ops/versioni-indietro.sh \
+                      tools/crypto/backup_teacher_keys.sh \
+                      tools/security/opzioni-mysql.sh \
+                      tools/security/create_maintenance_db_user.sh \
+                      tools/security/create_migrator_db_user.sh
+
+            - name: Il filtro delle differenze di AIDE, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Ogni verifica di aide-spiega.sh deve dire «attesa» quando
+                  # regge e «da guardare» quando non regge. Fino al 13 settembre
+                  # 2026 il filtro dava «atteso» anche senza debsums, perdeva
+                  # dal conto i file se mancava dpkg-query e con un elenco
+                  # grande scambiava un file che non combacia per uno atteso.
+                  # Niente root e niente server: un repository e comandi finti.
+                  bash tests/ops/aide-spiega.test.sh
+
+            - name: Gli ingressi nei container registrati da auditd, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Il punto cieco di docker exec (15/9/2026): ogni comando che
+                  # entra in un container conta come ingresso, gli altri comandi
+                  # docker no. Righe nella forma di ausearch -i, niente auditd.
+                  bash tests/ops/ingressi-container.test.sh
+
+            - name: Il server PHP dei job prende la sua porta, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Su una porta presa da un altro server lo script si deve
+                  # fermare, non interrogare l'altro (14/9/2026).
+                  bash tests/ops/server-php.test.sh
+
+            - name: Il router dello sviluppo risponde come nginx
+              if: ${{ !cancelled() }}
+              run: |
+                  # Divieti, /vendor/, alias e PHP che non c'è: lo stesso elenco
+                  # che immagine.yml prova contro il container (14/9/2026).
+                  bash tests/ops/rotte-come-nginx.test.sh
+
+            - name: Il marcatore del repository di sviluppo, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Ignorato da git, e la copia in WSL ne è rimasta senza per
+                  # dodici giorni: senza, sanitize --apply riscrive il
+                  # repository di sviluppo (22/9/2026). Cartelle usa e getta.
+                  bash tests/ops/marca-sviluppo.test.sh
+
+            - name: Il limitatore spento in sviluppo, e solo lì, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # In sviluppo il limitatore lo spegne .env.local, dove
+                  # server.sh aggiunge la chiave se manca
+                  # (wiki/environment-variables.md). Il file è di chi sviluppa:
+                  # si prova che lo script lo tocchi solo quando la chiave non
+                  # c'è, e che server.sh lo chiami davvero. Cartelle usa e
+                  # getta, mai il repository.
+                  bash tests/ops/limitatore-sviluppo.test.sh
+
+            - name: Il gancio dei runner tocca solo il suo, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Due runner finti e un chown finto: il gancio si riprende i
+                  # file del suo runner e non quelli di un altro (14/9/2026).
+                  bash tests/ops/gancio-runner.test.sh
+
+            - name: Il hook di ROUTES.md scrive nel repository del file, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Un file modificato in WSL da una sessione aperta sulla copia
+                  # Windows: il ROUTES.md da rigenerare è quello in WSL, non quello
+                  # della cartella della sessione (15/9/2026).
+                  bash tests/ops/rigenera-routes.test.sh
+
+            - name: Il PDF del Pacchetto DPO si sostituisce solo con uno nuovo valido, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # _gen_pdf.py cancellava il PDF versionato prima di lanciare
+                  # Edge, senza guardare se Edge c'era: da WSL, con il modulo
+                  # markdown installato, il PDF spariva (22/9/2026). Un modulo
+                  # markdown finto e un Edge finto, niente Windows.
+                  bash tests/ops/gen-pdf-pacchetto.test.sh
+
+            - name: build_pdf.sh in WSL si ferma e rimanda alla guida, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Col bash di WSL suggeriva di installare pandoc con winget
+                  # (22/9/2026). La prova imposta e toglie WSL_DISTRO_NAME da
+                  # sé: i runner di casa girano dentro WSL. pandoc finto.
+                  bash tests/ops/build-pdf-wsl.test.sh
+
+            - name: La copia pubblica ha indirizzi validi nei .env e nel codice, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Con {{OPERATORE_EMAIL}} in APP_MAIL_FROM e DPO_EMAIL il
+                  # Mailer rifiutava l'indirizzo e nella copia pubblica quattro
+                  # prove d'integrazione fallivano (23/9/2026). Il sanitizer
+                  # gira su una cartella usa e getta, mai sul repository.
+                  bash tests/ops/sanitizer-email-valide.test.sh
+
+            - name: Lo schema del database entra nella copia pubblica, i dump no, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # release.sh fa `git add -A`, che rispetta .gitignore: con
+                  # `*.sql` lo schema restava fuori dal repository pubblico
+                  # (23/9/2026). Cartella usa e getta, niente rete.
+                  bash tests/ops/copia-pubblica-schema.test.sh
+
+            - name: Gli strumenti d'accesso restano fuori dall'immagine, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # La copia pubblica toglie console e postazione perché
+                  # descrivono come si entra nel server; .dockerignore le
+                  # lasciava entrare nell'immagine (23/9/2026, A-85). L'elenco
+                  # lo dà il sanitizer; niente Docker: le regole di
+                  # .dockerignore le legge la prova, provata su un finto.
+                  bash tests/ops/strumenti-accesso-fuori-immagine.test.sh
+
+            - name: L'editor drawio si installa solo con la sua impronta, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Lo scarica la costruzione dell'immagine (15/9/2026): con
+                  # un'impronta diversa non si installa niente. Un draw.war
+                  # finto servito con file://, niente rete.
+                  bash tests/ops/install-drawio.test.sh
+
+            - name: Il rilascio porta il codice del servizio TeX, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Dall'8/9/2026 il rilascio a container non copiava più il
+                  # codice del TeX in /opt (19/9/2026): sincronizza solo se è
+                  # cambiato, e un TeX che non riparte avvisa senza fermare il
+                  # rilascio. Funzioni vere dello script, comandi finti.
+                  bash tests/ops/sincronizza-tex.test.sh
+
+            - name: Il rilascio aggiorna il vendor dell'host e le versioni legali, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Dall'8/9/2026 il rilascio a container non eseguiva più
+                  # sync_versions.php né composer install sull'host: in
+                  # produzione Termini e AUP erano fermi alla 1.3 (23/9/2026).
+                  # composer solo se cambia composer.*, e nessuno dei due
+                  # ferma il rilascio. Funzioni vere, comandi finti.
+                  bash tests/ops/vendor-e-versioni-legali.test.sh
+
+            - name: Il rilascio porta nella biblioteca i modelli TikZ versionati, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Dal 24/9/2026 (ADR-050) i modelli TikZ curati nel codice
+                  # stanno in storage/templates/tikz e il passo 8-quater li
+                  # porta nell'istanza, nel container nuovo come www-data. Un
+                  # guasto avvisa senza fermare il rilascio. Funzione vera,
+                  # docker finto.
+                  bash tests/ops/modelli-tikz-rilascio.test.sh
+
+            - name: Le prove Python del servizio TeX e dei modelli TikZ
+              if: ${{ !cancelled() }}
+              run: |
+                  # Solo la libreria standard di Python, niente rete. Le parti
+                  # che compilano davvero (i modelli TikZ versionati, ADR-050)
+                  # qui si saltano dicendolo: il TeX sul runner non c'è. In
+                  # locale, con TeX Live, girano. `-B` non lascia .pyc.
+                  python3 -B -m unittest discover -s tests/tex -v
+
+            - name: Le esclusioni del salvataggio notturno, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Il 20/9/2026 la riga escludeva `tex_pdf`, dove non scrive
+                  # nessuno, e archiviava `verifiche/tex_pdf`, dove finiscono i
+                  # PDF: il commento diceva il contrario di quello che faceva.
+                  # Albero dei dati finto, esclusioni lette dallo script vero.
+                  bash tests/ops/salvataggio-esclusioni.test.sh
+
+            - name: La password del database non passa sulla riga di comando, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Il salvataggio delle chiavi dei docenti chiamava ogni notte
+                  # `mysqldump -p"$DB_PASS"`: la password stava fra gli argomenti
+                  # del processo, leggibile con `ps` (23/9/2026). Lo script vero
+                  # con un mysqldump finto: la password arriva intera nel file di
+                  # opzioni, non fra gli argomenti né nell'ambiente, e il file
+                  # non resta nemmeno se il comando fallisce.
+                  bash tests/ops/credenziali-mysql.test.sh
+
+            - name: Lo smoke test del VPS non stampa i valori di .env.local, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # _vps_smoke.sh stampava i primi otto caratteri e la lunghezza
+                  # di tredici chiavi, cinque segreti compresi (23/9/2026). Lo
+                  # script vero su un .env.local finto con valori sentinella,
+                  # curl e mysql finti: nessun pezzo di valore né lunghezza
+                  # nell'uscita, e presente/assente/vuota/segnaposto sì.
+                  bash tests/ops/smoke-vps-segreti.test.sh
+
+            - name: Il container dei job e l'immagine della suite, nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  # Con un docker finto: il container va sulla rete del database
+                  # di questo job; dopo un'unione la suite aspetta l'immagine
+                  # del rilascio e non ne costruisce un'altra (14/9/2026).
+                  bash tests/ops/container-app.test.sh
+                  bash tests/ops/immagine-e2e.test.sh
+
+            - name: Manifesto del build
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-manifest-${{ github.sha }}
+                  path: public/build/manifest.json
+                  retention-days: 7
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # 2. Tutto quello che ha bisogno di PHP
+    # ═══════════════════════════════════════════════════════════════════════
+    # Erano tre job (PHPStan+PHPCS, PHPUnit single, PHPUnit institute), ognuno
+    # con il proprio `composer install`.
+    #
+    # Phase S2 F5 (ADR-017) — la suite Unit gira in **entrambi** i modi di
+    # installazione: `single` (S1, predefinito) e `institute` (S2). Le
+    # funzionalità condizionate dal modo non devono regredire su nessuno dei
+    # due rami.
+    php:
+        name: "PHP: analisi statica e test"
+        runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+        timeout-minutes: 30
+        env:
+            INSTITUTE_OWNER_EMAIL: ci-dpo@institute.test
+            INSTITUTE_LEGAL_NAME: "CI Institute Test"
+        steps:
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
+              # Saltato in casa. PHP e le sue estensioni sono gia' installati sul runner di casa
+              # (tools/ci/prepara-runner.sh): reinstallarli da zero costava piu' di venti
+              # minuti per job, tanto da far scattare il tetto di tempo.
+              if: ${{ !vars.RUNNER }}
+              with:
+                  php-version: "8.3"
+                  # 2026-09-08 — dichiarate invece di sperare nel predefinito
+                  # dell'azione. Senza `pdo_sqlite` i test che usano un database
+                  # in memoria si SALTANO, e una suite che salta è verde: in
+                  # locale erano settantasei, cioè il sette per cento.
+                  extensions: pdo_sqlite, sqlite3
+                  # Xdebug serve solo alla copertura, e rallenta tutto il resto
+                  # di parecchio: si installa qui e si accende solo dove serve,
+                  # con `XDEBUG_MODE` sul singolo passo.
+                  coverage: xdebug
+                  tools: composer:v2
+
+            - name: Cache delle dipendenze PHP
+              uses: actions/cache@v4
+              # Saltato in casa. La cache di composer resta sulla macchina fra un giro e l'altro:
+              # `actions/cache` farebbe un giro di rete verso GitHub per niente.
+              if: ${{ !vars.RUNNER }}
+              with:
+                  path: ~/.cache/composer
+                  key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+                  restore-keys: composer-${{ runner.os }}-
+
+            - name: Composer install
+              run: composer install --prefer-dist --no-progress --no-interaction
+
+            # 2026-09-23 (DOC-13) — dei tre documenti generati da routes/web.php
+            # e dai marker Phase, solo docs/ROUTES.md restava allineato, e solo
+            # grazie a un gancio delle sessioni di Claude Code (.claude/settings.json):
+            # una modifica alle rotte fatta fuori da Claude Code, o al codice che
+            # `tools/dev/gen_phases_md.php` legge, lasciava i documenti vecchi senza
+            # che nessun controllo lo dicesse. Si rigenerano qui i tre e si
+            # confronta con `git diff --exit-code`: un file diverso dal
+            # rigenerato fa fallire il passo, con il comando che lo risolve.
+            - name: I documenti generati corrispondono al codice (ROUTES, OpenAPI, PHASES)
+              if: ${{ !cancelled() }}
+              env:
+                  XDEBUG_MODE: "off"
+              run: |
+                  php tools/dev/gen_routes_md.php > docs/ROUTES.md
+                  composer openapi:build
+                  composer openapi:validate
+                  php tools/dev/gen_phases_md.php > docs/PHASES.md
+                  git diff --exit-code -- docs/ROUTES.md docs/api/openapi.yaml docs/api/openapi.full.yaml docs/PHASES.md
+
+            - name: Le guardie della produzione all'avvio del container, nei due versi
+              if: ${{ !cancelled() }}
+              env:
+                  XDEBUG_MODE: "off"
+              run: |
+                  # 2026-09-23 — docker/verifica-avvio.php ferma il container
+                  # di produzione con il limitatore spento, la motivazione non
+                  # in enforce, il debug acceso, senza indirizzo o mittente, con
+                  # l'archivio S3, senza chiave del WAF o con scenario e modo
+                  # che non combaciano (scheda R-4 della revisione del 23/9).
+                  # Sta qui e non accanto alle altre prove di tests/ops perché
+                  # carica l'applicazione: le serve vendor/. Una radice usa e
+                  # getta, mai il .env.local vero; la produzione misurata il
+                  # 23/9 e il .env della CI, letto da e2e.yml e immagine.yml,
+                  # devono partire (wiki/environment-variables.md).
+                  bash tests/ops/verifica-avvio.test.sh
+
+            # 2026-09-23 — blocca. Aveva `continue-on-error: true` dalla Phase
+            # 25.A: il 4/9 gli errori erano scesi a zero, e senza un cancello
+            # al 23/9 ne erano rientrati tredici (revisione architetturale,
+            # A-27). Corretti con `composer cs:fix`; gli avvisi non fermano il
+            # passo (`ignore_warnings_on_exit` in `composer cs`), gli errori sì.
+            - name: PHPCS (PSR-12)
+              if: ${{ !cancelled() }}
+              env:
+                  XDEBUG_MODE: "off"
+              run: composer cs
+
+            - name: PHPStan livello 6 (baseline in phpstan-baseline.neon)
+              if: ${{ !cancelled() }}
+              env:
+                  XDEBUG_MODE: "off"
+              run: composer stan
+
+            # 2026-09-07 — era nell'elenco del quality gate di
+            # wiki/dev-workflow.md ma non lo eseguiva nessun workflow: i link
+            # al codice nella wiki vanno tolti perché Obsidian indicizza solo
+            # i wikilink. Si corregge con `php tools/wiki/strip_code_links.php`.
+            - name: Niente link al codice nella wiki
+              if: ${{ !cancelled() }}
+              env:
+                  XDEBUG_MODE: "off"
+              run: php tools/wiki/strip_code_links.php --check
+
+            - name: PHPUnit (modo single)
+              if: ${{ !cancelled() }}
+              env:
+                  DEPLOYMENT_MODE: single
+                  XDEBUG_MODE: coverage
+              run: |
+                  vendor/bin/phpunit \
+                      --testsuite=unit \
+                      --coverage-text \
+                      --coverage-clover=coverage-single.xml \
+                      --colors=never \
+                      --testdox
+
+            - name: PHPUnit (modo institute)
+              if: ${{ !cancelled() }}
+              env:
+                  DEPLOYMENT_MODE: institute
+                  XDEBUG_MODE: coverage
+              run: |
+                  vendor/bin/phpunit \
+                      --testsuite=unit \
+                      --coverage-text \
+                      --coverage-clover=coverage-institute.xml \
+                      --colors=never \
+                      --testdox
+
+            - name: Copertura
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-${{ github.sha }}
+                  path: coverage-*.xml
+                  retention-days: 7
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # 2b. PHPUnit con il database
+    # ═══════════════════════════════════════════════════════════════════════
+    # 2026-09-14 — fino a oggi `tests/Integration/` (319 prove) non girava in
+    # nessun workflow: il lavoro qui sopra lancia solo la suite `unit`, senza
+    # database, e anche lì 41 prove si saltano perché il database non c'è. Una
+    # prova saltata è verde. Qui girano tutte e due le suite su un database
+    # vero, e **un salto è un fallimento** (`--fail-on-skipped`): se il
+    # database non risponde, il lavoro è rosso invece di verde senza aver
+    # guardato. Controprova: con il database irraggiungibile o `DB_ENABLED=false`
+    # esce con 2; con i soli salti e l'opzione, con 1; senza l'opzione, con 0.
+    #
+    # MariaDB 11.8, la versione della produzione, e non la 10.11 della suite
+    # end-to-end: una migrazione che passa su una e cade sull'altra si vede qui,
+    # prima dell'unione, e non nel rilascio.
+    #
+    # Non è ancora un controllo obbligatorio: lo diventa dopo una settimana di
+    # giri senza falsi rossi (wiki/dev-workflow.md, «Il cancello su `main`»).
+    integrazione:
+        name: "PHP: prove d'integrazione (MariaDB)"
+        runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+        timeout-minutes: 20
+        env:
+            INSTITUTE_OWNER_EMAIL: ci-dpo@institute.test
+            INSTITUTE_LEGAL_NAME: "CI Institute Test"
+            XDEBUG_MODE: "off"
+        services:
+            mariadb:
+                image: mariadb:11.8
+                env:
+                    MARIADB_ROOT_PASSWORD: root
+                    MARIADB_DATABASE: pantedu_test
+                ports:
+                    # Solo la porta del container: l'host ne sceglie una libera.
+                    # Una porta fissa collide fra i runner di casa (e2e.yml).
+                    - 3306
+                options: >-
+                    --health-cmd="healthcheck.sh --connect --innodb_initialized"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=15
+        steps:
+            # Le due azioni di GitHub di questo lavoro sono fissate all'impronta
+            # del commit, non all'etichetta `v4` come negli altri: il tetto di
+            # semgrep sulle etichette mutabili (tools/ci/semgrep-censimento.json)
+            # non si alza per un lavoro nuovo. Si aggiornano a mano.
+            - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+            - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
+              # Saltato in casa: PHP e le estensioni sono già sul runner
+              # (tools/ci/prepara-runner.sh).
+              if: ${{ !vars.RUNNER }}
+              with:
+                  php-version: "8.4"
+                  extensions: pdo_mysql, pdo_sqlite, sqlite3, gd, intl, zip
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Cache delle dipendenze PHP
+              uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+              if: ${{ !vars.RUNNER }}
+              with:
+                  path: ~/.cache/composer
+                  key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+                  restore-keys: composer-${{ runner.os }}-
+
+            - name: Composer install
+              run: composer install --prefer-dist --no-progress --no-interaction
+
+            - name: Ambiente, schema, migrazioni e semina
+              env:
+                  # Le migrazioni e la semina scelgono il database di prova
+                  # (`DB_NAME_TEST`, cioè `pantedu_test`) come fa PHPUnit.
+                  APP_ENV: testing
+                  PANTEDU_SEED_CI: "1"
+                  PORTA_DB: ${{ job.services.mariadb.ports['3306'] }}
+              run: |
+                  set -euo pipefail
+                  # I dati d'istanza in RUNNER_TEMP, non in /tmp: i runner di
+                  # casa condividono /tmp (docs/dev/ci-cd.md).
+                  DATI="${RUNNER_TEMP}/pantedu-dati-integrazione"
+                  rm -rf "$DATI"
+                  mkdir -p "$DATI"
+
+                  cp .env.example .env
+                  # Chiavi che in produzione stanno in .env.local: qui valgono
+                  # per un database che vive quanto il lavoro.
+                  sed -i "s|^APP_ENV=.*|APP_ENV=ci|"                     .env
+                  sed -i "s|^DB_HOST=.*|DB_HOST=127.0.0.1|"              .env
+                  sed -i "s|^DB_PORT=.*|DB_PORT=$PORTA_DB|"              .env
+                  sed -i "s|^DB_NAME=.*|DB_NAME=pantedu_test|"           .env
+                  sed -i "s|^DB_USER=.*|DB_USER=root|"                   .env
+                  sed -i "s|^DB_PASS=.*|DB_PASS=root|"                   .env
+                  sed -i "s|^SESSION_COOKIE_SECURE=.*|SESSION_COOKIE_SECURE=false|" .env
+                  sed -i "s|^PANTEDU_DATA_PATH=.*|PANTEDU_DATA_PATH=$DATI|" .env
+                  sed -i "s|^STORAGE_SIGNING_SECRET=.*|STORAGE_SIGNING_SECRET=$(openssl rand -hex 32)|" .env
+                  sed -i "s|^KMS_MASTER_KEY=.*|KMS_MASTER_KEY=$(openssl rand -hex 32)|" .env
+
+                  mysql -h 127.0.0.1 -P "$PORTA_DB" -uroot -proot pantedu_test < database/schema.sql
+                  php tools/migrate.php
+                  # La semina della suite end-to-end: alcune prove cercano il
+                  # docente di prova e i cataloghi che crea. Password usa e
+                  # getta, che nessuno usa.
+                  E2E_TEACHER_PASS="$(openssl rand -base64 24)" \
+                  E2E_TEACHER2_PASS="$(openssl rand -base64 24)" \
+                  FM_E2E_ADMIN_PASSWORD="$(openssl rand -base64 24)" \
+                      php tools/ci/seed_e2e_database.php
+
+            - name: PHPUnit, unit e integrazione, ogni salto è un fallimento
+              run: |
+                  vendor/bin/phpunit \
+                      --fail-on-skipped \
+                      --fail-on-incomplete \
+                      --fail-on-empty-test-suite \
+                      --display-skipped \
+                      --colors=never
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # 3. Sicurezza: dipendenze, analisi statica, segreti
+    # ═══════════════════════════════════════════════════════════════════════
+    # Non è fra i controlli obbligatori, e di proposito: `npm audit` e
+    # `composer audit` diventano rossi quando pubblicano una vulnerabilità su
+    # una dipendenza che nessuno ha toccato, e bloccherebbero lavoro per colpa
+    # d'altri. Resta visibile, e chi unisce lo guarda.
+    sicurezza:
+        name: "Sicurezza: dipendenze, semgrep, segreti"
+        runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+        timeout-minutes: 30
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0  # storia completa: gitleaks la scandaglia tutta
+
+            - uses: actions/setup-node@v4
+              # 2026-09-23 — anche sul runner di casa: il Node lo sceglie `.nvmrc`,
+              # non quello installato sulla macchina. setup-node lo cerca nella cache
+              # degli strumenti del runner (`_work/_tool`) e lo scarica solo la prima
+              # volta. Fino a quel giorno in casa questo passo si saltava e girava il
+              # Node di sistema di prepara-runner.sh: cambiare `.nvmrc` voleva un passo
+              # a mano su ogni macchina prima dell'unione (revisione architetturale,
+              # D-5). La cache di npm solo sui runner di GitHub: in casa `~/.npm` resta
+              # sulla macchina, e `actions/cache` farebbe un giro di rete per niente.
+              with:
+                  node-version-file: ".nvmrc"
+                  cache: ${{ !vars.RUNNER && 'npm' || '' }}
+            - run: npm ci --no-audit --no-fund
+            - name: npm audit (dipendenze di produzione)
+              if: ${{ !cancelled() }}
+              run: npm run audit:js
+
+            # 2026-09-23 — l'albero intero, strumenti di sviluppo compresi: girano
+            # sul runner di casa e nello stadio di build dell'immagine, e al 23/9
+            # avevano 27 avvisi (18 moderati, 9 alti) che nessuno strumento della
+            # CI mostrava (revisione architetturale, D-20). Informativo di
+            # proposito: `--audit-level=none` stampa e riassume senza fermare il
+            # lavoro, che resterebbe rosso per avvisi che una pull request non
+            # tocca. Un `npm audit` che non riesce a leggere il registro invece
+            # esce diverso da zero, e il passo è rosso: non ha misurato.
+            - name: npm audit, albero completo (informativo)
+              if: ${{ !cancelled() }}
+              run: |
+                  set -euo pipefail
+                  npm audit --audit-level=none | tee "$RUNNER_TEMP/npm-audit-completo.txt"
+                  echo "npm audit, albero completo: $(grep -E 'vulnerabilit' "$RUNNER_TEMP/npm-audit-completo.txt" | tail -1)" >> "$GITHUB_STEP_SUMMARY"
+
+            - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # v2
+              # Saltato in casa. PHP e le sue estensioni sono gia' installati sul runner di casa
+              # (tools/ci/prepara-runner.sh): reinstallarli da zero costava piu' di venti
+              # minuti per job, tanto da far scattare il tetto di tempo.
+              if: ${{ !cancelled() && !vars.RUNNER }}
+              with:
+                  php-version: "8.3"
+                  extensions: pdo_sqlite, sqlite3
+                  coverage: none
+                  tools: composer:v2
+            - name: Cache delle dipendenze PHP
+              # Saltato in casa. La cache di composer resta sulla macchina fra un giro e l'altro:
+              # `actions/cache` farebbe un giro di rete verso GitHub per niente.
+              if: ${{ !cancelled() && !vars.RUNNER }}
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/composer
+                  key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+                  restore-keys: composer-${{ runner.os }}-
+            - name: Composer install
+              if: ${{ !cancelled() }}
+              run: composer install --prefer-dist --no-progress --no-interaction
+            - name: composer audit
+              if: ${{ !cancelled() }}
+              run: composer audit --locked --no-dev
+
+            # 2026-09-23 — anche gli strumenti di sviluppo (D-20). Al 23/9 nessun
+            # avviso, quindi nessun motivo di tenerlo solo informativo: questo
+            # lavoro non è obbligatorio, e un avviso su PHPUnit o PHPStan lo si
+            # vuole vedere rosso.
+            - name: composer audit, albero completo
+              if: ${{ !cancelled() }}
+              run: composer audit --locked
+
+            # 2026-09-23 — il servizio TeX (tools/tex-compile-vps/app) va in
+            # produzione e nessuno strumento della CI ne guardava le dipendenze
+            # Python: i pin di sicurezza venivano da un'unica scansione di
+            # giugno (revisione architetturale, D-4). Informativo di proposito,
+            # come i due `npm audit`/`composer audit` sopra — ma `pip-audit`
+            # esce 1 sia quando trova avvisi sia quando fallisce per davvero
+            # (un percorso sbagliato, per esempio): il suo codice d'uscita da
+            # solo non basta a distinguere «ha misurato» da «non ha girato».
+            # Si guarda invece la prima riga, che pip-audit scrive sempre nella
+            # stessa forma quando ha misurato per davvero (`_cli.py`,
+            # `summary_msg`); qualunque altra cosa — un errore Python, un
+            # traceback — non l'ha misurato, ed e' quello il caso che deve
+            # fermare il lavoro.
+            - name: pip-audit, servizio TeX (informativo)
+              if: ${{ !cancelled() }}
+              run: |
+                  set -euo pipefail
+                  python3 -m venv "$RUNNER_TEMP/pip-audit-venv"
+                  "$RUNNER_TEMP/pip-audit-venv/bin/pip" install --quiet pip-audit
+                  "$RUNNER_TEMP/pip-audit-venv/bin/pip-audit" \
+                      -r tools/tex-compile-vps/app/requirements.txt \
+                      > "$RUNNER_TEMP/pip-audit.txt" 2>&1 || true
+                  cat "$RUNNER_TEMP/pip-audit.txt"
+                  riga1=$(head -1 "$RUNNER_TEMP/pip-audit.txt")
+                  case "$riga1" in
+                      "No known vulnerabilities found"*|"Found "*"known vulnerabilit"*)
+                          echo "pip-audit (servizio TeX): $riga1" >> "$GITHUB_STEP_SUMMARY"
+                          ;;
+                      *)
+                          echo "::error::pip-audit non ha misurato niente: $riga1"
+                          exit 1
+                          ;;
+                  esac
+
+            # Semgrep si lancia da noi, non con la sua azione, e il motivo e'
+            # concreto.
+            #
+            # `returntocorp/semgrep-action` e' un'**azione Docker**: gira come
+            # root con lo spazio di lavoro montato dentro, e semgrep esegue
+            # `git` per capire cosa e' cambiato. Ogni giro lasciava
+            # `.git/HEAD` e `.git/logs/refs/heads/main` di proprieta' di root.
+            #
+            # Su un runner di GitHub non si nota — la macchina si butta via —
+            # ma su uno in casa il giro dopo `actions/checkout` non riesce ad
+            # aggiornare i riferimenti e il job muore con
+            # «fatal: cannot update the ref», che non dice niente di utile.
+            # Il 9 settembre 2026 e' costato tre giri a capirlo.
+            #
+            # `--user` risolve alla radice: il container gira come noi, e
+            # quello che scrive resta nostro. L'immagine e' fissata per
+            # impronta (`@sha256:...`, non un'etichetta che si puo' spostare),
+            # come il binario di gitleaks qui sotto: e' `semgrep/semgrep:1.148.0`
+            # al 9 settembre 2026.
+            #
+            # Il risultato non lo giudica piu' `--error`, che fallisce su
+            # qualunque riscontro e quindi costringe a scegliere fra «blocca
+            # tutto» e «non blocca niente». Lo giudica
+            # `tools/ci/cancello-semgrep.mjs` sul censimento: ogni classe di
+            # riscontro ha un tetto e un motivo scritto, il tetto puo' solo
+            # scendere, e una classe nuova non entra in silenzio.
+            #
+            # Il cancello fallisce anche se semgrep ha rifiutato delle regole o
+            # se ha guardato troppi pochi file: e' il guasto dell'8 settembre,
+            # dove una regola malformata faceva uscire semgrep e il passo
+            # restava verde. Un controllo che non misura deve essere rosso,
+            # non verde.
+            #
+            # `tools/archive` fuori: sono script una-tantum archiviati, non
+            # codice dell'applicazione. Scansionarli produce solo riscontri che
+            # nessuno correggera' mai (uno sha1 usato come chiave di cache, un
+            # `eval` in un banco di prova), e un elenco pieno di cose che non
+            # si toccano e' un elenco che non si legge.
+            # Semgrep gira dentro un container: se Docker non c'è, il passo
+            # muore con «docker: command not found», che non dice la cosa da
+            # fare. Sul runner di casa lo fornisce Docker Desktop, e basta che
+            # non sia avviato. Vedi la stessa guardia in `immagine.yml`.
+            - name: Docker risponde
+              if: ${{ !cancelled() }}
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  command -v docker >/dev/null 2>&1 \
+                      || { echo '::error::docker non è nel percorso: sul runner di casa avvia Docker Desktop e rilancia.'; exit 1; }
+                  docker info >/dev/null 2>&1 \
+                      || { echo '::error::Docker non risponde: apri Docker Desktop, aspetta «Engine running», rilancia.'; exit 1; }
+                  echo "docker: $(docker --version)"
+
+            - name: Semgrep OWASP + regole del progetto
+              if: ${{ !cancelled() }}
+              env:
+                  SEMGREP_TIMEOUT: "120"
+              run: |
+                  set -euo pipefail
+                  docker run --rm \
+                      --user "$(id -u):$(id -g)" \
+                      -e SEMGREP_TIMEOUT \
+                      -v "$PWD:/src" \
+                      -w /src \
+                      semgrep/semgrep@sha256:3baabc2ec3fc217903ea716aa21b9faec944879012774312807f68b029666285 \
+                      semgrep scan \
+                          --config p/owasp-top-ten \
+                          --config p/php \
+                          --config p/javascript \
+                          --config .semgrep.yml \
+                          --exclude tools/archive \
+                          --json -o semgrep.json \
+                          --disable-version-check \
+                          --metrics off \
+                          --quiet
+                  node tools/ci/cancello-semgrep.mjs semgrep.json
+
+            # 2026-09-19 — le regole del progetto hanno un banco di prova in
+            # tests/semgrep/, un file per regola con il nome della regola: le
+            # righe annotate `ruleid:` dicono «qui deve scattare», quelle `ok:`
+            # «qui no». La scansione qui sopra non la guarda (l'elenco
+            # predefinito di semgrep salta `tests/`, e qui va bene così: i
+            # riscontri del banco sono voluti); `semgrep --test` la legge e
+            # fallisce se una regola smette di scattare dove deve o scatta dove
+            # non deve. È il verso che la scansione da sola non misura: una
+            # regola che non trova niente sembra una regola rispettata.
+            - name: Le regole del progetto, provate nei due versi
+              if: ${{ !cancelled() }}
+              run: |
+                  set -euo pipefail
+                  for banco in tests/semgrep/*.php; do
+                      docker run --rm \
+                          --user "$(id -u):$(id -g)" \
+                          -v "$PWD:/src" \
+                          -w /src \
+                          semgrep/semgrep@sha256:3baabc2ec3fc217903ea716aa21b9faec944879012774312807f68b029666285 \
+                          semgrep --test --config .semgrep.yml "$banco" \
+                              --disable-version-check \
+                              --metrics off
+                  done
+
+            - name: Il risultato di semgrep, per quando serve guardarlo
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: semgrep
+                  path: semgrep.json
+                  retention-days: 7
+                  if-no-files-found: warn
+
+            # 2026-09-07 — il binario, non l'azione. Su una pull request
+            # `gitleaks-action` chiede l'elenco dei commit
+            # (`GET /repos/.../pulls/N/commits`) e riceve 403: moriva prima di
+            # scansionare, cioè non scansionava affatto. Il binario legge la
+            # storia dal disco e non chiede niente a nessuno. Versione e
+            # impronta fissate: si scarica un binario noto, non «l'ultimo».
+            #
+            # 2026-09-09 — qui c'era scritto che «nessun blocco `permissions:`
+            # può andare oltre» il predefinito `contents: read`. **Non è
+            # vero**, ed era una deduzione dal sintomo, non una misura: il
+            # registro del giro delle 00:58 del 9 settembre mostra
+            # `Packages: write` concesso al job dell'immagine, che lo chiede
+            # con un blocco `permissions:`. L'elevazione funziona; il 403 di
+            # gitleaks veniva da altro. Corretto perché una spiegazione
+            # sbagliata scoraggia il tentativo giusto la volta dopo — e la
+            # volta dopo era `issues: write`, che serve all'avviso dei giri
+            # programmati.
+            - name: Gitleaks (binario fissato, con verifica dell'impronta)
+              if: ${{ !cancelled() }}
+              env:
+                  GITLEAKS_VERSION: "8.24.3"
+              run: |
+                  set -euo pipefail
+                  base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+                  archivio="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+                  # In RUNNER_TEMP e non in /tmp: sui runner di casa /tmp è di tutti
+                  # e quattro, e un altro job poteva sovrascrivere l'archivio
+                  # fra la verifica dell'impronta e l'esecuzione.
+                  D="$RUNNER_TEMP/gitleaks"
+                  mkdir -p "$D"
+                  curl -sSfL -o "$D/$archivio" "$base/$archivio"
+                  curl -sSfL -o "$D/checksums.txt" "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+                  (cd "$D" && grep " $archivio\$" checksums.txt | sha256sum -c -)
+                  tar -xzf "$D/$archivio" -C "$D" gitleaks
+                  "$D/gitleaks" detect --source . --config .gitleaks.toml \
+                      --redact --no-banner --exit-code 1

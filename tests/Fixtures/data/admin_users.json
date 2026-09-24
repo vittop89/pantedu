@@ -1,0 +1,18 @@
+{
+    "users": {
+        "admin1": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "administrator",
+            "created": "2026-04-01",
+            "active": true
+        },
+        "admin_disabled": {
+            "password_hash": "<BCRYPT_HASH_SCRUBBED>",
+            "role": "administrator",
+            "created": "2026-01-01",
+            "active": false
+        }
+    },
+    "config": { "max_attempts": 5, "lockout_time": 300 },
+    "metadata": { "version": "1.0" }
+}

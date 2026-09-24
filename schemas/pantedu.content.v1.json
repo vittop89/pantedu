@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "pantedu.content.v1",
+    "title": "Pantedu Content Contract (v1)",
+    "description": "Schema per `.contract.json` archiviati in storage_objects. Validazione shallow (top-level + groups shape). Items + fragments lasciati non tipati per performance (deep validation su dataset grande = troppo lento). NOTA: gli item possono portare un blocco `ai` di provenienza (AI Act art. 50(2)) la cui forma e' descritta in $defs.aiProvenance; poiche' gli item non sono tipati la definizione e' documentale, non applicata dal validator.",
+    "type": "object",
+    "required": ["$schema", "groups"],
+    "additionalProperties": true,
+    "$defs": {
+        "aiProvenance": {
+            "type": "object",
+            "description": "Provenienza IA di un item — Reg. UE 2024/1689 art. 50(2). Presente SOLO se l'item contiene campi prodotti da operazioni generative (soluzioni, argomenti, traduzioni). Assente per contenuto trascritto dalla pagina (estrazione OCR/vision, conteggio difficolta'): quelle sono operazioni assistive, coperte dall'eccezione dell'art. 50(2). Scritto da ExerciseInserter, popolato da AiProvenance.",
+            "required": ["generated", "fields"],
+            "additionalProperties": true,
+            "properties": {
+                "generated": { "type": "boolean" },
+                "fields": {
+                    "type": "array",
+                    "description": "Campi dell'item generati: solution | category_label | question.",
+                    "items": { "type": "string" }
+                },
+                "ops": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "op":    { "type": "string", "enum": ["solutions", "topics", "translation"] },
+                            "model": { "type": "string" },
+                            "at":    { "type": "string" }
+                        }
+                    }
+                },
+                "human_reviewed": {
+                    "type": "boolean",
+                    "description": "L'inserimento avviene solo dopo lo step di revisione del docente in PDF-Import. Sostiene l'eccezione art. 50(4) 2o comma (controllo editoriale)."
+                }
+            }
+        }
+    },
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "const": "pantedu.content.v1"
+        },
+        "id": { "type": "string" },
+        "kind": {
+            "type": "string",
+            "enum": ["mappa", "esercizio", "lab", "verifica", "bes", "risdoc", "didattica"]
+        },
+        "title":         { "type": "string" },
+        "version":       { "type": "integer", "minimum": 0 },
+        "scope":         { "type": "object" },
+        "source":        { "type": "string" },
+        "original_href": { "type": "string" },
+        "generated_at":  { "type": "string" },
+        "meta":          { "type": ["object", "array"] },
+        "groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["type"],
+                "additionalProperties": true,
+                "properties": {
+                    "kind":  { "type": "string" },
+                    "type":  {
+                        "type": "string",
+                        "enum": ["Collect", "VF", "RM", "Text", "Mixed", "type_Collect", "type_VF", "type_RMulti"],
+                        "description": "Le forme type_* sono quelle che l'editor scrive (exercise-wizard, upbar-controls: `type_Collect-1` senza il suffisso) e che i renderer riconoscono accanto alle forme ridotte. Aggiunte il 23/9/2026, quando ContractRepository::save ha cominciato a rifiutare gli errori di schema nuovi (A-76): misurati 6.146 contratti locali, 6.527 gruppi con type_*."
+                    },
+                    "id":    { "type": "string" },
+                    "title": { "type": "string" },
+                    "intro": {
+                        "type": ["string", "array"],
+                        "description": "Testo, oppure i blocchi {type, content} come le domande (ContractRenderer::renderGroup, GroupController::patch). Array ammesso dal 23/9/2026 (A-76): 43 contratti locali lo usavano."
+                    },
+                    "items": { "type": "array" }
+                }
+            }
+        }
+    }
+}

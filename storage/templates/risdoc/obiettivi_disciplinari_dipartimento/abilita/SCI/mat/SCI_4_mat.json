@@ -1,0 +1,118 @@
+[
+    {
+        "titolo": "FUNZIONI GONIOMETRICHE",
+        "contenuti": [
+            { "label": "Convertire la misura degli angoli da gradi a radianti e viceversa.", "checked": true },
+            { "label": "Definire le funzioni seno, coseno, tangente, cotangente, secante e cosecante sulla circonferenza goniometrica.", "checked": true },
+            { "label": "Analizzare e tracciare il grafico delle funzioni goniometriche, determinandone dominio, codominio, periodo e simmetrie.", "checked": true },
+            { "label": "Calcolare il valore delle funzioni goniometriche per angoli notevoli (0°, 30°, 45°, 60°, 90° e multipli).", "checked": true },
+            { "label": "Utilizzare le relazioni degli angoli associati per semplificare espressioni goniometriche.", "checked": true },
+            { "label": "Definire e utilizzare le funzioni goniometriche inverse (arcoseno, arcocoseno, arcotangente), comprendendone il dominio e il codominio.", "checked": true },
+            { "label": "Applicare trasformazioni geometriche (traslazioni, simmetrie, dilatazioni) ai grafici delle funzioni goniometriche.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "FORMULE GONIOMETRICHE",
+        "contenuti": [
+            { "label": "Applicare le formule di addizione e sottrazione per calcolare i valori di funzioni goniometriche e per dimostrare identità.", "checked": true },
+            { "label": "Utilizzare le formule di duplicazione per semplificare espressioni e risolvere problemi.", "checked": true },
+            { "label": "Applicare le formule di bisezione per determinare i valori esatti di funzioni goniometriche.", "checked": true },
+            { "label": "Utilizzare le formule parametriche per esprimere seno e coseno in funzione della tangente dell'arco metà.", "checked": true },
+            { "label": "Applicare le formule di prostaferesi (somma-prodotto) e di Werner (prodotto-somma) per trasformare espressioni goniometriche.", "checked": true },
+            { "label": "Scegliere e applicare la formula goniometrica più adatta per dimostrare un'identità o semplificare un'espressione complessa.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "EQUAZIONI E DISEQUAZIONI GONIOMETRICHE",
+        "contenuti": [
+            { "label": "Risolvere equazioni goniometriche elementari (es. sin(x)=k) e riconducibili ad esse.", "checked": true },
+            { "label": "Risolvere equazioni lineari in seno e coseno utilizzando il metodo dell'angolo ausiliario o le formule parametriche.", "checked": true },
+            { "label": "Risolvere equazioni omogenee o riconducibili a omogenee in seno e coseno.", "checked": true },
+            { "label": "Risolvere sistemi di equazioni goniometriche con metodi algebrici (es. sostituzione).", "checked": true },
+            { "label": "Risolvere disequazioni goniometriche elementari e più complesse utilizzando la circonferenza goniometrica o il metodo grafico.", "checked": true },
+            { "label": "Risolvere e discutere equazioni goniometriche parametriche, analizzando le soluzioni al variare del parametro.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "TRIGONOMETRIA",
+        "contenuti": [
+            { "label": "Applicare i teoremi sui triangoli rettangoli per determinare lati e angoli incogniti.", "checked": true },
+            { "label": "Risolvere problemi geometrici e di fisica applicando la trigonometria ai triangoli rettangoli.", "checked": true },
+            { "label": "Applicare il teorema della corda, il teorema dei seni e il teorema del coseno (Carnot) per risolvere triangoli qualsiasi.", "checked": true },
+            { "label": "Calcolare l'area di un triangolo e risolvere problemi complessi di geometria e topografia.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "NUMERI COMPLESSI",
+        "contenuti": [
+            { "label": "Eseguire operazioni (addizione, sottrazione, moltiplicazione, divisione) con numeri complessi in forma algebrica.", "checked": true },
+            { "label": "Rappresentare un numero complesso sul piano di Gauss e calcolarne modulo e argomento.", "checked": true },
+            { "label": "Convertire un numero complesso dalla forma algebrica alla forma trigonometrica (polare) e viceversa.", "checked": true },
+            { "label": "Eseguire moltiplicazioni, divisioni e potenze di numeri complessi in forma trigonometrica utilizzando la formula di De Moivre.", "checked": true },
+            { "label": "Calcolare e rappresentare graficamente le radici n-esime di un numero complesso e le radici n-esime dell'unità.", "checked": true },
+            { "label": "Utilizzare la forma esponenziale di un numero complesso per semplificare calcoli e dimostrazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "VETTORI, MATRICI, DETERMINANTI",
+        "contenuti": [
+            { "label": "Eseguire operazioni con i vettori nel piano (somma, differenza, prodotto per uno scalare, prodotto scalare).", "checked": true },
+            { "label": "Eseguire operazioni con le matrici (somma, prodotto per uno scalare, prodotto tra matrici).", "checked": true },
+            { "label": "Calcolare il determinante di una matrice quadrata (ordine 2 e 3) e riconoscere le matrici singolari.", "checked": true },
+            { "label": "Calcolare la matrice inversa di una matrice 2x2 o 3x3 (se esiste).", "checked": true },
+            { "label": "Utilizzare le matrici per rappresentare e risolvere sistemi lineari e trasformazioni geometriche.", "checked": true },
+            { "label": "Calcolare il volume dei principali solidi (prismi, piramidi, cilindri, coni, sfere).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "TRASFORMAZIONI GEOMETRICHE",
+        "contenuti": [
+            { "label": "Scrivere le equazioni di una trasformazione geometrica (traslazione, rotazione, simmetria) e applicarle a punti e figure.", "checked": true },
+            { "label": "Riconoscere e classificare le isometrie, analizzandone le proprietà (punti uniti, invarianza).", "checked": true },
+            { "label": "Scrivere le equazioni di un'omotetia e di una similitudine e analizzarne gli effetti su lunghezze e aree.", "checked": true },
+            { "label": "Definire un'affinità, scrivere le sue equazioni e analizzare come trasforma le figure geometriche.", "checked": true },
+            { "label": "Associare una matrice a una trasformazione affine e utilizzare il prodotto tra matrici per comporre trasformazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "GEOMETRIA EUCLIDEA NELLO SPAZIO",
+        "contenuti": [
+            { "label": "Analizzare le posizioni reciproche di punti, rette e piani nello spazio.", "checked": true },
+            { "label": "Applicare i teoremi di parallelismo e perpendicolarità tra rette e piani.", "checked": true },
+            { "label": "Calcolare distanze e angoli nello spazio (es. angolo diedro, distanza punto-piano).", "checked": true },
+            { "label": "Classificare i poliedri (inclusi i solidi platonici) e i solidi di rotazione e riconoscerne le proprietà.", "checked": true },
+            { "label": "Calcolare l'area della superficie totale e laterale dei principali solidi.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "GEOMETRIA ANALITICA NELLO SPAZIO",
+        "contenuti": [
+            { "label": "Utilizzare un sistema di riferimento cartesiano per rappresentare punti e vettori nello spazio.", "checked": true },
+            { "label": "Eseguire operazioni con vettori nello spazio, inclusi prodotto scalare e prodotto vettoriale.", "checked": true },
+            { "label": "Scrivere l'equazione di un piano in forma parametrica e cartesiana.", "checked": true },
+            { "label": "Scrivere le equazioni di una retta nello spazio in forma parametrica e cartesiana.", "checked": true },
+            { "label": "Analizzare le posizioni reciproche tra rette, tra piani e tra rette e piani.", "checked": true },
+            { "label": "Riconoscere l'equazione di una sfera e di altre superfici notevoli.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "α1 - CALCOLO COMBINATORIO",
+        "contenuti": [
+            { "label": "Utilizzare i principi fondamentali del calcolo combinatorio (regola della somma e del prodotto).", "checked": true },
+            { "label": "Riconoscere e risolvere problemi utilizzando disposizioni, permutazioni e combinazioni (semplici e con ripetizione).", "checked": true },
+            { "label": "Scegliere il modello combinatorio corretto per risolvere un problema di conteggio.", "checked": true },
+            { "label": "Applicare la formula del binomio di Newton per sviluppare la potenza di un binomio e calcolare i coefficienti binomiali.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "α2 - PROBABILITÀ",
+        "contenuti": [
+            { "label": "Definire lo spazio campionario e gli eventi, ed eseguire operazioni tra eventi.", "checked": true },
+            { "label": "Calcolare la probabilità di un evento utilizzando l'approccio classico.", "checked": true },
+            { "label": "Calcolare la probabilità dell'unione di due o più eventi (compatibili o incompatibili).", "checked": true },
+            { "label": "Calcolare la probabilità condizionata e la probabilità dell'intersezione di eventi (dipendenti o indipendenti).", "checked": true },
+            { "label": "Risolvere problemi complessi di probabilità applicando il teorema della probabilità totale e il teorema di Bayes.", "checked": true },
+            { "label": "Distinguere e comprendere le diverse definizioni di probabilità (classica, frequentista, soggettiva, assiomatica).", "checked": true }
+        ]
+    }
+]

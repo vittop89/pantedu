@@ -1,0 +1,208 @@
+{
+    "$id": "scheda-progetto-fis",
+    "title": "Scheda di progettazione (FIS)",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Scheda di progettazione",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina",
+                "professore"
+            ]
+        },
+        {
+            "type": "text-section",
+            "title": "1. DESCRIZIONE",
+            "items": [
+                {
+                    "type": "nota-textarea",
+                    "name": "titolo_progetto",
+                    "label": "1.1 Denominazione del progetto",
+                    "placeholder": "Indicare la denominazione del progetto."
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "responsabile_progetto",
+                    "label": "1.2 Responsabile del progetto",
+                    "placeholder": "Nome e cognome del/della responsabile del progetto."
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "classi_alunni_table",
+                    "title": "1.3 Classi e alunni che parteciperanno al progetto",
+                    "columns": [
+                        "Classi",
+                        "Alunni"
+                    ]
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "title": "2. FINALITA', METODOLOGIE E ATTIVITA'",
+            "items": [
+                {
+                    "type": "checkbox-group",
+                    "name": "obiettivi_ptof",
+                    "title": "2.1 Obiettivi",
+                    "description": "OBIETTIVI PTOF (inserirne fino a due)",
+                    "options": [
+                        {
+                            "value": "Valorizzazione e potenziamento delle competenze linguistiche, con particolare riferimento",
+                            "label": "Valorizzazione e potenziamento delle competenze linguistiche, con particolare riferimento"
+                        },
+                        {
+                            "value": "Potenziamento delle competenze matematico-logiche e scientifiche",
+                            "label": "Potenziamento delle competenze matematico-logiche e scientifiche"
+                        },
+                        {
+                            "value": "Sviluppo delle competenze in materia di cittadinanza attiva e democratica attraverso la",
+                            "label": "Sviluppo delle competenze in materia di cittadinanza attiva e democratica attraverso la"
+                        },
+                        {
+                            "value": "Sviluppo di comportamenti responsabili ispirati alla conoscenza e al rispetto della legalità, della",
+                            "label": "Sviluppo di comportamenti responsabili ispirati alla conoscenza e al rispetto della legalità, della"
+                        },
+                        {
+                            "value": "Sviluppo delle competenze digitali degli studenti, con particolare riguardo al pensiero",
+                            "label": "Sviluppo delle competenze digitali degli studenti, con particolare riguardo al pensiero"
+                        },
+                        {
+                            "value": "Potenziamento delle metodologie laboratoriali e delle attività di laboratorio",
+                            "label": "Potenziamento delle metodologie laboratoriali e delle attività di laboratorio"
+                        }
+                    ],
+                    "allow_custom": true,
+                    "custom_placeholder": "Specificare Altro:..."
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "azioni_table",
+                    "title": "2.2 Azioni",
+                    "columns": [
+                        "Obiettivo N.",
+                        "Azione N.",
+                        "AZIONE"
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "azioni_considerazioni",
+                    "label": "Ulteriori considerazioni (Azioni)"
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "metodologie_table",
+                    "title": "2.3 Metodologie",
+                    "columns": [
+                        "Azione N.",
+                        "METODOLOGIA"
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "metodologie_considerazioni",
+                    "label": "Ulteriori considerazioni (Metodologie)"
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "periodo_table",
+                    "title": "2.3 Periodo di svolgimento e durata",
+                    "columns": [
+                        "Classe",
+                        "Azione N.",
+                        "Periodo di svolgimento presunto"
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "periodo_considerazioni",
+                    "label": "Ulteriori considerazioni (Periodo)"
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "istituzioni_table",
+                    "title": "2.4 Eventuali rapporti con altre istituzioni",
+                    "columns": [
+                        "Nome",
+                        "Ruolo"
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "istituzioni_considerazioni",
+                    "label": "Ulteriori considerazioni (Istituzioni)"
+                }
+            ],
+            "pt_unified": true
+        },
+        {
+            "type": "text-section",
+            "title": "3. COSTI E RISORSE",
+            "items": [
+                {
+                    "type": "dynamic-table",
+                    "name": "risorse_table",
+                    "title": "3.1 Risorse umane",
+                    "columns": [
+                        "Profilo",
+                        "Dettaglio",
+                        "Numero ore",
+                        "Costo"
+                    ],
+                    "default_rows": [
+                        {
+                            "profilo": "Docenti interni",
+                            "span": 2
+                        },
+                        {
+                            "profilo": "Docenti esterni"
+                        },
+                        {
+                            "profilo": "Collaboratori esterni"
+                        },
+                        {
+                            "profilo": "Esperti esterni"
+                        }
+                    ]
+                },
+                {
+                    "type": "nota-textarea",
+                    "name": "risorse_considerazioni",
+                    "label": "Ulteriori considerazioni (Risorse)"
+                },
+                {
+                    "type": "dynamic-table",
+                    "name": "costi_table",
+                    "title": "3.2 Tabella costi",
+                    "columns": [
+                        "Ulteriori Risorse",
+                        "COSTI PREVISTI"
+                    ],
+                    "default_rows": [
+                        {
+                            "label": "Personale"
+                        },
+                        {
+                            "label": "Acquisto materiali"
+                        },
+                        {
+                            "label": "Trasporti"
+                        },
+                        {
+                            "label": "Altro (specificare)"
+                        }
+                    ]
+                }
+            ],
+            "pt_unified": true
+        }
+    ]
+}

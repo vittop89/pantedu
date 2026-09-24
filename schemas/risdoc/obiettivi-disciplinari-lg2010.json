@@ -1,0 +1,49 @@
+{
+    "$id": "obiettivi-disciplinari-lg2010",
+    "title": "Obiettivi disciplinari - Linee Guida 2010",
+    "category": "RISORSE",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "sections": [
+        {
+            "type": "header",
+            "title": "OBIETTIVI DISCIPLINARI LINEE GUIDA 2010",
+            "selectors": [
+                "classe",
+                "sezione",
+                "indirizzo",
+                "disciplina"
+            ]
+        },
+        {
+            "type": "checkbox-group",
+            "name": "competenze",
+            "title": "COMPETENZE DISCIPLINARI",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_LG2010/competenze"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "abilita",
+            "title": "ABILITA'",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_LG2010/abilita"
+            },
+            "pt_unified": true
+        },
+        {
+            "type": "checkbox-group",
+            "name": "conoscenze",
+            "title": "CONOSCENZE",
+            "options": [],
+            "options_source": {
+                "folder": "obiettivi_disciplinari_LG2010/conoscenze"
+            },
+            "pt_unified": true
+        }
+    ]
+}

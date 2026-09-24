@@ -1,0 +1,661 @@
+[
+  {
+    "_type": "sectionHeader",
+    "title": "Strumenti Compensativi",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "🚫 Accesso Negato",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Questa pagina è riservata agli amministratori e collaboratori.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Accedi con account admin o collaboratore",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "'); } ?> ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Strumenti Compensativi da Inserire nel PDP",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "1. Mappa Concettuale",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Definizione Rigorosa",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Una mappa concettuale è una ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "rappresentazione grafica gerarchica della conoscenza",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ". È costituita da ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "nodi concettuali",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " (parole-chiave o brevissime espressioni che rappresentano concetti significativi) collegati tra loro da ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "linee o frecce etichettate (parole-legame)",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " che esplicitano la natura della relazione logica tra i concetti. La struttura è tipicamente radiale o reticolare e mira a visualizzare le connessioni e le interdipendenze tra le idee principali di un argomento, facilitando la comprensione, la memorizzazione e il recupero delle informazioni.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Caratteristiche Essenziali:",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Nodi Concettuali:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Singole parole o termini chiave essenziali (es. “Fotosintesi”, “Rivoluzione Francese\", \"Teorema di Pitagora\").",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Parole-Legame (o Connessioni Logiche):",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Verbi o brevi congiunzioni che chiariscono il tipo di relazione tra i nodi (es. \"causa\", \"include”, “è un esempio di\", \"porta a”, “si oppone a\").",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Struttura Gerarchica/Reticolare:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Evidenzia i concetti principali e quelli subordinati, e le loro interconnessioni.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Sinteticità:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Utilizza il minor numero di parole possibile per esprimere i concetti e le loro relazioni.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Non è una Mappa Concettuale:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Un testo discorsivo anche se breve, un elenco puntato di frasi, un riassunto lineare disposto graficamente senza chiare connessioni logiche esplicitate da parole-legame. ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "2. Schema",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Definizione Rigorosa",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Uno schema è una ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "rappresentazione sintetica e strutturata di informazioni o di un processo",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ", che utilizza parole chiave, simboli, elenchi puntati o numerati, e talvolta elementi grafici essenziali (come frecce o riquadri) per evidenziare i punti fondamentali, le sequenze, le classificazioni o le relazioni principali all'interno di un argomento. L'obiettivo è fornire una visione d'insieme chiara e organizzata, facilitando la comprensione e la memorizzazione degli elementi essenziali.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Caratteristiche Essenziali:",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Parole Chiave:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Termini fondamentali e concisi.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Struttura Logica:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Organizzazione per punti, categorie, sequenze temporali o causali. ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Sinteticità:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Evita frasi complete e descrizioni dettagliate, privilegiando la brevità. ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Possibile Uso di Simboli/Icone:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Per rappresentare concetti o relazioni in modo visivo. ",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Esempi:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Alberi genealogici schematici, linee del tempo con eventi chiave, tabelle comparative sintetiche, diagrammi di flusso semplici per processi, elenchi organizzati per categorie.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Non è uno Schema (ai fini compensativi):",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Un testo continuo, un insieme di appunti disorganizzati, un paragrafo riscritto.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "3. Formulario",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Definizione Rigorosa",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Un formulario è una ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "raccolta organizzata e circoscritta di formule",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " matematiche, fisiche, chimiche, regole grammaticali (es. coniugazioni verbali, declinazioni), definizioni terminologiche essenziali o simboli specifici di una disciplina. Deve contenere esclusivamente gli elementi \"nudi\", senza spiegazioni procedurali estese, esempi svolti o commenti discorsivi. Il suo scopo è alleviare il carico mnemonico relativo a dati puramente nozionistici e convenzionali, permettendo allo studente di concentrarsi sull'applicazione e sul ragionamento.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Caratteristiche Essenziali:",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Contenuto Specifico:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Solo formule (es. A = b × h), regole sintetiche (es. \"il plurale dei nomi in -cia\"), simboli (es. tavola periodica degli elementi con solo simboli e numeri atomici), paradigmi verbali.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Essenzialità:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Nessuna informazione aggiuntiva o esplicativa oltre la formula/regola stessa.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Organizzazione Chiara:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Facilmente consultabile.",
+        "marks": []
+      }
+    ],
+    "listItem": "bullet",
+    "level": 1
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Non è un Formulario:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Un formulario che include la spiegazione di come si usa la formula, esempi di problemi risolti, dimostrazioni di teoremi, o commenti su quando applicare una regola.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Specificazioni Importanti – Cosa NON È Ammesso",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": " È cruciale distinguere gli strumenti sopra definiti da elaborazioni testuali che, pur potendo essere utili nello studio individuale, non assolvono alla funzione compensativa durante una prova di verifica, in quanto potrebbero sostituirsi all'elaborazione personale richiesta o fornire un vantaggio non equo. In particolare: ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Riassunto",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Definizione:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Un riassunto è un testo breve che espone in forma concisa e con parole proprie (o con una selezione e riorganizzazione delle parole dell'originale) i contenuti principali e le idee fondamentali di un testo più ampio. Implica comprensione, selezione delle informazioni rilevanti e loro riformulazione in un nuovo testo coerente e coeso, tipicamente in forma discorsiva (frasi complete e collegate).",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Perché non è ammesso (come strumento compensativo di tipo mappa/schema):",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Un riassunto, anche se sintetico, fornisce già un'elaborazione discorsiva del contenuto. Durante una verifica, lo studente deve dimostrare la propria capacità di elaborare e organizzare le informazioni, non di riportare un'elaborazione già strutturata in forma di testo. Equivarrebbe ad avere con sé una \"mini-versione” della risposta.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Frasi / Simil-Frasi (all'interno di mappe/schemi)",
+    "level": 3,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Definizione di Frase:",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Unità linguistica dotata di significato compiuto, generalmente costituita da un soggetto, un predicato e eventuali complementi, organizzata secondo regole grammaticali e sintattiche.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Definizione di Simil-Frase (nel contesto degli strumenti):",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " Sequenze di parole che, pur non rispettando formalmente tutte le regole di una frase completa, ne mimano la struttura discorsiva e contengono un'informazione elaborata e spiegata, andando oltre la semplice parola-chiave o la brevissima etichetta di una mappa.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Perché non sono ammesse (all'interno di mappe/schemi/formulari):",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": " L'inserimento di frasi complete o di sequenze di parole che costituiscono di fatto delle mini-spiegazioni o definizioni estese all'interno di nodi di una mappa o di voci di uno schema snaturerebbe la funzione compensativa dello strumento. Lo strumento deve essere uno “scheletro\" concettuale che lo studente “riveste” con la propria elaborazione e il proprio linguaggio durante la prova, non un testo già parzialmente o totalmente redatto. ",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "sectionHeader",
+    "title": "Conclusione per il PDP",
+    "level": 2,
+    "selectors": []
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "Nel redigere il PDP, è essenziale specificare che le mappe concettuali, gli schemi e i formulari ammessi come strumenti compensativi devono aderire alle definizioni rigorose sopra esposte, privilegiando parole-chiave, connessioni logiche visuali e sinteticità. Si deve esplicitamente indicare che ",
+        "marks": []
+      },
+      {
+        "_type": "span",
+        "text": "non sono ammessi esempi svolti, riassunti, testi discorsivi, frasi complete o sequenze di parole assimilabili a frasi all'interno di tali strumenti",
+        "marks": [
+          "strong"
+        ]
+      },
+      {
+        "_type": "span",
+        "text": ", in quanto ciò comprometterebbe la natura compensativa dello strumento e l'autonomia dell'elaborazione da parte dello studente durante le prove di verifica.",
+        "marks": []
+      }
+    ]
+  },
+  {
+    "_type": "block",
+    "style": "normal",
+    "children": [
+      {
+        "_type": "span",
+        "text": "L'obiettivo è fornire un supporto che faciliti l'accesso e l'organizzazione delle conoscenze, non che sostituisca il processo di apprendimento e di espressione autonoma delle competenze acquisite.",
+        "marks": []
+      }
+    ]
+  }
+]

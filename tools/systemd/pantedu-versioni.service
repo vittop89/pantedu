@@ -1,0 +1,36 @@
+[Unit]
+# Rapporto mensile su cosa è rimasto indietro sul server.
+#
+# Non è un aggiornatore: non installa niente e non tocca il sistema. Fa una
+# simulazione (`apt-get -s upgrade`) e scrive un rapporto.
+#
+# Suona per tre cose sole, tutte e tre della forma «l'automatismo su cui
+# contiamo si è fermato»: aggiornamenti di sicurezza Debian in attesa,
+# `unattended-upgrades` inattivo da più di una settimana, elenchi dei
+# pacchetti scaduti. Vedi il perché dentro lo script.
+#
+# Deliberatamente **non** suona per «ci sono 80 pacchetti da aggiornare»: su
+# Debian stable quella condizione è permanente, e un allarme permanente in
+# tre mesi non si apre più.
+Description=pantedu — rapporto mensile sulle versioni indietro
+After=network-online.target
+Wants=network-online.target
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+# Root serve per leggere lo stato di apt e scrivere in /var/log. Non installa
+# niente: la simulazione non richiede privilegi di scrittura sul sistema.
+User=root
+ExecStart=/usr/local/sbin/versioni-indietro.sh
+# 19/9/2026 — scrive il registro delle anomalie, che scrive anche il container
+# come www-data: un registro nato da qui con la umask predefinita usciva 0644,
+# e dopo il chown a pantedu:www-data il container non ci scriveva più.
+UMask=0007
+StandardOutput=null
+StandardError=journal
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

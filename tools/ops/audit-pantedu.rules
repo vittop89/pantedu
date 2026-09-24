@@ -1,0 +1,217 @@
+# Regole di audit per Pantedu.
+#
+# Si installa in `/etc/audit/rules.d/pantedu.rules`. `augenrules` concatena i
+# file di quella cartella in ordine alfabetico: `audit.rules` (le impostazioni
+# di base di Debian, che comincia con `-D` per azzerare) viene prima, questo
+# dopo.
+#
+# ── Che cosa fa auditd, e perché è diverso da AIDE ─────────────────────────
+#
+# AIDE fa una fotografia: due volte confrontate a distanza di ventiquattr'ore.
+# Dice **che** un file è cambiato, non chi l'ha cambiato né quando né con
+# quale comando. E un file toccato e rimesso a posto nella stessa giornata,
+# per AIDE, non è mai cambiato.
+#
+# auditd registra i fatti mentre accadono: quale processo, quale utente, quale
+# sessione di login, a che ora. È l'unico modo per rispondere alla domanda che
+# si fa dopo, non prima: «chi è stato».
+#
+# ── Perché queste regole e non altre ───────────────────────────────────────
+#
+# La tentazione, con auditd, è registrare tutto: `-S execve` su tutta la
+# macchina sembra prudenza. Non lo è. Un registro che cresce di gigabyte al
+# giorno viene ruotato via prima che qualcuno lo legga, e nel frattempo rende
+# l'audit una voce di costo invece che una difesa. Qui il registro è limitato
+# a 8 MB per cinque file — quaranta in tutto — e queste regole sono scelte per
+# stare dentro quel limite con mesi di margine.
+#
+# Il criterio: si registra quello che **non deve succedere mai**. Se una di
+# queste righe produce un evento, quell'evento merita di essere letto.
+
+# ── I segreti ─────────────────────────────────────────────────────────────
+#
+# `.env.local` contiene le chiavi di cifratura e i segreti delle API. È
+# marcato `chattr +i`: immutabile. Una scrittura qui non è solo insolita, è
+# qualcosa che deve prima **togliere** l'immutabilità — e quel tentativo
+# lascia comunque traccia.
+-w /var/www/pantedu/.env -p wa -k pantedu_segreti
+-w /var/www/pantedu/.env.local -p wa -k pantedu_segreti
+
+# La lettura è il segnale di esfiltrazione, ed è anche quello che l'app fa
+# ogni volta che nasce un processo PHP. Registrarla senza filtro
+# significherebbe migliaia di righe al giorno, tutte legittime, e il caso vero
+# sepolto in mezzo.
+#
+# `auid` è l'identità di chi ha aperto la sessione di login, e resta attaccata
+# a tutti i processi che ne discendono. I demoni (php-fpm, systemd) non ne
+# hanno una: `auid=unset`. Una persona che si collega ce l'ha.
+#
+# Quindi: la lettura di questo file da parte di un essere umano collegato
+# viene registrata; quella dell'applicazione no. È la differenza fra una
+# regola che si legge e una che si spegne dopo una settimana.
+#
+# **Non** `auid>=1000`, che è la forma che si trova scritta ovunque. Quella
+# soglia serve a escludere gli account di servizio, che nelle distribuzioni
+# stanno sotto 1000. Ma qui l'unico modo di collegarsi è **come root**, e root
+# ha `auid=0`: con quella soglia la regola escludeva esattamente le persone
+# che doveva sorvegliare. Provata prima di crederci — una lettura da sessione
+# interattiva non lasciava nessun evento.
+-a always,exit -F arch=b64 -F path=/var/www/pantedu/.env.local -F perm=r -F auid!=unset -k pantedu_segreti_letti
+
+# ── Gli script che possono rilasciare in produzione ───────────────────────
+#
+# Prima qui c'era una riga sola, su `/usr/local/bin/pantedu-deploy.sh`. Quel
+# file esiste ancora ma **non è più la strada del rilascio**: dall'8 settembre
+# 2026 si rilascia a container, e lo fa `pantedu-deploy-container.sh`. La
+# regola sorvegliava la porta che nessuno usa più.
+#
+# Invece di inseguire il nome del momento — e sbagliarlo di nuovo al prossimo
+# cambio — si sorveglia la cartella. Sono percorsi dove si scrive solo quando
+# si installa qualcosa a mano: qualche evento al mese, non al minuto.
+-w /usr/local/bin -p wa -k pantedu_script
+-w /usr/local/sbin -p wa -k pantedu_script
+
+# ── Chi diventa root ──────────────────────────────────────────────────────
+#
+# Tre righe che in condizioni normali non producono **niente**: questi file si
+# toccano quando si crea un utente o si cambiano i permessi di sudo, cioè
+# quasi mai. Costano zero e coprono la domanda che ci si fa per prima dopo un
+# incidente: qualcuno si è dato dei poteri che non aveva?
+-w /etc/passwd -p wa -k pantedu_identita
+-w /etc/shadow -p wa -k pantedu_identita
+-w /etc/sudoers -p wa -k pantedu_identita
+-w /etc/sudoers.d -p wa -k pantedu_identita
+
+# Le chiavi con cui si entra. Queste due righe non sono un di più: sono
+# l'**unica** copertura di `authorized_keys`, perché AIDE non ce la fa.
+#
+# In `99_pantedu` c'è `!/root` e `!/home` — necessari, perché quelle cartelle
+# sono piene di roba che cambia da sola (779 voci sotto `/root/.npm`, 7.775
+# sotto `/home/pantedu`). Ma una regola negativa di AIDE **pota l'intero
+# sottoalbero durante la visita**: una regola positiva più profonda su
+# `/root/.ssh` non riesce a riprenderselo, e infatti non lo riprendeva.
+#
+# Meglio così, del resto: per «qualcuno ha aggiunto una chiave» la domanda
+# vera è chi e quando, e quella la risponde auditd, non una fotografia
+# confrontata il giorno dopo.
+-w /root/.ssh -p wa -k pantedu_identita
+-w /home/pantedu/.ssh -p wa -k pantedu_identita
+
+# ── La passphrase delle copie di salvataggio ──────────────────────────────
+#
+# `/etc/pantedu/backup.env` contiene `BACKUP_GPG_PASSPHRASE`, cioè la chiave
+# con cui si aprono **tutte** le copie su B2. Chi la legge legge ogni copia;
+# chi la perde non ne apre nessuna, e non c'è recupero. Fino al 12 settembre
+# 2026 era l'unico segreto della macchina che non guardava nessuno: né AIDE
+# (`/etc` è nel perimetro, quindi una modifica si vedeva, ma il giorno dopo) né
+# auditd.
+#
+# Stesso trattamento di `.env.local`: scrittura sempre, lettura solo se dietro
+# c'è una sessione di login. Lo script del salvataggio gira da systemd, quindi
+# ha `auid=unset` e non produce niente ogni notte.
+-w /etc/pantedu/backup.env -p wa -k pantedu_segreti
+-a always,exit -F arch=b64 -F path=/etc/pantedu/backup.env -F perm=r -F auid!=unset -k pantedu_segreti_letti
+
+# ── Chi guarda i guardiani ────────────────────────────────────────────────
+#
+# La base di riferimento di AIDE è il metro: se qualcuno la riscrive dopo aver
+# modificato un file, il confronto del giorno dopo non trova niente e
+# l'integrità diventa una firma su un foglio bianco. Riscriverla è un'azione
+# legittima — va fatta quando le differenze sono state guardate — ma è
+# esattamente il genere di azione che deve lasciare un nome e un'ora.
+#
+# Non produce rumore: il giro notturno fa `--check`, che **legge** e basta. Il
+# 12 settembre 2026 la base è stata rifatta tre volte, e sarebbero stati tre
+# eventi da leggere.
+-w /var/lib/aide -p wa -k pantedu_guardiani
+
+# E le configurazioni dei due che sorvegliano. Le regole di audit sono già
+# immutabili (`-e 2`), quindi una modifica al file non ha effetto fino al
+# riavvio — ma è proprio il preludio a un riavvio che si vuole vedere.
+-w /etc/aide/aide.conf.d -p wa -k pantedu_guardiani
+-w /etc/audit/rules.d -p wa -k pantedu_guardiani
+
+# ── Le unità systemd ──────────────────────────────────────────────────────
+#
+# Un'unità nuova è il modo più pulito di restare su una macchina: gira da sola,
+# a ogni avvio, e sembra parte dell'arredamento. AIDE le vede (`/etc/systemd/
+# system` è nel perimetro) ma il giorno dopo e senza dire chi.
+-w /etc/systemd/system -p wa -k pantedu_persistenza
+
+# ── Quello che sparisce da /var/www ───────────────────────────────────────
+#
+# Il 12 settembre 2026 il rapporto di AIDE ha riportato 1450 voci rimosse:
+# `/var/www/pantedu-shared` e `/var/www/pantedu-releases`, sparite fra il 9 e
+# l'11 settembre. Dentro la prima c'era una copia di `.env.local`. Cercando
+# **chi**, non c'era niente da nessuna parte: nessuna regola copriva quei
+# percorsi, il registro di sudo non ha nessun `rm` che li nomini, e nessuno
+# script del repository li cancella. In tutta la macchina l'unica traccia era
+# la fotografia di AIDE, che dice cosa e non chi.
+#
+# Questa regola chiude quella lacuna. `-F dir=` è la variante ricorsiva di
+# `path=`: sorveglia il sottoalbero. `auid!=unset` tiene fuori i demoni, ed è
+# quello che la rende leggibile — il rilascio gira da systemd e fa
+# `git reset --hard`, che cancella e riscrive file a manciate. Quelle
+# scritture non compaiono. Compaiono quelle fatte da una persona collegata.
+#
+# `perm=w` copre anche le cancellazioni: togliere un file è una scrittura
+# nella cartella che lo contiene.
+-a always,exit -F arch=b64 -F dir=/var/www -F perm=w -F auid!=unset -k pantedu_www_scritture
+
+# ── Chi entra in un container ─────────────────────────────────────────────
+#
+# Il punto cieco della regola sulle letture di `.env.local`, segnalato il 14 e
+# misurato il 15 settembre 2026. Il container monta lo **stesso** file
+# dell'host, quindi una lettura dal container è una lettura di quel file; ma
+# un processo entrato con `docker exec` non ha una sessione di login: lo avvia
+# il runtime dei container. Sul VPS la sessione ssh ha `loginuid` 0, il
+# processo di `docker exec` 4294967295. `auid!=unset` lo esclude come esclude
+# php-fpm, e `docker exec pantedu-app-b cat /var/www/pantedu/.env.local` non
+# lasciava niente.
+#
+# La lettura dentro il container non si registra in modo pulito: senza il
+# filtro sul login sarebbero migliaia di letture di php-fpm, e filtrare per
+# eseguibile non regge, perché i binari del container cambiano percorso a ogni
+# rilascio. Si registra quindi l'**ingresso**, con lo stesso filtro: chi esegue
+# `docker`, `nsenter`, `runc` o `ctr` da una sessione di login. L'EXECVE porta
+# la riga di comando intera. Il rilascio usa docker da systemd, senza login, e
+# non compare.
+#
+# Stessa forma delle regole sui file qui sopra (`-F path` con `-F perm`), di
+# proposito: le regole si caricano all'avvio e sono immutabili, e una riga che
+# `auditctl` rifiutasse fermerebbe il caricamento di quelle dopo, `-e 2`
+# compreso.
+#
+# Cosa resta fuori, e si sa: chi parla con l'API di Docker direttamente sul
+# socket (`curl --unix-socket /run/docker.sock`), che è di root e del gruppo
+# `docker`, vuoto; e un binario copiato altrove. Il controllo notturno riporta
+# gli ingressi con `tools/ops/ingressi-container.sh`.
+-a always,exit -F arch=b64 -F path=/usr/bin/docker -F perm=x -F auid!=unset -k pantedu_container_ingressi
+-a always,exit -F arch=b64 -F path=/usr/bin/nsenter -F perm=x -F auid!=unset -k pantedu_container_ingressi
+-a always,exit -F arch=b64 -F path=/usr/bin/runc -F perm=x -F auid!=unset -k pantedu_container_ingressi
+-a always,exit -F arch=b64 -F path=/usr/bin/ctr -F perm=x -F auid!=unset -k pantedu_container_ingressi
+
+# ── Le regole diventano immutabili ────────────────────────────────────────
+#
+# `-e 2` blocca l'insieme delle regole fino al riavvio: nemmeno root può più
+# toglierle o aggiungerne. È la differenza fra un registro che racconta cosa è
+# successo e un registro che qualcuno può spegnere un attimo prima di fare la
+# cosa che non vuole far registrare.
+#
+# Va **ultima**, e in questo file perché `augenrules` concatena in ordine
+# alfabetico e `pantedu.rules` viene dopo `audit.rules`.
+#
+# Non c'era il 9 settembre 2026 quando le regole sono state accese, e la
+# ragione merita di restare scritta: prima si misura, poi si blocca. Una
+# regola rumorosa scoperta dopo `-e 2` si corregge solo riavviando la
+# macchina, e una macchina che si riavvia per aggiustare un allarme è una
+# macchina su cui l'allarme si finisce per spegnere.
+#
+# Misurato prima di metterlo: circa 2 MB al giorno, con un tetto di 80, e
+# ognuna delle quattro chiavi provata nei due versi (scatta quando deve,
+# **e non scatta** quando non deve).
+#
+# Da qui in avanti: per cambiare queste regole si modifica questo file, si
+# reinstalla, e si riavvia. `augenrules --load` da solo non basta più, e lo
+# dice con un errore invece di fallire in silenzio.
+-e 2

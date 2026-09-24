@@ -1,0 +1,19 @@
+[
+  {
+    "titolo": "COMPETENZE",
+    "contenuti": [
+      {
+        "label": "Completare lo studio dell'elettromagnetismo giungendo alla sintesi concettuale delle equazioni di Maxwell e allo studio delle onde elettromagnetiche.",
+        "checked": true
+      },
+      {
+        "label": "Confrontarsi con la teoria della relatività ristretta di Einstein, la simultaneità degli eventi, la dilatazione dei tempi e la contrazione delle lunghezze.",
+        "checked": true
+      },
+      {
+        "label": "Accostare le problematiche storiche che hanno portato ai nuovi concetti di spazio, tempo, massa ed energia nel XX secolo, utilizzando un formalismo matematico accessibile.",
+        "checked": true
+      }
+    ]
+  }
+]

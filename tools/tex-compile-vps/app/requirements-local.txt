@@ -1,0 +1,6 @@
+# Solo per lo sviluppo locale senza librsvg (Windows): ripiego SVG→PDF in
+# puro Python usato da svg_render.py quando rsvg-convert manca. In produzione
+# non serve (provision.sh installa librsvg2-bin). Lo installa
+# tools/dev/tex-service-local.mjs insieme a requirements.txt.
+svglib==1.5.1
+reportlab>=4.2,<5

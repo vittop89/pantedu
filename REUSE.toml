@@ -1,0 +1,56 @@
+# REUSE.toml — dichiarazione copyright/licenza machine-readable (REUSE 3.x / SPDX).
+# Conformità FSFE REUSE per la pubblicazione su Developers Italia (EUPL-1.2).
+# Valida con:  reuse lint   (oppure: pipx run reuse lint)
+#
+# Strategia: invece di un header SPDX in ognuno delle migliaia di file, queste
+# annotazioni dichiarano copyright e licenza per gruppi di path. Tutto il
+# repository è © Vittorio Pantaleo / EUPL-1.2, ECCETTO l'emblema di Stato e
+# il foglio di stile di Quill (override sotto). Le altre librerie di terze
+# parti arrivano da npm, non dal repo.
+
+version = 1
+
+# ─────────────────────────────────────────────────────────────────────────
+# Catch-all: tutto il progetto è © Vittorio Pantaleo, EUPL-1.2.
+# (I file in .gitignore — vendor/, node_modules/, storage runtime, ecc. —
+#  non vengono considerati da REUSE.)
+# ─────────────────────────────────────────────────────────────────────────
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Vittorio Pantaleo <vittop89@users.noreply.github.com>"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# ──────────────────────────────────────────────
+# Librerie di terze parti: SortableJS e web-vitals vengono dal pacchetto npm
+# dal 2026-09-05, come Lit, pdf.js, pako e MathJax dal P3: le dipendenze npm
+# non sono file del progetto e REUSE non le considera. L'annotazione per
+# js/vendor/sortablejs (MIT) e il relativo LICENSES/MIT.txt sono stati tolti
+# con la copia.
+#
+# Resta una copia vendorizzata: il foglio di stile di Quill 1.3.6. Fino al
+# 23/9/2026 questo file diceva che non ce n'erano, e il catch-all lo
+# attribuiva al progetto sotto EUPL-1.2; è codice di terzi con licenza
+# BSD-3-Clause, e i titolari sono quelli scritti in testa al file (revisione
+# architetturale del 23/9/2026, D-2 e DOC-25). Il JavaScript di Quill è stato
+# tolto lo stesso giorno: nessun file lo istanziava.
+# ──────────────────────────────────────────────
+[[annotations]]
+path = "public/vendor/quill/**"
+precedence = "override"
+SPDX-FileCopyrightText = ["2014 Jason Chen", "2013 salesforce.com"]
+SPDX-License-Identifier = "BSD-3-Clause"
+
+# Stemma della Repubblica Italiana — opera dello Stato, non coperta da
+# copyright proprietario (uso istituzionale). Dichiarato come tale.
+[[annotations]]
+path = ["img/stemma_REP1.png", "img/sources/stemma_REP1.png"]
+precedence = "override"
+SPDX-FileCopyrightText = "Repubblica Italiana — emblema di Stato (uso istituzionale)"
+SPDX-License-Identifier = "LicenseRef-Italy-State-Emblem"
+
+# NB: js/vendor/tikzjax.js RIMOSSO 2026-06-01 (era dead code: TikZJax
+# deprecato G22.S15.bis, render TikZ ora 100% server-side via /tikz/render).
+# NB: js/vendor/jquery.sticky.js RIMOSSO 2026-06-03 (era dead code: plugin
+# jQuery non più caricato dal phase7.2, .sticky() mai chiamato — sticky
+# stacking ora 100% vanilla via js/modules/features/verifica-sticky.js).

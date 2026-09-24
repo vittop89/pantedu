@@ -1,0 +1,17 @@
+/* ════════════════════════════════════════════════════════════
+ * shell.css — EMPTIED 2026-05-24 (Sprint F).
+ *
+ * @deprecated TUTTO il contenuto (276 LOC) è stato spostato in
+ *   css/modules/_shell-legacy.css (importato da main.css come
+ *   @layer overrides per preservare cascade priority).
+ *
+ * Layer order intatto:
+ *   main.css:
+ *     @import shell.css                 layer(overrides)  [empty]
+ *     @import modules/_shell-legacy.css layer(overrides)  [rules]
+ *     @import risdoc-tokens.css         layer(overrides)
+ *
+ * Loader main.css mantiene il <link>/@import per evitare 404 (Phase
+ * 6 rimuoverà l'import). Token import qui sotto rimosso: già caricato
+ * via main.css → @layer settings.
+ * ════════════════════════════════════════════════════════════ */

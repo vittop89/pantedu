@@ -1,0 +1,221 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "uid": "pantedu-authority-forensics",
+  "title": "Pantedu — Authority Cooperation Forensics",
+  "description": "Phase 25.R.22 — Visibilità su eventi custodia chiavi + cooperazione autorità + tentativi di accesso a /admin/* in finestre temporali sensibili. Fonti: crypto_custody_events (DB) + waf_logs (DB) per cross-reference investigation.",
+  "tags": ["pantedu", "gdpr", "authority", "forensics", "compliance"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5m",
+  "time": { "from": "now-30d", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "teacher_id",
+        "label": "Teacher ID (opzionale)",
+        "type": "textbox",
+        "current": { "value": "", "text": "" },
+        "query": ""
+      },
+      {
+        "name": "authority_name",
+        "label": "Autorità (opzionale, LIKE %x%)",
+        "type": "textbox",
+        "current": { "value": "", "text": "" },
+        "query": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Authority requests (finestra selezionata)",
+      "id": 1,
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT COUNT(*) AS value FROM crypto_custody_events WHERE event_type = 'authority_request' AND occurred_at BETWEEN $__timeFrom() AND $__timeTo() AND ('${authority_name}' = '' OR authority_name LIKE CONCAT('%','${authority_name}','%')) AND ('${teacher_id}' = '' OR teacher_id = '${teacher_id}')"
+        }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green" }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 5 }] }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Data provided events",
+      "id": 2,
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT COUNT(*) AS value FROM crypto_custody_events WHERE event_type = 'data_provided' AND occurred_at BETWEEN $__timeFrom() AND $__timeTo() AND ('${authority_name}' = '' OR authority_name LIKE CONCAT('%','${authority_name}','%')) AND ('${teacher_id}' = '' OR teacher_id = '${teacher_id}')"
+        }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green" }, { "color": "yellow", "value": 1 }] }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Eventi KMS / KEK emergency",
+      "id": 3,
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT COUNT(*) AS value FROM crypto_custody_events WHERE event_type IN ('kek_emergency_access','kms_rotated','kms_generated','data_recovered') AND occurred_at BETWEEN $__timeFrom() AND $__timeTo()"
+        }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green" }, { "color": "orange", "value": 1 }] }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Accessi /admin (WAF logs)",
+      "id": 4,
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT COUNT(*) AS value FROM waf_logs WHERE request_uri LIKE '/admin/%' AND ts BETWEEN $__timeFrom() AND $__timeTo()"
+        }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue" }] }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "📈 Timeline crypto_custody_events per tipo",
+      "id": 5,
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT $__timeGroup(occurred_at, '1h') AS time, event_type AS metric, COUNT(*) AS value FROM crypto_custody_events WHERE occurred_at BETWEEN $__timeFrom() AND $__timeTo() GROUP BY 1, event_type ORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "bars", "fillOpacity": 70, "stacking": { "mode": "normal" } }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "calcs": ["sum"] },
+        "tooltip": { "mode": "multi" }
+      }
+    },
+    {
+      "type": "table",
+      "title": "🔎 Authority events recenti (con perimetro decreto/teacher)",
+      "id": 6,
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 12 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT occurred_at AS 'Quando', event_type AS 'Tipo', teacher_id AS 'Teacher', authority_name AS 'Autorità', authority_ref AS 'Rif. procedimento', LEFT(description, 100) AS 'Descrizione', legal_basis AS 'Base giuridica', evidence_url AS 'Evidenza' FROM crypto_custody_events WHERE event_type IN ('authority_request','authority_granted','authority_denied','data_recovered','data_provided','kek_emergency_access') AND occurred_at BETWEEN $__timeFrom() AND $__timeTo() AND ('${authority_name}' = '' OR authority_name LIKE CONCAT('%','${authority_name}','%')) AND ('${teacher_id}' = '' OR teacher_id = '${teacher_id}') ORDER BY occurred_at DESC LIMIT 200"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          }
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "🛂 Heatmap accessi /admin/* intorno a eventi authority (last 30d)",
+      "id": 7,
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 24 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT DATE_FORMAT(ts, '%Y-%m-%d') AS 'Data', ip AS 'IP', country AS 'Country', request_uri AS 'Path', COUNT(*) AS 'Hits', MAX(ts) AS 'Ultimo hit' FROM waf_logs WHERE request_uri LIKE '/admin/%' AND request_uri NOT LIKE '/admin/waf/api/%' AND ts BETWEEN $__timeFrom() AND $__timeTo() GROUP BY 1, ip, country, request_uri ORDER BY MAX(ts) DESC LIMIT 100"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+    {
+      "type": "table",
+      "title": "📥 Download bundle export (export endpoint hits)",
+      "id": 8,
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 34 },
+      "datasource": { "type": "mysql", "uid": "pantedu-mysql" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT ts AS 'Quando', ip AS 'IP', country AS 'Country', request_uri AS 'Endpoint', outcome AS 'Outcome' FROM waf_logs WHERE (request_uri LIKE '/admin/crypto-status/export%' OR request_uri = '/admin/gdpr/authority-export') AND ts BETWEEN $__timeFrom() AND $__timeTo() ORDER BY ts DESC LIMIT 50"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "casi": [
+    {
+      "nome": "select-e-textfield-di-base",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "select",
+          "name": "corso",
+          "value": "b",
+          "options": [
+            {
+              "value": "a",
+              "label": "A"
+            },
+            {
+              "value": "b",
+              "label": "B"
+            }
+          ]
+        },
+        {
+          "_type": "textField",
+          "name": "nome",
+          "value": "Rossi"
+        }
+      ],
+      "atteso": {
+        "blocchi": [
+          {
+            "_type": "select",
+            "name": "corso",
+            "value": "",
+            "options": [
+              {
+                "value": "a",
+                "label": "A"
+              },
+              {
+                "value": "b",
+                "label": "B"
+              }
+            ]
+          },
+          {
+            "_type": "textField",
+            "name": "nome",
+            "value": ""
+          }
+        ],
+        "store": {
+          "K": {
+            "corso": "b",
+            "nome": "Rossi"
+          }
+        }
+      }
+    },
+    {
+      "nome": "cella-tabella-con-widget-array",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "cid": "c1",
+                "widget": {
+                  "_type": "checkbox",
+                  "value": [
+                    "x",
+                    "y"
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      ],
+      "atteso": {
+        "blocchi": [
+          {
+            "_type": "table",
+            "name": "tbl",
+            "columns": [
+              "A"
+            ],
+            "rows": [
+              [
+                {
+                  "cid": "c1",
+                  "widget": {
+                    "_type": "checkbox",
+                    "value": []
+                  }
+                }
+              ]
+            ]
+          }
+        ],
+        "store": {
+          "K": {
+            "tbl#c1": [
+              "x",
+              "y"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "nome": "cella-tabella-con-formula-esclusa",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A",
+            "B"
+          ],
+          "rows": [
+            [
+              {
+                "raw": "1"
+              },
+              {
+                "formula": "=A1*2"
+              }
+            ]
+          ]
+        }
+      ],
+      "atteso": {
+        "blocchi": [
+          {
+            "_type": "table",
+            "name": "tbl",
+            "columns": [
+              "A",
+              "B"
+            ],
+            "rows": [
+              [
+                {
+                  "raw": "1"
+                },
+                {
+                  "formula": "=A1*2"
+                }
+              ]
+            ]
+          }
+        ],
+        "store": {
+          "K": []
+        }
+      }
+    },
+    {
+      "nome": "cella-testo-non-marcata-non-estratta",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "table",
+          "name": "tbl",
+          "columns": [
+            "A"
+          ],
+          "rows": [
+            [
+              {
+                "text": "ETICHETTA",
+                "cid": "c1"
+              }
+            ]
+          ]
+        }
+      ],
+      "atteso": {
+        "blocchi": [
+          {
+            "_type": "table",
+            "name": "tbl",
+            "columns": [
+              "A"
+            ],
+            "rows": [
+              [
+                {
+                  "text": "ETICHETTA",
+                  "cid": "c1"
+                }
+              ]
+            ]
+          }
+        ],
+        "store": {
+          "K": []
+        }
+      }
+    },
+    {
+      "nome": "accordion-annidato",
+      "ternaKey": "K",
+      "blocchi": [
+        {
+          "_type": "accordion",
+          "items": [
+            {
+              "title": "Sez 1",
+              "body_pt": [
+                {
+                  "_type": "textField",
+                  "name": "campo",
+                  "value": "dentro accordion"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "atteso": {
+        "blocchi": [
+          {
+            "_type": "accordion",
+            "items": [
+              {
+                "title": "Sez 1",
+                "body_pt": [
+                  {
+                    "_type": "textField",
+                    "name": "campo",
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "store": {
+          "K": {
+            "campo": "dentro accordion"
+          }
+        }
+      }
+    }
+  ]
+}

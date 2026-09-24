@@ -1,0 +1,89 @@
+[
+    {
+        "titolo": "Richiami e complementi sulle funzioni",
+        "contenuti": [
+            { "label": "Saper definire una funzione e determinarne dominio, codominio e immagine.", "checked": true },
+            { "label": "Saper applicare le trasformazioni geometriche (traslazioni, simmetrie) al grafico di una funzione.", "checked": false },
+            { "label": "Saper classificare una funzione in base alle sue proprietà (iniettiva, suriettiva, pari, dispari, monotona).", "checked": false },
+            { "label": "Saper determinare, se esiste, la funzione inversa e tracciarne il grafico.", "checked": false },
+            { "label": "Saper calcolare la funzione composta di due o più funzioni.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Funzioni, equazioni e disequazioni esponenziali",
+        "contenuti": [
+            { "label": "Saper applicare le proprietà delle potenze con esponente reale.", "checked": true },
+            { "label": "Saper riconoscere, rappresentare graficamente e descrivere le proprietà della funzione esponenziale.", "checked": true },
+            { "label": "Saper risolvere le diverse tipologie di equazioni esponenziali.", "checked": true },
+            { "label": "Saper risolvere le disequazioni esponenziali, distinguendo i casi in base al valore della base.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Funzioni, equazioni e disequazioni logaritmiche",
+        "contenuti": [
+            { "label": "Saper riconoscere, rappresentare graficamente e descrivere le proprietà della funzione logaritmica.", "checked": true },
+            { "label": "Saper applicare le proprietà dei logaritmi per semplificare espressioni e risolvere problemi.", "checked": true },
+            { "label": "Saper risolvere equazioni logaritmiche, imponendo le corrette condizioni di esistenza.", "checked": true },
+            { "label": "Saper risolvere disequazioni logaritmiche, imponendo le corrette C.E. e distinguendo i casi in base alla base.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Funzioni e formule goniometriche",
+        "contenuti": [
+            { "label": "Saper misurare gli angoli in gradi e radianti e convertire da un'unità all'altra.", "checked": true },
+            { "label": "Saper definire seno, coseno, tangente sulla circonferenza goniometrica.", "checked": true },
+            { "label": "Saper applicare le relazioni fondamentali della goniometria.", "checked": true },
+            { "label": "Saper utilizzare le formule degli angoli associati per semplificare espressioni goniometriche.", "checked": true },
+            { "label": "Saper tracciare il grafico delle funzioni goniometriche elementari.", "checked": true },
+            { "label": "Saper applicare le formule di addizione, sottrazione, duplicazione e bisezione.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Trigonometria",
+        "contenuti": [
+            { "label": "Saper enunciare e applicare i teoremi sui triangoli rettangoli per risolverli.", "checked": true },
+            { "label": "Saper applicare la trigonometria a problemi di geometria e del mondo reale (es. calcolo di altezze e distanze).", "checked": true },
+            { "label": "Saper enunciare e applicare i teoremi dei seni e del coseno per risolvere triangoli qualunque.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Equazioni e disequazioni goniometriche",
+        "contenuti": [
+            { "label": "Saper risolvere equazioni goniometriche elementari (sin x = k, cos x = k, tan x = k).", "checked": true },
+            { "label": "Saper risolvere equazioni riconducibili a equazioni di secondo grado in una funzione goniometrica.", "checked": false },
+            { "label": "Saper risolvere equazioni lineari in seno e coseno con metodi algebrici e grafici.", "checked": false },
+            { "label": "Saper risolvere disequazioni goniometriche utilizzando la circonferenza goniometrica.", "checked": false },
+            { "label": "Saper modellizzare e risolvere problemi tramite equazioni o disequazioni goniometriche.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Geometria euclidea nello spazio",
+        "contenuti": [
+            { "label": "Saper riconoscere e descrivere le relazioni di parallelismo e perpendicolarità tra rette e piani nello spazio.", "checked": false },
+            { "label": "Saper calcolare distanze e angoli tra contenuti geometrici nello spazio (rette, piani).", "checked": false },
+            { "label": "Saper descrivere le proprietà di prismi, piramidi e poliedri regolari.", "checked": false },
+            { "label": "Saper descrivere le proprietà dei solidi di rotazione (cilindro, cono, sfera).", "checked": false },
+            { "label": "Saper calcolare l'area della superficie e il volume dei principali solidi geometrici.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Richiami e complementi di statistica",
+        "contenuti": [
+            { "label": "Saper organizzare e rappresentare dati statistici.", "checked": false },
+            { "label": "Saper calcolare e interpretare gli indici di posizione (media, moda, mediana) e di variabilità.", "checked": false },
+            { "label": "Saper analizzare la distribuzione di due caratteri tramite tabelle a doppia entrata.", "checked": false },
+            { "label": "Saper analizzare la correlazione tra due variabili e calcolare la retta di regressione.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Calcolo combinatorio e probabilità",
+        "contenuti": [
+            { "label": "Saper riconoscere e risolvere problemi di calcolo combinatorio utilizzando permutazioni, disposizioni e combinazioni.", "checked": false },
+            { "label": "Saper applicare il coefficiente binomiale e le sue proprietà.", "checked": false },
+            { "label": "Saper calcolare la probabilità di eventi utilizzando la definizione classica.", "checked": false },
+            { "label": "Saper applicare i teoremi della probabilità totale e composta.", "checked": false },
+            { "label": "Saper riconoscere eventi compatibili/incompatibili e dipendenti/indipendenti.", "checked": false },
+            { "label": "Saper calcolare la probabilità condizionata di un evento.", "checked": false }
+        ]
+    }
+]

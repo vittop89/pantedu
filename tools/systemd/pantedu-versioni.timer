@@ -1,0 +1,22 @@
+[Unit]
+Description=pantedu — timer del rapporto sulle versioni
+
+[Timer]
+# Il primo del mese alle 09:00. Mensile e non settimanale di proposito: la
+# risposta cambia lentamente, e un rapporto che arriva troppo spesso diventa
+# rumore prima di diventare abitudine.
+#
+# Le 09:00 e non la notte perché è un rapporto da leggere, non un lavoro da
+# nascondere: se qualcosa merita attenzione, meglio che arrivi quando c'è
+# qualcuno.
+OnCalendar=*-*-01 09:00:00
+
+# Se la macchina era spenta il primo del mese, il rapporto va fatto comunque:
+# saltarlo vuol dire non sapere per un altro mese.
+Persistent=true
+
+RandomizedDelaySec=30min
+Unit=pantedu-versioni.service
+
+[Install]
+WantedBy=timers.target

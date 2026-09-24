@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="random"
+         resolveDependencies="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnDeprecation="true"
+         failOnNotice="true">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+    <extensions>
+        <!-- Sessione e superglobali della richiesta non passano da una prova all'altra: tests/Support/RichiestaPulitaFraLeProve.php -->
+        <bootstrap class="Tests\Support\RichiestaPulitaFraLeProve"/>
+    </extensions>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <!--
+            2026-09-23 — il limitatore spento nelle prove sta qui, non più nel
+            `.env` versionato, che il rilascio monta in produzione (gli altri
+            posti dove vale 1: wiki/environment-variables.md). Vince su `.env`,
+            che si carica immutabile; `.env.local`, se ha la chiave, vince come
+            per ogni altra. Le prove che ricaricano `.env` come mutabile (per
+            esempio CurriculumServiceTest) lo riportano a 0 per quelle che
+            seguono, come succede già per APP_ENV: la suite è verde nei due
+            stati. Una prova che vuole il limitatore acceso lo chiede con
+            `X-Pantedu-Rate-Limit: enforce` (FinestraDelLimitatoreTest) o con
+            la configurazione (LimitatoreAccesoTest).
+        -->
+        <env name="RATE_LIMIT_DISABLED" value="1" force="true"/>
+    </php>
+</phpunit>

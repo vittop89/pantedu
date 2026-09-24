@@ -1,0 +1,37 @@
+% =============================================================================
+% main_NOR.tex — Variante NOR (Normale, stampa studente).
+% Placeholder sostituiti dal TexBuilder a save time:
+%   {{TEXCOMMON_DIR}}      → "../texCommon" (zip) | "../../../../../../texCommon" (vsc)
+%   {{GRIGLIE_DIR}}        → "../griglie"   (zip) | "../../../../../griglie" (vsc)
+%   {{TITOLO_VERIFICA}}    → titolo verifica
+%   {{INDIRIZZO_CODE}}     → es. "sc"
+%   {{MATERIA_CODE}}       → es. "MAT"
+%   {{COPIE_NOR}}          → numero copie stampe NOR
+%   {{ESERCIZI_FILE}}      → "esercizi_NOR" (relativo allo stesso dir)
+%   tikz_preamble          → file separato con macro estratte dai TikZ
+%                             template (\providecommand, \newif, ecc.) +
+%                             dedup. Sempre emesso da TexBuilder (anche se
+%                             vuoto/solo commento), vedi G27.tikz.hoist.
+%                             Path UNICO cross-variant (G27.tikz.unified).
+% =============================================================================
+\documentclass[12pt]{article}
+\usepackage{{{TEXCOMMON_DIR}}/verifica}
+\verificaFontNormal
+\verificaCounterFooter{NOR}{{{COPIE_NOR}}}
+
+% G27.tikz.hoist — preamble macros estratti dai TikZ template
+\input{tikz_preamble}
+
+\title{ {{TITOLO_VERIFICA}} }
+\date{}
+
+\begin{document}
+\thispagestyle{firstpage}
+\input{{{TEXCOMMON_DIR}}/intestazione}
+
+\input{{{ESERCIZI_FILE}}}
+
+\input{{{TEXCOMMON_DIR}}/ulteriori_misure}
+
+\input{{{GRIGLIE_DIR}}/{{INDIRIZZO_CODE}}_{{MATERIA_CODE}}}
+\end{document}

@@ -1,0 +1,94 @@
+includes:
+    # Phase 25.A8 — la baseline: gli errori noti del codice legacy, tollerati
+    # finché non si correggono. Non tiene voci morte (reportUnmatchedIgnoredErrors
+    # più sotto) e non cresce (il tetto in tools/ci/phpstan-tetto.json, che
+    # LaBaselineDiPhpstanPuoSoloScendereTest confronta). Il numero non si scrive qui né
+    # nelle guide, perché invecchia: si misura (wiki/dev-workflow.md, «Quality
+    # gate»).
+    - phpstan-baseline.neon
+
+parameters:
+    # Phase 25.A8 — bump a livello 6 con baseline (legacy errors grandfathered).
+    # Livello 7 next iteration; 8 (no-implicit-mixed) richiede full @param
+    # annotations su legacy → push out.
+    level: 6
+
+    # 2026-09-23 — la versione di PHP della produzione (docker/Dockerfile,
+    # `php:8.4-fpm`), non quella dell'interprete che lancia l'analisi: il
+    # cancello gira su 8.3, e senza questa riga le deprecazioni e i cambi di
+    # comportamento della 8.4 non passavano da nessun controllo (revisione
+    # architetturale del 23/9/2026, D-6). Misurato quel giorno: due errori
+    # nuovi, due parametri nullabili in modo implicito (deprecati dalla 8.4)
+    # in tests/Unit/Services/RmTablePipelineAuditTest.php, corretti con
+    # `?array`; la baseline invariata.
+    phpVersion: 80400
+
+    paths:
+        - app
+        - tools
+        - tests/Unit
+
+    excludePaths:
+        analyseAndScan:
+            - app/Support/helpers.php  # global helpers, mixed types tollerati
+            # 2026-09-23 — script una tantum fermi, che non partono senza un
+            # ritocco (tools/archive/README.md): analizzarli costava tempo e
+            # rumore senza proteggere niente. Nessuna voce della baseline li
+            # riguardava (revisione architetturale del 23/9/2026, A-57).
+            - tools/archive
+        analyse:
+            - tests/e2e            # JS, non PHP
+            - vendor
+
+    bootstrapFiles:
+        - app/bootstrap.php
+
+    # Ignora errori comuni in legacy code finché non viene refattorizzato.
+    # Ogni entry deve essere documentata con motivo + ticket di rimozione.
+    ignoreErrors:
+        # 2026-09-23 — tolti i due pattern globali su `mixed` («Cannot access
+        # offset … on mixed», «Parameter #n … expects array, mixed given»):
+        # non corrispondevano più a nessun errore (revisione architetturale
+        # del 23/9/2026, A-6), e un pattern globale che non trova niente oggi
+        # nasconderebbe domani un errore nuovo di quella forma in qualunque
+        # file.
+
+        # @TODO Phase 25.A: rimuovere dopo cleanup typing repositories.
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+
+        # 2026-09-08 (passaggio a PHPStan 2) — l'ultimo `case` prima del
+        # `default` risulta «sempre vero» quando il soggetto è già ristretto
+        # all'unione dei casi elencati. Il codice è giusto: il `default` è la
+        # difesa per quando il soggetto smetterà di essere così ristretto —
+        # una convalida a monte che cambia, un valore nuovo. Toglierlo per far
+        # tacere il controllore renderebbe fragile del codice corretto.
+        - identifier: match.alwaysTrue
+
+        # 2026-09-08 — uno script di sondaggio che gira SOLO sul server, dove
+        # quel percorso esiste. Analizzarlo da qui non ha senso.
+        -
+            path: tools/webhook/_vps_test_blob.php
+            identifier: requireOnce.fileNotFound
+
+    # 2026-09-23 — era `false`, e con `false` la baseline poteva solo
+    # crescere: una voce che non trova più il suo errore restava lì senza che
+    # nessuno se ne accorgesse, e avrebbe nascosto un errore nuovo della
+    # stessa forma nello stesso file. Il 23/9 erano morte 66 voci su 161
+    # (una su un file cancellato il 4/9) e i due pattern globali, e alcune
+    # coprivano il ritorno di difetti già corretti (revisione architetturale
+    # del 23/9/2026, A-6). Con `true` una voce senza errore, un percorso che
+    # non esiste o un `count` più alto del vero fanno fallire l'analisi:
+    # chi corregge un errore della baseline toglie anche la sua voce.
+    reportUnmatchedIgnoredErrors: true
+
+    # Performance + memoria
+    parallel:
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
+
+    # Symbol resolution
+    treatPhpDocTypesAsCertain: false
+
+    # Reporter: tabella per console, junit per CI
+    errorFormat: table

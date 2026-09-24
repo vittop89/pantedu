@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync ASN bulk (brianhama/bad-asn-list, settimanale)
+
+[Timer]
+# Ogni lunedì alle 04:15 (orario server).
+OnCalendar=Mon *-*-* 04:15:00
+Persistent=true
+RandomizedDelaySec=15min
+AccuracySec=1min
+Unit=pantedu-waf-threat-intel@asn.service
+
+[Install]
+WantedBy=timers.target

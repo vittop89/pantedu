@@ -1,0 +1,55 @@
+{
+    "id": "g-moti-nel-piano",
+    "type": "type_Collect-1",
+    "title": "Moti nel piano",
+    "items": [
+        {
+            "id": "voce-14",
+            "badge": { "page": "331", "ex_num": "14", "difficulty": 2 },
+            "question": [
+                { "type": "text", "content": "Un sasso è lanciato orizzontalmente dal bordo di un tavolo." },
+                {
+                    "type": "list",
+                    "ordered": true,
+                    "list_style": "a",
+                    "start": 2,
+                    "items": [
+                        [
+                            { "type": "text", "content": "Quanto vale la componente verticale" },
+                            { "type": "latex", "content": "\\(v_y\\)" },
+                            { "type": "text", "content": "nel momento in cui tocca terra?" }
+                        ],
+                        [
+                            { "type": "text", "content": "Dopo quanto tempo tocca terra?" }
+                        ]
+                    ]
+                }
+            ],
+            "solution": [
+                {
+                    "type": "tikz",
+                    "script": "\\usepackage{tikz}\n\\usepackage{amsmath}\n\\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing,patterns,shadings}\n\\begin{document}\n\\begin{tikzpicture}[>=Stealth]\n  \\draw[->] (0,0) -- (4,0) node[right] {$x$};\n  \\draw[->] (0,0) -- (0,3) node[above] {$y$};\n  \\draw[<->, thick] (0,2.5) -- (1.5,2.5) node[midway, above] {$v_x$ \\& $v_y$};\n\\end{tikzpicture}\n\\end{document}",
+                    "tex_packages": "{\"amsmath\":\"\"}",
+                    "tikz_libs": "arrows.meta,calc"
+                },
+                { "type": "text", "content": "La componente verticale vale" },
+                { "type": "latex", "content": "\\(v_y = g\\,t\\)" },
+                { "type": "text", "content": "e cresce col tempo." }
+            ]
+        },
+        {
+            "id": "voce-16",
+            "badge": { "page": "311", "ex_num": "16", "difficulty": 1 },
+            "question": [
+                { "type": "text", "content": "Disegna la traiettoria del sasso." }
+            ],
+            "solution": [
+                {
+                    "type": "tikz",
+                    "script": "\\begin{tikzpicture}\n  \\draw[thick] (0,0) parabola (2,-2);\n  \\fill (0,0) circle (1pt) node[above] {$O$};\n\\end{tikzpicture}"
+                },
+                { "type": "text", "content": "È un arco di parabola." }
+            ]
+        }
+    ]
+}

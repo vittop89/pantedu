@@ -1,0 +1,189 @@
+{
+    "_comment": [
+        "Come leggere le descrizioni MIUR di indirizzi e materie.",
+        "",
+        "Le SIGLE non compaiono nell'interfaccia: l'utente vede sempre l'etichetta.",
+        "Servono internamente come chiave di join (teacher_content.indirizzo,",
+        "users.indirizzo, teacher_sections.indirizzo, subject_code) e negli URL, e",
+        "restano stabili mentre le etichette cambiano. Per questo un alias serve a",
+        "due cose diverse, e solo una riguarda il codice.",
+        "",
+        "UNIFICARE due descrizioni sotto la stessa voce — con `code`.",
+        "  Il derivatore preferisce una sigla brutta a una fusione: due descrizioni",
+        "  diverse non collassano mai da sole. Ma non sa se indichino la STESSA",
+        "  cosa: 'artistico' e 'artistico biennio comune' sono lo stesso liceo,",
+        "  'SCIENZE MOTORIE E SPORTIVE' e 'Educazione Motoria' la stessa materia, e",
+        "  nessuna regola sulle parole puo' dedurlo. Senza alias la scuola si",
+        "  ritroverebbe due voci nella tendina e l'utente dovrebbe indovinare.",
+        "",
+        "DARE UN NOME LEGGIBILE — con `label` (sempre accanto a `code`).",
+        "  Il MIUR pubblica descrizioni troncate a meta' parola, o lunghissime.",
+        "  Quella stringa e' cio' che l'utente legge, quindi va riscritta.",
+        "",
+        "LE DUE SEZIONI SONO SEPARATE perche' i codici sono per KIND. GEO e'",
+        "'Geometria' fra le materie e non ha nulla a che vedere con un eventuale",
+        "GEO fra gli indirizzi. Ed e' anche il motivo per cui 'STORIA E GEOGRAFIA'",
+        "NON puo' prendersi GEO: e' gia' occupato da un'altra materia.",
+        "",
+        "PERCHE' IL CODICE E' SEMPRE OBBLIGATORIO",
+        "  Il codice, non l'etichetta, e' cio' che ritrova la voce al prossimo import.",
+        "  Appena l'import scrive l'etichetta riscritta al posto della descrizione MIUR",
+        "  le due stringhe non si somigliano piu' ('L. ART. IND. ARTI FIGU.( CURV...'",
+        "  contro 'Artistico - arti figurative'), e il confronto sulle parole non trova",
+        "  piu' niente: senza codice fissato il secondo import creerebbe un doppione",
+        "  accanto alla riga che aveva creato lui stesso.",
+        "",
+        "CAMPI",
+        "  miur   descrizione come compare nel dataset (il confronto e' sulle",
+        "         parole significative: maiuscole e punteggiatura non contano)",
+        "  code   OBBLIGATORIO — e' l'identita' della voce. Vedi sotto.",
+        "  label  etichetta mostrata all'utente al posto della descrizione MIUR",
+        "  note   perche' questa decisione — la parte che serve fra un anno",
+        "",
+        "Una voce vale per TUTTI gli istituti: le descrizioni MIUR sono nazionali.",
+        "Cambiare un `code` dopo che i docenti hanno agganciato contenuti non e'",
+        "piu' una scelta ma una migrazione: decidere qui, prima dell'--apply."
+    ],
+    "indirizzi": [
+        {
+            "miur": "LICEO ARTISTICO - BIENNIO COMUNE",
+            "code": "ART",
+            "label": "Artistico",
+            "note": "Il biennio comune e' l'artistico nei suoi primi due anni, non un indirizzo a se': le sue sezioni (1AA, 2AA, 2BA) vanno sotto ART insieme al resto del liceo artistico."
+        },
+        {
+            "miur": "LICEO ARTISTICO INDIRIZZO ARCHITETTURA E AMBIENTE",
+            "code": "AAA",
+            "label": "Artistico — architettura e ambiente",
+            "note": "Articolazione distinta del triennio artistico (3AR, 4AR, 5AR): resta separata da ART perche' il percorso diverge davvero dal terzo anno. Il codice e' obbligatorio proprio qui: appena l'import scrive questa etichetta al posto della descrizione MIUR, le due stringhe non si somigliano piu' e il confronto sulle parole non ritrova la riga. Senza codice fissato, il secondo import creerebbe un doppione."
+        },
+        {
+            "miur": "L. ART. IND. ARTI FIGU.( CURV. ARTE PLASTICO PITTO",
+            "code": "AFI",
+            "label": "Artistico — arti figurative (arte plastico-pittorica)",
+            "note": "La descrizione MIUR e' troncata a meta' parola e con una parentesi che non chiude: illeggibile per chi si iscrive. Il codice e' obbligatorio proprio qui: appena l'import scrive questa etichetta al posto della descrizione MIUR, le due stringhe non si somigliano piu' e il confronto sulle parole non ritrova la riga. Senza codice fissato, il secondo import creerebbe un doppione."
+        },
+        {
+            "miur": "LICEO MUSICALE - SEZ. MUSICALE",
+            "code": "MUS",
+            "label": "Musicale",
+            "note": "Serve solo a scrivere 'Musicale' invece della dicitura ministeriale. NB: sull'istituto 108 c'era un LIN etichettato 'Musicale', residuo del clone cross-istituto — rimosso il 2026-09-02, la riga del docente spostata sul codice nuovo. Il codice e' obbligatorio proprio qui: appena l'import scrive questa etichetta al posto della descrizione MIUR, le due stringhe non si somigliano piu' e il confronto sulle parole non ritrova la riga. Senza codice fissato, il secondo import creerebbe un doppione."
+        },
+        {
+            "miur": "SCIENTIFICO - SEZIONE AD INDIRIZZO SPORTIVO",
+            "code": "SCS",
+            "label": "Scientifico - sezione ad indirizzo sportivo",
+            "note": "E' un percorso ministeriale a se', e ha un codice suo. La 'curvatura sportiva' e' un'altra cosa - un arricchimento che la scuola aggiunge a uno scientifico ordinario - e per decisione del 2026-09-02 NON avra' un indirizzo proprio: resta sotto SCI. Non compare nelle descrizioni del dataset adozioni, quindi non serve una voce qui: si annota perche' la domanda e' gia' stata fatta una volta. Il codice SCS era gia' stato assegnato a mano sull'istituto 106."
+        }
+    ],
+    "materie": [
+        {
+            "miur": "DISCIPLINE PROGETTUALI ARCHITETTURA E AMBIENTE",
+            "code": "DPA",
+            "label": "Discipline progettuali — architettura e ambiente",
+            "note": "Solo l'etichetta: il codice derivato va bene, la dicitura per esteso no. Il codice e' obbligatorio proprio qui: appena l'import scrive questa etichetta al posto della descrizione MIUR, le due stringhe non si somigliano piu' e il confronto sulle parole non ritrova la riga. Senza codice fissato, il secondo import creerebbe un doppione."
+        },
+        {
+            "miur": "DISCIPLINE PROGETTUALI DESIGN",
+            "code": "DPD",
+            "label": "Discipline progettuali — design",
+            "note": "Come sopra. Il codice e' obbligatorio proprio qui: appena l'import scrive questa etichetta al posto della descrizione MIUR, le due stringhe non si somigliano piu' e il confronto sulle parole non ritrova la riga. Senza codice fissato, il secondo import creerebbe un doppione."
+        },
+        {
+            "miur": "DISEGNO",
+            "code": "DIS",
+            "label": "Disegno",
+            "note": "Come sopra."
+        },
+        {
+            "miur": "EDUCAZIONE CIVICA",
+            "code": "EDC",
+            "label": "Educazione civica",
+            "note": "Vicina a EDM solo nella sigla: e' l'insegnamento trasversale della L.92/2019, non l'educazione motoria. Codice esplicito proprio per non lasciare la distinzione a una derivazione."
+        },
+        {
+            "miur": "FILOSOFIA",
+            "code": "FIL",
+            "label": "Filosofia",
+            "note": "Senza voce qui l'etichetta resterebbe la descrizione ministeriale in maiuscolo: sul musicale si leggerebbe FILOSOFIA e sullo scientifico Filosofia, la stessa materia scritta in due modi nella stessa scuola."
+        },
+        {
+            "miur": "FISICA",
+            "code": "FIS",
+            "label": "Fisica",
+            "note": "Come sopra: la descrizione MIUR e' tutta maiuscola."
+        },
+        {
+            "miur": "LINGUA INGLESE",
+            "code": "ING",
+            "label": "Inglese",
+            "note": "Come sopra: ING esiste gia'."
+        },
+        {
+            "miur": "LINGUA E LETTERATURA ITALIANA",
+            "code": "ITA",
+            "label": "Italiano",
+            "note": "A registro la materia si chiama gia' Italiano con codice ITA. Il derivatore ne ricaverebbe LLI, cioe' una seconda voce per la stessa materia."
+        },
+        {
+            "miur": "LINGUA LATINA",
+            "code": "LAT",
+            "label": "Latino",
+            "note": "Come sopra: LAT esiste gia'."
+        },
+        {
+            "miur": "MATEMATICA",
+            "code": "MAT",
+            "label": "Matematica",
+            "note": "Come sopra."
+        },
+        {
+            "miur": "SCIENZE MOTORIE E SPORTIVE",
+            "code": "EDM",
+            "label": "Scienze motorie e sportive",
+            "note": "A registro sta come 'Educazione Motoria' (EDM): stesso insegnamento, nome vecchio. Si unifica sul codice esistente e si aggiorna l'etichetta a quella attuale."
+        },
+        {
+            "miur": "SCIENZE NATURALI (BIOLOGIA, CHIMICA, SCIENZE DELLA TERRA)",
+            "code": "SCN",
+            "label": "Scienze naturali",
+            "note": "La dicitura ministeriale elenca le tre discipline fra parentesi; a registro e' gia' 'Scienze' con codice SCN. Da non confondere con CHIMICA, che al triennio e' materia separata con un suo docente."
+        },
+        {
+            "miur": "STORIA",
+            "code": "STO",
+            "label": "Storia",
+            "note": "Come sopra. Da non confondere con STG (Storia e geografia), che al biennio e' materia unica."
+        },
+        {
+            "miur": "STORIA DELL'ARTE",
+            "code": "STA",
+            "label": "Storia dell'arte",
+            "note": "Il derivatore darebbe SAR (storia + arte, dell' e' stopword). STA e' piu' riconoscibile e non collide con STO ne' con STG."
+        },
+        {
+            "miur": "STORIA DELLA MUSICA",
+            "code": "STM",
+            "label": "Storia della musica",
+            "note": "Materia del liceo musicale. La sigla e' quella che il derivatore produce gia': fissarla la rende stabile se un domani l'etichetta cambia."
+        },
+        {
+            "miur": "STORIA E GEOGRAFIA",
+            "code": "STG",
+            "label": "Storia e geografia",
+            "note": "La materia unica del biennio, distinta da STORIA del triennio. NON puo' prendersi GEO, che a registro e' gia' 'Geometria': e' il caso in cui la sigla apparentemente ovvia e' gia' occupata da tutt'altro."
+        },
+        {
+            "miur": "TECNOLOGIE MUSICALI",
+            "code": "TEM",
+            "label": "Tecnologie musicali",
+            "note": "Materia del liceo musicale, come sopra."
+        },
+        {
+            "miur": "TEORIA, ANALISI E COMPOSIZIONE",
+            "code": "TAC",
+            "label": "Teoria, analisi e composizione",
+            "note": "Materia del liceo musicale, come sopra."
+        }
+    ]
+}

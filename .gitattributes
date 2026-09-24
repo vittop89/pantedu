@@ -1,0 +1,58 @@
+# ADR-029 — codice PHP sempre LF nel repo (PSR-12/PHPCS richiede \n).
+# Senza questa regola, autocrlf=true su Windows committa CRLF e il job CI
+# "PHPCS" su Linux fallisce con "End of line character is invalid".
+*.php text eol=lf
+
+# Phase 25.Q.4 — Self-hosted vendor assets: NO line-ending conversion.
+# Hash SRI calcolato sui file originali (LF). Conversione CRLF su Windows
+# romperebbe SRI integrity check sul browser.
+public/vendor/** binary
+
+# Nginx config files: LF obbligatorio (nginx accetta CRLF ma scripts diff/cmp
+# nel deploy.sh confronterebbero con un file CRLF su VPS dopo `cp` da Windows
+# checkout). Forziamo LF ovunque.
+infra/nginx/*.conf text eol=lf
+tools/webhook/*.sh text eol=lf
+# release.sh gira in Git Bash su Windows: CRLF romperebbe lo shebang/`$'\r'`.
+tools/publish/*.sh text eol=lf
+
+# 2026-09-06 — suite E2E: LF anche nella copia di lavoro (con autocrlf=true 53 spec erano CRLF e 4 miste)
+tests/e2e/**/*.js text eol=lf
+tests/e2e/**/*.ts text eol=lf
+tests/e2e/**/*.mjs text eol=lf
+
+# 2026-09-08 — le unità systemd e lo script del trigger finiscono copiati
+# verbatim in /etc/systemd/system/ e /usr/local/bin/ dal deploy. Con CRLF
+# systemd legge un `ExecStart=` con un ritorno a capo in coda e lo script
+# muore con `$'\r': command not found`. Stessa ragione già scritta sopra per
+# tools/webhook/*.sh, che però non copriva questa cartella.
+tools/systemd/* text eol=lf
+tools/ops/*.php text eol=lf
+
+# 2026-09-08 — tutto ciò che finisce dentro il container Linux: LF obbligatorio.
+#
+# Uno script con CRLF dentro un'immagine Linux non fallisce in modo chiaro:
+# dà «bad interpreter: /bin/bash^M», che sembra un file mancante. E la
+# configurazione di nginx e di supervisor con CRLF dà errori di sintassi su
+# righe che a occhio sono giuste. È il tipo di trappola che costa un'ora e
+# non insegna niente.
+docker/** text eol=lf
+.dockerignore text eol=lf
+tools/systemd/*.sh text eol=lf
+tools/ops/*.sh text eol=lf
+
+# 2026-09-09 — anche `tools/ops/` contiene file che finiscono copiati verbatim
+# su una macchina Linux: le regole di AIDE in /etc/aide/aide.conf.d/, quelle di
+# auditd in /etc/audit/rules.d/, la riga di cron in /etc/cron.d/. Con CRLF cron
+# **salta il file senza dire niente** e `augenrules` rifiuta le regole: due
+# modi di spegnere un controllo di sicurezza senza che nessuno se ne accorga.
+# Stessa ragione già scritta qui sopra per tools/systemd/, che però copriva
+# solo quella cartella.
+tools/ops/* text eol=lf
+
+# 2026-09-09 — `tools/backup/` mancava, ed e' lo script del salvataggio cifrato:
+# quello che gira ogni notte e che tiene la copia offsite. Con CRLF, copiato a
+# mano su Linux, morirebbe con `$'': command not found`. Oggi non succede
+# perche' sul VPS ci arriva dal checkout, ma e' la quarta volta che questa
+# trappola compare in questo file e non c'e' ragione di lasciarla aperta.
+tools/backup/* text eol=lf

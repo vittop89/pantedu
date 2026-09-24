@@ -1,0 +1,19 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Calcolare i limiti di successioni e funzioni in casi semplici.",
+        "checked": true
+      },
+      {
+        "label": "Derivare funzioni note, integrare funzioni polinomiali e altre funzioni elementari, determinare aree e volumi in casi semplici.",
+        "checked": true
+      },
+      {
+        "label": "Studiare dal punto di vista analitico rette, piani e sfere nello spazio.",
+        "checked": true
+      }
+    ]
+  }
+]

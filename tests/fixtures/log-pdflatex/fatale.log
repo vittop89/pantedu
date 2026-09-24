@@ -1,0 +1,14 @@
+Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
+ick labels; missing features). Consider writing \pgfplotsset{compat=1.18} into
+your preamble.
+ on input line 125.
+
+! Paragraph ended before \pgffor@normal@list was complete.
+<to be read again>
+                   \par
+l.136 ...sy/\labely/\posy/\visproxy in \pointslist
+                                                  {
+Here is how much of TeX's memory you used:
+ 24094 strings out of 474494
+
+!  ==> Fatal error occurred, no output PDF file produced!

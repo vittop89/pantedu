@@ -1,0 +1,23 @@
+[
+  {
+    "titolo": "CONOSCENZE",
+    "contenuti": [
+      {
+        "label": "Conoscere il concetto di limite di una successione e di una funzione, e i principali concetti del calcolo infinitesimale (continuità, derivabilità e l'integrabilità).",
+        "checked": true
+      },
+      {
+        "label": "Comprendere il concetto di equazione differenziale e le sue principali proprietà, con particolare riguardo all'equazione della dinamica di Newton.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le caratteristiche di alcune distribuzioni di probabilità (binomiale, normale, di Poisson).",
+        "checked": true
+      },
+      {
+        "label": "Approfondire la conoscenza dei fondamenti della teoria microeconomica, della teoria dell'utilità e del modello macroeconomico keynesiano.",
+        "checked": true
+      }
+    ]
+  }
+]

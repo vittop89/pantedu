@@ -1,0 +1,62 @@
+# Protezione cartella LOG principale
+# Permette l'accesso solo ai file PHP autorizzati
+
+# Nega l'accesso diretto ai file di log e configurazione
+<Files "*.log">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "*.txt">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "*.md">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "*.json">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Permetti accesso ai file PHP necessari
+<Files "cleanup_logs.php">
+    # File sensibile - ACCESSO NEGATO dal web
+    # Può essere eseguito solo via CLI/terminale locale
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Impedisci il listing delle directory
+Options -Indexes
+
+# Redirect alla dashboard se si accede alla cartella principale (NON data)
+# DirectoryIndex /log/analytics/index.php  # Commentato per non interferire con /data/
+
+# Protezione contro accessi diretti non autorizzati
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # IMPORTANTE: Non toccare mai la cartella data - deve rimanere protetta
+    RewriteCond %{REQUEST_URI} !^/log/data/
+    
+    # Blocca l'accesso diretto ai file di configurazione
+    RewriteRule ^CRON_SETUP\.md$ - [F]
+    RewriteRule ^README\.md$ - [F]
+    
+    # Redirect alla dashboard per accesso alla cartella SOLO se non è data/
+    RewriteCond %{REQUEST_URI} !^/log/data/
+    RewriteRule ^$ analytics/ [R=302,L]
+</IfModule>
+
+# Intestazioni di sicurezza
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Messaggio di errore personalizzato
+ErrorDocument 403 "ACCESSO NEGATO - File di Sistema Protetto"

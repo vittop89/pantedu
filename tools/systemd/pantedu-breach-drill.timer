@@ -1,0 +1,23 @@
+# Due volte l'anno, come la DPIA dichiara: gennaio e luglio.
+#
+# `Persistent=true` perche' una macchina spenta il primo di gennaio non deve
+# far saltare l'esercitazione di un semestre intero: al riavvio parte.
+#
+# Il ritardo casuale evita che coincida al secondo con gli altri lavori
+# notturni; l'ora e' quella in cui il salvataggio cifrato della notte e' gia'
+# finito, cosi' il controllo sulla copia recente misura la copia di oggi.
+
+[Unit]
+Description=pantedu — timer semestrale della prova del piano violazioni
+
+[Timer]
+OnCalendar=*-01-15 06:30
+OnCalendar=*-07-15 06:30
+
+Persistent=true
+RandomizedDelaySec=15min
+
+Unit=pantedu-breach-drill.service
+
+[Install]
+WantedBy=timers.target

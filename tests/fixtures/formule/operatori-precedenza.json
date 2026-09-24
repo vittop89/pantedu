@@ -1,0 +1,191 @@
+{
+  "casi": [
+    {
+      "nome": "somma-e-precedenza",
+      "griglia": [
+        [
+          {
+            "formula": "=2+3*4"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "14",
+          "value": 14,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "parentesi-cambiano-precedenza",
+      "griglia": [
+        [
+          {
+            "formula": "=(2+3)*4"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "20",
+          "value": 20,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "potenza-associativa-a-destra",
+      "griglia": [
+        [
+          {
+            "formula": "=2^3^2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "512",
+          "value": 512,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "divisione-e-moltiplicazione-sinistra-destra",
+      "griglia": [
+        [
+          {
+            "formula": "=8/4*2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "4",
+          "value": 4,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "unario-meno-e-potenza",
+      "griglia": [
+        [
+          {
+            "formula": "=-2^2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "4",
+          "value": 4,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "confronto-minore",
+      "griglia": [
+        [
+          {
+            "formula": "=1<2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "confronto-diverso-vero",
+      "griglia": [
+        [
+          {
+            "formula": "=1<>1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "confronto-maggiore-uguale",
+      "griglia": [
+        [
+          {
+            "formula": "=2>=2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "concatenazione-testo",
+      "griglia": [
+        [
+          {
+            "formula": "=\"A\"&\"B\""
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "AB",
+          "value": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "concatenazione-con-somma-precedenza",
+      "griglia": [
+        [
+          {
+            "formula": "=1+1&2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "22",
+          "value": 22,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "somma-decimali-flottanti",
+      "griglia": [
+        [
+          {
+            "formula": "=0.1+0.2"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "0,3",
+          "value": 0.30000000000000004,
+          "error": null
+        }
+      }
+    }
+  ]
+}

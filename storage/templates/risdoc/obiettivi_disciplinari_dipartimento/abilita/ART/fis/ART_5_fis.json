@@ -1,0 +1,82 @@
+[
+    {
+        "titolo": "LA LEGGE DI COULOMB",
+        "contenuti": [
+            { "label": "Descrivere le proprietà della carica elettrica (quantizzazione, conservazione) e distinguere tra materiali conduttori e isolanti.", "checked": true },
+            { "label": "Spiegare i fenomeni dell'induzione elettrostatica nei conduttori e della polarizzazione negli isolanti.", "checked": true },
+            { "label": "Enunciare e applicare la legge di Coulomb per calcolare la forza di interazione tra due o più cariche puntiformi.", "checked": true },
+            { "label": "Cogliere le differenze e le analogie tra la legge di Coulomb e la legge di gravitazione universale.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "IL CAMPO ELETTRICO E IL POTENZIALE ELETTRICO",
+        "contenuti": [
+            { "label": "Definire il vettore campo elettrico e calcolarlo per una o più cariche puntiformi.", "checked": true },
+            { "label": "Rappresentare il campo elettrico tramite le linee di forza e interpretarne il significato.", "checked": true },
+            { "label": "Definire il flusso del campo elettrico, enunciare il teorema di Gauss e applicarlo a distribuzioni di carica simmetriche.", "checked": true },
+            { "label": "Definire l'energia potenziale elettrica e il potenziale elettrico, calcolando il lavoro compiuto dalla forza elettrica.", "checked": true },
+            { "label": "Descrivere la relazione tra campo elettrico e potenziale elettrico, utilizzando le superfici equipotenziali.", "checked": true },
+            { "label": "Definire la capacità di un condensatore e calcolare l'energia immagazzinata in esso.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LA CORRENTE ELETTRICA",
+        "contenuti": [
+            { "label": "Definire l'intensità di corrente elettrica e descrivere il funzionamento di un generatore di tensione.", "checked": true },
+            { "label": "Enunciare e applicare la prima e la seconda legge di Ohm per analizzare semplici circuiti.", "checked": true },
+            { "label": "Descrivere il modello microscopico della conduzione elettrica nei metalli e le proprietà dei semiconduttori.", "checked": true },
+            { "label": "Analizzare circuiti elettrici contenenti resistori in serie e in parallelo, calcolando la resistenza equivalente.", "checked": true },
+            { "label": "Applicare la legge di Joule per calcolare la potenza dissipata e l'energia consumata in un circuito.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "IL CAMPO MAGNETICO",
+        "contenuti": [
+            { "label": "Descrivere le proprietà dei magneti e rappresentare il campo magnetico attraverso le linee di forza.", "checked": true },
+            { "label": "Descrivere l'esperimento di Oersted e calcolare il campo magnetico generato da fili rettilinei, spire e solenoidi.", "checked": true },
+            { "label": "Applicare la legge della forza di Lorentz per calcolare la forza agente su una carica in moto e su un filo percorso da corrente.", "checked": true },
+            { "label": "Enunciare e applicare la legge di Ampère per calcolare il campo magnetico in casi di alta simmetria.", "checked": true },
+            { "label": "Classificare i materiali in base alle loro proprietà magnetiche (diamagnetici, paramagnetici, ferromagnetici).", "checked": true }
+        ]
+    },
+    {
+        "titolo": "L'INDUZIONE ELETTROMAGNETICA E LA CORRENTE ALTERNATA",
+        "contenuti": [
+            { "label": "Enunciare la legge di Gauss per il magnetismo e comprenderne le implicazioni.", "checked": true },
+            { "label": "Applicare la legge di Faraday-Neumann-Lenz per calcolare la forza elettromotrice indotta e determinarne il verso.", "checked": true },
+            { "label": "Definire l'induttanza e descrivere il fenomeno dell'autoinduzione.", "checked": true },
+            { "label": "Descrivere le caratteristiche di una corrente alternata (valore efficace, massimo, frequenza) e il funzionamento di un alternatore.", "checked": true },
+            { "label": "Spiegare il principio di funzionamento del trasformatore e applicare le relative equazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "LE EQUAZIONI DI MAXWELL E LE ONDE ELETTROMAGNETICHE",
+        "contenuti": [
+            { "label": "Spiegare il ruolo della corrente di spostamento introdotta da Maxwell.", "checked": true },
+            { "label": "Enunciare le quattro equazioni di Maxwell e descriverne il significato fisico complessivo.", "checked": true },
+            { "label": "Descrivere la natura e le proprietà delle onde elettromagnetiche come soluzione delle equazioni di Maxwell.", "checked": true },
+            { "label": "Descrivere le diverse regioni dello spettro elettromagnetico e le loro principali applicazioni.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "LA RELATIVITÀ RISTRETTA E LA MECCANICA QUANTISTICA",
+        "contenuti": [
+            { "label": "Enunciare i due postulati della relatività ristretta e discuterne le conseguenze.", "checked": false },
+            { "label": "Descrivere e applicare i concetti di dilatazione dei tempi e contrazione delle lunghezze.", "checked": false },
+            { "label": "Analizzare il concetto di simultaneità e applicare la formula di equivalenza massa-energia E=mc².", "checked": false },
+            { "label": "Descrivere le principali crisi della fisica classica (corpo nero, effetto fotoelettrico).", "checked": false },
+            { "label": "Spiegare l'effetto fotoelettrico attraverso l'ipotesi dei quanti di luce (fotoni) di Einstein.", "checked": false },
+            { "label": "Descrivere il modello atomico di Bohr e i suoi postulati.", "checked": false }
+        ]
+    },
+    {
+        "titolo": "LA FISICA SUBATOMICA E LA RADIOATTIVITÀ",
+        "contenuti": [
+            { "label": "Descrivere la composizione del nucleo atomico (protoni, neutroni) e il ruolo dell'interazione nucleare forte.", "checked": false },
+            { "label": "Descrivere i diversi tipi di decadimento radioattivo (alfa, beta, gamma) e applicare la legge del decadimento.", "checked": false },
+            { "label": "Distinguere tra fissione e fusione nucleare, descrivendo il bilancio energetico di tali reazioni.", "checked": false },
+            { "label": "Descrivere il concetto di particella e antiparticella.", "checked": false },
+            { "label": "Elencare e descrivere le quattro interazioni fondamentali della natura.", "checked": false }
+        ]
+    }
+]

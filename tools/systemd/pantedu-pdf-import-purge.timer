@@ -1,0 +1,16 @@
+[Unit]
+Description=pantedu — timer della pulizia delle importazioni PDF
+
+[Timer]
+# Le 03:30, l'orario che aveva nel crontab.
+OnCalendar=03:30
+
+# Qui `Persistent` non serve: è una pulizia per anzianità, e un giorno saltato
+# lo recupera il giorno dopo senza che cambi niente.
+Persistent=false
+
+RandomizedDelaySec=10min
+Unit=pantedu-pdf-import-purge.service
+
+[Install]
+WantedBy=timers.target

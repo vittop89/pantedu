@@ -1,0 +1,19 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Analizzare i fenomeni elettrici e magnetici utilizzando i concetti di campo e di potenziale, applicando le leggi di sintesi dell'elettromagnetismo (leggi di Maxwell) per interpretare il funzionamento di dispositivi tecnologici e la propagazione delle onde elettromagnetiche.",
+                "checked": true
+            },
+            {
+                "label": "Comprendere e argomentare la crisi della fisica classica e i rivoluzionari postulati della relatività ristretta e della fisica dei quanti, applicandoli per descrivere la struttura dell'atomo e del nucleo e l'interazione tra materia ed energia.",
+                "checked": false
+            },
+            {
+                "label": "Riconoscere la natura e la portata esplicativa delle teorie fisiche, cogliendo il nesso storico e concettuale tra elettromagnetismo classico, relatività e modelli quantistici per costruire una visione organica dei fenomeni fisici fondamentali.",
+                "checked": false
+            }
+        ]
+    }
+]

@@ -1,0 +1,172 @@
+{
+    "aggiornato": "2026-09-23",
+    "perche_esiste": "La guardia del CSS (tools/ci/no-css-in-js.mjs) guarda solo js/. Nelle viste e nelle classi PHP che emettono HTML ci sono blocchi <style> e attributi style=: stanno fuori da @layer, quindi vincono sul fascio, e sono la ragione per cui la CSP non può ancora rinunciare a 'unsafe-inline' per gli stili (revisione architetturale del 23/9/2026, A-51). Questo censimento fissa, per ogni file che ne ha, i due numeri del 23/9/2026: 41 file, 26 blocchi <style>, 141 attributi style=. tests/Unit/Architettura/CssNelleVisteTest.php li ricalcola a ogni corsa della suite unit.",
+    "come_si_aggiorna": "Il cricchetto scatta in due versi. Un file nuovo con CSS in linea, o un numero più alto di quello scritto qui, fa fallire la prova: le regole vanno in css/modules/_*.css sotto @layer, uno stato dinamico con una classe o una variabile CSS. Un numero più basso (CSS spostato) fa fallire l'altra prova, per ricordare di abbassarlo qui, o di togliere la voce se è a zero: altrimenti il margine guadagnato resterebbe a disposizione di CSS nuovo. Non si alzano i numeri per far passare un ramo.",
+    "criterio": "File .php e .html sotto views/ e .php sotto app/ (ricorsivo). Il sorgente si legge col tokenizer di PHP (token_get_all) e si scartano T_COMMENT e T_DOC_COMMENT: un commento che nomina <style> non è CSS. blocchi = occorrenze di /<style\\b/i; attributi = occorrenze di style= preceduto da uno spazio o da una virgoletta e seguito da una virgoletta, anche con l'escape di una stringa PHP (style=\\\"): non conta $style =, ->style, 'style' =>, data-style=.",
+    "file": {
+        "app/Controllers/Admin/RisdocAdminController.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "app/Controllers/AdminController.php": {
+            "blocchi": 0,
+            "attributi": 8
+        },
+        "app/Controllers/AdminMigrateController.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "app/Controllers/ContentExportController.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "app/Controllers/ExerciseStudyController.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "app/Controllers/ParentConsentController.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "app/Controllers/PublicSidebarController.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "app/Controllers/Risdoc/TemplateViewController.php": {
+            "blocchi": 2,
+            "attributi": 0
+        },
+        "app/Controllers/Teacher/PdfImportPageController.php": {
+            "blocchi": 2,
+            "attributi": 2
+        },
+        "app/Core/Kernel.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "app/Middleware/LegacyGoneMiddleware.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "app/Middleware/WafMiddleware.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "app/Services/ContractRenderer.php": {
+            "blocchi": 0,
+            "attributi": 10
+        },
+        "app/Services/Risdoc/Pt/PtToHtml.php": {
+            "blocchi": 0,
+            "attributi": 5
+        },
+        "app/Services/Study/StudyPageRenderer.php": {
+            "blocchi": 0,
+            "attributi": 30
+        },
+        "app/Support/CriticalCss.php": {
+            "blocchi": 2,
+            "attributi": 0
+        },
+        "app/Support/StandalonePageRenderer.php": {
+            "blocchi": 2,
+            "attributi": 0
+        },
+        "views/admin/_risdoc_admin_panel.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/admin/data_breach_index.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/admin/institutes_catalogo.php": {
+            "blocchi": 0,
+            "attributi": 6
+        },
+        "views/admin/sidebar-config.php": {
+            "blocchi": 1,
+            "attributi": 32
+        },
+        "views/admin/system/deployment.php": {
+            "blocchi": 1,
+            "attributi": 11
+        },
+        "views/admin/takedown_show.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/admin/templates.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "views/admin/waf/config.php": {
+            "blocchi": 0,
+            "attributi": 2
+        },
+        "views/admin/waf/dashboard.php": {
+            "blocchi": 0,
+            "attributi": 2
+        },
+        "views/admin/waf/reports.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/area_docente/fonti.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/area_docente/profilo.php": {
+            "blocchi": 1,
+            "attributi": 2
+        },
+        "views/area_docente/templates.php": {
+            "blocchi": 1,
+            "attributi": 1
+        },
+        "views/auth/class_access.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/auth/login.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/auth/register.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/errors/generic.php": {
+            "blocchi": 0,
+            "attributi": 1
+        },
+        "views/exercises/search.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/layout/app.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/legal/tos_acceptance.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/partials/_legal_notice_banner.php": {
+            "blocchi": 1,
+            "attributi": 0
+        },
+        "views/partials/head.php": {
+            "blocchi": 0,
+            "attributi": 5
+        },
+        "views/partials/sidebar.php": {
+            "blocchi": 0,
+            "attributi": 10
+        },
+        "views/risdoc/edit.php": {
+            "blocchi": 1,
+            "attributi": 0
+        }
+    }
+}

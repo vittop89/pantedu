@@ -1,0 +1,314 @@
+{
+  "casi": [
+    {
+      "nome": "cella-vuota-in-aritmetica-diretta",
+      "griglia": [
+        [
+          {
+            "raw": ""
+          },
+          {
+            "formula": "=A1+1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "",
+          "value": 0,
+          "error": null
+        },
+        "0,1": {
+          "display": "#VALUE!",
+          "value": null,
+          "error": "#VALUE!"
+        }
+      }
+    },
+    {
+      "nome": "cella-vuota-riferimento-diretto",
+      "griglia": [
+        [
+          {
+            "raw": ""
+          },
+          {
+            "formula": "=A1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "",
+          "value": 0,
+          "error": null
+        },
+        "0,1": {
+          "display": "",
+          "value": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "cella-vuota-dentro-somma",
+      "griglia": [
+        [
+          {
+            "raw": ""
+          }
+        ],
+        [
+          {
+            "raw": ""
+          }
+        ],
+        [
+          {
+            "formula": "=SOMMA(A1:A2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "",
+          "value": 0,
+          "error": null
+        },
+        "1,0": {
+          "display": "",
+          "value": 0,
+          "error": null
+        },
+        "2,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "riferimento-oltre-la-griglia",
+      "griglia": [
+        [
+          {
+            "raw": "1"
+          },
+          {
+            "formula": "=SOMMA(A1:A5)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        },
+        "0,1": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "numeri-it-migliaia",
+      "griglia": [
+        [
+          {
+            "raw": "1.234,56"
+          },
+          {
+            "formula": "=A1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "1.234,56",
+          "value": 1234.56,
+          "error": null
+        },
+        "0,1": {
+          "display": "1234,56",
+          "value": 1234.56,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "numeri-it-percento",
+      "griglia": [
+        [
+          {
+            "raw": " 10% "
+          },
+          {
+            "formula": "=A1"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": " 10% ",
+          "value": 10,
+          "error": null
+        },
+        "0,1": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "formula-vuota",
+      "griglia": [
+        [
+          {
+            "formula": "="
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "",
+          "value": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "min-max-con-testo-nel-range",
+      "griglia": [
+        [
+          {
+            "raw": "testo"
+          }
+        ],
+        [
+          {
+            "raw": "10"
+          }
+        ],
+        [
+          {
+            "formula": "=MIN(A1:A2)"
+          }
+        ],
+        [
+          {
+            "formula": "=MAX(A1:A2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "testo",
+          "value": 0,
+          "error": null
+        },
+        "1,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        },
+        "2,0": {
+          "display": "0",
+          "value": 0,
+          "error": null
+        },
+        "3,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "media-ignora-non-numerici-nel-conteggio",
+      "griglia": [
+        [
+          {
+            "raw": "testo"
+          }
+        ],
+        [
+          {
+            "raw": "10"
+          }
+        ],
+        [
+          {
+            "formula": "=MEDIA(A1:A2)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "testo",
+          "value": 0,
+          "error": null
+        },
+        "1,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        },
+        "2,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        }
+      }
+    },
+    {
+      "nome": "conta-solo-numerici",
+      "griglia": [
+        [
+          {
+            "raw": "testo"
+          }
+        ],
+        [
+          {
+            "raw": "10"
+          }
+        ],
+        [
+          {
+            "raw": ""
+          }
+        ],
+        [
+          {
+            "formula": "=CONTA(A1:A3)"
+          }
+        ]
+      ],
+      "atteso": {
+        "0,0": {
+          "display": "testo",
+          "value": 0,
+          "error": null
+        },
+        "1,0": {
+          "display": "10",
+          "value": 10,
+          "error": null
+        },
+        "2,0": {
+          "display": "",
+          "value": 0,
+          "error": null
+        },
+        "3,0": {
+          "display": "1",
+          "value": 1,
+          "error": null
+        }
+      }
+    }
+  ]
+}

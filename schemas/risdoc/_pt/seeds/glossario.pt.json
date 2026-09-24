@@ -1,0 +1,226 @@
+[
+    {
+        "_type": "glossaryTable",
+        "name": "glossario_lemmi",
+        "columns": [
+            "N.",
+            "Lemma",
+            "Definizione",
+            "Fonte"
+        ],
+        "entries": [
+            {
+                "n": 1,
+                "lemma": "Abilità",
+                "definizione": "Le capacità di applicare conoscenze e di utilizzare know-how per portare a termine compiti e risolvere problemi. Nel contesto del Quadro europeo delle qualifiche le abilità sono descritte come cognitive (comprendenti l'uso del pensiero logico, intuitivo e creativo) o pratiche (comprendenti l'abilità manuale e l'uso di metodi, materiali, strumenti).",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 2,
+                "lemma": "Apprendimento formale",
+                "definizione": "Apprendimento erogato tradizionalmente da un'istituzione di istruzione o formazione, strutturato (in termini di obiettivi di apprendimento e tempi o risorse per l'apprendimento) e sfociante in una certificazione. L'apprendimento formale è intenzionale dal punto di vista del discente.",
+                "fonte": "All.II: Glossario Comunicazione della Commissione europea “Realizzare uno spazio europeo dell'apprendimento permanente” (COM (2001)678)"
+            },
+            {
+                "n": 3,
+                "lemma": "Apprendimento informale",
+                "definizione": "Apprendimento risultante dalle attività della vita quotidiana legate al lavoro, alla famiglia o al tempo libero. Non è strutturato (in termini di obiettivi di apprendimento, di tempi o di risorse) e di norma non sfocia in una certificazione. L'apprendimento informale può essere intenzionale, ma nella maggior parte dei casi non lo è (ovvero è \"fortuito” o casuale).",
+                "fonte": "All.II: Glossario Comunicazione della Commissione europea “Realizzare uno spazio europeo dell'apprendimento permanente” (COM (2001)678)"
+            },
+            {
+                "n": 4,
+                "lemma": "Apprendimento permanente",
+                "definizione": "Qualsiasi attività di apprendimento intrapresa nelle varie fasi della vita al fine di migliorare le conoscenze, le capacità e le competenze in una prospettiva personale, civica, sociale e/o occupazionale.",
+                "fonte": "Risoluzione del Consiglio del 27 giugno 2002 sull'apprendimento permanente (2002/C 163/01)"
+            },
+            {
+                "n": 5,
+                "lemma": "Area di istruzione generale degli istituti tecnici",
+                "definizione": "L'area di istruzione generale ha l'obiettivo di fornire ai giovani la preparazione di base, acquisita attraverso il rafforzamento e lo sviluppo degli assi culturali che caratterizzano l'obbligo di istruzione: asse dei linguaggi, matematico, scientifico-tecnologico, storico-sociale.",
+                "fonte": "Allegato A: Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 6,
+                "lemma": "Aree di indirizzo degli istituti tecnici",
+                "definizione": "Le aree di indirizzo hanno l'obiettivo di far acquisire agli studenti sia conoscenze teoriche e applicative spendibili in vari contesti di vita, di studio e di lavoro sia abilità cognitive idonee per risolvere problemi, sapersi gestire autonomamente in ambiti caratterizzati da innovazioni continue, assumere progressivamente anche responsabilità per la valutazione e il miglioramento dei risultati ottenuti.",
+                "fonte": "Allegato A: Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 7,
+                "lemma": "Asse culturale",
+                "definizione": "Tessuto per la costruzione di percorsi di apprendimento orientati all'acquisizione delle competenze chiave che preparano i giovani alla vita adulta e che costituiscono la base per consolidare e accrescere saperi e competenze in un processo di apprendimento permanente, anche ai fini della futura vita lavorativa.",
+                "fonte": "Decreto 22 agosto 2007 Regolamento recante norme in materia di assolvimento dell'obbligo d'istruzione"
+            },
+            {
+                "n": 8,
+                "lemma": "Certificazione dei risultati di apprendimento",
+                "definizione": "Rilascio di un certificato, un diploma o un titolo che attesta formalmente che un ente competente ha accertato e convalidato un insieme di risultati dell'apprendimento (conoscenze, know-how, abilità e/o competenze) conseguiti da un individuo rispetto a uno standard prestabilito.",
+                "fonte": "CEDEFOP Terminology of European education and training policy Luxembourg: Office for Official Publications of the European Communities, 2008"
+            },
+            {
+                "n": 9,
+                "lemma": "Cittadinanza e Costituzione",
+                "definizione": "Acquisizione nel primo e nel secondo ciclo di istruzione delle conoscenze e delle competenze relative a «Cittadinanza e Costituzione», nell'ambito delle aree storico-geografica e storico-sociale.",
+                "fonte": "art. 1 del Decreto Legge 1 settembre 2008 n. 137, convertito con modificazioni, dalla legge 30 ottobre 2008, n. 169 Le attività e gli insegnamenti relativi a \"Cittadinanza e Costituzione\" di cui all'art. 1 del decreto legge 1 settembre 2008 n. 137, convertito con modificazioni, dalla legge 30 ottobre 2008, n. 169, coinvolgono tutti gli ambiti disciplinari e si sviluppano, in particolare, in quelli di interesse storico-sociale e giuridico-economico. Fonte Allegato A: Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 10,
+                "lemma": "Classificazione ISCED (International Standard Classification of Education)",
+                "definizione": "Standard di classificazione internazionale e analisi comparata dei vari livelli dei sistemi di istruzione creato dall'UNESCO.",
+                "fonte": "http://www.unesco.org/education/information/nfsunesco/doc/isced_1997.htm"
+            },
+            {
+                "n": 11,
+                "lemma": "Classifiche ISCO (International Standard Classification of Occupations)",
+                "definizione": "Standard internazionale di classificazione per il mondo del lavoro e delle professioni. E' redatto da ILO (International Labour Organization-in italiano OIL) e serve per classificare le occupazioni in gruppi /settori secondo le mansioni espletate sul posto di lavoro.",
+                "fonte": "http://www.ilo.org/public/english/bureau/stat/isco/index.htm"
+            },
+            {
+                "n": 12,
+                "lemma": "CLIL (Content and Language Integrated Learning)",
+                "definizione": "Approccio educativo che prevede l'insegnamento di una disciplina o solo di alcune parti in lingua straniera veicolare al fine di facilitare sia l'apprendimento della lingua sia l'acquisizione dei contenuti disciplinari.",
+                "fonte": "http://ec.europa.eu/education/languages/language-teaching/doc236_it.htm Insegnamento negli istituti tecnici, in lingua inglese, di una disciplina non linguistica compresa nell'area di indirizzo del quinto anno, da attivare in ogni caso nei limiti degli organici determinati a legislazione vigente, sono definiti con successivi decreti del Ministro dell'istruzione, dell'università e della ricerca di concerto con il Ministro dell'economia e delle finanze. Fonte Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 13,
+                "lemma": "Comitato tecnico-scientifico",
+                "definizione": "Struttura innovativa di cui possono dotarsi gli istituti tecnici, nell'esercizio della loro autonomia didattica e organizzativa, con funzioni consultive e di proposta per l'organizzazione delle aree di indirizzo e l'utilizzazione degli spazi di autonomia e flessibilità. E' composto da docenti e da esperti del mondo del lavoro, delle professioni e della ricerca scientifica e tecnologica.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 14,
+                "lemma": "Competenze",
+                "definizione": "Comprovata capacità di utilizzare conoscenze, abilità e capacità personali, sociali e/o metodologiche, in situazioni di lavoro o di studio e nello sviluppo professionale e personale. Nel contesto del Quadro Europeo delle Qualifiche le competenze sono descritte in termini di responsabilità e autonomia.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 15,
+                "lemma": "Competenze chiave per l'apprendimento permanente",
+                "definizione": "Combinazione di conoscenze, abilità e attitudini appropriate al contesto. Le competenze chiave sono quelle di cui tutti hanno bisogno per la realizzazione e lo sviluppo personali, la cittadinanza attiva, l'inclusione sociale e l'occupazione.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 18 dicembre 2006 relativa a competenze chiave per l'apprendimento permanente (2006/962/CE)"
+            },
+            {
+                "n": 16,
+                "lemma": "Conoscenze",
+                "definizione": "Risultato dell'assimilazione di informazioni attraverso l'apprendimento. Le conoscenze sono un insieme di fatti, principi, teorie e pratiche relative ad un settore di lavoro o di studio. Nel contesto del Quadro europeo delle qualifiche le conoscenze sono descritte come teoriche e/o pratiche.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 17,
+                "lemma": "Dipartimenti",
+                "definizione": "Strutture innovative di cui possono dotarsi gli istituti tecnici, nell'esercizio della loro autonomia didattica, organizzativa e di ricerca, quali articolazioni funzionali del collegio dei docenti, per il sostegno alla didattica e alla progettazione formativa.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 18,
+                "lemma": "ECVET (European Credit system for Vocational Education and Training)",
+                "definizione": "Sistema europeo di crediti per l'istruzione e la formazione professionale (“ECVET\") inteso ad agevolare il trasferimento, il riconoscimento e l'accumulo dei risultati comprovati dell'apprendimento delle persone interessate ad acquisire una qualifica.",
+                "fonte": "Punto 6 della Raccomandazione del Parlamento europeo e del Consiglio del 18 giugno del 2009 sull'istituzione di un sistema di crediti per l'istruzione e la formazione professionale (ECVET) (2009/C 155/02)"
+            },
+            {
+                "n": 19,
+                "lemma": "EQARF (European Quality Assurance Reference Framework)",
+                "definizione": "Quadro europeo di riferimento per la garanzia della qualità dell'istruzione e della formazione professionale. Strumento di riferimento destinato ad aiutare gli Stati membri a promuovere e a seguire il miglioramento continuo dei loro sistemi di istruzione e formazione professionale sulla base di riferimenti europei comuni, il quale si basa sul QGCQ (quadro comune di garanzia della qualità) e lo sviluppa ulteriormente. Il quadro di riferimento dovrebbe contribuire a migliorare la qualità dell'istruzione e formazione professionale e ad accrescere la trasparenza e la coerenza delle politiche degli Stati membri in materia di istruzione e formazione professionale, favorendo così la fiducia reciproca, la mobilità dei lavoratori e degli studenti e l'apprendimento permanente.",
+                "fonte": "Punto 9 Raccomandazione del Parlamento europeo e del Consiglio del 18 giugno del 2009 sull'istituzione di un quadro europeo di riferimento per la garanzia della qualità dell'istruzione e della formazione professionale (2009/C 155/01)"
+            },
+            {
+                "n": 20,
+                "lemma": "EQF (European Qualification Framework)",
+                "definizione": "\"Quadro europeo delle qualifiche per l'apprendimento permanente. Strumento di riferimento per confrontare i livelli delle qualifiche dei diversi sistemi delle qualifiche e per promuovere sia l'apprendimento permanente sia le pari opportunità nella società basata sulla conoscenza, nonché l'ulteriore integrazione del mercato del lavoro europeo, rispettando al contempo la ricca diversità dei sistemi d'istruzione nazionali.\" Il termine qualifica si riferisce a titoli di studio e qualifiche professionali.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 21,
+                "lemma": "Identità degli istituti tecnici",
+                "definizione": "L'identità degli istituti tecnici è connotata da una solida base culturale a carattere scientifico e tecnologico in linea con le indicazioni dell'Unione europea. Costruita attraverso lo studio, l'approfondimento, l'applicazione di linguaggi e metodologie di carattere generale e specifico, tale identità è espressa da un numero limitato di ampi indirizzi, correlati a settori fondamentali per lo sviluppo economico e produttivo del Paese.",
+                "fonte": "Allegato A: Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 22,
+                "lemma": "Indagine OCSE-PISA",
+                "definizione": "Indagine che riguarda i livelli ottenuti nella capacità di lettura, in matematica e nelle scienze da parte dei quindicenni. Si tratta di statistiche che possono essere considerate uno specchio affidabile del complesso delle “competenze per la società della conoscenza\", dal momento che individuano fasce della popolazione non sufficientemente preparate alle sfide contemporanee o all'apprendimento lungo tutto l'arco della vita.",
+                "fonte": "Comunicazione della Commissione Parametri di riferimento europei per l'istruzione e la formazione: seguito al Consiglio europeo di Lisbona (COM/2002/0629 def.)"
+            },
+            {
+                "n": 23,
+                "lemma": "Linee guida degli istituti tecnici",
+                "definizione": "Il passaggio al nuovo ordinamento è definito da linee guida a sostegno dell'autonomia organizzativa e didattica delle istituzioni scolastiche, anche per quanto concerne l'articolazione in competenze, abilità e conoscenze dei risultati di apprendimento.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 24,
+                "lemma": "Livelli",
+                "definizione": "Il quadro europeo delle qualifiche e dei titoli EQF definisce otto livelli articolati in conoscenze, abilità e competenze. Queste ultime sono progressivamente differenziate in relazione all'acquisizione, da parte dello studente, del grado di autonomia e responsabilità.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 25,
+                "lemma": "Obbligo di istruzione",
+                "definizione": "Istruzione impartita per almeno dieci anni obbligatoria e finalizzata a consentire il conseguimento di un titolo di studio di scuola secondaria superiore o di una qualifica professionale di durata almeno triennale entro il diciottesimo anno di età.",
+                "fonte": "Legge 27 dicembre 2006, n. 296, art 1 comma 622 Decreto 22 agosto 2007 Regolamento recante norme in materia di assolvimento dell'obbligo d'istruzione L'obbligo di istruzione si assolve anche nei percorsi di istruzione e formazione professionale di cui al Capo III del decreto legislativo 17 ottobre 2005, n. 226, e, sino alla completa messa a regime delle disposizioni ivi contenute, anche nei percorsi sperimentali di istruzione e formazione professionale di cui al comma 624 del presente articolo. Fonte Art. 64 del Decreto Legge 25 giugno 2008, n. 112 convertito con modificazioni, dalla Legge 6 agosto 2008, n. 133"
+            },
+            {
+                "n": 26,
+                "lemma": "Opzioni",
+                "definizione": "Ulteriore articolazione delle aree di indirizzo negli spazi di flessibilità in un numero contenuto incluso in un apposito elenco nazionale. Ambiti, criteri e modalità sono definiti, previo parere della Conferenza Stato, Regioni e Province autonome di cui al decreto legislativo 28 agosto 1997, n. 281, con successivo decreto del Ministro dell'istruzione, dell'università e della ricerca di concerto con il Ministro dell'economia e delle finanze.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 27,
+                "lemma": "Organizzazione settoriale internazionale",
+                "definizione": "Associazione di organizzazioni nazionali, anche, ad esempio, di datori di lavoro e organismi professionali, che rappresenta gli interessi di settori nazionali.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 28,
+                "lemma": "PCTO (Percorsi per le Competenze Trasversali e per l'Orientamento)",
+                "definizione": "Modalità di realizzazione dei corsi del secondo ciclo, sia nel sistema dei licei, sia nel sistema dell'istruzione e della formazione professionale, per assicurare ai giovani, oltre alle conoscenze di base, l'acquisizione di competenze spendibili nel mercato del lavoro.",
+                "fonte": "Legge n. 107 del 13 luglio 2015; Legge 30 dicembre 2018, n. 145, articolo 1, comma 785 (Legge di Bilancio per il 2019) percorsi, precedentemente disciplinati dalla Legge n. 107 del 13 luglio 2015 (\"Buona Scuola\")"
+            },
+            {
+                "n": 29,
+                "lemma": "Quadro comune europeo di riferimento per le lingue (Common European Framework of Reference for Languages)",
+                "definizione": "Strumento del Consiglio di Europa per fornire sistemi di validazione delle competenze linguistiche che definisce anche i livelli di competenza secondo una scala di misurazione globale che si sviluppa in 6 livelli comuni di riferimento (dal livello A1, il più basso, al livello C2, il più alto) che viene, utilizzata a livello europeo, per definire il livello di padronanza raggiunto da un apprendente. Fonti http://www.languagepoint.eu/pdf/Tabella%20dei%20livelli%20CEF.pdf http://www.coe.int/T/DG4/Linguistic/CADRE_EN.asp#TopOfPage",
+                "fonte": "Raccomandazione del Consiglio d'Europa sull'uso del Quadro Comune Europeo di Riferimento per le Lingue e la promozione del Plurilinguismo CM/Rec(2008)7E"
+            },
+            {
+                "n": 30,
+                "lemma": "Qualifica",
+                "definizione": "Risultato formale di un processo di valutazione e convalida, acquisito quando l'autorità competente stabilisce che i risultati dell'apprendimento di una persona corrispondono a standard definiti.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 31,
+                "lemma": "Riconoscimento dei risultati di apprendimento",
+                "definizione": "Il processo in cui sono attestati i risultati dell'apprendimento ufficialmente conseguiti attraverso l'attribuzione di unità o qualifiche.",
+                "fonte": "Punto h) All.1 della Raccomandazione del Parlamento europeo e del Consiglio del 18 giugno del 2009 sull'istituzione di un sistema di crediti per l'istruzione e la formazione professionale (ECVET) (2009/C 155/02)"
+            },
+            {
+                "n": 32,
+                "lemma": "Risultati dell'apprendimento",
+                "definizione": "Descrizione di ciò che un discente conosce, capisce ed è in grado di realizzare al termine di un processo di apprendimento. I risultati sono definiti in termini di conoscenze, abilità e competenze.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 33,
+                "lemma": "Settore",
+                "definizione": "Raggruppamento di attività professionali in base a funzione economica, prodotto, servizio o tecnologia principale. Negli istituti tecnici il regolamento prevede due ampi settori: economico e tecnologico; negli istituti professionali il regolamento prevede due grandi settori: dei servizi e industria e artigianato.",
+                "fonte": "Raccomandazione del Parlamento europeo e del Consiglio del 23 aprile 2008 sulla costituzione del Quadro europeo delle qualifiche per l'apprendimento permanente (2008/C 111/01)"
+            },
+            {
+                "n": 34,
+                "lemma": "Spazi di flessibilità",
+                "definizione": "Possibilità di articolare in opzioni le aree di indirizzo di cui agli Allegati B) e C) del Regolamento degli istituti tecnici per corrispondere alle esigenze del territorio e ai fabbisogni formativi espressi dal mondo del lavoro e delle professioni, con riferimento all'orario annuale delle lezioni: entro il 30% nel secondo biennio e il 35% nell'ultimo anno. La citata flessibilità è utilizzata nei limiti delle dotazioni organiche assegnate senza determinare esuberi di personale.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            },
+            {
+                "n": 35,
+                "lemma": "Ufficio tecnico",
+                "definizione": "Ufficio di cui sono dotati gli istituti tecnici del settore tecnologico, con il compito di sostenere la migliore organizzazione e funzionalità dei laboratori a fini didattici e il loro adeguamento in relazione alle esigenze poste dall'innovazione tecnologica, nonché per la sicurezza delle persone e dell'ambiente.",
+                "fonte": "Regolamento recante norme concernenti il riordino degli istituti tecnici ai sensi dell'articolo 64, comma 4, del decreto legge 25 giugno 2008, n. 112, convertito dalla legge 6 agosto 2008, n. 133, emanato dal Presidente della Repubblica in data 15 marzo 2010."
+            }
+        ],
+        "sortable": true,
+        "searchable": true
+    }
+]

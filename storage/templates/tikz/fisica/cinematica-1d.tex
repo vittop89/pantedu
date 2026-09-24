@@ -1,0 +1,681 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usetikzlibrary{arrows.meta}
+
+\pagestyle{empty}
+
+% ==================================================
+% CINEMATICA 1D MODULARE
+% ==================================================
+% Una figura = più RIGHE (istanti) impilate in verticale. Ogni riga ha
+% titolo, tempo, un asse x e gli elementi elencati con i comandi \Set...
+%
+%   \begin{MotionRow}{indice}{mostra}{titolo}{tempo}
+%     \KinSet{...}  \tikzset{kin ...}   (facoltativi: valgono solo per la riga)
+%     \SetObjects{...} \SetVectors{...} \SetTicks{...} ...
+%   \end{MotionRow}
+%
+% indice: 0 = prima riga in alto, 1 = seconda, ...  (y = -indice * row spacing)
+% mostra: 1 = disegna, 0 = nascondi (lo spazio della riga resta)
+%
+% Tutto ciò che si imposta FUORI dalle righe vale per l'intera figura;
+% DENTRO una riga vale solo per quella riga.
+%
+% Campi delle liste: separati da /, elementi separati da virgola.
+% Un campo che contiene una virgola o una / va tra graffe: {red, dashed}.
+% Un campo lasciato vuoto prende il valore predefinito (dove indicato);
+% un campo di soli spazi vale come vuoto, e gli spazi attorno alle / non
+% contano (si possono allineare le colonne). Una virgola dopo l'ultimo
+% elemento è ammessa. Ogni elemento ha tutti i suoi campi, fino a
+% «mostra» (l'ultimo, 0 o 1): con una / in più o in meno la compilazione
+% si ferma con un errore che nomina la lista e l'elemento.
+%
+% Più vettori sullo stesso corpo (es. velocità e accelerazione): basta
+% elencarli, senza spostamenti. Nello stesso verso si impilano da soli,
+% lontano dall'asse (sopra un corpo che sta sopra l'asse, sotto uno che
+% sta sotto), ognuno «vector gap» (12pt: la punta è larga 9pt) oltre il
+% precedente; l'etichetta del corpo, se sta da quella parte, si sposta
+% oltre la pila. In versi opposti restano alla stessa altezza. Ogni
+% vettore in più occupa 12pt: in una figura di più righe, se l'etichetta
+% del corpo arriva alla linea di separazione, aumenta row spacing (3.4).
+% Un vettore con uno spostamento scritto nel suo stile ({yshift=...})
+% resta fuori dalla pila: lo metti tu, dove dice lo spostamento.
+% Un vettore di componente 0 non ha freccia; la sua etichetta (se c'è)
+% va accanto al corpo dal lato libero: a destra, o a sinistra se a destra
+% parte già un vettore. Più etichette nulle dello stesso corpo si mettono
+% in fila (es. «v=0  a=0»). Il campo posizione le mette dove vuoi.
+% Le distanze delle etichette dei corpi e dei vettori nulli (above=2pt,
+% right=5pt, ...) sono tarate sul raggio 0.1: con un raggio più grande
+% l'etichetta si allontana da sola della differenza, e resta fuori.
+% Un vettore più corto di «short vector» (0.6) ha la punta accorciata al
+% 70% della sua lunghezza (stile «kin short vector»: se cambi la punta in
+% «kin vector», cambiala anche lì), così non sporge dietro al corpo. Un
+% vettore che esce dal pallino meno di 0.05 non si vedrebbe: la
+% compilazione si ferma con un errore (per un corpo fermo: componente 0).
+% Una quota va dentro la sua riga: y fra -row spacing/2 e +row spacing/2
+% (con 2.5: fra -1.25 e 1.25, dove sta la linea di separazione). Dalla
+% seconda riga in giù, con la separazione accesa, una quota su quella
+% linea o sopra ferma la compilazione con un errore. Nelle righe
+% d'esempio c'è posto fra l'asse e i corpi (y=0.4) o sotto l'ultima riga.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri numerici e testi (si cambiano con \KinSet{chiave=valore, ...})
+\pgfkeys{
+  /kin/.is family, /kin,
+  % impaginazione delle righe
+  row spacing/.initial=2.5,     % distanza verticale fra le righe
+  x title/.initial=-12,         % ascissa del titolo della riga
+  x time/.initial=-6.5,         % ascissa del tempo
+  x drawing/.initial=1,         % spostamento orizzontale del disegno
+  separator/.initial=1,         % 1 = linea tratteggiata fra le righe
+  separator start/.initial=-13, % estremi della linea di separazione
+  separator end/.initial=5,
+  % asse
+  show axis/.initial=1,
+  axis min/.initial=-3.8,
+  axis max/.initial=4,
+  axis label/.initial={$x(\text{m})$},
+  % tacche
+  show common ticks/.initial=1, % 1 = disegna anche le tacche comuni
+  tick down/.initial=0.1,       % lunghezza della tacca sotto l'asse
+  tick up/.initial=0.2,         % lunghezza della tacca sopra l'asse
+  % corpi
+  object radius/.initial=0.1,
+  object color/.initial=black,
+  % vettori
+  vector gap/.initial=12pt,     % distanza fra vettori impilati sullo stesso
+                                % corpo (negativa = pila verso l'asse)
+  short vector/.initial=0.6,    % sotto questa lunghezza la punta si accorcia
+  % quote
+  measure guides/.initial=1,    % 1 = tratteggio verticale dall'asse alla quota
+}
+\newcommand{\KinSet}[1]{\pgfkeys{/kin/.cd,#1}}
+\newcommand{\kinget}[1]{\pgfkeysvalueof{/kin/#1}}
+
+% Stili grafici (si cambiano con \tikzset{kin ... /.style={...}})
+\tikzset{
+  kin axis/.style={->, thick, black, line width=1pt},
+  kin axis label/.style={right},
+  kin tick/.style={black},
+  kin tick below/.style={below, yshift=2pt},  % testo sotto la tacca
+  kin tick above/.style={left},               % testo sopra la tacca
+  kin vector/.style={-{Latex}, line width=2pt},
+  % punta dei vettori più corti di «short vector»: lunga il 70% del
+  % vettore (\kinTipLength), così non sporge dietro al corpo
+  kin short vector/.style={-{Latex[length=\kinTipLength]}},
+  kin vector label/.style={},
+  kin vector zero/.style={right=5pt},         % etichetta di un vettore nullo
+  kin vector zero left/.style={left=5pt},     % ... quando a destra c'è un vettore
+  kin object/.style={},
+  kin object label/.style={},
+  kin title/.style={anchor=west, font=\bfseries},
+  kin time/.style={anchor=west, font=\Large},
+  kin separator/.style={dashed, gray},
+  kin measure/.style={<->, >={Latex}, thin},
+  kin measure guide/.style={dashed, gray, thin},
+  kin segment/.style={thick},
+  kin label/.style={},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- dati (vuoti per default) ---
+\newcommand{\SetCommonTicks}[1]{\def\KinCommonTicksData{#1}}
+\newcommand{\SetTicks}[1]{\def\KinTicksData{#1}}
+\newcommand{\SetObjects}[1]{\def\KinObjectsData{#1}}
+\newcommand{\SetVectors}[1]{\def\KinVectorsData{#1}}
+\newcommand{\SetMeasures}[1]{\def\KinMeasuresData{#1}}
+\newcommand{\SetSegments}[1]{\def\KinSegmentsData{#1}}
+\newcommand{\SetLabels}[1]{\def\KinLabelsData{#1}}
+
+\SetCommonTicks{}
+\SetTicks{}
+\SetObjects{}
+\SetVectors{}
+\SetMeasures{}
+\SetSegments{}
+\SetLabels{}
+
+% --- utilità ---
+% \kinIfEmpty{\macro}{se vuota}{se piena}
+\newcommand{\kinIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \kinDefault{\macro}{valore}: se \macro è vuota le assegna il valore
+\newcommand{\kinDefault}[2]{\kinIfEmpty{#1}{\edef#1{#2}}{}}
+% \kinStyle{nome}{\campo}: trasforma il contenuto di un campo (anche
+% con più opzioni separate da virgola) nello stile TikZ «nome»
+\newcommand{\kinStyle}[2]{\expandafter\kinStyleAux\expandafter{#2}{#1}}
+\newcommand{\kinStyleAux}[2]{\tikzset{#2/.style={#1}}}
+% \kinTrim{\a\b\c}: toglie a ogni campo gli spazi in testa e in coda e,
+% se il campo è tutto fra graffe, le graffe: « red » vale «red», « » e
+% « {} » valgono vuoto
+\ExplSyntaxOn
+\cs_new_protected:Npn \kinTrim #1 { \tl_map_function:nN {#1} \kin_trim:N }
+\cs_new_protected:Npn \kin_trim:N #1
+  {
+    \tl_trim_spaces:N #1
+    \tl_if_single:NT #1
+      {
+        \exp_args:No \tl_if_head_is_group:nT {#1}
+          {
+            \tl_set:Nx #1 { \exp_args:No \tl_head:n {#1} }
+            \tl_trim_spaces:N #1
+          }
+      }
+  }
+% \kinIfNumber{\macro}{se è un intero}{se no}
+\cs_new_protected:Npn \kinIfNumber #1#2#3
+  { \exp_args:NnV \regex_match:nnTF { \A \d+ \Z } #1 {#2} {#3} }
+% \kinIfIn{\macro}{testo}{se lo contiene}{se no}
+\cs_new_protected:Npn \kinIfIn #1#2#3#4 { \tl_if_in:NnTF #1 {#2} {#3} {#4} }
+\ExplSyntaxOff
+% \kinIfShow{\mostra}{\penultimo}{\primo}{lista e campi}{codice}:
+% esegue il codice se mostra è 1 (o più). Un elemento vuoto (una virgola
+% in fondo alla lista, o due virgole di fila) si salta. Una / in più o
+% in meno si riconosce così: con una / in più il campo mostra non è un
+% numero; con una / in meno \foreach ripete l'ultimo valore, e il
+% penultimo campo è uguale a mostra. In tutti e due i casi: errore in
+% italiano che nomina la lista e l'elemento.
+\newcommand{\kinIfShow}[5]{%
+  \kinIfEmpty{#1}{%
+    \kinIfEmpty{#3}{}{\kinFieldError{#4}{#3}{#2}{#1}}%
+  }{%
+    \kinIfNumber{#1}{%
+      \ifx#1#2\kinFieldError{#4}{#3}{#2}{#1}\else\ifnum#1>0 #5\fi\fi
+    }{\kinFieldError{#4}{#3}{#2}{#1}}%
+  }}
+% \kinFieldError{lista e campi}{\primo}{\penultimo}{\mostra}
+\newcommand{\kinFieldError}[4]{%
+  \PackageError{cinematica}{#1\MessageBreak
+    l'elemento che comincia con '\detokenize\expandafter{#2}'
+    ha una / in piu' o in meno:\MessageBreak
+    gli ultimi due campi valgono '\detokenize\expandafter{#3}' e
+    '\detokenize\expandafter{#4}',\MessageBreak
+    ma l'ultimo deve essere mostra (0 o 1) e il penultimo
+    un altro campo.\MessageBreak I decimali vanno con il punto (1.5): la
+    virgola separa gli elementi}{}}
+% contatori per riga e per corpo: \kinCount{nome} (0 se non c'è),
+% \kinStep{nome} (aggiunge 1)
+\newcommand{\kinCount}[1]{\ifcsname #1\endcsname\csname #1\endcsname\else 0\fi}
+\newcommand{\kinStep}[1]{%
+  \edef\kinTmp{\the\numexpr\kinCount{#1}+1\relax}%
+  \expandafter\xdef\csname #1\endcsname{\kinTmp}}
+\newcount\kinRowCount
+\newcount\kinZeroCount
+% \kinToPt{lunghezza}{\macro}: la lunghezza in pt, senza unità; un
+% numero senza unità vale in cm, come nelle coordinate TikZ
+\newcommand{\kinToPt}[2]{%
+  \pgfmathparse{#1}%
+  \ifpgfmathunitsdeclared\else\pgfmathparse{\pgfmathresult*28.45274}\fi
+  \let#2\pgfmathresult}
+% \kinRadiusSep{raggio}: stile «kin tmp sep», che allontana un'etichetta
+% dal centro del corpo di quanto il raggio supera 0.1 (le distanze
+% predefinite delle etichette sono tarate sul raggio 0.1)
+\newcommand{\kinRadiusSep}[1]{%
+  \kinToPt{#1}{\kinRPt}%
+  \pgfmathsetmacro{\kinExtra}{max(0,\kinRPt-2.845274)}%
+  \ifdim\kinExtra pt>0pt
+    \edef\kinTmp{\noexpand\tikzset{kin tmp sep/.style={%
+      outer sep={.5\noexpand\pgflinewidth+\kinExtra pt}}}}\kinTmp
+  \else
+    \tikzset{kin tmp sep/.style={}}%
+  \fi}
+% \kinStackStyle{livello}{verso}: stile «kin tmp stack», spostamento del
+% livello-esimo vettore impilato sullo stesso corpo; verso = 1 per un
+% corpo sopra l'asse (la pila sale), -1 per uno sotto (la pila scende)
+\newcommand{\kinStackStyle}[2]{%
+  \ifnum#1>0
+    \pgfmathsetlengthmacro{\kinShift}{(#1)*(#2)*(\kinget{vector gap})}%
+    \edef\kinTmp{\noexpand\tikzset{kin tmp stack/.style={yshift=\kinShift}}}\kinTmp
+  \else
+    \tikzset{kin tmp stack/.style={}}%
+  \fi}
+% Le due sonde qui sotto applicano uno stile dentro una scatola che poi
+% si butta: leggono che cosa fa lo stile senza disegnare niente.
+\newbox\kinProbeBox
+% \kinMovesOf{stile}: \kinMoves = 1 se lo stile sposta (xshift, yshift,
+% shift, rotate, ...), 0 se no: un vettore con uno spostamento suo non
+% entra nella pila automatica
+\newcommand{\kinMovesOf}[1]{%
+  \setbox\kinProbeBox\hbox{%
+    \expandafter\let\csname tikz@transform\endcsname\empty
+    \tikzset{#1}%
+    \expandafter\ifx\csname tikz@transform\endcsname\empty
+      \gdef\kinMoves{0}\else\gdef\kinMoves{1}\fi}}
+% \kinAnchorOf{stile}: \kinAnchor = l'ancora che lo stile dà a
+% un'etichetta (south = sta sopra il punto, north = sotto, ...)
+\newcommand{\kinAnchorOf}[1]{%
+  \setbox\kinProbeBox\hbox{%
+    \expandafter\def\csname tikz@anchor\endcsname{center}%
+    \tikzset{#1}%
+    \xdef\kinAnchor{\csname tikz@anchor\endcsname}}}
+\def\kinTickFields{\string\SetTicks: x/testo sotto/testo sopra/stile/mostra}
+\def\kinSegFields{\string\SetSegments: x1/y1/x2/y2/stile/mostra}
+\def\kinObjFields{\string\SetObjects:
+  nome/x/y/colore/raggio/etichetta/posizione/mostra}
+\def\kinVecFields{\string\SetVectors:
+  corpo/componente x/colore/stile/etichetta/posizione/mostra}
+\def\kinMeasFields{\string\SetMeasures:
+  x1/x2/y/etichetta/posizione/stile/mostra}
+\def\kinLabFields{\string\SetLabels: x/y/testo/opzioni/mostra}
+
+% --- disegno di una lista di tacche: x/testo sotto/testo sopra/stile/mostra ---
+\newcommand{\kinDrawTicks}[1]{%
+  \kinIfEmpty{#1}{}{%
+    \foreach \tx/\tbelow/\tabove/\tstyle/\tshow in #1 {
+      \kinTrim{\tx\tbelow\tabove\tstyle\tshow}%
+      \kinIfShow{\tshow}{\tstyle}{\tx}{\kinTickFields}{%
+        \kinStyle{kin tmp}{\tstyle}
+        \draw[kin tick, kin tmp] (\tx,-\kinget{tick down})
+          node[kin tick below] {\tbelow}
+          -- (\tx,\kinget{tick up})
+          node[kin tick above] {\tabove};
+      }%
+    }%
+  }%
+}
+
+% --- contenuto di una riga ---
+\newcommand{\KinRenderRow}{%
+  % numero unico della riga disegnata (per le tabelle dei corpi)
+  \global\advance\kinRowCount by 1
+  \edef\KinRowId{\the\kinRowCount}%
+  % asse
+  \ifnum\kinget{show axis}>0
+    \draw[kin axis] (\kinget{axis min},0) -- (\kinget{axis max},0)
+      node[kin axis label] {\kinget{axis label}};
+  \fi
+  % tacche comuni e della riga
+  \ifnum\kinget{show common ticks}>0
+    \kinDrawTicks{\KinCommonTicksData}
+  \fi
+  \kinDrawTicks{\KinTicksData}
+
+  % segmenti liberi: x1/y1/x2/y2/stile/mostra
+  \kinIfEmpty{\KinSegmentsData}{}{%
+    \foreach \sxa/\sya/\sxb/\syb/\sstyle/\sshow in \KinSegmentsData {
+      \kinTrim{\sxa\sya\sxb\syb\sstyle\sshow}%
+      \kinIfShow{\sshow}{\sstyle}{\sxa}{\kinSegFields}{%
+        \kinStyle{kin tmp}{\sstyle}
+        \draw[kin segment, kin tmp] (\sxa,\sya) -- (\sxb,\syb);
+      }%
+    }%
+  }
+
+  % corpi, prima passata: coordinate, colori e raggi (servono ai vettori)
+  % nome/x/y/colore/raggio/etichetta/posizione etichetta/mostra
+  \kinIfEmpty{\KinObjectsData}{}{%
+    \foreach \oname/\ox/\oy/\ocolor/\oradius/\olabel/\opos/\oshow in \KinObjectsData {
+      \kinTrim{\oname\ox\oy\ocolor\oradius\olabel\opos\oshow}%
+      \kinIfShow{\oshow}{\opos}{\oname}{\kinObjFields}{%
+        \kinDefault{\ocolor}{\kinget{object color}}
+        \kinDefault{\oradius}{\kinget{object radius}}
+        \coordinate (\oname) at (\ox,\oy);
+        \expandafter\xdef\csname kin@col@\KinRowId @\oname\endcsname{\ocolor}
+        \expandafter\xdef\csname kin@x@\KinRowId @\oname\endcsname{\ox}
+        \expandafter\xdef\csname kin@y@\KinRowId @\oname\endcsname{\oy}
+        \expandafter\xdef\csname kin@r@\KinRowId @\oname\endcsname{\oradius}
+        % verso della pila dei vettori: lontano dall'asse
+        \pgfmathtruncatemacro{\kinSign}{\oy<0 ? -1 : 1}%
+        \expandafter\xdef\csname kin@s@\KinRowId @\oname\endcsname{\kinSign}
+      }%
+    }%
+  }
+
+  % vettori: corpo/componente x/colore/stile/etichetta/posizione/mostra
+  % colore vuoto = colore del corpo; posizione vuota = a destra o a
+  % sinistra secondo il verso. Più vettori dello stesso corpo nello
+  % stesso verso si impilano da soli, lontano dall'asse, a distanza
+  % «vector gap»; uno spostamento nello stile ({yshift=-12pt}) toglie il
+  % vettore dalla pila e lo mette dove dice lo spostamento.
+  % Componente 0 = nessuna freccia, ma l'etichetta (se c'è) resta: dove
+  % dice il campo posizione o, se è vuoto, accanto al corpo dal lato
+  % libero (stili «kin vector zero» e «kin vector zero left»), in fila
+  % con le altre etichette nulle dello stesso corpo.
+  % Prima passata: per ogni corpo, quanti vettori non nulli partono verso
+  % destra (nr) e verso sinistra (nl), e quanti di questi entrano nella
+  % pila perché non hanno uno spostamento proprio nello stile (sr, sl):
+  % servono a scegliere il lato libero e a spostare l'etichetta del corpo
+  % oltre la pila.
+  \kinIfEmpty{\KinVectorsData}{}{%
+    \foreach \vobj/\vdx/\vcolor/\vstyle/\vlabel/\vpos/\vshow in \KinVectorsData {
+      \kinTrim{\vobj\vdx\vcolor\vstyle\vlabel\vpos\vshow}%
+      \kinIfShow{\vshow}{\vpos}{\vobj}{\kinVecFields}{%
+        \expandafter\ifx\csname kin@x@\KinRowId @\vobj\endcsname\relax\else
+          \kinIfEmpty{\vdx}{%
+            \PackageError{cinematica}{Vettore del corpo '\vobj': manca la
+              componente x\MessageBreak (per un vettore nullo scrivi 0)}{}%
+            \def\vdx{0}}{}%
+          \pgfmathtruncatemacro{\kinDir}{sign(\vdx)}%
+          \kinStyle{kin tmp}{\vstyle}%
+          \kinMovesOf{kin tmp}%
+          \ifnum\kinDir>0 \kinStep{kin@nr@\KinRowId @\vobj}%
+            \ifnum\kinMoves=0 \kinStep{kin@sr@\KinRowId @\vobj}\fi\fi
+          \ifnum\kinDir<0 \kinStep{kin@nl@\KinRowId @\vobj}%
+            \ifnum\kinMoves=0 \kinStep{kin@sl@\KinRowId @\vobj}\fi\fi
+        \fi
+      }%
+    }%
+  }
+  % seconda passata: le frecce, e le etichette nulle con la posizione scritta
+  \kinIfEmpty{\KinVectorsData}{}{%
+    \foreach \vobj/\vdx/\vcolor/\vstyle/\vlabel/\vpos/\vshow in \KinVectorsData {
+      \kinTrim{\vobj\vdx\vcolor\vstyle\vlabel\vpos\vshow}%
+      \kinIfShow{\vshow}{\vpos}{\vobj}{\kinVecFields}{%
+        \expandafter\ifx\csname kin@x@\KinRowId @\vobj\endcsname\relax
+          \PackageError{cinematica}{Vettore: il corpo '\vobj' non c'e' in
+            \string\SetObjects\space di questa riga (o ha mostra=0)}{}%
+        \else
+          \edef\kinVX{\csname kin@x@\KinRowId @\vobj\endcsname}%
+          \edef\kinVY{\csname kin@y@\KinRowId @\vobj\endcsname}%
+          \kinIfEmpty{\vcolor}{%
+            \edef\vcolor{\csname kin@col@\KinRowId @\vobj\endcsname}}{}%
+          \kinStyle{kin tmp}{\vstyle}%
+          \pgfmathtruncatemacro{\kinDir}{sign(\vdx)}%
+          \ifnum\kinDir=0
+            % vettore nullo con la posizione scritta: l'etichetta lì
+            \kinIfEmpty{\vlabel}{}{\kinIfEmpty{\vpos}{}{%
+              \kinRadiusSep{\csname kin@r@\KinRowId @\vobj\endcsname}%
+              \kinStyle{kin tmp pos}{\vpos}%
+              \node[\vcolor, kin tmp, kin tmp pos, kin tmp sep, kin vector label]
+                at (\kinVX,\kinVY) {\vlabel};%
+            }}%
+          \else
+            % livello nella pila dei vettori del corpo in questo verso; un
+            % vettore con uno spostamento suo nello stile resta fuori
+            \ifnum\kinDir>0 \def\kinSide{r}\else\def\kinSide{l}\fi
+            \kinMovesOf{kin tmp}%
+            \ifnum\kinMoves=0
+              \edef\kinLevel{\kinCount{kin@k\kinSide @\KinRowId @\vobj}}%
+              \kinStep{kin@k\kinSide @\KinRowId @\vobj}%
+            \else
+              \def\kinLevel{0}%
+            \fi
+            \kinStackStyle{\kinLevel}{\csname kin@s@\KinRowId @\vobj\endcsname}%
+            % l'etichetta del primo vettore verso destra ha un nome: se il
+            % corpo ha vettori da tutte e due le parti, le etichette nulle
+            % si mettono in fila dopo di lei
+            \tikzset{kin tmp name/.style={}}%
+            \if r\kinSide
+              \ifcsname kin@fr@\KinRowId @\vobj\endcsname\else
+                \expandafter\gdef\csname kin@fr@\KinRowId @\vobj\endcsname{}%
+                \edef\kinTmp{\noexpand\tikzset{kin tmp name/.style={%
+                  name=kin vlab \KinRowId\space\vobj}}}\kinTmp
+              \fi
+            \fi
+            \kinIfEmpty{\vpos}{%
+              \ifnum\kinDir<0 \def\vpos{left=1pt}\else\def\vpos{right=1pt}\fi}{}%
+            \kinStyle{kin tmp pos}{\vpos}%
+            \kinToPt{abs(\vdx)}{\kinLen}%
+            % un vettore che esce dal pallino meno di 0.05 non si vedrebbe
+            \kinToPt{\csname kin@r@\KinRowId @\vobj\endcsname}{\kinRPt}%
+            \pgfmathtruncatemacro{\kinHidden}{\kinLen<\kinRPt+1.4226}%
+            \ifnum\kinHidden>0
+              \PackageError{cinematica}{Vettore del corpo '\vobj': la
+                componente \vdx\space e' troppo corta,\MessageBreak la freccia
+                resterebbe sotto il pallino (raggio
+                \csname kin@r@\KinRowId @\vobj\endcsname).\MessageBreak
+                Allungala, rimpicciolisci il corpo, oppure usa la componente
+                0\MessageBreak (vettore nullo: resta solo l'etichetta)}{}%
+            \fi
+            % vettore corto: punta al 70% della lunghezza
+            \pgfmathtruncatemacro{\kinShort}{\kinLen<(\kinget{short vector})*28.45274}%
+            \ifnum\kinShort>0
+              \pgfmathsetmacro{\kinTipLength}{0.7*\kinLen}%
+              \edef\kinTipLength{\kinTipLength pt}%
+              \tikzset{kin tmp short/.style={kin short vector}}%
+            \else
+              \tikzset{kin tmp short/.style={}}%
+            \fi
+            \draw[kin vector, kin tmp short, \vcolor, kin tmp, kin tmp stack]
+              (\kinVX,\kinVY) -- ++(\vdx,0)
+              node[pos=1, kin tmp pos, kin vector label, kin tmp name] {\vlabel};
+          \fi
+        \fi
+      }%
+    }%
+  }
+  % terza passata: le etichette nulle senza posizione, in fila dal lato
+  % libero: a destra se nessun vettore parte a destra, altrimenti a
+  % sinistra; con vettori da tutte e due le parti, dopo l'etichetta del
+  % primo vettore verso destra
+  \kinIfEmpty{\KinVectorsData}{}{%
+    \foreach \vobj/\vdx/\vcolor/\vstyle/\vlabel/\vpos/\vshow in \KinVectorsData {
+      \kinTrim{\vobj\vdx\vcolor\vstyle\vlabel\vpos\vshow}%
+      \kinIfShow{\vshow}{\vpos}{\vobj}{\kinVecFields}{%
+        \expandafter\ifx\csname kin@x@\KinRowId @\vobj\endcsname\relax\else
+          \pgfmathtruncatemacro{\kinDir}{sign(\vdx)}%
+          \ifnum\kinDir=0 \kinIfEmpty{\vlabel}{}{\kinIfEmpty{\vpos}{%
+            \edef\kinVX{\csname kin@x@\KinRowId @\vobj\endcsname}%
+            \edef\kinVY{\csname kin@y@\KinRowId @\vobj\endcsname}%
+            \kinIfEmpty{\vcolor}{%
+              \edef\vcolor{\csname kin@col@\KinRowId @\vobj\endcsname}}{}%
+            \kinStyle{kin tmp}{\vstyle}%
+            \edef\kinNR{\kinCount{kin@nr@\KinRowId @\vobj}}%
+            \edef\kinNL{\kinCount{kin@nl@\KinRowId @\vobj}}%
+            \def\kinSide{r}%
+            \ifnum\kinNR>0 \ifnum\kinNL=0 \def\kinSide{l}\fi\fi
+            \global\advance\kinZeroCount by 1
+            \edef\kinZeroName{kin zero \the\kinZeroCount}%
+            % dopo che cosa si mette in fila: l'etichetta nulla precedente
+            % dello stesso corpo, o l'etichetta del primo vettore a destra
+            \let\kinPrev\relax
+            \ifcsname kin@zl@\KinRowId @\vobj\endcsname
+              \edef\kinPrev{\csname kin@zl@\KinRowId @\vobj\endcsname}%
+            \else
+              \ifnum\kinNR>0 \ifnum\kinNL>0
+                \edef\kinPrev{kin vlab \KinRowId\space\vobj}%
+              \fi\fi
+            \fi
+            \ifx\kinPrev\relax
+              % la prima: accanto al corpo
+              \kinRadiusSep{\csname kin@r@\KinRowId @\vobj\endcsname}%
+              \if r\kinSide \def\kinZeroSide{kin vector zero}%
+              \else \def\kinZeroSide{kin vector zero left}\fi
+              \node[\vcolor, kin tmp, \kinZeroSide, kin tmp sep, kin vector label]
+                (\kinZeroName) at (\kinVX,\kinVY) {\vlabel};%
+            \else
+              \if r\kinSide
+                \node[\vcolor, kin tmp, kin vector label, anchor=base west]
+                  (\kinZeroName) at (\kinPrev.base east) {\vlabel};%
+              \else
+                \node[\vcolor, kin tmp, kin vector label, anchor=base east]
+                  (\kinZeroName) at (\kinPrev.base west) {\vlabel};%
+              \fi
+            \fi
+            \expandafter\xdef\csname kin@zl@\KinRowId @\vobj\endcsname{\kinZeroName}%
+          }{}}\fi
+        \fi
+      }%
+    }%
+  }
+
+  % corpi, seconda passata: pallini ed etichette sopra i vettori
+  \kinIfEmpty{\KinObjectsData}{}{%
+    \foreach \oname/\ox/\oy/\ocolor/\oradius/\olabel/\opos/\oshow in \KinObjectsData {
+      \kinTrim{\oname\ox\oy\ocolor\oradius\olabel\opos\oshow}%
+      \kinIfShow{\oshow}{\opos}{\oname}{\kinObjFields}{%
+        \kinDefault{\ocolor}{\kinget{object color}}
+        \kinDefault{\oradius}{\kinget{object radius}}
+        % posizione vuota: sopra un corpo sopra l'asse, sotto uno sotto
+        \ifnum\csname kin@s@\KinRowId @\oname\endcsname<0
+          \kinDefault{\opos}{below=2pt}\else\kinDefault{\opos}{above=2pt}\fi
+        \kinStyle{kin tmp pos}{\opos}
+        \kinRadiusSep{\oradius}%
+        % con una pila di vettori, l'etichetta che sta dalla parte della
+        % pila si sposta oltre di essa
+        \tikzset{kin tmp push/.style={}}%
+        \edef\kinSR{\kinCount{kin@sr@\KinRowId @\oname}}%
+        \edef\kinSL{\kinCount{kin@sl@\KinRowId @\oname}}%
+        \pgfmathtruncatemacro{\kinTop}{max(\kinSR,\kinSL)-1}%
+        \ifnum\kinTop>0
+          \pgfmathsetlengthmacro{\kinPush}{\kinTop
+            *\csname kin@s@\KinRowId @\oname\endcsname*(\kinget{vector gap})}%
+          \kinAnchorOf{kin tmp pos}%
+          \edef\kinTmp{\noexpand\tikzset{kin tmp push/.style={yshift=\kinPush}}}%
+          \ifdim\kinPush>0pt \kinIfIn{\kinAnchor}{south}{\kinTmp}{}\fi
+          \ifdim\kinPush<0pt \kinIfIn{\kinAnchor}{north}{\kinTmp}{}\fi
+        \fi
+        \filldraw[\ocolor, kin object] (\oname) circle (\oradius)
+          node[text=\ocolor, kin tmp pos, kin tmp sep, kin tmp push,
+               kin object label] {\olabel};
+      }%
+    }%
+  }
+
+  % quote (distanze): x1/x2/y/etichetta/posizione/stile/mostra
+  \kinIfEmpty{\KinMeasuresData}{}{%
+    \foreach \mxa/\mxb/\my/\mlabel/\mpos/\mstyle/\mshow in \KinMeasuresData {
+      \kinTrim{\mxa\mxb\my\mlabel\mpos\mstyle\mshow}%
+      \kinIfShow{\mshow}{\mstyle}{\mxa}{\kinMeasFields}{%
+        % una quota sulla linea di separazione, o sopra, sta nella riga
+        % precedente: meglio fermarsi che disegnarla lì
+        \ifnum\KinRowIndex>0 \ifnum\kinget{separator}>0
+          \pgfmathtruncatemacro{\kinOut}{\my>=0.5*\kinget{row spacing}}%
+          \ifnum\kinOut>0
+            \PackageError{cinematica}{Quota: y=\my\space e' sulla linea di
+              separazione (a meta' di row spacing)\MessageBreak o sopra,
+              nella riga precedente. Abbassala (fra l'asse e i corpi,
+              es. y=0.4)\MessageBreak o aumenta row spacing}{}%
+          \fi
+        \fi\fi
+        \kinDefault{\mpos}{above}
+        \kinStyle{kin tmp}{\mstyle}
+        \kinStyle{kin tmp pos}{\mpos}
+        \ifnum\kinget{measure guides}>0
+          \draw[kin measure guide] (\mxa,0) -- (\mxa,\my);
+          \draw[kin measure guide] (\mxb,0) -- (\mxb,\my);
+        \fi
+        \draw[kin measure, kin tmp] (\mxa,\my) -- (\mxb,\my)
+          node[midway, kin tmp pos] {\mlabel};
+      }%
+    }%
+  }
+
+  % etichette libere: x/y/testo/opzioni/mostra
+  \kinIfEmpty{\KinLabelsData}{}{%
+    \foreach \lx/\ly/\ltext/\lstyle/\lshow in \KinLabelsData {
+      \kinTrim{\lx\ly\ltext\lstyle\lshow}%
+      \kinIfShow{\lshow}{\lstyle}{\lx}{\kinLabFields}{%
+        \kinStyle{kin tmp}{\lstyle}
+        \node[kin label, kin tmp] at (\lx,\ly) {\ltext};
+      }%
+    }%
+  }
+}
+
+% --- la riga: {indice}{mostra}{titolo}{tempo} ---
+\newenvironment{MotionRow}[4]{%
+  \begin{scope}
+  \def\KinRowIndex{#1}%
+  \def\KinRowShow{#2}%
+  \def\KinRowTitle{#3}%
+  \def\KinRowTime{#4}%
+}{%
+  \ifnum\KinRowShow>0
+    \pgfmathsetmacro{\kinY}{-\KinRowIndex*\kinget{row spacing}}
+    \ifnum\KinRowIndex>0
+      \ifnum\kinget{separator}>0
+        \pgfmathsetmacro{\kinYLine}{\kinY+0.5*\kinget{row spacing}}
+        \draw[kin separator] (\kinget{separator start},\kinYLine)
+          -- (\kinget{separator end},\kinYLine);
+      \fi
+    \fi
+    \node[kin title] at (\kinget{x title},\kinY) {\KinRowTitle};
+    \node[kin time] at (\kinget{x time},\kinY) {\KinRowTime};
+    \begin{scope}[shift={(\kinget{x drawing},\kinY)}]
+      \KinRenderRow
+    \end{scope}
+  \fi
+  \end{scope}
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTA LA FIGURA ============
+  % (ogni chiave si può anche ridefinire dentro una singola riga)
+  \KinSet{
+    row spacing=2.5,
+    x title=-12, x time=-6.5, x drawing=1,
+    separator=1, separator start=-13, separator end=5,
+    axis min=-3.8, axis max=4, axis label={$x(\text{m})$},
+  }
+  % stili: \tikzset{kin vector/.style={-{Latex}, line width=1.5pt}}
+
+  % tacche comuni a tutte le righe: x/testo sotto/testo sopra/stile/mostra
+  \SetCommonTicks{-3/$0$/START//1}
+
+  % ============ RIGA 1 ============
+  \begin{MotionRow}{0}{1}{PARTE ALEX}{$t_0=0\,s$}
+    % nome/x/y/colore/raggio/etichetta/posizione/mostra
+    \SetObjects{
+      A/-3/0.6/red//{Alex(A)}/above=2pt/1,
+      B/2/-0.6/blue//{Antonio(B)}/below=2pt/1
+    }
+    % corpo/componente x/colore/stile/etichetta/posizione/mostra
+    \SetVectors{
+      A/1.5///$\vec{v}_A$//1,
+      B/-1///$\vec{v}_B$//1
+    }
+    % x/testo sotto/testo sopra/stile/mostra
+    \SetTicks{0/$s_1$/pausa//1}
+  \end{MotionRow}
+
+  % ============ RIGA 2 ============
+  \begin{MotionRow}{1}{1}{PRIMO STOP}{$t_1=15$ min}
+    \SetObjects{
+      A/1/0.6/red//{Alex(A)}/above=2pt/1,
+      B/1/-0.6/blue//{Antonio(B)}/below=2pt/1
+    }
+    % componente 0: niente freccia; con un'etichetta, l'etichetta resta
+    % accanto al corpo (qui vuota: al primo stop non si scrive niente)
+    \SetVectors{
+      A/0///{}//1,
+      B/0///{}//1
+    }
+    \SetTicks{1/$s_1$/pausa//1}
+  \end{MotionRow}
+
+  % ============ RIGA 3 ============
+  \begin{MotionRow}{2}{1}{RIPARTENZA}{$t_p=18$ min}
+    \SetObjects{
+      A/1/0.6/red//{Alex(A)}/above=2pt/1,
+      B/1/-0.6/blue//{Antonio(B)}/below=2pt/1
+    }
+    \SetVectors{
+      A/1.5///$\vec{v}_A$//1,
+      B/1///$\vec{v}_B$//1
+    }
+    \SetTicks{1/$s_p$/pausa//1}
+  \end{MotionRow}
+
+  % ============ RIGA 4 ============
+  \begin{MotionRow}{3}{1}{TRAGUARDO}{$t_2=?$ min}
+    \SetObjects{
+      A/3/0.6/red//{Alex(A)}/above=2pt/1,
+      B/2/-0.6/blue//{Antonio(B)}/below=2pt/1
+    }
+    \SetVectors{
+      A/1.5///$\vec{v}_A$//1,
+      B/1///$\vec{v}_B$//1
+    }
+    \SetTicks{
+      2/$s'_2$///1,
+      3/$s_2$///1,
+      1/$s_1$/pausa//1
+    }
+    % x1/x2/y/etichetta/posizione/stile/mostra (mostra=1 per vederla)
+    \SetMeasures{-3/3/0.4/$\Delta x_A$///0}
+  \end{MotionRow}
+
+\end{tikzpicture}
+\end{document}

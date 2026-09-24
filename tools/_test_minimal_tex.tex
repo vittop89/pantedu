@@ -1,0 +1,27 @@
+% Test minimal: verifica enumitem v3.x supporta \setlist[ENV,LEVEL]{label=X}
+% nel preambolo. Compila con `pdflatex _test_minimal_tex.tex`.
+% Output atteso (PDF):
+%   a. f
+%       i. sdf
+%      ii. sdfsd
+%           1. dfsd b
+\documentclass{article}
+\usepackage{enumitem}
+\begin{document}
+
+\begingroup
+\setlist[enumerate,2]{label=\roman*.}
+\setlist[enumerate,3]{label=\arabic*.}
+\begin{enumerate}[label=\alph*.]
+\item f
+\begin{enumerate}
+\item sdf
+\item sdfsd
+\begin{enumerate}
+\item dfsd b
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\endgroup
+
+\end{document}

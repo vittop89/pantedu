@@ -1,0 +1,22 @@
+{
+    "$id": "rendicontazione-progetto",
+    "title": "Rendicontazione progetto",
+    "category": "MODELLI",
+    "origin": "risdoc",
+    "body_class": "fm-studio-risdoc",
+    "_stub": true,
+    "_stub_reason": "Il PHP originale contiene solo l'header (titolo + pulsanti Overleaf/Download + selettori dinamici). Le sezioni funzionali non sono ancora state implementate nel monolitico — schema minimo, da estendere quando saranno definiti i campi della rendicontazione.",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Rendicontazione progetto",
+            "selectors": ["classe", "sezione", "indirizzo", "disciplina", "professore"]
+        },
+        {
+            "type": "nota-textarea",
+            "name": "rendicontazione_placeholder",
+            "label": "Rendicontazione (contenuti da definire)",
+            "placeholder": "Da implementare: dettaglio consuntivo del progetto (azioni svolte, costi sostenuti, risultati)."
+        }
+    ]
+}

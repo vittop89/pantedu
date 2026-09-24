@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync Spamhaus DROP+EDROP (giornaliero)
+
+[Timer]
+# Ogni giorno alle 04:30 (dopo l'ASN sync settimanale).
+OnCalendar=*-*-* 04:30:00
+Persistent=true
+RandomizedDelaySec=15min
+AccuracySec=1min
+Unit=pantedu-waf-threat-intel@spamhaus.service
+
+[Install]
+WantedBy=timers.target

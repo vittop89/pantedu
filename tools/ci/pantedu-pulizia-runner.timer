@@ -1,0 +1,24 @@
+[Unit]
+Description=pantedu — pulizia mensile di Docker sulla macchina dei runner
+Documentation=file:///docs/ops/runner-self-hosted.md
+
+[Timer]
+# Il primo del mese alle 4 del mattino. Mensile e non settimanale perché la
+# cache dei build è un acceleratore: potarla troppo spesso rallenta i giri
+# senza guadagnare niente su un disco da quasi due terabyte. Sul VPS, che ne ha
+# settantacinque in tutto, la potatura è a ogni rilascio.
+OnCalendar=*-*-01 04:00:00
+
+# Il PC non è acceso ventiquattr'ore: senza questa riga, un primo del mese a
+# macchina spenta salterebbe il giro e se ne riparlerebbe fra un mese.
+# `Persistent` lo fa recuperare al primo avvio utile.
+Persistent=true
+
+# Quindici minuti di sfasamento: se un giro di CI sta partendo proprio in quel
+# momento, meglio non contendergli il disco.
+RandomizedDelaySec=900
+
+Unit=pantedu-pulizia-runner.service
+
+[Install]
+WantedBy=timers.target

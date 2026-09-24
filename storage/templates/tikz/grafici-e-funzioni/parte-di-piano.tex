@@ -1,0 +1,491 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+
+\pagestyle{empty}
+
+% ==================================================
+% PARTE DI PIANO (regione delimitata da rette)
+% ==================================================
+% Un disegno = uno o più PIANI cartesiani. Ogni piano ha una finestra
+% (griglia, assi, tacche), le rette, i punti con nome e le regioni
+% colorate che hanno per vertici quei punti; si disegna da solo alla
+% chiusura dell'ambiente:
+%
+%   \begin{Piano}{spostamento x}
+%     \PianoSet{...}  \tikzset{piano ...}   (facoltativi: valgono solo qui)
+%     \SetPunti{...} \SetRegioni{...} \SetRette{...} \SetVerticali{...}
+%   \end{Piano}
+%
+% spostamento x: di quanto (in cm) il piano è spostato a destra (0 se
+% il piano è uno solo). Ciò che si imposta FUORI dai piani vale per tutti,
+% DENTRO un piano vale solo per quel piano.
+%
+% Liste: campi separati da /, voci separate da virgola, in numero libero.
+% Un campo che contiene una virgola o una / va tra graffe: {red, dashed}.
+% Un campo lasciato vuoto prende il valore predefinito (dove indicato).
+% Ogni voce deve avere TUTTI i campi (anche vuoti): se ne manca uno il
+% disegno si ferma con un errore che dice quale lista e quale voce.
+% L'ultimo campo è sempre «mostra»: 1 = disegna, 0 = nascondi.
+%
+% --- PUNTI (con nome, servono anche come vertici delle regioni) ---
+% \SetPunti{nome/x/y/etichetta/posizione/pallino/mostra, ...}
+%   etichetta  testo (vuota = niente); posizione: left, above, below left,
+%              {below=3pt, xshift=-2pt}, ... (vuota = above right).
+%              Le etichette stanno sopra griglia, assi e rette: con
+%              {right, fill=white} lo sfondo bianco copre la griglia.
+%   pallino    1 = disegna anche il pallino del punto (vuoto = 0)
+%
+% --- REGIONI (parti di piano colorate) ---
+% \SetRegioni{vertici/stile/mostra, ...}
+%   vertici  nomi dei punti tra graffe, nell'ordine del contorno: {O,A,B,C}.
+%            La regione è tagliata alla finestra: i vertici possono stare
+%            anche fuori (un semipiano: vertici lontani, es. a ±10).
+%   stile    vuoto = piano regione; oppure es. {blue, opacity=0.2};
+%            con draw il contorno: {fill=blue!20, draw=blue, thick}
+%
+% --- RETTE (e curve) y = f(x) ---
+% \SetRette{espressione/da/a/colore/stile/etichetta/x etichetta/
+%           opzioni etichetta/mostra, ...}
+%   espressione  in \x, es. {-\x-2}, {0.5*\x+1}, {\x^2-3}, {1/\x}.
+%                \x vale già tra parentesi: -\x^2 è -(x^2), \x^2 è x^2.
+%                Il prodotto va scritto con *: 2*\x, non 2\x (pgfmath non
+%                conosce il prodotto sottinteso: il disegno si ferma con
+%                un errore che dice la voce).
+%   da, a        intervallo di x (vuoti = tutta la finestra)
+%   colore       vuoto = black; stile: es. dashed, {dashed, thin}, smooth
+%   etichetta    scritta accanto alla retta nel punto di ascissa
+%                «x etichetta» (vuota = vicino all'estremo «a», dentro la
+%                finestra e lontano dagli assi)
+%   opzioni etichetta  vuote = sopra, dal lato che la retta non
+%                attraversa (above left se sale, above right se scende)
+%   Curve: con ritaglio=1 le y fuori dalla finestra si tagliano (anche
+%   molto ripide, es. {\x^4}); dove la curva salta da un bordo all'altro
+%   per un asintoto (es. {1/\x}) il tratto si interrompe da solo. Se un
+%   campione cade proprio sull'asintoto o molto vicino (1/\x su una
+%   finestra simmetrica) pgfmath si ferma («divide ... by 0» o
+%   «Dimension too large»): una voce per ramo, con da/a che non arrivano
+%   all'asintoto. Lo stesso per valori oltre circa 16000 dentro da..a
+%   (restringi da/a) e per le x fuori dal dominio (sqrt, ln: da/a dentro
+%   il dominio). Se un ramo non arriva al bordo della finestra: aumenta
+%   «campioni».
+%
+% --- RETTE VERTICALI x = c ---
+% \SetVerticali{x/colore/stile/etichetta/y etichetta/opzioni etichetta/mostra, ...}
+%   y etichetta  altezza della scritta (vuota = in cima alla finestra)
+%   opzioni etichetta vuote = dal lato lontano dall'asse y (right per
+%                x > 0, left per x < 0), ma non contro il bordo vicino;
+%                sotto il bordo se la scritta è in cima
+%
+% Rette e verticali sono tagliate alla finestra (chiave «ritaglio»).
+%
+% --- CHIAVI (\PianoSet{chiave=valore, ...}) ---
+% x min, x max, y min, y max   finestra (interi); l'asse x va da x min a x max
+%                (anche rovesciato: x min=1, x max=-6 punta a sinistra)
+% passo griglia, griglia (1/0), tacche (1/0), numeri (1/0 numeri sulle tacche)
+% zero sulle tacche (1 = scrive 0 anche sulle tacche dell'origine)
+% lunghezza tacca, etichetta x, etichetta y
+% ritaglio (1/0), margine ritaglio (quanto la finestra di taglio esce
+% dalla griglia), campioni (punti per disegnare una retta/curva),
+% raggio pallino
+%
+% --- STILI (\tikzset{piano .../.style={...}}) ---
+% piano griglia, piano asse, piano etichetta asse x, piano etichetta asse y,
+% piano tacca, piano numero, piano numero x, piano numero y, piano regione,
+% piano retta, piano verticale, piano etichetta, piano etichetta retta,
+% piano pallino. La «x» e la «y» degli assi vanno dopo la punta della
+% freccia (right/above, left/below se l'asse è rovesciato): lo stile
+% piano etichetta asse x/y si aggiunge a questa posizione.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% colori usati dai dati
+\definecolor{darkgreen}{rgb}{0.0, 0.5, 0.0}
+
+\pgfkeys{
+  /piano/.is family, /piano,
+  % finestra (unità = cm)
+  x min/.initial=-6, x max/.initial=1,
+  y min/.initial=-1, y max/.initial=6,
+  % griglia, tacche, numeri
+  griglia/.initial=1,
+  passo griglia/.initial=0.5,
+  tacche/.initial=1,
+  numeri/.initial=1,
+  zero sulle tacche/.initial=0,
+  lunghezza tacca/.initial=0.1,
+  % assi
+  etichetta x/.initial={$x$},
+  etichetta y/.initial={$y$},
+  % rette
+  ritaglio/.initial=1,
+  margine ritaglio/.initial=0,
+  campioni/.initial=25,
+  % punti
+  raggio pallino/.initial=1.5pt,
+}
+\newcommand{\PianoSet}[1]{\pgfkeys{/piano/.cd,#1}}
+\newcommand{\pianoget}[1]{\pgfkeysvalueof{/piano/#1}}
+
+% Stili grafici
+\tikzset{
+  piano griglia/.style={very thin, color=gray!85},
+  piano asse/.style={-latex},
+  piano etichetta asse x/.style={},
+  piano etichetta asse y/.style={},
+  piano tacca/.style={gray!95},
+  piano numero/.style={gray!95},
+  piano numero x/.style={below},
+  piano numero y/.style={left},
+  piano regione/.style={gray, opacity=0.3},
+  piano retta/.style={thick},
+  piano verticale/.style={thick},
+  piano etichetta/.style={},
+  piano etichetta retta/.style={},
+  piano pallino/.style={fill=black},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- dati (vuoti per default) ---
+\newcommand{\SetPunti}[1]{\def\PianoPuntiData{#1}}
+\newcommand{\SetRegioni}[1]{\def\PianoRegioniData{#1}}
+\newcommand{\SetRette}[1]{\def\PianoRetteData{#1}}
+\newcommand{\SetVerticali}[1]{\def\PianoVerticaliData{#1}}
+\SetPunti{}
+\SetRegioni{}
+\SetRette{}
+\SetVerticali{}
+
+\makeatletter
+% --- utilità ---
+% \pianoSeVuota{\macro}{se vuota}{se piena}
+\newcommand{\pianoSeVuota}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \pianoDefault{\macro}{valore}: se \macro è vuota le assegna il valore
+\newcommand{\pianoDefault}[2]{\pianoSeVuota{#1}{\edef#1{#2}}{}}
+% \pianoStile{nome}{\campo}: il contenuto del campo diventa lo stile «nome»
+\newcommand{\pianoStile}[2]{\expandafter\piano@stile\expandafter{#2}{#1}}
+\def\piano@stile#1#2{\tikzset{#2/.style={#1}}}
+% conta i campi (separati da / fuori dalle graffe) della voce in #1
+\newcount\piano@n
+\def\piano@stop{\relax}
+\def\piano@stopm{\piano@stop}
+\newcommand{\pianoContaCampi}[1]{\piano@n=0 \expandafter\piano@cc#1/\piano@stop/}
+\def\piano@cc#1/{\def\piano@t{#1}%
+  \ifx\piano@t\piano@stopm\else\advance\piano@n by 1 \expandafter\piano@cc\fi}
+% \pianoScorri{\lista}{numero campi}{nome della lista}{\a/\b/...}{corpo}
+\newcommand{\pianoScorri}[5]{%
+  \foreach \piano@voce [count=\piano@k] in #1 {%
+    \pianoSeVuota{\piano@voce}{}{%
+      \pianoContaCampi{\piano@voce}%
+      \ifnum\piano@n=#2\relax
+        \foreach #4 in \piano@voce {#5}%
+      \else
+        \PackageError{parte di piano}{#3, voce \piano@k: ha \the\piano@n\space
+          campi invece di #2}{Ogni voce della lista ha #2 campi separati da /,
+          anche vuoti. Un campo con virgole o / va tra graffe.}%
+      \fi}%
+  }%
+}
+\newcount\piano@num
+% nome interno TikZ del punto #1 nel piano corrente
+\def\piano@nome#1{piano-\the\piano@num-#1}
+
+% --- espressioni in \x ---
+% \x non si sostituisce come testo: vale (numero), tra parentesi, così
+% -\x^2 per x = -1 dà -1 e non +1 (in pgfmath il meno davanti lega meno
+% di ^). Il prodotto sottinteso («2\x», «\x\x», «(\x+1)\x», «\x(...)»)
+% pgfmath non lo conosce e lo calcola sbagliato senza dirlo (2(3) = 3):
+% \piano@controlla lo ferma con un errore che dice la voce.
+\def\piano@cerca{\edef\piano@tt{\noexpand\pgfutil@in@{\piano@ago}{\piano@s}}%
+  \piano@tt\ifpgfutil@in@\gdef\piano@trovato{1}\fi}
+\newcommand{\piano@controlla}{%
+  % (la | in fondo: \pgfutil@in@ accoda l'ago al pagliaio, e senza un
+  % separatore «\x» seguito dall'ago «\x\x» darebbe un falso allarme)
+  \edef\piano@s{\detokenize\expandafter{\pn@sf}|}\gdef\piano@trovato{0}%
+  \foreach \piano@c in {0,1,2,3,4,5,6,7,8,9}{%
+    \edef\piano@ago{\piano@c\detokenize{\x}}\piano@cerca
+    \edef\piano@ago{\piano@c\space\detokenize{\x}}\piano@cerca
+    \edef\piano@ago{\detokenize{\x}\piano@c}\piano@cerca}%
+  \edef\piano@ago{\detokenize{)\x}}\piano@cerca
+  \edef\piano@ago{\detokenize{) \x}}\piano@cerca
+  \edef\piano@ago{\detokenize{\x(}}\piano@cerca
+  \edef\piano@ago{\detokenize{\x\x}}\piano@cerca
+  \ifnum\piano@trovato=1
+    \PackageError{parte di piano}{Rette, voce \piano@k: nell'espressione
+      manca un * (scrivi 2*\string\x, non 2\string\x)}{pgfmath non conosce il
+      prodotto sottinteso e darebbe un valore sbagliato: 2(3) vale 3.}%
+  \fi}
+
+% \piano@curva: in \piano@cc@cammino il cammino di y = \pn@sf fra \pn@sda e
+% \pn@sa, negli stessi campioni che userebbe «plot» di TikZ (domain e
+% samples: stesso calcolo di \tikz@plot@samples@recalc).
+% - le y oltre la finestra (più due volte la sua altezza) si limitano:
+%   una curva ripida non fa traboccare TeX («Dimension too large»), e il
+%   ritaglio toglie la parte limitata;
+% - fra due campioni che saltano più dell'altezza della finestra si guarda
+%   la curva a 0,3819 del passo: se il valore non sta fra i due, lì c'è
+%   un asintoto e il cammino si spezza (niente tratto fra i due rami).
+%   Non a metà né a un terzo: con finestre intere quei punti cadono
+%   spesso proprio sull'asintoto (2/(\x-1) su -4..5: 0,875 + 0,125 = 1)
+%   e pgfmath si fermerebbe dividendo per zero;
+% - \piano@lx@N (N = numero della voce) = l'ultimo campione, andando da
+%   «da» ad «a», dentro la finestra lontano (un decimo della finestra) dai
+%   bordi e dagli assi, dove ci sono i numeri delle tacche; se non c'è,
+%   l'ultimo almeno dentro la finestra: per l'etichetta con «x etichetta»
+%   vuota.
+\newcommand{\piano@curva}{%
+  \pgfmathparse{\pn@sda}\let\piano@ca\pgfmathresult
+  \pgfmathparse{\pn@sa}\let\piano@cb\pgfmathresult
+  \pgfmathsetmacro\piano@cd{(\piano@cb-\piano@ca)/(max(2,\pianoget{campioni})-1)}%
+  \pgfmathsetmacro\piano@cdabs{abs(\piano@cd)}%
+  \ifdim\piano@cdabs pt<0.0001pt\relax
+    \edef\piano@cs{\piano@ca,\piano@cb}%
+  \else
+    \pgfmathparse{\piano@ca+\piano@cd}%
+    \edef\piano@cs{\piano@ca,\pgfmathresult,...,\piano@cb}%
+  \fi
+  \pgfmathsetmacro\piano@H{\pn@yhi-\pn@ylo}%
+  \pgfmathsetmacro\piano@clo{\pn@ylo-\pn@pm-2*\piano@H}%
+  \pgfmathsetmacro\piano@chi{\pn@yhi+\pn@pm+2*\piano@H}%
+  \pgfmathsetmacro\piano@mx{(\pn@xhi-\pn@xlo)/10}%
+  \pgfmathsetmacro\piano@my{\piano@H/10}%
+  \gdef\piano@cc@cammino{}\gdef\piano@cc@pezzo{}\gdef\piano@cc@px{}%
+  \gdef\piano@cc@lx{}\gdef\piano@cc@lxb{}%
+  \foreach \piano@tx in \piano@cs {%
+    \def\x{(\piano@tx)}\pgfmathsetmacro\piano@ty{\pn@sf}%
+    \pgfmathsetmacro\piano@tyc{max(min(\piano@ty,\piano@chi),\piano@clo)}%
+    \def\piano@rompi{0}%
+    \pianoSeVuota{\piano@cc@px}{}{%
+      \pgfmathtruncatemacro\piano@salto{abs(\piano@tyc-\piano@cc@pyc)>\piano@H}%
+      \ifnum\piano@salto=1
+        \pgfmathsetmacro\piano@tm{\piano@cc@px+0.3819*(\piano@tx-\piano@cc@px)}%
+        \def\x{(\piano@tm)}\pgfmathsetmacro\piano@ym{\pn@sf}%
+        \pgfmathtruncatemacro\piano@rompi{\piano@ym<min(\piano@cc@py,\piano@ty)
+          || \piano@ym>max(\piano@cc@py,\piano@ty)}%
+      \fi}%
+    \ifnum\piano@rompi=1
+      \xdef\piano@cc@cammino{\piano@cc@cammino plot coordinates {\piano@cc@pezzo}}%
+      \gdef\piano@cc@pezzo{}%
+    \fi
+    \ifnum\pianoget{ritaglio}>0 \let\piano@tyd\piano@tyc\else\let\piano@tyd\piano@ty\fi
+    \xdef\piano@cc@pezzo{\piano@cc@pezzo(\piano@tx,\piano@tyd)}%
+    \xdef\piano@cc@px{\piano@tx}\xdef\piano@cc@py{\piano@ty}\xdef\piano@cc@pyc{\piano@tyc}%
+    \pgfmathtruncatemacro\piano@dentro{\piano@ty>=\pn@ylo && \piano@ty<=\pn@yhi
+      && \piano@tx>=\pn@xlo && \piano@tx<=\pn@xhi}%
+    \ifnum\piano@dentro=1 \xdef\piano@cc@lxb{\piano@tx}\fi
+    \pgfmathtruncatemacro\piano@dentro{\piano@ty>=\pn@ylo+\piano@my
+      && \piano@ty<=\pn@yhi-\piano@my && \piano@tx>=\pn@xlo+\piano@mx
+      && \piano@tx<=\pn@xhi-\piano@mx && abs(\piano@tx)>=\piano@mx
+      && abs(\piano@ty)>=\piano@my}%
+    \ifnum\piano@dentro=1 \xdef\piano@cc@lx{\piano@tx}\fi
+  }%
+  \xdef\piano@cc@cammino{\piano@cc@cammino plot coordinates {\piano@cc@pezzo}}%
+  \pianoSeVuota{\piano@cc@lx}{\global\let\piano@cc@lx\piano@cc@lxb}{}%
+  \expandafter\xdef\csname piano@lx@\piano@k\endcsname{\piano@cc@lx}%
+}
+
+% \piano@lato: opzioni predefinite dell'etichetta di una retta nel punto
+% (\pn@slx, \piano@y): sopra, dal lato che la retta non attraversa
+% (above left se sale, above right se scende; se è orizzontale above left
+% o above right, verso il centro della finestra). Sopra e non sotto: sotto
+% l'asse x ci sono i numeri delle tacche.
+\newcommand{\piano@lato}{%
+  \pgfmathsetmacro\piano@dx{abs(\pn@sa-\pn@sda)/(4*(max(2,\pianoget{campioni})-1))}%
+  \pgfmathsetmacro\piano@xb{\pn@slx+((\pn@sda+\pn@sa)/2>=\pn@slx ? \piano@dx : -\piano@dx)}%
+  \def\x{(\piano@xb)}\pgfmathsetmacro\piano@yb{\pn@sf}%
+  \pgfmathtruncatemacro\piano@pend{abs(\piano@yb-\piano@y)<0.1*\piano@dx ? 0 :
+    (((\piano@yb>\piano@y)==(\piano@xb>\pn@slx)) ? 1 : -1)}%
+  \pgfmathtruncatemacro\piano@sx{\pn@slx>(\pn@xlo+\pn@xhi)/2}%
+  \ifcase\numexpr\piano@pend+1\relax
+    \def\pn@slo{above right}% scende
+  \or
+    \edef\pn@slo{above \ifnum\piano@sx=1 left\else right\fi}% orizzontale
+  \or
+    \def\pn@slo{above left}% sale
+  \fi}
+
+% --- disegno del piano ---
+\newcommand{\piano@disegna}{%
+  \edef\pn@pxmin{\pianoget{x min}}\edef\pn@pxmax{\pianoget{x max}}%
+  \edef\pn@pymin{\pianoget{y min}}\edef\pn@pymax{\pianoget{y max}}%
+  % estremi della finestra in ordine crescente (un asse può essere rovesciato)
+  \pgfmathsetmacro\pn@xlo{min(\pn@pxmin,\pn@pxmax)}\pgfmathsetmacro\pn@xhi{max(\pn@pxmin,\pn@pxmax)}%
+  \pgfmathsetmacro\pn@ylo{min(\pn@pymin,\pn@pymax)}\pgfmathsetmacro\pn@yhi{max(\pn@pymin,\pn@pymax)}%
+  \edef\pn@pt{\pianoget{lunghezza tacca}}%
+  \edef\pn@pm{\pianoget{margine ritaglio}}%
+  % punti: coordinate con nome (le etichette più avanti, sopra la griglia)
+  \pianoScorri{\PianoPuntiData}{7}{Punti}{\pn@qn/\pn@qx/\pn@qy/\pn@ql/\pn@qp/\pn@qd/\pn@qm}{%
+    \ifnum\pn@qm>0
+      \coordinate (\piano@nome{\pn@qn}) at (\pn@qx,\pn@qy);
+      \expandafter\gdef\csname piano@p@\the\piano@num @\pn@qn\endcsname{}%
+    \fi}%
+  % regioni, sullo sfondo: il poligono dei vertici (così lo stile vale per
+  % il poligono, anche draw), tagliato alla finestra; il taglio tiene la
+  % pagina grande quanto il piano anche con i vertici lontani
+  \pianoScorri{\PianoRegioniData}{3}{Regioni}{\pn@rv/\pn@rs/\pn@rm}{%
+    \ifnum\pn@rm>0
+      \gdef\piano@cammino{}%
+      \foreach \piano@v in \pn@rv {%
+        \ifcsname piano@p@\the\piano@num @\piano@v\endcsname
+          \xdef\piano@cammino{\piano@cammino (\piano@nome{\piano@v}) --}%
+        \else
+          \PackageError{parte di piano}{Regione: il punto '\piano@v' non
+            c'e' in \string\SetPunti\space di questo piano (o ha mostra=0)}{}%
+        \fi}%
+      \pianoSeVuota{\pn@rs}{\def\pn@rs{piano regione}}{}%
+      \pianoStile{piano tmp}{\pn@rs}%
+      % la scope interna chiude il ritaglio DENTRO lo strato di sfondo:
+      % senza, la regione successiva sarebbe tagliata anche da questa
+      \begin{scope}[on background layer]
+        \begin{scope}
+          \clip[overlay] (\pn@pxmin,\pn@pymin) rectangle (\pn@pxmax,\pn@pymax);
+          \fill[piano tmp] \piano@cammino cycle;
+        \end{scope}
+      \end{scope}
+      \global\let\piano@cammino\relax
+    \fi}%
+  % griglia
+  \ifnum\pianoget{griglia}>0
+    \draw[piano griglia, step=\pianoget{passo griglia}] (\pn@pxmin,\pn@pymin) grid (\pn@pxmax,\pn@pymax);
+  \fi
+  % assi: la «x» e la «y» dopo la punta, anche con l'asse rovesciato
+  \pgfmathtruncatemacro\piano@rov{\pn@pxmax<\pn@pxmin}%
+  \ifnum\piano@rov=1 \tikzset{piano tmp asse/.style={left}}\else\tikzset{piano tmp asse/.style={right}}\fi
+  \draw[piano asse] (\pn@pxmin,0) -- (\pn@pxmax,0)
+    node[piano tmp asse, piano etichetta asse x] {\pianoget{etichetta x}};
+  \pgfmathtruncatemacro\piano@rov{\pn@pymax<\pn@pymin}%
+  \ifnum\piano@rov=1 \tikzset{piano tmp asse/.style={below}}\else\tikzset{piano tmp asse/.style={above}}\fi
+  \draw[piano asse] (0,\pn@pymin) -- (0,\pn@pymax)
+    node[piano tmp asse, piano etichetta asse y] {\pianoget{etichetta y}};
+  % tacche e numeri
+  \ifnum\pianoget{tacche}>0
+    \foreach \pn@i in {\pn@pxmin,...,\pn@pxmax}{
+      \draw[piano tacca] (\pn@i,\pn@pt) -- (\pn@i,-\pn@pt);
+      \pgfmathtruncatemacro\piano@z{abs(\pn@i)<0.0001 && \pianoget{zero sulle tacche}==0}%
+      \ifnum\pianoget{numeri}>0 \ifnum\piano@z=0
+        \node[piano numero, piano numero x] at (\pn@i,-\pn@pt) {$\pn@i$};
+      \fi\fi
+    }
+    \foreach \pn@i in {\pn@pymin,...,\pn@pymax}{
+      \draw[piano tacca] (\pn@pt,\pn@i) -- (-\pn@pt,\pn@i);
+      \pgfmathtruncatemacro\piano@z{abs(\pn@i)<0.0001 && \pianoget{zero sulle tacche}==0}%
+      \ifnum\pianoget{numeri}>0 \ifnum\piano@z=0
+        \node[piano numero, piano numero y] at (-\pn@pt,\pn@i) {$\pn@i$};
+      \fi\fi
+    }
+  \fi
+  % rette e verticali, tagliate alla finestra (più il margine, verso
+  % l'esterno anche con un asse rovesciato)
+  \begin{scope}
+    \ifnum\pianoget{ritaglio}>0
+      \clip (\pn@xlo-\pn@pm,\pn@ylo-\pn@pm) rectangle (\pn@xhi+\pn@pm,\pn@yhi+\pn@pm);
+    \fi
+    \pianoScorri{\PianoRetteData}{9}{Rette}{\pn@sf/\pn@sda/\pn@sa/\pn@sc/\pn@ss/\pn@sl/\pn@slx/\pn@slo/\pn@sm}{%
+      \ifnum\pn@sm>0
+        \pianoDefault{\pn@sda}{\pn@pxmin}\pianoDefault{\pn@sa}{\pn@pxmax}\pianoDefault{\pn@sc}{black}%
+        \piano@controlla
+        \piano@curva
+        \pianoStile{piano tmp}{\pn@ss}%
+        \draw[piano retta, \pn@sc, piano tmp] \piano@cc@cammino;
+      \fi}%
+    \pianoScorri{\PianoVerticaliData}{7}{Verticali}{\pn@vx/\pn@vc/\pn@vs/\pn@vl/\pn@vly/\pn@vlo/\pn@vm}{%
+      \ifnum\pn@vm>0
+        \pianoDefault{\pn@vc}{black}\pianoStile{piano tmp}{\pn@vs}%
+        \draw[piano verticale, \pn@vc, piano tmp] (\pn@vx,\pn@pymin) -- (\pn@vx,\pn@pymax);
+      \fi}%
+  \end{scope}
+  % etichette di rette e verticali
+  \pianoScorri{\PianoRetteData}{9}{Rette}{\pn@sf/\pn@sda/\pn@sa/\pn@sc/\pn@ss/\pn@sl/\pn@slx/\pn@slo/\pn@sm}{%
+    \ifnum\pn@sm>0 \pianoSeVuota{\pn@sl}{}{%
+      \pianoDefault{\pn@sda}{\pn@pxmin}\pianoDefault{\pn@sa}{\pn@pxmax}\pianoDefault{\pn@sc}{black}%
+      \pianoSeVuota{\pn@slx}{\edef\pn@slx{\csname piano@lx@\piano@k\endcsname}}{}%
+      \pianoSeVuota{\pn@slx}{%
+        \PackageWarning{parte di piano}{Rette, voce \piano@k: la curva non passa
+          dalla finestra, l'etichetta non si disegna}}{%
+        \def\x{(\pn@slx)}\pgfmathsetmacro\piano@y{\pn@sf}%
+        \pianoSeVuota{\pn@slo}{\piano@lato}{}%
+        \pianoStile{piano tmp}{\pn@slo}%
+        \node[piano etichetta retta, \pn@sc, piano tmp] at (\pn@slx,\piano@y) {\pn@sl};}}\fi}%
+  \pianoScorri{\PianoVerticaliData}{7}{Verticali}{\pn@vx/\pn@vc/\pn@vs/\pn@vl/\pn@vly/\pn@vlo/\pn@vm}{%
+    \ifnum\pn@vm>0 \pianoSeVuota{\pn@vl}{}{%
+      \pianoDefault{\pn@vc}{black}%
+      % lato predefinito: lontano dall'asse y (numeri delle tacche), ma non
+      % contro il bordo vicino; senza asse y nella finestra, verso il centro
+      \pgfmathtruncatemacro\piano@sx{(\pn@xlo<0 && \pn@xhi>0) ?
+        ((\pn@vx<0 && \pn@vx>\pn@xlo+0.15*(\pn@xhi-\pn@xlo))
+         || \pn@vx>\pn@xhi-0.15*(\pn@xhi-\pn@xlo))
+        : (\pn@vx>(\pn@xlo+\pn@xhi)/2)}%
+      \edef\piano@l{\ifnum\piano@sx=1 left\else right\fi}%
+      \pianoSeVuota{\pn@vly}{\let\pn@vly\pn@yhi\pianoDefault{\pn@vlo}{below \piano@l}}%
+        {\pianoDefault{\pn@vlo}{\piano@l}}%
+      \pianoStile{piano tmp}{\pn@vlo}%
+      \node[piano etichetta retta, \pn@vc, piano tmp] at (\pn@vx,\pn@vly) {\pn@vl};}\fi}%
+  % etichette dei punti, sopra griglia e rette (uno sfondo le stacca)
+  \pianoScorri{\PianoPuntiData}{7}{Punti}{\pn@qn/\pn@qx/\pn@qy/\pn@ql/\pn@qp/\pn@qd/\pn@qm}{%
+    \ifnum\pn@qm>0
+      \pianoSeVuota{\pn@ql}{}{%
+        \pianoDefault{\pn@qp}{above right}\pianoStile{piano tmp pos}{\pn@qp}%
+        \node[piano etichetta, piano tmp pos] at (\pn@qx,\pn@qy) {\pn@ql};}%
+    \fi}%
+  % pallini dei punti, sopra a tutto
+  \pianoScorri{\PianoPuntiData}{7}{Punti}{\pn@qn/\pn@qx/\pn@qy/\pn@ql/\pn@qp/\pn@qd/\pn@qm}{%
+    \ifnum\pn@qm>0
+      \pianoDefault{\pn@qd}{0}%
+      \ifnum\pn@qd>0
+        \fill[piano pallino] (\pn@qx,\pn@qy) circle (\pianoget{raggio pallino});
+      \fi
+    \fi}%
+}
+
+% --- il piano: {spostamento x} ---
+\newenvironment{Piano}[1]{%
+  \def\PianoSpostamento{#1}%
+}{%
+  \global\advance\piano@num by 1
+  \begin{scope}[shift={(\PianoSpostamento,0)}]
+    \piano@disegna
+  \end{scope}
+}
+\makeatother
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  \begin{Piano}{0}
+    % finestra: l'asse x va da x min a x max (freccia verso x max)
+    \PianoSet{x min=-6, x max=1, y min=-1, y max=6,
+      passo griglia=0.5, zero sulle tacche=0}
+
+    % nome/x/y/etichetta/posizione/pallino/mostra
+    \SetPunti{
+      A/-5/5/$A$/left/0/1,
+      B/-5/3/$B$/left/0/1,
+      C/-2/0/$C$/above right/0/1,
+      D/-5/0/$D$/above left/0/1,
+      O/0/0/O/{below=0.43cm, xshift=-0.22cm}/0/1
+    }
+    % vertici/stile/mostra
+    \SetRegioni{
+      {O,A,B,C}//1
+    }
+    % espressione/da/a/colore/stile/etichetta/x etichetta/opzioni etichetta/mostra
+    \SetRette{
+      {\x}///red/////1,
+      {-\x}///blue/////1,
+      {-\x-2}///darkgreen/dashed////1
+    }
+    % x/colore/stile/etichetta/y etichetta/opzioni etichetta/mostra
+    \SetVerticali{
+      -5//dashed////1
+    }
+  \end{Piano}
+
+\end{tikzpicture}
+\end{document}

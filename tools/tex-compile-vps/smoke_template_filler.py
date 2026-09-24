@@ -1,0 +1,285 @@
+#!/usr/bin/env python3
+"""Smoke: prende l'output dell'assembler JS schema-modulare per i 3 schemi
+del docente e lo manda al VPS locale per verificare che compili."""
+import base64, hashlib, hmac, json, os, sys, time, urllib.request
+
+SECRET = os.environ.get("TEX_COMPILE_SECRET", "local-dev-test-secret-not-for-prod-32-bytes-min")
+ENDPOINT = os.environ.get("ENDPOINT", "http://127.0.0.1:8001")
+
+# Equivalente di renderTikz(data) con i 3 schemi del docente, simulato.
+# Lo header e' lo stesso che produce schema-modulare.js, body montato a mano.
+TIKZ = open("php_smoke_test1.svg.tex", "w") if False else None
+
+# Generiamo la stringa equivalente direttamente:
+PREAMBLE = r"""% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\makeatletter
+
+\newcount\schemaCountA
+\newcount\schemaCountB
+\newcount\schemaIndex
+\newdimen\schemaDimA
+\newdimen\schemaDimB
+\newdimen\schemaDimPrev
+\newdimen\schemaLastShift
+\newdimen\schemaLastWidth
+\newdimen\schemaLastRowDim
+\newdimen\schemaPrevRowDim
+\def\schemaHighlightTarget{}
+\def\schemaTempHighlight{}
+\def\schemaHighlightListEnd{\relax}
+
+\gdef\schemaLastCenterVal{0}
+
+\newcommand{\schemaTrimSpaces}[2]{%
+    \edef#2{\zap@space#1 \@empty}%
+}
+
+\def\schemaIterateHighlights#1;#2\schemaHighlightListEnd{%
+    \schemaTrimSpaces{#1}{\schemaTempHighlight}%
+    \ifx\schemaTempHighlight\empty
+    \else
+        \ifnum\schemaTempHighlight=\schemaHighlightTarget\relax
+            \global\def\schemaDoHighlight{1}%
+        \fi
+    \fi
+    \ifx#2\schemaHighlightListEnd
+    \else
+        \schemaIterateHighlights#2\schemaHighlightListEnd
+    \fi
+}
+
+\newcommand{\schemaModulareCore}[7]{%
+    \begin{scope}[shift={(#1,0)}]
+        \schemaLastRowDim=0pt
+        \schemaPrevRowDim=0pt
+        \schemaCountA=0
+        \foreach \pos/\val in {#2} {
+            \global\advance\schemaCountA by 1
+            \expandafter\xdef\csname tempXPos\the\schemaCountA\endcsname{\pos}
+        }
+        \edef\tempNumCols{\the\schemaCountA}
+        \edef\tempLastPos{\csname tempXPos\tempNumCols\endcsname}
+        \schemaDimA=\tempLastPos pt
+        \advance\schemaDimA by 1pt
+        \edef\tempLastCol{\strip@pt\schemaDimA}
+        \pgfmathparse{#1 + \tempLastCol/2}
+        \xdef\schemaLastCenterVal{\pgfmathresult}
+        \schemaDimPrev=0pt
+        \schemaIndex=1
+        \foreach \pos/\val in {#2} {
+            \schemaDimA=\pos pt
+            \advance\schemaDimA by \schemaDimPrev
+            \divide\schemaDimA by 2
+            \expandafter\xdef\csname tempMidPos\the\schemaIndex\endcsname{\strip@pt\schemaDimA}
+            \global\schemaDimPrev=\pos pt
+            \global\advance\schemaIndex by 1
+        }
+        \schemaDimA=\tempLastCol pt
+        \advance\schemaDimA by \schemaDimPrev
+        \divide\schemaDimA by 2
+        \expandafter\xdef\csname tempMidPos\the\schemaIndex\endcsname{\strip@pt\schemaDimA}
+        \draw (0,0) -- (\tempLastCol,0);
+        \foreach \ypos/\equazione/\rowSigns/\rowCircles/\rowHighlights [count=\rowNum] in {#3} {
+            \global\schemaPrevRowDim=\schemaLastRowDim
+            \schemaDimA=\ypos pt
+            \global\schemaLastRowDim=\schemaDimA
+            \node [left] at (0,-\ypos) {\equazione};
+            \begingroup
+                \edef\schemaTmpCircles{\detokenize{\rowCircles}}
+                \if\relax\schemaTmpCircles\relax
+                \else
+                    \foreach \idx/\filltype in \rowCircles {
+                        \schemaTrimSpaces{\idx}{\schemaCircleIdxDet}
+                        \schemaTrimSpaces{\filltype}{\schemaCircleCmdDet}
+                        \if\relax\schemaCircleIdxDet\relax\else
+                            \edef\xVal{\csname tempXPos\schemaCircleIdxDet\endcsname}
+                            \csname\schemaCircleCmdDet\endcsname[line width=0.4mm] (\xVal,-\ypos) circle (5pt);
+                        \fi
+                    }
+                \fi
+            \endgroup
+            \foreach \sign [count=\schemaTmpIdx] in \rowSigns {
+                \edef\schemaTempMid{\csname tempMidPos\schemaTmpIdx\endcsname}
+                \gdef\schemaDoHighlight{0}
+                \edef\schemaCheckHL{\detokenize{\rowHighlights}}
+                \if\relax\schemaCheckHL\relax\else
+                    \edef\schemaHighlightTarget{\schemaTmpIdx}
+                    \begingroup
+                        \edef\schemaHLRaw{\rowHighlights}
+                        \expandafter\schemaIterateHighlights\schemaHLRaw;\schemaHighlightListEnd
+                    \endgroup
+                \fi
+                \ifnum\schemaDoHighlight=1
+                    \filldraw[fill=\schemaHighlightFill,draw=\schemaHighlightBorder,line width=\schemaHighlightBorderWidth] (\schemaTempMid,-\ypos) circle (\schemaHighlightRadius);
+                    \node[text=\schemaHighlightText] at (\schemaTempMid,-\ypos) {\Large \sign};
+                \else
+                    \node at (\schemaTempMid,-\ypos) {\Large \sign};
+                \fi
+            }
+        }
+        \edef\tempLastRow{\strip@pt\schemaLastRowDim}
+        \pgfmathparse{\tempLastRow + \bottomTextPadding}
+        \xdef\bottomTextY{\pgfmathresult}
+        \schemaDimA=\schemaLastRowDim
+        \advance\schemaDimA by 0.5pt
+        \edef\tempVerticalDepth{\strip@pt\schemaDimA}
+        \schemaDimA=\schemaLastRowDim
+        \advance\schemaDimA by \schemaPrevRowDim
+        \divide\schemaDimA by 2
+        \edef\tempDottedY{\strip@pt\schemaDimA}
+        \foreach \pos/\val in {#2} {
+            \draw (\pos,0.2) -- (\pos,-\tempVerticalDepth);
+            \node [above] at (\pos,0.2) {\val};
+        }
+        \draw [dotted] (0,-\tempDottedY) -- (\tempLastCol,-\tempDottedY);
+        \foreach \idx/\sign in {#4} {
+            \begingroup
+                \edef\schemaTempX{\csname tempMidPos\idx\endcsname}
+                \gdef\schemaColMatch{0}
+                \edef\schemaCheckColHL{\detokenize{#6}}
+                \if\relax\schemaCheckColHL\relax\else
+                    \foreach \hCol in {#6} {
+                        \ifnum\hCol=\idx
+                            \global\def\schemaColMatch{1}
+                        \fi
+                    }
+                \fi
+                \ifnum\schemaColMatch=1
+                     \filldraw[fill=\schemaHighlightFill,draw=\schemaHighlightBorder,line width=\schemaHighlightBorderWidth] (\schemaTempX,-\tempLastRow) circle (\schemaHighlightRadius);
+                     \node[text=\schemaHighlightText] at (\schemaTempX,-\tempLastRow) {\Large \sign};
+                \else
+                     \node at (\schemaTempX,-\tempLastRow) {\Large \sign};
+                \fi
+            \endgroup
+        }
+        \foreach \idx/\filltype in {#5} {
+            \ifx\filltype\empty\else
+                \edef\xVal{\csname tempXPos\idx\endcsname}
+                \csname\filltype\endcsname[line width=0.4mm] (\xVal,-\tempLastRow) circle (5pt);
+            \fi
+        }
+        \edef\schemaSolutionTextCheck{\detokenize{#7}}
+        \if\relax\schemaSolutionTextCheck\relax
+        \else
+            \dimen255=\tempLastCol pt
+            \divide\dimen255 by 2
+            \edef\tempTextX{\strip@pt\dimen255}
+            \dimen255=\tempLastRow pt
+            \advance\dimen255 by 1pt
+            \edef\tempTextY{\strip@pt\dimen255}
+            \node [align=center] at (\tempTextX,-\tempTextY) {#7};
+        \fi
+    \end{scope}
+}
+
+\def\schemaModulare#1#2#3{%
+    \ignorespaces
+    \@ifnextchar\bgroup
+        {\schemaModulareWithExtras{#1}{#2}{#3}}%
+        {\schemaModulareCore{#1}{#2}{#3}{}{}{}{}}%
+}
+
+\def\schemaModulareWithExtras#1#2#3#4#5#6#7{%
+    \schemaModulareCore{#1}{#2}{#3}{#4}{#5}{#6}{#7}%
+}
+
+\newcommand{\schemaTextAbove}[2]{%
+    \node at (\schemaLastCenterVal,#1) {#2};
+}
+\newcommand{\schemaTextBelow}[2]{%
+    \node at (\schemaLastCenterVal,-#1) {#2};
+}
+
+\makeatother
+"""
+
+DOC = r"""
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+    \def\schemaSpacing{5}
+    \def\topTextY{1}
+    \def\bottomTextPadding{1}
+    \def\bottomTextY{0}
+    \def\schemaHighlightRadius{0.2cm}
+    \def\schemaHighlightFill{red!70}
+    \def\schemaHighlightBorder{red!40!black}
+    \def\schemaHighlightText{white}
+    \def\schemaHighlightBorderWidth{0.4pt}
+
+    \pgfmathsetmacro{\firstSchema}{0}
+    \schemaModulare{\firstSchema}
+        {1/{$2a$}, 2/{$0$}, 3/{$-\frac{a}{4}$}}
+        {
+            0.5/{$N(x)>0$}/{{$+$},{$+$},{$-$},{$+$}}/{2/draw,3/draw}/{},
+            1.5/{$D(x)>0$}/{{$+$},{$+$},{$+$},{$+$}}/{1/draw}/{},
+            2.5/{$\frac{N(x)}{D(x)}$}/{{$+$},{$+$},{$-$},{$+$}}/{1/draw,2/draw,3/draw}/3
+        }
+
+    \schemaTextAbove{\topTextY}{$\text{se }a<0$}
+    \schemaTextBelow{\bottomTextY}{$0<x<-\dfrac{a}{4}$}
+
+    \pgfmathsetmacro{\secondSchema}{\schemaSpacing}
+    \schemaModulare{\secondSchema}
+        {1/{$0$}}
+        {
+            0.5/{}/{{$+$},{$+$}}/{1/draw}/{},
+            1.5/{}/{{$+$},{$+$}}/{1/draw}/{},
+            2.5/{}/{{$+$},{$+$}}/{1/draw}/{}
+        }
+
+    \schemaTextAbove{\topTextY}{$\text{se }a=0$}
+    \schemaTextBelow{\bottomTextY}{$\text{imp.}$}
+
+    \pgfmathsetmacro{\thirdSchema}{1.6*\schemaSpacing}
+    \schemaModulare{\thirdSchema}
+        {1/{$-\frac{a}{4}$}, 2/{$0$}, 3/{$2a$}}
+        {
+            0.5/{}/{{$+$},{$-$},{$+$},{$+$}}/{1/draw,2/draw}/{},
+            1.5/{}/{{$+$},{$+$},{$+$},{$+$}}/{3/draw}/{},
+            2.5/{}/{{$+$},{$-$},{$+$},{$+$}}/{1/draw,2/draw,3/draw}/2
+        }
+
+    \schemaTextAbove{\topTextY}{$\text{se }a>0$}
+    \schemaTextBelow{\bottomTextY}{$-\dfrac{a}{4}<x<0$}
+
+\end{tikzpicture}
+\end{document}
+"""
+
+TIKZ = PREAMBLE + DOC
+
+payload = json.dumps({
+    "tikz_b64": base64.b64encode(TIKZ.encode("utf-8")).decode("ascii"),
+    "libraries": ["calc"],
+    "doc_id": "tplfiller-3schemi",
+}).encode()
+ts = str(int(time.time()))
+sig = hmac.new(SECRET.encode(), ts.encode() + b"." + payload, hashlib.sha256).hexdigest()
+req = urllib.request.Request(f"{ENDPOINT}/render-tikz", data=payload, method="POST",
+    headers={"Content-Type":"application/json","X-Timestamp":ts,"X-Signature":sig})
+try:
+    with urllib.request.urlopen(req, timeout=60) as r:
+        body = r.read()
+        print(f"HTTP {r.status} | {r.headers.get('Content-Type')} | {len(body)} bytes | {r.headers.get('X-Compile-Duration-Ms')}ms")
+        if "image/svg" in r.headers.get("Content-Type",""):
+            with open("tplfiller_3schemi.svg","wb") as f: f.write(body)
+            print("OK: tplfiller_3schemi.svg")
+except urllib.error.HTTPError as e:
+    print(f"HTTP {e.code}: {e.reason}")
+    err = e.read().decode("utf-8", errors="replace")
+    try:
+        j = json.loads(err)
+        print("LOG (tail 1500):"); print(j.get("log", err)[-1500:])
+    except: print(err[:3000])
+    sys.exit(1)

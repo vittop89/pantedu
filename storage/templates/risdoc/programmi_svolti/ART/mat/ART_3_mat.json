@@ -1,0 +1,119 @@
+[
+    {
+        "titolo": "Unità 1: Divisibilità tra polinomi",
+        "contenuti": [
+            { "label": "La divisione di un polinomio per un monomio", "checked": true },
+            { "label": "La divisione tra due polinomi nella stessa variabile", "checked": false },
+            { "label": "La regola di Ruffini", "checked": true },
+            { "label": "Il teorema del resto e il teorema di Ruffini", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 2: Scomposizione di polinomi",
+        "contenuti": [
+            { "label": "Le scomposizioni e i raccoglimenti", "checked": true },
+            { "label": "Scomposizioni mediante prodotti notevoli", "checked": true },
+            { "label": "Scomposizioni di particolari trinomi di secondo grado", "checked": true },
+            { "label": "Scomposizione mediante il teorema e la regola di Ruffini", "checked": true },
+            { "label": "Massimo comune divisore e minimo comune multiplo tra polinomi", "checked": true },
+            { "label": "Scomposizioni ed equazioni", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 3: Frazioni algebriche",
+        "contenuti": [
+            { "label": "Frazioni algebriche equivalenti e proprietà invariantiva", "checked": true },
+            { "label": "Addizione e sottrazione tra frazioni algebriche", "checked": true },
+            { "label": "Moltiplicazione e divisione tra frazioni algebriche. Elevamento a potenza di una frazione algebrica", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 4: Equazioni di primo grado frazionarie e letterali",
+        "contenuti": [
+            { "label": "Equazioni frazionarie", "checked": true },
+            { "label": "Equazioni letterali", "checked": true },
+            { "label": "Problemi che hanno come modello equazioni frazionarie o letterali", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 5: Equazioni e sistemi di secondo grado",
+        "contenuti": [
+            { "label": "Equazioni di secondo grado: il caso generale", "checked": true },
+            { "label": "Scomposizione di un trinomio di secondo grado", "checked": true },
+            { "label": "Relazioni tra le soluzioni e i coefficienti di un'equazione di secondo grado", "checked": true },
+            { "label": "Equazioni parametriche", "checked": true },
+            { "label": "Problemi che hanno come modello un'equazione di secondo grado", "checked": false },
+            { "label": "Sistemi di secondo grado", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 6: Parabola",
+        "contenuti": [
+            { "label": "La parabola come luogo e la sua equazione", "checked": true },
+            { "label": "La parabola e la retta", "checked": true },
+            { "label": "Come determinare l'equazione di una parabola", "checked": true },
+            { "label": "La parabola e i problemi di massimo e di minimo di secondo grado", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 7: Disequazioni di secondo grado e frazionarie",
+        "contenuti": [
+            { "label": "Richiami sulle disequazioni", "checked": true },
+            { "label": "Le disequazioni di secondo grado", "checked": true },
+            { "label": "Le disequazioni frazionarie", "checked": true },
+            { "label": "I sistemi di disequazioni contenenti disequazioni di secondo grado frazionarie", "checked": true },
+            { "label": "Problemi che hanno come modello disequazioni di secondo grado", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 8: Equazioni, disequazioni e sistemi di grado superiore al secondo",
+        "contenuti": [
+            { "label": "Equazioni monomie, binomie e trinomie", "checked": true },
+            { "label": "Equazioni risolvibili mediante scomposizione in fattori", "checked": true },
+            { "label": "Disequazioni di grado superiore al secondo", "checked": true },
+            { "label": "Sistemi di grado superiore al secondo e sistemi simmetrici", "checked": true }
+        ]
+    },
+    {
+        "titolo": "Unità 9: Equazioni e disequazioni irrazionali e con valori assoluti",
+        "contenuti": [
+            { "label": "Equazioni irrazionali", "checked": false },
+            { "label": "Equazioni con valori assoluti", "checked": false },
+            { "label": "Disequazioni irrazionali", "checked": false },
+            { "label": "Disequazioni con valori assoluti", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 10: Circonferenza e poligoni inscritti e circoscritti",
+        "contenuti": [
+            { "label": "Luoghi geometrici", "checked": false },
+            { "label": "Circonferenza e cerchio", "checked": false },
+            { "label": "Proprietà delle corde", "checked": false },
+            { "label": "Retta e circonferenza", "checked": false },
+            { "label": "Posizione reciproca di due circonferenze", "checked": false },
+            { "label": "Angoli al centro e angoli alla circonferenza", "checked": false },
+            { "label": "Poligoni inscritti e circoscritti", "checked": false },
+            { "label": "Punti notevoli di un triangolo", "checked": false },
+            { "label": "Poligoni regolari", "checked": false },
+            { "label": "Lunghezza della circonferenza e area del cerchio", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 11: Circonferenza nel piano cartesiano",
+        "contenuti": [
+            { "label": "Equazione della circonferenza", "checked": false },
+            { "label": "La circonferenza e la retta", "checked": false },
+            { "label": "Scrivere l'equazione di una circonferenza", "checked": false }
+        ]
+    },
+    {
+        "titolo": "Unità 12: Ellisse, iperbole e complementi sulle coniche",
+        "contenuti": [
+            { "label": "Ellisse", "checked": false },
+            { "label": "Iperbole", "checked": false },
+            { "label": "Iperbole equilatera e funzione omografica", "checked": false },
+            { "label": "Coniche e funzioni. Equazioni e disequazioni irrazionali", "checked": false },
+            { "label": "Coniche e funzioni. Equazioni e disequazioni con valori assoluti", "checked": false }
+        ]
+    }
+]

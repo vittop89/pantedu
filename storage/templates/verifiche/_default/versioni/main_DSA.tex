@@ -1,0 +1,35 @@
+% =============================================================================
+% main_DSA.tex — Variante DSA.
+%
+% Documento in font normale (\verificaFontNormal). Solo l'\input{esercizi_DSA}
+% viene avvolto in {dsaScope}, che applica interlinea 1.5. Intestazione,
+% ulteriori misure, misure dispensative e griglia restano nella spaziatura
+% standard.
+% =============================================================================
+\documentclass[12pt]{article}
+\usepackage{{{TEXCOMMON_DIR}}/verifica}
+\verificaFontNormal
+\verificaCounterFooter{DSA}{{{COPIE_DSA}}}
+
+% G27.tikz.hoist — preamble macros estratti dai TikZ template
+\input{tikz_preamble}
+
+\title{ {{TITOLO_VERIFICA}} \\\large [DSA] }
+\date{}
+
+\begin{document}
+\thispagestyle{firstpage}
+\input{{{TEXCOMMON_DIR}}/intestazione}
+
+\begin{dsaScope}
+\input{{{ESERCIZI_FILE}}}
+\end{dsaScope}
+
+\input{{{TEXCOMMON_DIR}}/ulteriori_misure}
+\input{{{TEXCOMMON_DIR}}/BES_DSA/misure_dispensative}
+
+\input{{{GRIGLIE_DIR}}/{{INDIRIZZO_CODE}}_{{MATERIA_CODE}}{{GRIGLIA_SUFFIX}}}
+
+% Compensazione orale SOTTO la griglia (porting legacy master).
+{{COMPENSA_OPEN}}\input{{{TEXCOMMON_DIR}}/BES_DSA/compensazione_orale}{{COMPENSA_CLOSE}}
+\end{document}

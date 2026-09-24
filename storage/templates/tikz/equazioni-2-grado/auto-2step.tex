@@ -1,0 +1,569 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ==================================================
+% EQUAZIONI DI SECONDO GRADO — MODULARE
+% ==================================================
+% Una figura = più RIGHE impilate, una per equazione. Il modello calcola
+% il discriminante Delta = b^2 - 4ac e sceglie da solo che cosa scrivere:
+%   Delta > 0  formula risolutiva, poi un bivio verso x_1 e x_2, e da
+%              ciascuna i RAMI (diramazioni) che elenchi tu;
+%   Delta = 0  x_1 = x_2 = -b / 2a (= la chiave x1; se è vuota, x2);
+%   Delta < 0  Delta < 0 ==> la chiave «impossibile» (se è vuota, la
+%              riga finisce con Delta < 0, senza freccia). Qui x1 e x2
+%              non si scrivono.
+%
+%   \begin{Equazione}{indice}{mostra}
+%     \EqSet{a=..., b=..., c=..., x1=..., x2=..., ...}   (valgono solo qui)
+%     \tikzset{eq2 ...}                                   (facoltativi)
+%     \SetRami{...}
+%   \end{Equazione}
+%
+% indice: 0 = prima riga in alto, 1 = seconda, ...  (y = -indice * passo)
+%         Se una riga toccherebbe le scritte delle righe sopra (frazioni
+%         alte, rami lunghi), il modello la sposta più in basso quanto
+%         basta, e con lei le righe che seguono (chiave «distanza righe»).
+%         Per disegnare altro accanto a una riga si usano i suoi nodi con
+%         nome (sotto), che la seguono; coordinate fisse non la seguono.
+% mostra: 1 = disegna, 0 = nascondi (lo spazio della riga resta);
+%         vuoto = 1.
+% Tutto ciò che si imposta FUORI dalle righe vale per l'intera figura;
+% DENTRO una riga vale solo per quella riga.
+%
+% RAMI (campi separati da /, rami separati da virgola; un campo con
+% virgole o / va tra graffe; un testo vuoto non si disegna; gli spazi
+% attorno alle barre, una virgola in fondo e le righe vuote fra un ramo
+% e l'altro non contano):
+%   \SetRami{soluzione/etichetta/testo esterno/testo interno/mostra, ...}
+%     soluzione = 1 (il ramo parte da x_1, verso l'alto)
+%                 2 (parte da x_2, verso il basso)
+%     etichetta = testo del nodo del ramo (modo testo; \\ va a capo)
+%     testo esterno = in alto per x_1, in basso per x_2 (modo matematico)
+%     testo interno = alla stessa altezza dell'etichetta (modo matematico)
+%     mostra = 1 disegna, 0 nascondi, vuoto = 1
+%   I rami sono in numero libero: più rami dalla stessa soluzione si
+%   impilano, il secondo sopra il primo (per x_1) o sotto (per x_2), a
+%   «distanza fra rami» dal bordo del precedente.
+%   I rami esistono solo se Delta > 0: altrimenti errore.
+%
+% CHIAVI (\EqSet{chiave=valore, ...}): vedi VARIABILI / PARAMETRI.
+% STILI (\tikzset{eq2 .../.style={...}}): vedi sotto le chiavi. Servono
+% per colore, carattere, frecce: l'ancora dei nodi la mette il modello,
+% quindi /.style={blue} e /.append style={blue} fanno la stessa cosa.
+% NODI con nome (per aggiungere altro a mano): eq-INDICE (equazione),
+% eq-INDICE-x1, eq-INDICE-x2, eq-INDICE-rN (etichetta del ramo N),
+% eq-INDICE-rN-e / -i (testi esterno e interno).
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri (si cambiano con \EqSet{chiave=valore, ...})
+\pgfkeys{
+  /eq2/.is family, /eq2,
+  % l'equazione (di solito si danno dentro la riga)
+  a/.initial=1, b/.initial=0, c/.initial=0, % numeri: servono al calcolo
+                           % (col punto: 0.5; anche 1/2, grandi a piacere)
+  variabile/.initial=x,
+  x1/.initial={},          % soluzioni già semplificate (testo matematico)
+  x2/.initial={},
+  delta/.initial={},       % vuoto = b^2-4ac; altrimenti valore scritto
+                           % sotto radice e usato per il segno: numeri,
+                           % + - * / ^ e parentesi (\cdot e \times vanno bene)
+  equazione/.initial={},   % vuoto = (a)x^2+(b)x+(c)=0 scritto dal modello
+  impossibile/.initial={\nexists\, x\in\mathbb{R}}, % dopo Delta<0 ==>
+  dimensione/.initial=\large,  % carattere dell'equazione
+  % impaginazione
+  passo righe/.initial=2,  % distanza verticale fra le righe (minima)
+  distanza righe/.initial=0.15, % spazio minimo fra le scritte di una riga
+                           % e quelle delle righe sopra
+  x inizio/.initial=0,     % ascissa del bordo sinistro dell'equazione
+  bivio dx/.initial=1,     % le due linee verso x_1 e x_2
+  bivio dy/.initial=0.6,
+  % rami
+  x rami/.initial=4.6,     % ascissa delle etichette dei rami (minima)
+  y rami/.initial=0.6,     % altezza delle etichette sopra/sotto la riga
+  dx rami/.initial=1,      % dalle etichette ai testi (di più se
+                           % l'etichetta è larga: vedi distanza testi)
+  dy rami/.initial=0.6,    % dal testo interno al testo esterno (minima:
+                           % di più se i testi sono alti)
+  distanza rami/.initial=0.6, % spazio minimo fra x_1, x_2 e le etichette
+  distanza testi/.initial=0.3,% spazio minimo fra un'etichetta e i suoi testi
+  distanza esterno/.initial=0, % spazio minimo in verticale fra testo
+                           % interno ed esterno (0: i riquadri si possono
+                           % toccare, i margini dei nodi lasciano ~2 mm)
+  distanza fra rami/.initial=0.2, % spazio in verticale fra due rami che
+                           % partono dalla stessa soluzione
+}
+% Una chiave che non esiste (scritta male, o un numero con la virgola
+% senza graffe: a=0,5) si ferma con un errore in italiano.
+\pgfkeys{/eq2/.unknown/.code={%
+  \PackageError{equazioni}{\string\EqSet: la chiave '\pgfkeyscurrentname'
+    non esiste (le chiavi sono in VARIABILI / PARAMETRI). Se e' un pezzo
+    di numero, i numeri si scrivono col punto (a=0.5); un valore con
+    virgole va tra graffe}{}}}
+% (le righe vuote fra le chiavi non contano)
+\newcommand{\EqSet}[1]{%
+  \def\eqChiavi{#1}\EqTogliParagrafi\eqChiavi
+  \expandafter\eqSetAux\expandafter{\eqChiavi}}
+\newcommand{\eqSetAux}[1]{\pgfkeys{/eq2/.cd,#1}}
+\newcommand{\eqget}[1]{\pgfkeysvalueof{/eq2/#1}}
+
+% Stili grafici (si cambiano con \tikzset{eq2 ... /.style={...}})
+\tikzset{
+  eq2 equazione/.style={},
+  eq2 bivio/.style={},               % linee verso x_1 e x_2
+  eq2 soluzione/.style={},           % nodi di x_1 e x_2
+  eq2 ramo/.style={},                % linee dei rami
+  eq2 etichetta ramo/.style={},
+  eq2 testo ramo/.style={},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% Posizione dei nodi: l'ancora (e l'a capo delle etichette) la dà il
+% modello, PRIMA dello stile del docente, così che ridefinire uno stile
+% con /.style non sposti niente.
+\tikzset{
+  eq2@equazione/.style={anchor=west, eq2 equazione},
+  eq2@soluzione/.style={anchor=west, eq2 soluzione},
+  eq2@etichetta/.style={anchor=west, align=left, eq2 etichetta ramo},
+  eq2@testo/.style={anchor=west, eq2 testo ramo},
+}
+
+\newcommand{\SetRami}[1]{\def\EqRamiData{#1}\EqTogliParagrafi\EqRamiData}
+\def\EqRamiData{}
+
+% --- utilità ---
+% \eqIfEmpty{\macro}{se vuota}{se piena}
+\newcommand{\eqIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+\newcommand{\eqval}[2]{\pgfkeysgetvalue{/eq2/#1}{#2}}
+% \eqTrim\macro: toglie gli spazi attorno al contenuto (e le graffe esterne)
+\makeatletter
+\newcommand{\eqTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+\makeatother
+% \eqSeUguale{\macro}{testo}{se uguale}{se diverso}: confronto letterale
+\newcommand{\eqSeUguale}[4]{%
+  \ifnum\pdfstrcmp{\detokenize\expandafter{#1}}{#2}=0 #3\else #4\fi}
+% \eqLeggiMostra\campo{dove}{consiglio}: vuoto = 1; 1 -> \eqveditrue,
+% 0 -> falso; altro -> errore in italiano
+\newif\ifeqvedi
+\newcommand{\eqLeggiMostra}[3]{%
+  \eqTrim#1%
+  \eqIfEmpty{#1}{\def#1{1}}{}%
+  \eqSeUguale{#1}{1}{\eqveditrue}{%
+    \eqSeUguale{#1}{0}{\eqvedifalse}{%
+      \eqvedifalse
+      \PackageError{equazioni}{#2: mostra vale
+        '\detokenize\expandafter{#1}': si scrive 1 (disegna), 0 (nascondi)
+        o si lascia vuoto (= 1). #3}{}}}}
+
+% \EqTogliParagrafi\macro: toglie le righe vuote (\par) da una lista, che
+% altrimenti fermerebbero \foreach e \pgfkeys.
+% \EqNumero\testo\uscita: prepara in \uscita l'espressione da calcolare
+% (\cdot e \times diventano *, le graffe parentesi); \ifeqnumok dice se
+% contiene solo cifre, punto, + - * / ^ e parentesi (chiuse), senza
+% un'operazione in fondo; \ifeqnumvirgola se c'è una virgola.
+\newif\ifeqnumok
+\newif\ifeqnumvirgola
+\ExplSyntaxOn
+\cs_new_protected:Npn \EqTogliParagrafi #1 { \tl_remove_all:Nn #1 { \par } }
+\str_new:N \l__eqdue_str
+\int_new:N \l__eqdue_int
+\cs_new_protected:Npn \EqNumero #1#2
+  {
+    \tl_set_eq:NN \l_tmpa_tl #1
+    \tl_replace_all:Nnn \l_tmpa_tl { \cdot } { * }
+    \tl_replace_all:Nnn \l_tmpa_tl { \times } { * }
+    \str_set:NV \l__eqdue_str \l_tmpa_tl
+    \exp_args:NNV \str_replace_all:Nnn \l__eqdue_str \c_left_brace_str { ( }
+    \exp_args:NNV \str_replace_all:Nnn \l__eqdue_str \c_right_brace_str { ) }
+    \str_remove_all:Nn \l__eqdue_str { ~ }
+    \eqnumoktrue
+    \eqnumvirgolafalse
+    \int_zero:N \l__eqdue_int
+    \str_if_empty:NT \l__eqdue_str { \eqnumokfalse }
+    \str_map_inline:Nn \l__eqdue_str
+      {
+        \str_if_in:nnF { 0123456789.+-*/^() } { ##1 } { \eqnumokfalse }
+        \str_if_eq:nnT { ##1 } { , } { \eqnumvirgolatrue }
+        \str_if_eq:nnT { ##1 } { ( } { \int_incr:N \l__eqdue_int }
+        \str_if_eq:nnT { ##1 } { ) }
+          {
+            \int_decr:N \l__eqdue_int
+            \int_compare:nNnT { \l__eqdue_int } < { 0 } { \eqnumokfalse }
+          }
+      }
+    % parentesi che non si chiudono, un'operazione in fondo o in testa
+    \int_compare:nNnF { \l__eqdue_int } = { 0 } { \eqnumokfalse }
+    \str_if_empty:NF \l__eqdue_str
+      {
+        \exp_args:Nne \str_if_in:nnT { +-*/^( }
+          { \str_item:Nn \l__eqdue_str { -1 } } { \eqnumokfalse }
+        \exp_args:Nne \str_if_in:nnT { */^) }
+          { \str_head:N \l__eqdue_str } { \eqnumokfalse }
+      }
+    \tl_set_eq:NN #2 \l__eqdue_str
+  }
+\ExplSyntaxOff
+% \eqCoefficiente{nome}\testo\uscita: controlla a, b, c o delta
+\newcommand{\eqCoefficiente}[3]{%
+  \EqNumero#2#3%
+  \ifeqnumok\else
+    \eqIfEmpty{#3}{%
+      \PackageError{equazioni}{Riga \EqIndice: #1 e' vuoto: serve un
+        numero}{}%
+    }{%
+      \ifeqnumvirgola
+        \PackageError{equazioni}{Riga \EqIndice: #1 =
+          '\detokenize\expandafter{#2}': i numeri si scrivono col punto
+          (0.5), non con la virgola}{}%
+      \else
+        \PackageError{equazioni}{Riga \EqIndice: #1 =
+          '\detokenize\expandafter{#2}' non si puo' calcolare: ci vanno
+          numeri col punto, + - * / ^ e parentesi chiuse, senza
+          un'operazione in fondo (\string\cdot\space e \string\times\space
+          vanno bene). Per scrivere l'equazione in un altro modo c'e' la
+          chiave equazione}{}%
+      \fi
+    }%
+    \def#3{0}%
+  \fi}
+
+% --- misure: prima di disegnare un nodo se ne conosce l'ingombro ---
+% \eqMisura{stile}{contenuto}: disegna il nodo in una scatola che si butta
+% via e scrive in \eqMisN / \eqMisS l'altezza del bordo alto e basso
+% rispetto al punto in cui lo si piazza.
+\newif\ifeqdentro % vero mentre si disegna (o si misura) una riga
+\newcommand{\eqMisura}[2]{%
+  \begingroup
+    \pgfinterruptpicture
+      \setbox0=\hbox{\begin{tikzpicture}%
+        \node[#1] (eq@misura) at (0,0) {#2};%
+        \pgfextracty{\dimen0}{\pgfpointanchor{eq@misura}{north}}%
+        \pgfextracty{\dimen2}{\pgfpointanchor{eq@misura}{south}}%
+        \xdef\eqMisN{\the\dimen0}\xdef\eqMisS{\the\dimen2}%
+      \end{tikzpicture}}%
+    \endpgfinterruptpicture
+  \endgroup}
+% \eqOffset\verso\fuori: dopo \eqMisura, i bordi del nodo nel verso del
+% ramo (u = distanza dalla riga, positiva verso l'esterno)
+\newdimen\eqTmp
+\newcommand{\eqOffset}[2]{%
+  \ifnum\eqVerso>0
+    \let#1\eqMisS \let#2\eqMisN
+  \else
+    \eqTmp=-\eqMisN\relax\edef#1{\the\eqTmp}%
+    \eqTmp=-\eqMisS\relax\edef#2{\the\eqTmp}%
+  \fi}
+
+% --- ingombri di una riga: rettangoli dei nodi e delle linee ---
+% \eqRettRiga raccoglie \eqR{x min}{y min}{x max}{y max} della riga in
+% corso (coordinate della riga); \eqOccupati raccoglie
+% \eqO{indice}{x min}{y min}{x max}{y max} delle righe già disegnate.
+\def\eqRettRiga{}
+\def\eqOccupati{}
+\def\eqScarto{0pt}
+% ogni figura riparte da zero (non le figure di misura, né una figura
+% dentro il testo di un nodo)
+\AddToHook{env/tikzpicture/begin}{%
+  \ifeqdentro\else\gdef\eqOccupati{}\gdef\eqScarto{0pt}\fi}
+\newcommand{\eqAggiungi}[4]{%
+  \xdef\eqRettRiga{\unexpanded\expandafter{\eqRettRiga}%
+    \noexpand\eqR{#1}{#2}{#3}{#4}}}
+\newcommand{\eqRegistraNodo}[1]{%
+  \pgfextractx{\dimen0}{\pgfpointanchor{#1}{south west}}%
+  \pgfextracty{\dimen2}{\pgfpointanchor{#1}{south west}}%
+  \pgfextractx{\dimen4}{\pgfpointanchor{#1}{north east}}%
+  \pgfextracty{\dimen6}{\pgfpointanchor{#1}{north east}}%
+  \eqAggiungi{\the\dimen0}{\the\dimen2}{\the\dimen4}{\the\dimen6}}
+% \eqRegistraLinea{nodo}{ancora}{nodo}{ancora}: il rettangolo della linea
+\newcommand{\eqRegistraLinea}[4]{%
+  \pgfextractx{\dimen0}{\pgfpointanchor{#1}{#2}}%
+  \pgfextracty{\dimen2}{\pgfpointanchor{#1}{#2}}%
+  \pgfextractx{\dimen4}{\pgfpointanchor{#3}{#4}}%
+  \pgfextracty{\dimen6}{\pgfpointanchor{#3}{#4}}%
+  \ifdim\dimen0>\dimen4 \eqTmp=\dimen0 \dimen0=\dimen4 \dimen4=\eqTmp \fi
+  \ifdim\dimen2>\dimen6 \eqTmp=\dimen2 \dimen2=\dimen6 \dimen6=\eqTmp \fi
+  \eqAggiungi{\the\dimen0}{\the\dimen2}{\the\dimen4}{\the\dimen6}}
+
+% --- una riga ---
+\newcommand{\EqRender}{%
+  \gdef\eqRettRiga{}%
+  \eqval{a}{\eqA}\eqval{b}{\eqB}\eqval{c}{\eqC}\eqval{variabile}{\eqV}%
+  \eqval{x1}{\eqXa}\eqval{x2}{\eqXb}\eqval{delta}{\eqDelta}%
+  \eqval{equazione}{\eqEq}\eqval{impossibile}{\eqImp}%
+  % discriminante: segno (calcolato con \fpeval, senza limiti di
+  % grandezza) e testo sotto radice
+  \eqIfEmpty{\eqDelta}{%
+    \eqCoefficiente{a}\eqA\eqAn
+    \eqCoefficiente{b}\eqB\eqBn
+    \eqCoefficiente{c}\eqC\eqCn
+    \edef\eqDiscEspr{(\eqBn)^2-4*(\eqAn)*(\eqCn)}%
+    \def\eqDeltaTesto{(\eqB)^2-4(\eqA)(\eqC)}%
+  }{%
+    \eqCoefficiente{delta}\eqDelta\eqDiscEspr
+    \let\eqDeltaTesto\eqDelta
+  }%
+  \edef\eqSegno{\fpeval{abs(\eqDiscEspr)<0.0001 ? 0 : sign(\eqDiscEspr)}}%
+  \eqIfEmpty{\eqEq}{\def\eqEq{(\eqA) \eqV^2+(\eqB)\eqV+(\eqC)=0}}{}%
+  \def\eqI{eq-\EqIndice}%
+  \ifnum\eqSegno>0
+    \node[eq2@equazione] (\eqI) at (\eqget{x inizio},0) {\eqget{dimensione}%
+      $\eqEq \Longrightarrow \eqV_{1,2}=\dfrac{-(\eqB)\pm\sqrt{\eqDeltaTesto}}{2(\eqA)}$};
+    \draw[eq2 bivio] (\eqI.east) -- ++(\eqget{bivio dx},\eqget{bivio dy})
+      coordinate (\eqI-b1);
+    \draw[eq2 bivio] (\eqI.east) -- ++(\eqget{bivio dx},-\eqget{bivio dy})
+      coordinate (\eqI-b2);
+    \node[eq2@soluzione] (\eqI-x1) at (\eqI-b1)
+      {$\eqV_1=\dfrac{-(\eqB)+\sqrt{\eqDeltaTesto}}{2(\eqA)}\eqIfEmpty{\eqXa}{}{=\eqXa}$};
+    \node[eq2@soluzione] (\eqI-x2) at (\eqI-b2)
+      {$\eqV_2=\dfrac{-(\eqB)-\sqrt{\eqDeltaTesto}}{2(\eqA)}\eqIfEmpty{\eqXb}{}{=\eqXb}$};
+    \eqRegistraNodo{\eqI}\eqRegistraNodo{\eqI-x1}\eqRegistraNodo{\eqI-x2}%
+    \eqRegistraLinea{\eqI}{east}{\eqI-b1}{center}%
+    \eqRegistraLinea{\eqI}{east}{\eqI-b2}{center}%
+    % ascissa delle etichette dei rami: x rami, ma almeno «distanza rami»
+    % a destra di x_1 e di x_2
+    \pgfmathsetlengthmacro{\eqXramiLen}{\eqget{x rami} cm}%
+    \pgfmathsetlengthmacro{\eqDxLen}{\eqget{dx rami} cm}%
+    \pgfmathsetlengthmacro{\eqGapLen}{\eqget{distanza rami} cm}%
+    \pgfextractx{\dimen0}{\pgfpointanchor{\eqI-x1}{east}}%
+    \pgfextractx{\dimen2}{\pgfpointanchor{\eqI-x2}{east}}%
+    \ifdim\dimen2>\dimen0 \dimen0=\dimen2 \fi
+    \advance\dimen0 by \eqGapLen
+    \ifdim\eqXramiLen<\dimen0
+      \edef\eqXlab{\the\dimen0}%
+    \else
+      \edef\eqXlab{\eqXramiLen}%
+    \fi
+    \pgfmathsetlengthmacro{\eqXtesti}{\eqXlab+\eqDxLen}%
+    \EqRenderRami
+  \else
+    \ifnum\eqSegno=0
+      % x_1 = x_2: vale la chiave x1, e se è vuota x2
+      \eqIfEmpty{\eqXa}{\let\eqXz\eqXb}{\let\eqXz\eqXa}%
+      \node[eq2@equazione] (\eqI) at (\eqget{x inizio},0) {\eqget{dimensione}%
+        $\eqEq \Longrightarrow \eqV_1=\eqV_2=\dfrac{-(\eqB)}{2(\eqA)}\eqIfEmpty{\eqXz}{}{=\eqXz}$};
+    \else
+      \node[eq2@equazione] (\eqI) at (\eqget{x inizio},0) {\eqget{dimensione}%
+        $\eqEq \Longrightarrow \Delta<0 \eqIfEmpty{\eqImp}{}{\Longrightarrow \eqImp}$};
+    \fi
+    \eqRegistraNodo{\eqI}%
+    % i rami hanno bisogno di x_1 e x_2
+    \eqScorriRami{%
+      \PackageError{equazioni}{Riga \EqIndice: il ramo n. \rn\space (da
+        x_\detokenize\expandafter{\rs}) non si puo' disegnare, qui Delta
+        non e' positivo (non ci sono x_1 e x_2)}{}}%
+  \fi
+}
+
+% --- i rami: soluzione/etichetta/testo esterno/testo interno/mostra ---
+% \eqScorriRami{azione}: per ogni ramo della lista (gli elementi vuoti,
+% cioè virgole in più, si saltano) prepara \rs \rl \rest \rint senza
+% spazi attorno e \rn (numero del ramo) e, se il ramo è da mostrare,
+% esegue l'azione.
+\newcommand{\eqScorriRami}[1]{%
+  \gdef\eqRn{0}%
+  \eqIfEmpty{\EqRamiData}{}{%
+    \foreach \rs/\rl/\rest/\rint/\rshow in \EqRamiData {%
+      \eqTrim\rs\eqTrim\rl\eqTrim\rest\eqTrim\rint\eqTrim\rshow
+      \if\relax\detokenize\expandafter{\rs}\detokenize\expandafter{\rl}%
+          \detokenize\expandafter{\rest}\detokenize\expandafter{\rint}%
+          \detokenize\expandafter{\rshow}\relax
+      \else
+        \xdef\eqRn{\the\numexpr\eqRn+1\relax}\let\rn\eqRn
+        \eqLeggiMostra\rshow{Riga \EqIndice, ramo n. \rn}{Se il ramo ha
+          meno di cinque campi ne manca uno (soluzione/etichetta/testo
+          esterno/testo interno/mostra); un testo con / o virgole va tra
+          graffe}%
+        \ifeqvedi #1\fi
+      \fi
+    }%
+  }%
+}
+
+\newcommand{\EqRenderRami}{%
+  % quanti rami sono già partiti da x_1 e da x_2, e dove finiscono
+  \expandafter\gdef\csname eqNrami1\endcsname{0}%
+  \expandafter\gdef\csname eqNrami2\endcsname{0}%
+  \eqScorriRami{\eqDisegnaRamo}%
+}
+
+\newcommand{\eqDisegnaRamo}{%
+  \def\eqSol{0}%
+  \eqSeUguale{\rs}{1}{\def\eqSol{1}\def\eqVerso{1}}{}%
+  \eqSeUguale{\rs}{2}{\def\eqSol{2}\def\eqVerso{-1}}{}%
+  \ifnum\eqSol=0
+    \PackageError{equazioni}{Riga \EqIndice: ramo n. \rn\space con
+      soluzione '\detokenize\expandafter{\rs}': si scrive 1 (da x_1) o 2
+      (da x_2)}{}%
+  \else
+    \eqPiazzaRamo
+  \fi}
+
+\newdimen\eqUlab \newdimen\eqUest \newdimen\eqGapV \newdimen\eqGapE
+\newdimen\eqFuori
+\newcommand{\eqPiazzaRamo}{%
+  % misure dei nodi, prima di disegnarli (u: distanza dalla riga)
+  \eqMisura{eq2@etichetta}{\rl}\eqOffset\eqLin\eqLout
+  \eqIfEmpty{\rint}{}{\eqMisura{eq2@testo}{$\rint$}\eqOffset\eqIin\eqIout}%
+  \eqIfEmpty{\rest}{}{\eqMisura{eq2@testo}{$\rest$}\eqOffset\eqEin\eqEout}%
+  \pgfmathsetlength{\eqGapV}{\eqget{distanza fra rami}*1cm}%
+  \pgfmathsetlength{\eqGapE}{\eqget{distanza esterno}*1cm}%
+  % etichetta e testo interno a «y rami» dalla riga; se da questa
+  % soluzione è già partito un ramo, oltre il suo bordo esterno
+  \pgfmathsetlength{\eqUlab}{\eqget{y rami}*1cm}%
+  \ifnum\csname eqNrami\eqSol\endcsname>0
+    \eqTmp=\csname eqFuori\eqSol\endcsname\relax
+    \advance\eqTmp by \eqGapV \advance\eqTmp by -\eqLin\relax
+    \ifdim\eqUlab<\eqTmp \eqUlab=\eqTmp \fi
+    \eqIfEmpty{\rint}{}{%
+      \eqTmp=\csname eqFuori\eqSol\endcsname\relax
+      \advance\eqTmp by \eqGapV \advance\eqTmp by -\eqIin\relax
+      \ifdim\eqUlab<\eqTmp \eqUlab=\eqTmp \fi}%
+  \fi
+  % testo esterno a «dy rami» oltre, ma senza toccare il testo interno
+  \pgfmathsetlength{\eqUest}{\eqget{dy rami}*1cm}%
+  \advance\eqUest by \eqUlab
+  \eqIfEmpty{\rint}{}{\eqIfEmpty{\rest}{}{%
+    \eqTmp=\eqUlab \advance\eqTmp by \eqIout\relax
+    \advance\eqTmp by \eqGapE \advance\eqTmp by -\eqEin\relax
+    \ifdim\eqUest<\eqTmp \eqUest=\eqTmp \fi}}%
+  \eqTmp=\eqVerso\eqUlab \edef\eqYlab{\the\eqTmp}%
+  \eqTmp=\eqVerso\eqUest \edef\eqYest{\the\eqTmp}%
+  % disegno
+  \node[eq2@etichetta] (\eqI-r\rn) at (\eqXlab,\eqYlab) {\rl};
+  \draw[eq2 ramo] (\eqI-x\eqSol.east) -- (\eqI-r\rn.west);
+  \eqRegistraNodo{\eqI-r\rn}\eqRegistraLinea{\eqI-x\eqSol}{east}{\eqI-r\rn}{west}%
+  % i testi: a «dx rami» dalle etichette, ma almeno «distanza
+  % testi» a destra di questa etichetta (se è larga)
+  \pgfextractx{\dimen4}{\pgfpointanchor{\eqI-r\rn}{east}}%
+  \pgfmathsetlengthmacro{\eqGapTesti}{\eqget{distanza testi} cm}%
+  \advance\dimen4 by \eqGapTesti
+  \ifdim\eqXtesti<\dimen4 \edef\eqXt{\the\dimen4}\else\let\eqXt\eqXtesti\fi
+  \eqIfEmpty{\rest}{}{%
+    \node[eq2@testo] (\eqI-r\rn-e) at (\eqXt,\eqYest) {$\rest$};
+    \eqRegistraNodo{\eqI-r\rn-e}}%
+  \eqIfEmpty{\rint}{}{%
+    \node[eq2@testo] (\eqI-r\rn-i) at (\eqXt,\eqYlab) {$\rint$};
+    \eqRegistraNodo{\eqI-r\rn-i}}%
+  \eqIfEmpty{\rest}{}{\draw[eq2 ramo] (\eqI-r\rn.east) -- (\eqI-r\rn-e.west);
+    \eqRegistraLinea{\eqI-r\rn}{east}{\eqI-r\rn-e}{west}}%
+  \eqIfEmpty{\rint}{}{\draw[eq2 ramo] (\eqI-r\rn.east) -- (\eqI-r\rn-i.west);
+    \eqRegistraLinea{\eqI-r\rn}{east}{\eqI-r\rn-i}{west}}%
+  % bordo esterno di questo ramo, per il prossimo dalla stessa soluzione
+  \eqFuori=\eqUlab \advance\eqFuori by \eqLout\relax
+  \eqIfEmpty{\rint}{}{%
+    \eqTmp=\eqUlab \advance\eqTmp by \eqIout\relax
+    \ifdim\eqTmp>\eqFuori \eqFuori=\eqTmp \fi}%
+  \eqIfEmpty{\rest}{}{%
+    \eqTmp=\eqUest \advance\eqTmp by \eqEout\relax
+    \ifdim\eqTmp>\eqFuori \eqFuori=\eqTmp \fi}%
+  \expandafter\xdef\csname eqFuori\eqSol\endcsname{\the\eqFuori}%
+  \expandafter\xdef\csname eqNrami\eqSol\endcsname{%
+    \the\numexpr\csname eqNrami\eqSol\endcsname+1\relax}%
+}
+
+% --- dove va una riga: -indice*passo (più lo spostamento delle righe
+% sopra), e più in basso se una sua scritta starebbe sopra, o a meno di
+% «distanza righe», a una scritta di una riga sopra che le sta di fronte
+\newdimen\eqYriga \newdimen\eqGapR
+\newcommand{\eqCalcolaY}{%
+  \pgfmathsetlength{\eqYriga}{-(\eqIdx)*(\eqget{passo righe})*1cm}%
+  \edef\eqYnominale{\the\eqYriga}%
+  \advance\eqYriga by -\eqScarto\relax
+  \pgfmathsetlength{\eqGapR}{\eqget{distanza righe}*1cm}%
+  \def\eqR##1##2##3##4{\def\eqRxa{##1}\def\eqRxb{##3}\def\eqRyb{##4}\eqOccupati}%
+  \def\eqO##1##2##3##4##5{%
+    \ifdim##1pt<\eqIdx pt
+      \ifdim\eqRxa<##4\relax\ifdim\eqRxb>##2\relax
+        \eqTmp=##3\relax
+        \advance\eqTmp by -\eqGapR \advance\eqTmp by -\eqRyb\relax
+        \ifdim\eqTmp<\eqYriga \eqYriga=\eqTmp \fi
+      \fi\fi
+    \fi}%
+  \eqRettRiga
+  \eqTmp=\eqYnominale\relax \advance\eqTmp by -\eqYriga
+  \xdef\eqScarto{\the\eqTmp}%
+  \edef\eqY{\the\eqYriga}}
+% la riga disegnata entra fra gli ingombri
+\newcommand{\eqRegistraRiga}{%
+  \def\eqR##1##2##3##4{%
+    \eqTmp=##2\relax \advance\eqTmp by \eqY\relax \edef\eqRya{\the\eqTmp}%
+    \eqTmp=##4\relax \advance\eqTmp by \eqY\relax \edef\eqRyb{\the\eqTmp}%
+    \xdef\eqOccupati{\unexpanded\expandafter{\eqOccupati}%
+      \noexpand\eqO{\eqIdx}{##1}{\eqRya}{##3}{\eqRyb}}}%
+  \eqRettRiga}
+
+% --- la riga: {indice}{mostra} ---
+\newenvironment{Equazione}[2]{%
+  \begin{scope}
+  \def\EqIndice{#1}\eqTrim\EqIndice
+  \eqIfEmpty{\EqIndice}{%
+    \PackageError{equazioni}{Una riga non ha l'indice: si scrive
+      \string\begin{Equazione}{indice}{mostra}, con indice 0 per la prima
+      riga, 1 per la seconda, ...}{}\def\EqIndice{0}}{}%
+  \pgfmathsetmacro{\eqIdx}{\EqIndice}%
+  \def\EqMostra{#2}%
+}{%
+  \eqdentrotrue
+  \eqLeggiMostra\EqMostra{Riga \EqIndice}{E' il secondo argomento di
+    \string\begin{Equazione}{indice}{mostra}}%
+  \ifeqvedi
+    % 1) la riga si disegna in una scatola che si butta via, per
+    %    conoscerne gli ingombri; 2) si sceglie la y; 3) si disegna
+    \begingroup
+      \pgfinterruptpicture
+        \setbox0=\hbox{\begin{tikzpicture}\EqRender\end{tikzpicture}}%
+      \endpgfinterruptpicture
+    \endgroup
+    \eqCalcolaY
+    \begin{scope}[shift={(0pt,\eqY)}]
+      \EqRender
+    \end{scope}
+    \eqRegistraRiga
+  \fi
+  \end{scope}
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTA LA FIGURA ============
+  \EqSet{passo righe=2, variabile=x}
+  % stili: \tikzset{eq2 ramo/.style={gray}}
+
+  % ============ RIGA 1: Delta > 0 (9-8=1), con due rami ============
+  \begin{Equazione}{0}{1}
+    \EqSet{a=-2, b=3, c=-1, x1=\dfrac{1}{2}, x2=1, delta=1,
+      x rami=14, y rami=0.6, dx rami=2, dy rami=1.5}
+    % soluzione/etichetta/testo esterno/testo interno/mostra
+    \SetRami{
+      1/{per la 1}/
+        {\color{blue}0\neq -1 \Longrightarrow \forall b\in\mathbb{R}}/
+        {-b\neq -1 \Longrightarrow b\neq 1}/1,
+      2/{per la 1}/
+        {0=\dfrac{-b+2}{2} \Longrightarrow b=2}/
+        {-b\neq \dfrac{-b+2}{2} \Longrightarrow b\neq -2}/1
+    }
+  \end{Equazione}
+
+  % ============ RIGA 2: Delta = 0 ============
+  \begin{Equazione}{1}{1}
+    \EqSet{a=1, b=-4, c=4, x1=2}
+  \end{Equazione}
+
+  % ============ RIGA 3: Delta < 0 ============
+  \begin{Equazione}{2}{1}
+    \EqSet{a=2, b=1, c=3}
+  \end{Equazione}
+
+\end{tikzpicture}
+\end{document}

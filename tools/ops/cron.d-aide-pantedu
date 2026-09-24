@@ -1,0 +1,19 @@
+# Controllo giornaliero dell'integrità dei file (AIDE).
+#
+# Si installa in `/etc/cron.d/aide-pantedu`. Lo script vero sta in
+# `tools/ops/aide-check.sh` di questo repository e si installa in
+# `/usr/local/sbin/` — non si esegue direttamente dall'albero del
+# repository, che è scrivibile dall'utente `pantedu`: un cron di root che
+# esegue un file scrivibile da un altro utente è una scala verso root.
+#
+# Niente `MAILTO=`. C'era, e puntava a un indirizzo vero, ma su questa
+# macchina **non c'è nessun MTA**: cron non ha modo di consegnare, quindi
+# quella riga prometteva un recapito che non è mai esistito. Le segnalazioni
+# passano da `logger` (journald, poi Loki e gli allarmi di Grafana) e dal
+# registro delle anomalie, che la diagnostica trasforma in una mail vera
+# passando da Resend.
+#
+# 04:00: dopo il salvataggio cifrato (02:35), la catena di audit (02:50) e la
+# sincronizzazione con Drive (03:40). Il giro dura una decina di minuti e
+# legge tutto il disco, quindi conviene che sia solo.
+0 4 * * * root /usr/local/sbin/aide-check-pantedu.sh

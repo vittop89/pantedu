@@ -1,0 +1,27 @@
+[
+    {
+        "titolo": "COMPETENZE",
+        "contenuti": [
+            {
+                "label": "Utilizzare in modo integrato e strategico le tecniche del calcolo algebrico (radicali, equazioni, disequazioni e sistemi di vario grado) per modellizzare, analizzare e risolvere problemi in diversi contesti, interpretando criticamente le soluzioni ottenute.",
+                "checked": true
+            },
+            {
+                "label": "Padroneggiare il linguaggio della geometria analitica per rappresentare e analizzare le proprietà di luoghi geometrici e figure piane (rette, parabole, circonferenze), mettendo in relazione la loro rappresentazione algebrica con quella grafica per risolvere problemi.",
+                "checked": true
+            },
+            {
+                "label": "Applicare i principi della geometria euclidea (equivalenza, teoremi di Pitagora ed Euclide, similitudine) per analizzare le proprietà delle figure piane, costruire argomentazioni e risolvere problemi che richiedono un approccio logico-deduttivo.",
+                "checked": true
+            },
+            {
+                "label": "Analizzare e applicare le trasformazioni geometriche nel piano (isometrie, omotetie) come strumento per studiare le proprietà delle figure e le loro invarianze, operando con consapevolezza la transizione tra approccio sintetico e analitico.",
+                "checked": true
+            },
+            {
+                "label": "Utilizzare i concetti e gli strumenti fondamentali del calcolo delle probabilità per analizzare, quantificare e interpretare l'incertezza in semplici situazioni aleatorie, distinguendo tra i diversi approcci alla probabilità.",
+                "checked": true
+            }
+        ]
+    }
+]

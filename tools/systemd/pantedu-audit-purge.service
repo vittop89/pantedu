@@ -1,0 +1,74 @@
+[Unit]
+# Cancellazione dei registri di audit oltre la retention (sette anni).
+#
+# GDPR art. 5(1)(e): i dati non si tengono più a lungo del necessario. Il 1°
+# settembre 2026 questo giro ha cancellato 31.619 righe, quindi funziona — ma
+# funzionava da una riga di crontab, senza `OnFailure=` e senza nessuno stato:
+# il giorno in cui avesse smesso, l'avremmo saputo da un adempimento mancato,
+# non da un allarme.
+#
+# È la stessa forma del salvataggio delle chiavi dei docenti, rimasto fermo
+# tre settimane senza dirlo (vedi `pantedu-backup-chiavi.service`).
+#
+# E come quello: girava da cron **come root**. Un cron ha una sessione di
+# login, quindi un `auid`; PHP legge `.env.local` all'avvio; auditd registra
+# le letture dei segreti da una sessione di login. Misurato: un `php` lanciato
+# così lascia **un evento**. Ogni mese l'allarme sui segreti avrebbe suonato
+# per un lavoro nostro. Da systemd, `auid` non c'è e l'evento neanche.
+Description=pantedu — purga dei registri di audit oltre la retention
+After=network-online.target mariadb.service
+Wants=network-online.target
+Requires=mariadb.service
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+Group=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/audit/purge_old_logs.php --apply
+StandardOutput=append:/var/log/pantedu-audit-purge.log
+StandardError=append:/var/log/pantedu-audit-purge.log
+# Cancella decine di migliaia di righe in una volta sola: mezz'ora è larga e
+# non lascia un processo appeso se il database si impunta.
+TimeoutStartSec=1800
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Misurato il 9 settembre 2026 con `systemd-analyze security`: tutte le unità
+# di questo progetto stavano fra 9.2 e 9.6 su 10, cioè «unsafe» — nessuna
+# aveva una sola direttiva di contenimento.
+#
+# Non è la difesa contro l'intrusione. È la stessa idea del container: dato
+# per scontato che prima o poi qualcosa esegua codice non previsto dentro uno
+# di questi lavori, quanto lontano arriva?
+#
+# Sono direttive scelte perché **nessuno di questi programmi ha motivo di fare
+# quelle cose**: sono script PHP che leggono un database e scrivono file sotto
+# `storage/`. Non caricano moduli del kernel, non toccano l'orologio, non
+# hanno bisogno di `/home`, non creano file setuid.
+#
+# `ProtectSystem=full` e non `strict`: rende `/usr`, `/boot` ed `/etc` in sola
+# lettura lasciando `/var` scrivibile, che è dove questi lavori scrivono. Con
+# `strict` servirebbe elencare a mano i percorsi di ognuno, e un elenco
+# sbagliato si scopre di notte quando il lavoro fallisce.
+#
+# `NoNewPrivileges` non è compatibile con `sudo`, che è setuid: per questo non
+# sta nelle unità che lo usano (il rilascio).
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

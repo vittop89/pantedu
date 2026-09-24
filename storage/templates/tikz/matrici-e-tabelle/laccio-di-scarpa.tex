@@ -1,0 +1,392 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{matrix}
+
+% ==================================================
+% METODO DEL LACCIO DI SCARPA (determinante per punti)
+% ==================================================
+% I vertici del poligono, in ordine, vanno in colonna (x | y); in fondo si
+% ripete il primo. Le diagonali \ (x_i y_{i+1}) sono i prodotti «di
+% andata», le diagonali / (x_{i+1} y_i) quelli «di ritorno». A destra il
+% calcolo: (somma andata) - (somma ritorno) = D, fatto dal modello.
+%
+%   \SetVertici{x/y/mostra, x/y/mostra, ...}
+%     x, y   = coordinate: numeri scritti col PUNTO decimale (2.5, -3,
+%              0.25), anche se la tabella li mostra con la virgola: la
+%              virgola separa i vertici. Numeri, non conti: 0.5 e non
+%              {1/2}, perché la tabella mostra quello che scrivi. Quanti
+%              vertici vuoi, almeno 3 visibili
+%     mostra = 1 il vertice c'è, 0 il vertice si salta; si può omettere
+%              (x/y) o lasciare vuoto (x/y/): vale 1
+%   (campi separati da /, vertici separati da virgola; una virgola in più,
+%   in fondo alla lista anche prima di una riga commentata o doppia, non
+%   conta)
+%   Un vertice scritto male (un campo solo, più di tre campi, una
+%   coordinata vuota o che non è un numero) ferma il disegno con un errore
+%   che dice quale vertice, contando quelli scritti.
+%
+% IL CALCOLO: si fa sulle coordinate come le scrive la tabella; i prodotti
+% e il risultato si scrivono esatti, per intero, così i termini scritti
+% sommano davvero al risultato scritto. Le coordinate si arrotondano solo
+% se lo chiedi con la chiave «cifre», e allora il calcolo usa quelle
+% arrotondate. Numeri grandi vanno bene (un campo di 120 m x 80 m,
+% coordinate di decine di migliaia): i conti sono esatti finché ogni
+% prodotto e ogni somma stanno in 16 cifre significative.
+%
+% CHIAVI (\LaccioSet{chiave=valore, ...}):
+%   chiudi         1 = ripete il primo vertice in fondo; 0 = no (lo scrivi tu)
+%   sinistra       testo a sinistra della barra                ($D=$)
+%   destra         testo subito a destra della barra           ($=$)
+%   calcolo        il calcolo scritto a mano, in modo matematico senza $;
+%                  vuoto = calcolato dai vertici
+%   mostra calcolo 1 = scrive il calcolo, 0 = solo la barra e «destra»
+%   colore andata, colore ritorno   diagonali e parentesi del calcolo
+%   margine verticale, margine orizzontale   barre oltre la tabella
+%   cifre          vuoto = le coordinate si scrivono come le hai date;
+%                  un numero = arrotondate a tante cifre decimali (5 in su
+%                  per eccesso: 3.25 con cifre=1 fa 3,3), e il calcolo usa
+%                  quelle arrotondate                          (vuoto)
+%   virgola        1 = virgola decimale (2,5); 0 = punto (2.5)
+% STILI (\tikzset{laccio .../.style={...}}):
+%   laccio matrice (distanze e nodi della tabella), laccio andata,
+%   laccio ritorno (in più alle diagonali), laccio barra,
+%   laccio testo (i testi accanto alle barre: un text=... colora tutto,
+%   tranne le parentesi del calcolo, che hanno i colori di andata e ritorno)
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+\pgfkeys{
+  /laccio/.is family, /laccio,
+  chiudi/.initial=1,
+  sinistra/.initial={$D=$},
+  destra/.initial={$=$},
+  calcolo/.initial={},
+  mostra calcolo/.initial=1,
+  colore andata/.initial=blue,
+  colore ritorno/.initial=red,
+  margine verticale/.initial=0.3em,
+  margine orizzontale/.initial=0.5em,
+  cifre/.initial={},
+  virgola/.initial=1,
+}
+\newcommand{\LaccioSet}[1]{\pgfkeys{/laccio/.cd,#1}}
+\newcommand{\laccioget}[1]{\pgfkeysvalueof{/laccio/#1}}
+
+\tikzset{
+  laccio matrice/.style={row sep=1.5em, column sep=1.5em,
+    nodes={minimum size=1em}},
+  laccio andata/.style={},
+  laccio ritorno/.style={},
+  laccio barra/.style={},
+  laccio testo/.style={},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+\newcommand{\SetVertici}[1]{\def\LaccioVerticiData{#1}}
+\SetVertici{}
+\newcount\laccioN
+\newcommand{\laccioIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+\newcommand{\laccioV}[2]{\csname laccio@#1@#2\endcsname}% \laccioV{x}{3}
+
+% I conti si fanno con \fpeval (aritmetica decimale di LaTeX, 16 cifre
+% significative), non con pgfmath: pgfmath si ferma a 16383,99 con
+% «Dimension too large», e un campo di 120 m x 80 m non si calcolava.
+%
+% \laccioNumero{espressione}: in \laccioSegno «-» o vuoto, in \laccioAss il
+% valore assoluto scritto per intero, con la virgola se virgola=1 (testo
+% semplice: \pgfmathprintnumber non va dentro la tabella). Non arrotonda:
+% si arrotondano (se «cifre» lo chiede) solo le coordinate, e prodotti e
+% somme restano esatti.
+\def\laccioDividi#1.#2.#3\relax{\def\laccioParteInt{#1}\def\laccioParteDec{#2}}
+\newcommand{\laccioNumero}[1]{%
+  \edef\laccioTmp{\fpeval{#1}}%
+  % -0 non ha segno: -0<0 è falso
+  \xdef\laccioNeg{\fpeval{\laccioTmp<0}}%
+  \edef\laccioTmp{\fpeval{abs(\laccioTmp)}}%
+  \expandafter\laccioDividi\laccioTmp..\relax
+  \laccioIfEmpty{\laccioParteDec}{\xdef\laccioAss{\laccioParteInt}}{%
+    \ifnum\laccioget{virgola}>0
+      \xdef\laccioAss{\laccioParteInt{,}\laccioParteDec}%
+    \else
+      \xdef\laccioAss{\laccioParteInt.\laccioParteDec}%
+    \fi}%
+  \ifnum\laccioNeg>0 \gdef\laccioSegno{-}\else\gdef\laccioSegno{}\fi}
+
+% \laccioAppendi{\macro}{\altra}: aggiunge in fondo a \macro (globale) il
+% contenuto di \altra, senza espanderlo
+\newcommand{\laccioAppendi}[2]{%
+  \xdef#1{\unexpanded\expandafter{#1}\unexpanded\expandafter{#2}}}
+
+% \laccioTermini{1 = andata | 0 = ritorno}{\macro somma}: in \laccioTesto
+% i prodotti con i segni, es. -4+1-16; in \macro la loro somma. I prodotti
+% delle coordinate come stanno in tabella sono esatti, e si sommano quelli:
+% il calcolo scritto torna sempre.
+\newcommand{\laccioTermini}[2]{%
+  \gdef\laccioTesto{}\gdef#2{0}%
+  \foreach \k [evaluate=\k as \kk using int(\k+1)] in {1,...,\laccioUltimo} {
+    \ifnum#1>0 % andata: x_k y_{k+1}; ritorno: x_{k+1} y_k
+      \edef\laccioP{\fpeval{(\laccioV{x}{\k})*(\laccioV{y}{\kk})}}%
+    \else
+      \edef\laccioP{\fpeval{(\laccioV{x}{\kk})*(\laccioV{y}{\k})}}%
+    \fi
+    \xdef#2{\fpeval{(#2)+(\laccioP)}}%
+    \laccioNumero{\laccioP}%
+    \ifnum\k=1
+      \laccioAppendi{\laccioTesto}{\laccioSegno}%
+    \else
+      \ifnum\laccioNeg>0 \xdef\laccioTesto{\unexpanded\expandafter{\laccioTesto}-}%
+      \else \xdef\laccioTesto{\unexpanded\expandafter{\laccioTesto}+}\fi
+    \fi
+    \laccioAppendi{\laccioTesto}{\laccioAss}%
+  }}
+
+% --- lettura dei vertici ---
+% Gli errori su un vertice. Il testo sta qui, fuori da \ExplSyntaxOn (dove
+% gli spazi non contano). \laccioVoceN = il numero del vertice contando
+% quelli scritti; \laccioVoceTesto = il vertice com'è scritto.
+\newcommand{\laccioErrore}[1]{\PackageError{laccio}{Il vertice n.
+  \laccioVoceN\space («\laccioVoceTesto») #1}{Ogni vertice si scrive
+  x/y/mostra, per esempio 2.5/-1/1; mostra si può omettere e vale 1.
+  I decimali vanno col punto: la virgola separa i vertici.}}
+\newcommand{\laccioErrUnCampo}{\laccioErrore{ha un campo solo: si scrive
+  x/y/mostra. Se è un numero decimale, va scritto col punto (2.5): la
+  virgola separa i vertici}}
+\newcommand{\laccioErrTroppi}[1]{\laccioErrore{ha #1 campi: si scrive
+  x/y/mostra, tre campi al massimo}}
+\newcommand{\laccioErrVuoto}[1]{\laccioErrore{non ha #1: si scrive
+  x/y/mostra}}
+\newcommand{\laccioErrNumero}[2]{\laccioErrore{ha #1 «#2», che non è un
+  numero: i decimali si scrivono col punto (2.5), anche se la tabella li
+  mostra con la virgola}}
+\newcommand{\laccioErrMostra}[1]{\laccioErrore{ha mostra «#1»: si scrive
+  1 (il vertice c'è) o 0 (si salta)}}
+\newcommand{\laccioErrCifre}[1]{\PackageError{laccio}{cifre=#1: si scrive
+  un numero intero di cifre decimali (0, 1, 2, ...), o si lascia vuota}{}}
+
+\ExplSyntaxOn
+\clist_new:N \l__laccio_vertici_clist
+\seq_new:N \l__laccio_campi_seq
+\int_new:N \l__laccio_voce_int
+\tl_new:N \l__laccio_x_tl
+\tl_new:N \l__laccio_y_tl
+\tl_new:N \l__laccio_m_tl
+\bool_new:N \l__laccio_ok_bool
+\tl_new:N \l__laccio_cifre_tl
+% un numero col punto decimale: 3, -2.5, +0.25, .5. Non un conto: con 1/3
+% la tabella scriverebbe 0,3333333333333333 e D 0,9999999999999999
+\regex_const:Nn \c__laccio_numero_regex
+  { \A [\+\-]? ( \d+ (\.\d*)? | \.\d+ ) \Z }
+% un intero, per mostra
+\regex_const:Nn \c__laccio_intero_regex { \A [\+\-]? \d+ \Z }
+% un intero non negativo, per cifre
+\regex_const:Nn \c__laccio_cifre_regex { \A \s* \d+ \s* \Z }
+
+% \__laccio_valore:n {numero}: il numero come va in tabella e nei conti:
+% com'è scritto (solo normalizzato: +4 -> 4, 2.50 -> 2.5) se «cifre» è
+% vuota, altrimenti arrotondato a «cifre» decimali, 5 in su per eccesso
+% (0.125 -> 0.13, come faceva pgfmath). Espandibile.
+\cs_new:Npn \__laccio_valore:n #1
+  {
+    \tl_if_blank:VTF \l__laccio_cifre_tl
+      { \fp_eval:n {#1} }
+      {
+        \fp_eval:n
+          {
+            sign(#1) * trunc(abs(#1) + 0.5 * 10^(-\l__laccio_cifre_tl),
+              \l__laccio_cifre_tl)
+          }
+      }
+  }
+
+% \laccioLeggiVertici: legge \LaccioVerticiData; mette i vertici visibili,
+% come vanno in tabella, in \laccio@x@k e \laccio@y@k (k = 1, 2, ...), e
+% in \laccioN quanti sono
+\cs_new_protected:Npn \laccioLeggiVertici
+  {
+    \int_gzero:N \laccioN
+    \int_zero:N \l__laccio_voce_int
+    \tl_set:Nx \l__laccio_cifre_tl { \laccioget{cifre} }
+    \tl_if_blank:VF \l__laccio_cifre_tl
+      {
+        \exp_args:NNV \regex_match:NnF \c__laccio_cifre_regex
+          \l__laccio_cifre_tl
+          {
+            \exp_args:Nx \laccioErrCifre { \tl_to_str:N \l__laccio_cifre_tl }
+            \tl_clear:N \l__laccio_cifre_tl
+          }
+      }
+    % la clist toglie gli spazi e le voci vuote: una virgola in fondo
+    % alla lista, o doppia, non conta e non sposta la numerazione
+    \clist_set:NV \l__laccio_vertici_clist \LaccioVerticiData
+    \clist_map_function:NN \l__laccio_vertici_clist \__laccio_vertice:n
+  }
+\cs_new_protected:Npn \__laccio_vertice:n #1
+  {
+    \int_incr:N \l__laccio_voce_int
+    \tl_set:Nx \laccioVoceN { \int_use:N \l__laccio_voce_int }
+    \tl_set:Nx \laccioVoceTesto { \tl_to_str:n {#1} }
+    % i campi separati da /: spazi e graffe esterne tolti, un campo
+    % vuoto resta vuoto
+    \seq_set_split:Nnn \l__laccio_campi_seq { / } {#1}
+    \bool_set_true:N \l__laccio_ok_bool
+    \int_case:nnF { \seq_count:N \l__laccio_campi_seq }
+      {
+        { 1 }
+          { \laccioErrUnCampo \bool_set_false:N \l__laccio_ok_bool }
+        { 2 }
+          { \tl_set:Nn \l__laccio_m_tl { 1 } }
+        { 3 }
+          {
+            \__laccio_campo:Nn \l__laccio_m_tl { 3 }
+            \tl_if_empty:NT \l__laccio_m_tl
+              { \tl_set:Nn \l__laccio_m_tl { 1 } }
+          }
+      }
+      {
+        \exp_args:Nx \laccioErrTroppi { \seq_count:N \l__laccio_campi_seq }
+        \bool_set_false:N \l__laccio_ok_bool
+      }
+    \bool_if:NT \l__laccio_ok_bool
+      {
+        \__laccio_campo:Nn \l__laccio_x_tl { 1 }
+        \__laccio_campo:Nn \l__laccio_y_tl { 2 }
+        \__laccio_numero:Nn \l__laccio_x_tl { l'ascissa }
+        \__laccio_numero:Nn \l__laccio_y_tl { l'ordinata }
+      }
+    \bool_if:NT \l__laccio_ok_bool
+      {
+        \exp_args:NNV \regex_match:NnF \c__laccio_intero_regex \l__laccio_m_tl
+          {
+            \exp_args:Nx \laccioErrMostra { \tl_to_str:N \l__laccio_m_tl }
+            \bool_set_false:N \l__laccio_ok_bool
+          }
+      }
+    \bool_if:NT \l__laccio_ok_bool
+      {
+        \int_compare:nNnT { \l__laccio_m_tl } > { 0 }
+          {
+            \int_gincr:N \laccioN
+            \cs_gset:cpx { laccio@x@ \int_use:N \laccioN }
+              { \__laccio_valore:n { \l__laccio_x_tl } }
+            \cs_gset:cpx { laccio@y@ \int_use:N \laccioN }
+              { \__laccio_valore:n { \l__laccio_y_tl } }
+          }
+      }
+  }
+% \__laccio_campo:Nn \tl {k}: in \tl il campo k del vertice, espanso (una
+% macro che contiene un numero va bene, come prima con pgfmath; i comandi
+% di testo come \textbf restano come sono, e il controllo li ferma) e
+% senza spazi ai lati
+\cs_new_protected:Npn \__laccio_campo:Nn #1#2
+  {
+    \tl_set:Nx #1 { \seq_item:Nn \l__laccio_campi_seq {#2} }
+    \tl_set:Nx #1 { \exp_args:NV \text_expand:n #1 }
+    \tl_trim_spaces:N #1
+  }
+% \__laccio_numero:Nn \campo {nome}: il campo c'è ed è un numero col punto
+\cs_new_protected:Npn \__laccio_numero:Nn #1#2
+  {
+    \bool_if:NT \l__laccio_ok_bool
+      {
+        \tl_if_empty:NTF #1
+          {
+            \laccioErrVuoto {#2}
+            \bool_set_false:N \l__laccio_ok_bool
+          }
+          {
+            \exp_args:NNV \regex_match:NnF \c__laccio_numero_regex #1
+              {
+                \exp_args:Nnx \laccioErrNumero {#2} { \tl_to_str:N #1 }
+                \bool_set_false:N \l__laccio_ok_bool
+              }
+          }
+      }
+  }
+\ExplSyntaxOff
+
+\newcommand{\LaccioDisegna}{%
+  % vertici visibili, come vanno in tabella, in \laccio@x@k e \laccio@y@k
+  \laccioLeggiVertici
+  \ifnum\laccioN<3
+    \PackageError{laccio}{Servono almeno 3 vertici visibili in
+      \string\SetVertici\space (ce ne sono \the\laccioN)}{}%
+  \fi
+  % chiusura: il primo vertice ripetuto in fondo
+  \ifnum\laccioget{chiudi}>0
+    \global\advance\laccioN by 1
+    \expandafter\xdef\csname laccio@x@\the\laccioN\endcsname{\laccioV{x}{1}}
+    \expandafter\xdef\csname laccio@y@\the\laccioN\endcsname{\laccioV{y}{1}}
+  \fi
+  \pgfmathtruncatemacro{\laccioUltimo}{\laccioN-1}
+  % righe della tabella
+  \gdef\laccioRighe{}
+  \def\laccioAmp{\&}\def\laccioFine{\\}
+  \foreach \k in {1,...,\the\laccioN} {
+    \laccioNumero{\laccioV{x}{\k}}%
+    \laccioAppendi{\laccioRighe}{\laccioSegno}\laccioAppendi{\laccioRighe}{\laccioAss}%
+    \laccioAppendi{\laccioRighe}{\laccioAmp}%
+    \laccioNumero{\laccioV{y}{\k}}%
+    \laccioAppendi{\laccioRighe}{\laccioSegno}\laccioAppendi{\laccioRighe}{\laccioAss}%
+    \laccioAppendi{\laccioRighe}{\laccioFine}%
+  }
+  \matrix (m) [matrix of math nodes, ampersand replacement=\&,
+    laccio matrice] {\laccioRighe};
+  % diagonali: prima tutte quelle di andata, poi quelle di ritorno
+  \foreach \k [evaluate=\k as \kk using int(\k+1)] in {1,...,\laccioUltimo}
+    \draw[color=\laccioget{colore andata}, laccio andata]
+      (m-\k-1) -- (m-\kk-2);
+  \foreach \k [evaluate=\k as \kk using int(\k+1)] in {1,...,\laccioUltimo}
+    \draw[color=\laccioget{colore ritorno}, laccio ritorno]
+      (m-\kk-1) -- (m-\k-2);
+  % il calcolo
+  \pgfkeysgetvalue{/laccio/calcolo}{\laccioCalcolo}
+  \laccioIfEmpty{\laccioCalcolo}{%
+    \laccioTermini{1}{\laccioSommaA}\let\laccioTA\laccioTesto
+    \laccioTermini{0}{\laccioSommaR}\let\laccioTR\laccioTesto
+    \laccioNumero{(\laccioSommaA)-(\laccioSommaR)}%
+    % fra le parentesi colorate si torna al colore del testo del nodo
+    % (quello di «laccio testo»), non al nero fisso
+    \edef\laccioCalcolo{%
+      \noexpand\colorlet{laccioBase}{.}%
+      \noexpand\color{\laccioget{colore andata}}(\unexpanded\expandafter{\laccioTA})%
+      \noexpand\color{laccioBase}-%
+      \noexpand\color{\laccioget{colore ritorno}}(\unexpanded\expandafter{\laccioTR})%
+      \noexpand\color{laccioBase}=\laccioSegno\unexpanded\expandafter{\laccioAss}}%
+  }{}
+  \ifnum\laccioget{mostra calcolo}>0
+    \edef\laccioDestra{\unexpanded\expandafter{\laccioCalcolo}}%
+  \else
+    \def\laccioDestra{}%
+  \fi
+  % barre, con i testi a sinistra e a destra
+  \draw[laccio barra]
+    ([xshift=-\laccioget{margine orizzontale},
+      yshift=\laccioget{margine verticale}]m.north west)
+    -- ([xshift=-\laccioget{margine orizzontale},
+      yshift=-\laccioget{margine verticale}]m.south west)
+    node[midway, left, laccio testo] {\laccioget{sinistra}};
+  \draw[laccio barra]
+    ([xshift=\laccioget{margine orizzontale},
+      yshift=\laccioget{margine verticale}]m.north east)
+    -- ([xshift=\laccioget{margine orizzontale},
+      yshift=-\laccioget{margine verticale}]m.south east)
+    node[midway, right, laccio testo] {\laccioget{destra}%
+      \laccioIfEmpty{\laccioDestra}{}{$\laccioDestra$}};
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}[baseline=(m.center)]
+  % x/y/mostra, in ordine lungo il poligono (il primo si ripete da sé)
+  \SetVertici{-1/-4/1, 1/4/1, 4/1/1}
+  % \LaccioSet{sinistra={$2A=$}, colore andata=blue, colore ritorno=red}
+  \LaccioDisegna
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,274 @@
+/* ============================================================ */
+
+/* Legacy Modals — Phase Roadmap Sprint 39.                       */
+
+/*                                                                */
+
+/* Estratto VERBATIM da layout.css (311 LOC). Visual byte-equivalent. */
+
+/* Legacy modal+banner system: bottom-bar + .fm-modal +           */
+
+/* fm-license-modal +                                              */
+
+/* responsive @media (max-width: 768px).                          */
+
+/*                                                                */
+
+/* Coverage:                                                       */
+
+/*   - #bottom-bar (footer fixed) + .bar-content + .bar-content-links */
+
+/*   - #bottom-bar a + a:hover                                     */
+
+/*   - .resource-placeholder (banner placeholder)                  */
+
+/*   - .fm-modal (legacy modal wrapper position:fixed)             */
+
+/*   - .fm-modal .fm-modal-body h2/span/p/a                        */
+
+/*   - .fm-modal-close + #fm-modal-overlay                         */
+
+/*   - @media (max-width: 768px) responsive (.fm-modal,            */
+
+/*     #bottom-bar)                                                */
+
+/*   - #fm-license-modal .license-details (CC license details)     */
+
+/* ============================================================ */
+
+/* Barra inferiore */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+
+    /* padding: 10px 0; */
+    z-index: 1000; /* Assicura che sia sopra il contenuto */
+    box-shadow: 0 -2px 5px rgb(0 0 0 / 20%);
+}
+
+/* 2026-09-07 (voce 54 del debito) — la barra è fissa: senza spazio riservato
+   copre quello che sta in fondo alla pagina, e su una pagina corta non c'è
+   scorrimento che lo liberi. Capitava con il bottone «Chiudi» dell'editor del
+   quesito: si vedeva, ma il clic finiva sulla barra. L'altezza la misura
+   bottom-bar-panel.js e la scrive in --fm-bottom-bar-h (la barra va a capo
+   sugli schermi stretti, quindi non è un numero fisso); il ripiego copre il
+   caso in cui il JavaScript non parta. */
+#fm-content {
+    padding-bottom: var(--fm-bottom-bar-h, 56px);
+}
+
+#bottom-bar .bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+#bottom-bar .bar-content-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+#bottom-bar a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+#bottom-bar a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+
+/* Stile per i banner modali */
+.resource-placeholder {
+    border: 1px dashed #ccc;
+    padding: 20px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    min-height: 50px;
+}
+
+.fm-modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 25px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 15px rgb(0 0 0 / 20%);
+    z-index: 1002;
+    max-width: 90%;
+    width: 650px; /* Aumentato leggermente per il contenuto dei cookie */
+    border-radius: 8px;
+    max-height: 90vh; /* Leggermente più alto per contenuto cookie */
+    overflow-y: auto;
+}
+
+.fm-modal .fm-modal-body h2 { /* Specificità per h2 dentro .fm-modal-body */
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5em; /* Dimensione titolo modal */
+}
+
+.fm-modal span { /* Stile generico, potrebbe necessitare affinamento */
+    /* margin-bottom: 15px; Questo potrebbe essere troppo generico */
+    color: #555;
+    font-size: 0.95em;
+}
+
+.fm-modal p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.fm-modal a {
+    color: var(--fm-c-link);
+    text-decoration: none;
+}
+
+.fm-modal a:hover {
+    text-decoration: underline;
+}
+
+.fm-modal-close {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: #6c757d; /* Grigio per coerenza con rifiuta */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.fm-modal-close:hover {
+    background-color: #545b62;
+}
+
+/* Overlay per lo sfondo (dal tuo CSS) */
+#fm-modal-overlay { /* Prefix fm- per coerenza (ex #modal-overlay) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 60%); /* Leggermente più scuro */
+    z-index: 1001;
+}
+
+/* Barra inferiore (dal tuo CSS) */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 -2px 5px rgb(0 0 0 / 20%);
+}
+
+#bottom-bar .bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    /* padding: 5px 20px; */
+}
+
+#bottom-bar a {
+    color: white;
+    text-decoration: none;
+
+    /* padding: 8px 12px; */
+    margin-left: 10px; /* Spazio tra i link */
+    transition: background-color 0.3s;
+}
+
+#bottom-bar a:hover {
+    background-color: #555;
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fm-modal {
+        width: 95%; /* Più largo su mobile */
+        padding: 10px 15px;
+        font-size: small;
+    }
+
+    #fm-license-section{
+        text-align: center;
+    }
+
+    #bottom-bar .bar-content {
+        /* flex-direction: column;
+                */
+        display: inline-flex;
+        justify-content: space-between;
+        width: 94%;
+        padding: 0 20px;
+    }
+    
+    #bottom-bar a {
+        margin-left: 0;
+
+        /* padding: 0; */
+
+        /* display: block; Link a blocco intero su mobile */
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+}
+
+/* Stili specifici (opzionali) per il contenuto del modale licenza */
+#fm-license-modal .license-details {
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333; /* Colore testo standard */
+}
+
+#fm-license-modal .license-details b {
+    /* display: block; Fa andare "Copyright:" a capo */
+    margin-bottom: 5px;
+    color: #111; /* Un po' più scuro per il titolo */
+}
+
+#fm-license-modal .license-details a {
+    color: var(--fm-c-link); /* Colore standard per i link */
+    text-decoration: none;
+}
+
+#fm-license-modal .license-details a:hover {
+    text-decoration: underline;
+}
+
+#fm-license-modal .license-details img {
+    height: 1.2em; /* Altezza unificata per le icone CC */
+    margin-left: .2em;
+    vertical-align: -0.2em; /* Aggiustamento fine per l'allineamento verticale */
+    border: none; /* Assicura che non ci siano bordi strani sulle immagini linkate */
+}

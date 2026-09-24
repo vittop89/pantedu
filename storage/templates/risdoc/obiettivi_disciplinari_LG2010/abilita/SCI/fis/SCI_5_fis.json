@@ -1,0 +1,15 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Sviluppare un'interpretazione energetica dei fenomeni nucleari (radioattività, fissione, fusione).",
+        "checked": false
+      },
+      {
+        "label": "Approfondire tematiche di interesse accostandosi alle scoperte più recenti della fisica o ai rapporti tra scienza e tecnologia.",
+        "checked": false
+      }
+    ]
+  }
+]

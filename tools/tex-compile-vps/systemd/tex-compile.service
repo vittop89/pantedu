@@ -1,0 +1,66 @@
+[Unit]
+Description=tex-compile-vps — pantedu LaTeX compile microservice
+# 19/9/2026 — dopo Docker. Il servizio ascolta sul gateway del bridge Docker
+# (vedi ExecStart), un indirizzo che esiste solo quando Docker ha creato
+# docker0. Partito prima, uvicorn non riesce a legarsi («Cannot assign
+# requested address», Errno 99) e Restart= riprova ogni tre secondi: con
+# questo ordine non succede.
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=texcompile
+Group=texcompile
+WorkingDirectory=/opt/tex-compile
+EnvironmentFile=/opt/tex-compile/.env
+
+# ── Dove ascolta ──────────────────────────────────────────────────────────
+#
+# Sul gateway del bridge Docker, non su 127.0.0.1 (19/9/2026).
+#
+# Dall'8 settembre 2026 l'applicazione gira in un container, e dentro il
+# container 127.0.0.1 è il container stesso: ogni compilazione avviata dal
+# sito falliva con «connessione rifiutata», per undici giorni. Il gateway del
+# bridge è l'unico indirizzo valido in tutti e due i posti: sull'host è
+# l'indirizzo di docker0 (lo usano i lavori a orario), nel container è il
+# gateway (lo usa l'applicazione). Serve un indirizzo solo perché `.env.local`
+# è uno, per il container e per l'host.
+#
+# L'indirizzo non sta qui: sta in /opt/tex-compile/.env, TEX_COMPILE_HOST, e
+# si ricava da Docker con
+#     docker network inspect bridge -f '{{(index .IPAM.Config 0).Gateway}}'
+# Lo scrive provision.sh. Vuoto, il servizio NON parte (ExecStartPre): uvicorn
+# con un indirizzo vuoto ascolterebbe su tutte le interfacce. Senza virgolette
+# né commenti sulla riga: EnvironmentFile li prenderebbe come parte del valore.
+#
+# Il firewall deve lasciar passare solo docker0 verso quell'indirizzo e quella
+# porta (la regola ufw la scrive provision.sh). Tutto il resto, e il ritorno
+# indietro: docs/ops/tex-dal-container.md.
+ExecStartPre=/usr/bin/test -n "${TEX_COMPILE_HOST}"
+ExecStart=/opt/tex-compile/venv/bin/uvicorn app.main:app --host ${TEX_COMPILE_HOST} --port 8001 --workers 2 --no-access-log
+Restart=on-failure
+RestartSec=3
+
+# Hardening minimale ma efficace.
+# NB: PrivateTmp=yes rende /tmp e /var/tmp privati al servizio →
+# il WORKDIR del compile DEVE puntare a /tmp/<sub> (vedi .env), NON a
+# /var/tmp/<sub> con ReadWritePaths (incompatibile con PrivateTmp).
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+
+# Resource limits — adatta in base alle dimensioni del VPS.
+LimitNOFILE=4096
+MemoryHigh=1G
+MemoryMax=2G
+CPUQuota=350%
+
+[Install]
+WantedBy=multi-user.target

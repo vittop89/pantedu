@@ -1,0 +1,647 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+
+\pagestyle{empty}
+
+% ==================================================
+% STUDIO DEL SEGNO IN PIÙ SCHEMI (CASI DI UN PARAMETRO)
+% ==================================================
+% Una figura = più SCHEMI affiancati, uno per caso («se a<0», «se a=0»,
+% «se a>0»). Ogni schema ha l'asse con i valori, una riga per fattore
+% (N(x), D(x), ...) con i segni negli intervalli, i cerchi sui valori,
+% i segni evidenziati, e un testo sopra e uno sotto.
+%
+%   \begin{Schema}{mostra}{testo sopra}{testo sotto}
+%     \SchemaSet{...}  \tikzset{schema ...}  (facoltativi: valgono solo qui)
+%     \SetValori{...}  \SetRighe{...}  \SetEtichette{...}
+%   \end{Schema}
+%
+% mostra: 1 = disegna, 0 = nascondi (lo spazio dello schema resta, anche
+% quando è il primo o l'ultimo)
+% Gli schemi si mettono da soli uno accanto all'altro, da sinistra, con
+% «distanza schemi» di spazio libero fra uno e il successivo; contano
+% anche le scritte che sporgono dall'asse (le etichette delle righe, un
+% testo più largo dell'asse). Con «x schema» uno schema va in un punto
+% fisso. Ogni schema si disegna da solo in chiusura. Tutto ciò che si
+% imposta FUORI dagli schemi vale per tutti; DENTRO uno schema vale solo lì.
+%
+% L'asse di ogni schema comincia in x=0 e va verso destra; le righe
+% scendono dall'asse (con passo righe=1 la prima è centrata in y=-0.5).
+% Numeri di chiavi e posizioni: unità del disegno (1 = 1 cm); si può
+% scrivere anche l'unità (0.8cm, 12mm, 5pt), in ogni chiave.
+% In tutti i testi (sopra, sotto, dei valori, delle etichette) \\ va a
+% capo. Il testo sopra sale da solo se un valore alto (es. un \dfrac) lo
+% toccherebbe; il testo sotto scende se toccherebbe le linee dei valori.
+%
+% LISTE (campi separati da /, elementi separati da virgola; un campo che
+% contiene una virgola o una / va tra graffe: {2,3}, {red, dashed};
+% un campo lasciato vuoto prende il valore predefinito. La virgola dopo
+% l'ultimo elemento, le righe vuote e una lista vuota scritta su più
+% righe non aggiungono niente; due virgole di fila, invece, fanno un
+% elemento con tutti i campi predefiniti, che tiene il suo posto. Nelle
+% liste di numeri gli elementi vuoti non contano mai; per i segni, sotto):
+%
+%   \SetValori{posizione/testo/stile/mostra, ...}
+%     posizione: ascissa della linea verticale, contata dall'inizio
+%                dell'asse: maggiore di 0 e crescente da sinistra a
+%                destra. È un punto del disegno, non il valore della x:
+%                «$-2$» si scrive nel testo. Vuota = la precedente
+%                + larghezza colonna.
+%     testo:     scritto sopra la linea (es. $2a$, $-\frac{a}{4}$)
+%     stile:     opzioni TikZ del testo (es. {yshift=6pt} per alzarlo)
+%     mostra:    1 = linea e testo; 0 = niente (l'intervallo resta diviso)
+%
+%   \SetRighe{etichetta/segni/cerchi vuoti/cerchi pieni/evidenziati/stile/mostra, ...}
+%     etichetta:   scritta a sinistra della riga (es. $N(x)>0$)
+%     segni:       un segno per intervallo, da sinistra, tra graffe:
+%                  {+,+,-,+}. «+» e «-» diventano $+$ e $-$; altro testo
+%                  (es. $0$, {$\nexists$}) si scrive così com'è.
+%                  Gli intervalli sono i valori + 1. Un segno vuoto
+%                  lascia l'intervallo in bianco ({+,,-,} con 4
+%                  intervalli: il secondo e il quarto); una virgola dopo
+%                  l'ultimo segno, se i segni sono già tanti quanti gli
+%                  intervalli, non conta.
+%     cerchi vuoti / cerchi pieni: numeri dei valori (1 = il primo da
+%                  sinistra) su cui disegnare il cerchio, es. {2,3}
+%     evidenziati: numeri degli intervalli il cui segno va nel disco
+%                  colorato, es. {3} o {1,3}
+%     stile:       opzioni TikZ dei segni della riga (es. blue)
+%     mostra:      1 = disegna; 0 = nascondi (lo spazio della riga resta)
+%   La linea punteggiata (chiave «separatore») sta sopra l'ultima riga.
+%
+%   \SetEtichette{x/y/testo/stile/mostra, ...}   testi liberi, in
+%     coordinate dello schema (asse sulla retta y=0 da x=0, righe verso
+%     il basso); x e y sono obbligatorie
+%
+% CHIAVI (\SchemaSet{chiave=valore, ...}) e STILI (\tikzset{...}): sotto,
+% nella sezione VARIABILI / PARAMETRI, ognuna col suo commento.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri numerici e testi (si cambiano con \SchemaSet{chiave=valore, ...};
+% i numeri sono in unità del disegno, 1 = 1 cm, oppure con l'unità: 8mm)
+\pgfkeys{
+  /schema/.is family, /schema,
+  % disposizione degli schemi
+  distanza schemi/.initial=1,   % spazio libero fra uno schema e il successivo
+                                % (dalla fine dell'asse, o dalla scritta che
+                                % sporge di più, alla prima scritta dopo)
+  x schema/.initial={},         % vuota = accanto al precedente; numero = fissa
+  y schema/.initial=0,          % spostamento verticale dello schema
+  % asse e colonne
+  larghezza colonna/.initial=1, % passo dei valori con posizione vuota
+                                % e ultimo tratto dell'asse
+  fine asse/.initial={},        % vuota = ultimo valore + larghezza colonna;
+                                % scritta, deve stare oltre l'ultimo valore
+  sporgenza/.initial=0.2,       % quanto le linee salgono sopra l'asse
+                                % (i testi dei valori stanno lì)
+  % righe
+  passo righe/.initial=1,       % distanza verticale fra le righe
+  separatore/.initial=1,        % 1 = linea punteggiata sopra l'ultima riga
+  % cerchi e segni evidenziati
+  raggio cerchio/.initial=5pt,
+  raggio evidenziato/.initial=0.2cm,
+  % testi sopra e sotto lo schema (centrati sull'asse)
+  y testo sopra/.initial=1,     % ordinata del testo sopra (sale da solo se
+                                % un valore alto lo toccherebbe)
+  distanza testo sotto/.initial=1, % distanza sotto il centro dell'ultima riga
+}
+\newcommand{\SchemaSet}[1]{\pgfkeys{/schema/.cd,#1}}
+\newcommand{\schemaget}[1]{\pgfkeysvalueof{/schema/#1}}
+
+% Stili grafici (si cambiano con \tikzset{schema ... /.style={...}};
+% «align» serve ad andare a capo con \\: se si ridefinisce uno stile di
+% testo, tenerlo)
+\tikzset{
+  schema asse/.style={},                 % retta orizzontale in alto
+  schema linea/.style={},                % linee verticali dei valori
+  schema valore/.style={above, align=center}, % testi dei valori
+  schema etichetta/.style={left, align=right}, % scritte a sinistra delle righe
+  schema segno/.style={font=\Large},     % segni negli intervalli
+  schema evidenziato/.style={fill=red!70, draw=red!40!black,
+    line width=0.4pt},                   % disco dei segni evidenziati
+  schema evidenziato testo/.style={text=white}, % segno dentro il disco
+  schema cerchio vuoto/.style={draw, line width=0.4mm},
+  schema cerchio pieno/.style={draw, fill, line width=0.4mm},
+  schema separatore/.style={dotted},     % linea sopra l'ultima riga
+  schema testo sopra/.style={align=center},
+  schema testo sotto/.style={align=center},
+  schema etichetta libera/.style={align=center},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+\makeatletter
+% --- utilità ---
+\let\schema@q\relax      % segnaposti per le macro qui sotto (non si usano)
+\let\schema@fermo\relax
+\let\schema@fine\relax
+\newbox\schema@scarto    % scatole in cui si disegna per misurare, e che
+\newbox\schema@scartino  % poi si buttano
+% \schemaIfEmpty{\macro}{se vuota}{se piena}: «vuota» anche quando contiene
+% solo spazi (per esempio una lista svuotata ma lasciata su più righe)
+\long\def\schema@seVuoto#1{%
+  \schema@sv#1\schema@q\schema@q\@secondoftwo\@firstoftwo\schema@fermo}
+\long\def\schema@sv#1#2\schema@q#3#4#5\schema@fermo{#4}
+\newcommand{\schemaIfEmpty}[3]{%
+  \expandafter\schema@seVuoto\expandafter{#1}{#2}{#3}}
+% \schemaTrim\macro: toglie gli spazi attorno al contenuto (e le graffe
+% esterne): « {2, 3} » diventa «2, 3»
+\newcommand{\schemaTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+% \schemaPulisci\lista: toglie gli elementi vuoti IN FONDO alla lista (la
+% virgola dopo l'ultimo elemento, una lista di soli spazi); quelli in
+% mezzo restano e tengono il loro posto. \schemaPulisciTutti\lista li
+% toglie tutti (liste di numeri). Gli elementi restano come sono scritti,
+% graffe comprese.
+\newif\ifschema@tutti
+\newif\ifschema@nessuno
+\def\schema@marca{\@empty\schema@fine}
+\newcommand{\schemaPulisci}{\schema@tuttifalse\schema@pulisci}
+\newcommand{\schemaPulisciTutti}{\schema@tuttitrue\schema@pulisci}
+\newcommand{\schema@pulisci}[1]{%
+  \def\schema@acc{}\def\schema@buono{}\schema@nessunotrue
+  \expandafter\schema@pul@passo\expandafter\@empty#1,\schema@fine,%
+  \let#1\schema@buono}
+% ogni elemento arriva con \@empty davanti, così le sue graffe restano
+\long\def\schema@pul@passo#1,{%
+  \edef\schema@el{\unexpanded{#1}}%
+  \ifx\schema@el\schema@marca
+    \let\schema@poi\relax
+  \else
+    \edef\schema@el{\unexpanded\expandafter{#1}}% via lo \@empty
+    \schemaIfEmpty{\schema@el}%
+      {\ifschema@tutti\else\schema@aggiungi{,}\fi}%
+      {\schema@aggiungi{,}\let\schema@buono\schema@acc}%
+    \def\schema@poi{\schema@pul@passo\@empty}%
+  \fi
+  \schema@poi}
+% \schema@aggiungi{separatore}: \schema@el in fondo a \schema@acc
+\newcommand{\schema@aggiungi}[1]{%
+  \ifschema@nessuno
+    \let\schema@acc\schema@el \schema@nessunofalse
+  \else
+    \edef\schema@acc{\unexpanded\expandafter{\schema@acc}#1%
+      \unexpanded\expandafter{\schema@el}}%
+  \fi}
+% \schema@togliPar\lista: una riga vuota dentro la lista (\par) vale uno
+% spazio
+\newcommand{\schema@togliPar}[1]{%
+  \def\schema@acc{}\schema@nessunotrue
+  \expandafter\schema@par@passo\expandafter\@empty#1\par\schema@fine\par
+  \let#1\schema@acc}
+\long\def\schema@par@passo#1\par{%
+  \edef\schema@el{\unexpanded{#1}}%
+  \ifx\schema@el\schema@marca
+    \let\schema@poi\relax
+  \else
+    \edef\schema@el{\unexpanded\expandafter{#1}}%
+    \schema@aggiungi{ }%
+    \def\schema@poi{\schema@par@passo\@empty}%
+  \fi
+  \schema@poi}
+\newcommand{\schemaPulisciLista}[1]{\schema@togliPar#1\schemaPulisci#1}
+% \schemaInUnita\macro{x o y}: un valore scritto con l'unità (0.8cm, 12mm)
+% diventa un numero di unità del disegno (orizzontali o verticali); un
+% numero senza unità resta com'è
+\newcommand{\schemaInUnita}[2]{%
+  \schemaIfEmpty{#1}{}{%
+    \pgfmathparse{#1}%
+    \ifpgfmathunitsdeclared
+      \let\schema@v\pgfmathresult
+      \pgfmathparse{\schema@v/\csname pgf@#2#2\endcsname}%
+      \let#1\pgfmathresult
+    \fi}}
+% \schemaStyle{nome}{\campo}: il contenuto del campo (anche con più
+% opzioni separate da virgola) diventa lo stile TikZ «nome»
+\newcommand{\schemaStyle}[2]{\expandafter\schemaStyleAux\expandafter{#2}{#1}}
+\newcommand{\schemaStyleAux}[2]{\tikzset{#2/.style={#1}}}
+% \schemaShow\campo: un «mostra» vuoto vale 1
+\newcommand{\schemaShow}[1]{\schemaTrim#1\schemaIfEmpty{#1}{\def#1{1}}{}}
+% \schemaSegno\campo: «+» e «-» diventano segni matematici
+\def\schemaPiu{+}
+\def\schemaMeno{-}
+\newcommand{\schemaSegno}[1]{%
+  \ifx#1\schemaPiu $+$\else\ifx#1\schemaMeno $-$\else #1\fi\fi}
+% coordinate calcolate dello schema corrente: ascissa del valore k
+% (0 = inizio asse, N+1 = fine asse) e centro dell'intervallo k
+\newcommand{\schemaX}[1]{\csname schema@x@#1\endcsname}
+\newcommand{\schemaM}[1]{\csname schema@m@#1\endcsname}
+% posizione del prossimo schema
+\gdef\SchemaCursore{0}
+\gdef\SchemaPrimo{1}
+
+% --- dati (vuoti per default) ---
+\newcommand{\SetValori}[1]{\def\SchemaValoriData{#1}%
+  \schemaPulisciLista\SchemaValoriData}
+\newcommand{\SetRighe}[1]{\def\SchemaRigheData{#1}%
+  \schemaPulisciLista\SchemaRigheData}
+\newcommand{\SetEtichette}[1]{\def\SchemaEtichetteData{#1}%
+  \schemaPulisciLista\SchemaEtichetteData}
+
+\SetValori{}
+\SetRighe{}
+\SetEtichette{}
+
+% --- valori: posizioni, fine dell'asse, centri degli intervalli ---
+% Prepara \schemaN (valori), \schemaNi (intervalli = valori + 1), \schemaFine.
+\newcommand{\schemaCalcolaValori}{%
+  \gdef\schemaN{0}%
+  \expandafter\gdef\csname schema@x@0\endcsname{0}%
+  \edef\schema@lc{\schemaget{larghezza colonna}}\schemaInUnita\schema@lc{x}%
+  \schemaIfEmpty{\SchemaValoriData}{}{%
+    \foreach \vx/\vtesto/\vstile/\vmostra in \SchemaValoriData {
+      \schemaTrim\vx
+      \edef\schemaPrec{\schemaX{\schemaN}}%
+      \schemaIfEmpty{\vx}{%
+        \pgfmathsetmacro{\vx}{\schemaPrec+\schema@lc}}{\schemaInUnita\vx{x}}%
+      \pgfmathtruncatemacro{\schemaNn}{\schemaN+1}%
+      \pgfmathtruncatemacro{\schemaCresce}{\vx>\schemaPrec}%
+      \ifnum\schemaCresce=0
+        \ifnum\schemaN=0
+          \PackageError{schema}{Valore 1: la posizione \vx\space non sta a
+            destra dell'inizio dell'asse, che e' in 0. La posizione e'
+            l'ascissa della linea nel disegno, contata dall'inizio
+            dell'asse: deve essere maggiore di 0 (il numero da scrivere
+            sopra la linea, per esempio $-2$, va nel campo testo)}{}%
+        \else
+          \PackageError{schema}{Valore \schemaNn: la posizione \vx\space non
+            sta a destra della precedente (\schemaPrec). Le posizioni in
+            \string\SetValori\space devono crescere}{}%
+        \fi
+      \fi
+      \xdef\schemaN{\schemaNn}%
+      \expandafter\xdef\csname schema@x@\schemaN\endcsname{\vx}%
+    }%
+  }%
+  \pgfmathtruncatemacro{\schemaNi}{\schemaN+1}%
+  \xdef\schemaNi{\schemaNi}%
+  \edef\schemaUltimo{\schemaX{\schemaN}}%
+  \edef\schemaFine{\schemaget{fine asse}}%
+  \schemaIfEmpty{\schemaFine}{%
+    \pgfmathsetmacro{\schemaFine}{\schemaUltimo+\schema@lc}}{%
+    \schemaInUnita\schemaFine{x}}%
+  % l'ultimo intervallo deve avere spazio: la fine dell'asse oltre
+  % l'ultimo valore
+  \pgfmathtruncatemacro{\schema@ok}{\schemaFine>\schemaUltimo}%
+  \ifnum\schema@ok=0
+    \PackageError{schema}{La fine dell'asse (\schemaFine) non sta a destra
+      dell'ultimo valore (posizione \schemaUltimo): l'ultimo intervallo non
+      avrebbe spazio e il suo segno finirebbe sulla linea. Scrivi in
+      \string\SchemaSet\space una 'fine asse' maggiore, oppure lasciala
+      vuota (ultimo valore + larghezza colonna)}{}%
+  \fi
+  \xdef\schemaFine{\schemaFine}%
+  \expandafter\xdef\csname schema@x@\schemaNi\endcsname{\schemaFine}%
+  \foreach \qk in {1,...,\schemaNi} {
+    \pgfmathtruncatemacro{\qkp}{\qk-1}%
+    \pgfmathsetmacro{\schemaMid}{(\schemaX{\qkp}+\schemaX{\qk})/2}%
+    \expandafter\xdef\csname schema@m@\qk\endcsname{\schemaMid}%
+  }%
+}
+
+% \schemaConta{\lista}: quanti elementi (in \schemaQuanti)
+\newcommand{\schemaConta}[1]{%
+  \gdef\schemaQuanti{0}%
+  \schemaIfEmpty{#1}{}{%
+    \foreach \qe [count=\qi] in #1 {\xdef\schemaQuanti{\qi}}}%
+}
+
+% \schemaVerifica{\lista}{massimo}{cosa}{riga}: ogni numero della lista
+% dev'essere un intero fra 1 e massimo, altrimenti errore esplicito
+\newcommand{\schemaVerifica}[4]{%
+  \schemaIfEmpty{#1}{}{%
+    \foreach \qc in #1 {
+      \pgfmathtruncatemacro{\schemaOk}{(\qc>=1)&&(\qc<=#2)&&(\qc==int(\qc))}%
+      \ifnum\schemaOk=0
+        \PackageError{schema}{Riga #4: #3 \qc, ma in questo schema ce ne
+          sono #2 (si contano da 1, da sinistra)}{}%
+      \fi
+    }%
+  }%
+}
+
+% \schemaCerchi{\lista}{stile}{y}: cerchi sui valori elencati
+\newcommand{\schemaCerchi}[3]{%
+  \schemaIfEmpty{#1}{}{%
+    \foreach \qc in #1 {
+      \pgfmathtruncatemacro{\qci}{\qc}%
+      \path[#2] (\schemaX{\qci},-#3) circle (\schemaget{raggio cerchio});
+    }%
+  }%
+}
+
+% \schemaInLista{numero}{\lista}: \schemaTrovato = 1 se c'è, 0 se no
+\newcommand{\schemaInLista}[2]{%
+  \gdef\schemaTrovato{0}%
+  \schemaIfEmpty{#2}{}{%
+    \foreach \qe in #2 {\ifnum\qe=#1\relax\gdef\schemaTrovato{1}\fi}}%
+}
+
+% \schema@margini{stile}: margine interno (inner sep) dei nodi con quello
+% stile, in \schema@mx e \schema@my
+\newcommand{\schema@margini}[1]{%
+  \begingroup
+    \tikzset{#1}%
+    \pgfmathsetlength\dimen@{\pgfkeysvalueof{/pgf/inner xsep}}%
+    \xdef\schema@mx{\the\dimen@}%
+    \pgfmathsetlength\dimen@{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \xdef\schema@my{\the\dimen@}%
+  \endgroup}
+
+% \schema@alzaTitolo: di quanto alzare il testo sopra (\schema@alza) perché
+% fra lui e i testi dei valori che ha sotto restino almeno 5pt. Il testo
+% sopra si prova dove andrebbe, in una scatola che si butta.
+\newcommand{\schema@alzaTitolo}{%
+  \gdef\schema@alza{0pt}%
+  \ifx\schema@nodiValori\@empty\else
+    \setbox\schema@scartino\hbox{%
+      \path[overlay] node[schema testo sopra, name=schema-titolo]
+        at (\schemaCentro,\schemaget{y testo sopra}) {\SchemaTestoSopra};}%
+    \schema@margini{schema testo sopra}%
+    \let\schema@tx\schema@mx \let\schema@ty\schema@my
+    \schema@margini{schema valore}%
+    \pgfpointanchor{schema-titolo}{south}\edef\schema@tS{\the\pgf@y}%
+    \pgfpointanchor{schema-titolo}{west}\edef\schema@tW{\the\pgf@x}%
+    \pgfpointanchor{schema-titolo}{east}\edef\schema@tE{\the\pgf@x}%
+    \foreach \qk in \schema@nodiValori {
+      \pgfpointanchor{schema-valore-\qk}{north}\edef\schema@vN{\the\pgf@y}%
+      \pgfpointanchor{schema-valore-\qk}{west}\edef\schema@vW{\the\pgf@x}%
+      \pgfpointanchor{schema-valore-\qk}{east}\edef\schema@vE{\the\pgf@x}%
+      % le due scritte (senza margini) si incontrano in orizzontale?
+      \ifdim\dimexpr\schema@vE-\schema@mx\relax>\dimexpr\schema@tW+\schema@tx\relax
+      \ifdim\dimexpr\schema@vW+\schema@mx\relax<\dimexpr\schema@tE-\schema@tx\relax
+        \dimen@=\dimexpr\schema@vN-\schema@my-\schema@ty+5pt-\schema@tS\relax
+        \ifdim\dimen@>\schema@alza\relax \xdef\schema@alza{\the\dimen@}\fi
+      \fi\fi
+    }%
+  \fi}
+
+% \schema@abbassaSotto: di quanto abbassare il testo sotto (\schema@abbassa)
+% perché la sua scritta resti almeno 2pt sotto la fine delle linee dei
+% valori (un testo di più righe, o una «distanza testo sotto» piccola)
+\newcommand{\schema@abbassaSotto}{%
+  \gdef\schema@abbassa{0pt}%
+  \setbox\schema@scartino\hbox{%
+    \path[overlay] node[schema testo sotto, name=schema-sotto]
+      at (\schemaCentro,-\schemaYsotto) {\SchemaTestoSotto};}%
+  \schema@margini{schema testo sotto}%
+  \pgfpointanchor{schema-sotto}{north}\edef\schema@sN{\the\pgf@y}%
+  \pgfpointxy{0}{-\schemaFondo}\edef\schema@fY{\the\pgf@y}%
+  \dimen@=\dimexpr\schema@sN-\schema@my-\schema@fY+2pt\relax
+  \ifdim\dimen@>0pt \xdef\schema@abbassa{\the\dimen@}\fi}
+
+% --- contenuto di uno schema (origine: inizio dell'asse) ---
+\newcommand{\schemaDisegna}{%
+  \edef\schemaP{\schemaget{passo righe}}\schemaInUnita\schemaP{y}%
+  % righe (anche quelle nascoste: tengono il loro posto)
+  \schemaConta{\SchemaRigheData}%
+  \edef\schemaR{\schemaQuanti}%
+  \pgfmathsetmacro{\schemaFondo}{\schemaR*\schemaP}%
+  % asse
+  \draw[schema asse] (0,0) -- (\schemaFine,0);
+  % linee verticali e testi dei valori
+  \gdef\schema@nodiValori{}%
+  \schemaIfEmpty{\SchemaValoriData}{}{%
+    \foreach \vx/\vtesto/\vstile/\vmostra [count=\qk] in \SchemaValoriData {
+      \schemaShow\vmostra
+      \ifnum\vmostra>0
+        \schemaTrim\vstile
+        \schemaStyle{schema tmp}{\vstile}%
+        \draw[schema linea] (\schemaX{\qk},\schemaget{sporgenza})
+          -- (\schemaX{\qk},-\schemaFondo);
+        \schemaIfEmpty{\vtesto}{}{%
+          \node[schema valore, schema tmp, name=schema-valore-\qk] at (\schemaX{\qk},\schemaget{sporgenza}) {\vtesto};%
+          \ifx\schema@nodiValori\@empty \xdef\schema@nodiValori{\qk}%
+          \else \xdef\schema@nodiValori{\schema@nodiValori,\qk}\fi}%
+      \fi
+    }%
+  }%
+  % linea punteggiata sopra l'ultima riga
+  \ifnum\schemaget{separatore}>0
+    \ifnum\schemaR>1
+      \pgfmathsetmacro{\schemaYsep}{(\schemaR-1)*\schemaP}%
+      \draw[schema separatore] (0,-\schemaYsep) -- (\schemaFine,-\schemaYsep);
+    \fi
+  \fi
+  % righe: etichetta/segni/cerchi vuoti/cerchi pieni/evidenziati/stile/mostra
+  \schemaIfEmpty{\SchemaRigheData}{}{%
+    \foreach \retich/\rsegni/\rvuoti/\rpieni/\revid/\rstile/\rmostra [count=\qr] in \SchemaRigheData {
+      \schemaShow\rmostra
+      \ifnum\rmostra>0
+        \pgfmathsetmacro{\ry}{(\qr-0.5)*\schemaP}%
+        \schemaIfEmpty{\retich}{}{%
+          \node[schema etichetta] at (0,-\ry) {\retich};}%
+        \schemaTrim\rstile
+        \schemaStyle{schema tmp riga}{\rstile}%
+        \schemaTrim\rvuoti \schemaTrim\rpieni \schemaTrim\revid
+        \schemaPulisciTutti\rvuoti \schemaPulisciTutti\rpieni
+        \schemaPulisciTutti\revid
+        \schemaVerifica{\rvuoti}{\schemaN}{cerchio vuoto sul valore}{\qr}%
+        \schemaVerifica{\rpieni}{\schemaN}{cerchio pieno sul valore}{\qr}%
+        \schemaVerifica{\revid}{\schemaNi}{evidenziato l'intervallo}{\qr}%
+        % segni: uno per intervallo. Un segno vuoto lascia l'intervallo in
+        % bianco; i segni vuoti in fondo oltre il numero degli intervalli
+        % (una virgola finale) non contano
+        \schemaTrim\rsegni
+        \schemaIfEmpty{\rsegni}{}{%
+          \schemaConta{\rsegni}\let\schema@cTutti\schemaQuanti
+          \let\schema@veri\rsegni \schemaPulisci\schema@veri
+          \schemaConta{\schema@veri}\let\schema@cVeri\schemaQuanti
+          \ifnum\schema@cVeri>\schemaNi
+            \let\schemaQuanti\schema@cVeri \def\schema@ok{0}%
+          \else\ifnum\schema@cTutti<\schemaNi
+            \let\schemaQuanti\schema@cTutti \def\schema@ok{0}%
+          \else \def\schema@ok{1}\fi\fi
+          \ifnum\schema@ok=0
+            \PackageError{schema}{Riga \qr: ci sono \schemaQuanti\space segni,
+              ma gli intervalli sono \schemaNi\space (un segno per
+              intervallo: valori + 1)}{}%
+          \fi
+          \foreach \qs [count=\qk] in \rsegni {
+            \ifnum\qk>\schemaNi\else
+              \schemaTrim\qs
+              \schemaInLista{\qk}{\revid}%
+              \ifnum\schemaTrovato>0
+                \path[schema evidenziato] (\schemaM{\qk},-\ry)
+                  circle (\schemaget{raggio evidenziato});
+                \node[schema segno, schema tmp riga, schema evidenziato testo]
+                  at (\schemaM{\qk},-\ry) {\schemaSegno\qs};
+              \else
+                \node[schema segno, schema tmp riga] at (\schemaM{\qk},-\ry) {\schemaSegno\qs};
+              \fi
+            \fi
+          }%
+        }%
+        % cerchi sui valori
+        \schemaCerchi{\rvuoti}{schema cerchio vuoto}{\ry}%
+        \schemaCerchi{\rpieni}{schema cerchio pieno}{\ry}%
+      \fi
+    }%
+  }%
+  % testi sopra e sotto, centrati sull'asse
+  \pgfmathsetmacro{\schemaCentro}{\schemaFine/2}%
+  \schemaIfEmpty{\SchemaTestoSopra}{}{%
+    \schema@alzaTitolo
+    \ifdim\schema@alza>0pt
+      \node[schema testo sopra, yshift=\schema@alza] at (\schemaCentro,\schemaget{y testo sopra}) {\SchemaTestoSopra};%
+    \else
+      \node[schema testo sopra] at (\schemaCentro,\schemaget{y testo sopra}) {\SchemaTestoSopra};%
+    \fi}%
+  \schemaIfEmpty{\SchemaTestoSotto}{}{%
+    \edef\schema@dts{\schemaget{distanza testo sotto}}%
+    \schemaInUnita\schema@dts{y}%
+    \pgfmathsetmacro{\schemaYsotto}{(\schemaR-0.5)*\schemaP+\schema@dts}%
+    \schema@abbassaSotto
+    \ifdim\schema@abbassa>0pt
+      \node[schema testo sotto, yshift=-\schema@abbassa] at (\schemaCentro,-\schemaYsotto) {\SchemaTestoSotto};%
+    \else
+      \node[schema testo sotto] at (\schemaCentro,-\schemaYsotto) {\SchemaTestoSotto};%
+    \fi}%
+  % etichette libere: x/y/testo/stile/mostra
+  \schemaIfEmpty{\SchemaEtichetteData}{}{%
+    \foreach \lx/\ly/\ltesto/\lstile/\lmostra [count=\qe] in \SchemaEtichetteData {
+      \schemaShow\lmostra
+      \ifnum\lmostra>0
+        \schemaTrim\lx \schemaTrim\ly
+        \schemaIfEmpty{\lx}{\def\schema@manca{la x}}{%
+          \schemaIfEmpty{\ly}{\def\schema@manca{la y}}{\def\schema@manca{}}}%
+        \ifx\schema@manca\@empty\else
+          \PackageError{schema}{Etichetta libera \qe: manca \schema@manca.
+            In \string\SetEtichette\space x e y sono obbligatorie (l'asse
+            sta sulla retta y=0 da x=0, le righe scendono: con passo
+            righe=1 la prima e' in y=-0.5)}{}%
+        \fi
+        \schemaTrim\lstile
+        \schemaStyle{schema tmp}{\lstile}%
+        \node[schema etichetta libera, schema tmp] at (\lx,\ly) {\ltesto};
+      \fi
+    }%
+  }%
+}
+
+% \schemaMisura: disegna lo schema in una scatola che si butta, senza
+% toccare il riquadro della figura, e ne misura l'ingombro orizzontale,
+% scritte comprese, in unità del disegno: \schemaSin = quanto sporge a
+% sinistra dell'inizio dell'asse (0 se niente), \schemaDes = fin dove
+% arriva a destra (almeno la fine dell'asse). Tolleranza 0.01.
+\newcommand{\schemaMisura}{%
+  \begin{pgfinterruptboundingbox}%
+    \setbox\schema@scarto\hbox{%
+      \schemaDisegna
+      \pgfpointtransformed{\pgfpointorigin}\xdef\schema@ox{\the\pgf@x}%
+      \pgfpointtransformed{\pgfpointxy{1}{0}}\xdef\schema@ux{\the\pgf@x}%
+    }%
+    \xdef\schema@minx{\the\pgf@picminx}%
+    \xdef\schema@maxx{\the\pgf@picmaxx}%
+  \end{pgfinterruptboundingbox}%
+  \pgfmathsetmacro{\schemaSin}{(\schema@ox-\schema@minx)/(\schema@ux-\schema@ox)}%
+  \pgfmathsetmacro{\schemaSin}{\schemaSin>0.01 ? \schemaSin : 0}%
+  \pgfmathsetmacro{\schemaDes}{(\schema@maxx-\schema@ox)/(\schema@ux-\schema@ox)}%
+  \pgfmathsetmacro{\schemaDes}{\schemaDes>\schemaFine+0.01 ? \schemaDes : \schemaFine}%
+}
+
+% --- lo schema: {mostra}{testo sopra}{testo sotto} ---
+\newenvironment{Schema}[3]{%
+  \begin{scope}%
+  \def\SchemaMostra{#1}%
+  \def\SchemaTestoSopra{#2}%
+  \def\SchemaTestoSotto{#3}%
+}{%
+  \schemaCalcolaValori
+  \schemaMisura
+  % ascissa dello schema: fissa, oppure accanto al precedente, lasciando
+  % «distanza schemi» fra ciò che sporge a destra del precedente e ciò
+  % che sporge a sinistra di questo
+  \edef\schemaXfissa{\schemaget{x schema}}%
+  \schemaIfEmpty{\schemaXfissa}{%
+    \ifnum\SchemaPrimo>0
+      \def\schemaXs{0}%
+    \else
+      \edef\schema@ds{\schemaget{distanza schemi}}%
+      \schemaInUnita\schema@ds{x}%
+      \pgfmathsetmacro{\schemaXs}{\SchemaCursore+\schema@ds+\schemaSin}%
+    \fi
+  }{\schemaInUnita\schemaXfissa{x}\let\schemaXs\schemaXfissa}%
+  \pgfmathsetmacro{\schemaCursoreNuovo}{\schemaXs+\schemaDes}%
+  \xdef\SchemaCursore{\schemaCursoreNuovo}%
+  \gdef\SchemaPrimo{0}%
+  \schemaShow\SchemaMostra
+  \ifnum\SchemaMostra>0
+    \begin{scope}[shift={(\schemaXs,\schemaget{y schema})}]
+      \schemaDisegna
+    \end{scope}
+  \else
+    % nascosto: si disegna in una scatola che si butta; il suo ingombro
+    % entra comunque nel riquadro della figura, e lo spazio resta
+    \setbox\schema@scarto\hbox{%
+      \begin{scope}[shift={(\schemaXs,\schemaget{y schema})}]
+        \schemaDisegna
+      \end{scope}}%
+  \fi
+  \end{scope}%
+}
+\makeatother
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTA LA FIGURA ============
+  % (ogni chiave si può anche ridefinire dentro un solo schema)
+  \SchemaSet{
+    distanza schemi=1, larghezza colonna=1, passo righe=1,
+    y testo sopra=1, distanza testo sotto=1,
+  }
+  % stili: \tikzset{schema evidenziato/.style={fill=blue!60, draw=blue!40!black}}
+
+  % ============ SCHEMA 1 ============
+  \begin{Schema}{1}{$\text{se }a<0$}{$0<x<-\dfrac{a}{4}$}
+    % posizione/testo/stile/mostra
+    \SetValori{
+      1/$2a$//1,
+      2/$0$//1,
+      3/$-\frac{a}{4}$//1
+    }
+    % etichetta/segni/cerchi vuoti/cerchi pieni/evidenziati/stile/mostra
+    \SetRighe{
+      {$N(x)>0$}/{+,+,-,+}/{2,3}////1,
+      {$D(x)>0$}/{+,+,+,+}/{1}////1,
+      {$\frac{N(x)}{D(x)}$}/{+,+,-,+}/{1,2,3}//{3}//1
+    }
+  \end{Schema}
+
+  % ============ SCHEMA 2 ============
+  \begin{Schema}{1}{$\text{se }a=0$}{$\text{imp.}$}
+    \SetValori{
+      1/$0$//1
+    }
+    \SetRighe{
+      /{+,+}/{1}////1,
+      /{+,+}/{1}////1,
+      /{+,+}/{1}////1
+    }
+  \end{Schema}
+
+  % ============ SCHEMA 3 ============
+  \begin{Schema}{1}{$\text{se }a>0$}{$-\dfrac{a}{4}<x<0$}
+    \SetValori{
+      1/$-\frac{a}{4}$//1,
+      2/$0$//1,
+      3/$2a$//1
+    }
+    \SetRighe{
+      /{+,-,+,+}/{1,2}////1,
+      /{+,+,+,+}/{3}////1,
+      /{+,-,+,+}/{1,2,3}//{2}//1
+    }
+  \end{Schema}
+
+\end{tikzpicture}
+\end{document}

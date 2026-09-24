@@ -1,0 +1,36 @@
+[Unit]
+# Rilascia quello che la finestra oraria aveva messo in attesa.
+#
+# Il pezzo gemello sta in `pantedu-deploy-trigger.sh`: quando arriva una
+# consegna dentro la finestra in cui non si rilascia, quello script **non
+# consuma** l'identificativo, lascia un marcatore e si ferma. Qui si guarda
+# ogni dieci minuti se c'è qualcosa in attesa e se la finestra si è aperta.
+#
+# Perché differire e non rifiutare: un rilascio rifiutato è un rilascio perso.
+# Il codice resterebbe unito su `main` e non in produzione, e nessuno se ne
+# accorgerebbe fino alla volta dopo — che è il genere di silenzio che questa
+# tornata di lavoro serve a togliere.
+#
+# Senza finestra configurata questa unità non fa niente: la finestra è spenta
+# finché non esiste `/etc/pantedu/deploy-window.conf`.
+Description=pantedu — rilascia ciò che la finestra oraria aveva differito
+Documentation=file:///var/www/pantedu/wiki/dev-workflow.md
+After=network-online.target
+
+OnFailure=pantedu-avviso@%n.service
+
+# 2026-09-08 — non partire finché lo script non c'è.
+#
+# Il timer può scattare mentre un rilascio sta ancora installando i file in
+# /usr/local/bin/: è successo il giorno stesso, l'unità è finita in `failed` e
+# l'avviso è partito per una cosa che si sarebbe sistemata da sola trenta
+# secondi dopo. Con `ConditionPathExists` systemd la SALTA invece di
+# considerarla fallita, e l'avviso resta per i guasti veri.
+ConditionPathExists=/usr/local/bin/pantedu-deploy-differito.sh
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pantedu-deploy-differito.sh
+StandardOutput=append:/var/log/pantedu-deploy.log
+StandardError=append:/var/log/pantedu-deploy.log
+TimeoutStartSec=60

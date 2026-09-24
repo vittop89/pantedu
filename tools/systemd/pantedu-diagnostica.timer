@@ -1,0 +1,24 @@
+[Unit]
+Description=pantedu — timer della diagnostica degli invarianti
+
+[Timer]
+# Due volte al giorno. Non piu' spesso: gli invarianti che controlla cambiano
+# solo quando cambia il sistema — un rilascio, una configurazione toccata a
+# mano, un file scaduto — e un controllo che scrive una mail troppo spesso
+# smette di essere letto. Non meno spesso: dodici ore e' il tempo massimo che
+# un guasto silenzioso puo' restare tale prima che qualcuno lo sappia.
+#
+# Le 07:00 perche' la giornata cominci sapendo com'e' andata la notte (il
+# backup cifrato e' alle 03:00), le 19:00 per chiudere quella lavorativa.
+OnCalendar=07:00
+OnCalendar=19:00
+
+# Il VPS non si spegne, ma un riavvio proprio all'ora giusta salterebbe il
+# giro: `Persistent` lo fa recuperare.
+Persistent=true
+
+RandomizedDelaySec=5min
+Unit=pantedu-diagnostica.service
+
+[Install]
+WantedBy=timers.target

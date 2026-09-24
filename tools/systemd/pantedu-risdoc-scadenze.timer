@@ -1,0 +1,20 @@
+[Unit]
+Description=pantedu — timer giornaliero per le bozze di compilazione scadute
+
+[Timer]
+# Ogni giorno alle 03:50. Lo slot è libero: alle 03:40 c'è la sincronizzazione
+# di Drive e alle 04:00 AIDE, che non è un'unità systemd ma una riga di cron.
+#
+# Ogni giorno e non una volta a settimana: la scadenza è al giorno, e un giro
+# settimanale terrebbe una bozza fino a sei giorni oltre il termine che
+# l'informativa dichiara.
+OnCalendar=*-*-* 03:50:00
+# Persistent: se il server è stato spento, il giro si recupera alla riaccensione.
+# Una notte saltata non deve diventare una notte di conservazione in più — e il
+# ritardo, quando c'è, lo assorbe l'attesa di tre giorni dopo l'avviso.
+Persistent=true
+RandomizedDelaySec=5min
+Unit=pantedu-risdoc-scadenze.service
+
+[Install]
+WantedBy=timers.target

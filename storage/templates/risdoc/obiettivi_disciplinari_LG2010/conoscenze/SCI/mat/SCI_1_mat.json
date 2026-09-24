@@ -1,0 +1,51 @@
+[
+  {
+    "titolo": "CONOSCENZE",
+    "contenuti": [
+      {
+        "label": "Conoscere gli elementi di base del calcolo letterale, le proprietà dei polinomi e le più semplici operazioni tra di essi.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere i concetti di vettore, di dipendenza e indipendenza lineare, di prodotto scalare e vettoriale nel piano e nello spazio, e gli elementi del calcolo matriciale.",
+        "checked": true
+      },
+      {
+        "label": "Comprendere il ruolo fondamentale dei concetti dell'algebra vettoriale e matriciale nella fisica.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere i fondamenti della geometria euclidea del piano e il significato dei concetti di postulato, assioma, definizione, teorema e dimostrazione.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le principali trasformazioni geometriche e le proprietà fondamentali della circonferenza.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le definizioni e le proprietà dei valori medi e delle misure di variabilità.",
+        "checked": true
+      },
+      {
+        "label": "Apprendere la nozione di probabilità e gli elementi di base della statistica.",
+        "checked": true
+      },
+      {
+        "label": "Comprendere il concetto di modello matematico e la sua specificità rispetto all'approccio della fisica classica.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le caratteristiche architetturali di un computer (hardware, software, codifica binaria, macchina di Von Neumann).",
+        "checked": true
+      },
+      {
+        "label": "Conoscere il concetto e le funzionalità di base di un sistema operativo (processo, gestione memoria, file system).",
+        "checked": true
+      },
+      {
+        "label": "Conoscere i principi alla base dei linguaggi di programmazione e il concetto di algoritmo.",
+        "checked": true
+      }
+    ]
+  }
+]

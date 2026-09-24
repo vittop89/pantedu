@@ -1,0 +1,810 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{calc,angles,quotes}
+
+\pagestyle{empty}
+
+% ==================================================
+% POLIGONI E FIGURE GEOMETRICHE MODULARI
+% ==================================================
+% Una figura = uno o più PANNELLI affiancati. In ogni pannello si elencano
+% gli elementi con i comandi \Set... e si disegna con \RenderFigure:
+%
+%   \begin{FigurePanel}{spostamentoX/distanza barra}{base barra}{ymin}{ymax}
+%     \PoliSet{...}  \tikzset{poli ...}   (facoltativi: valgono solo qui)
+%     \SetPoints{...} \SetPolygons{...} ...
+%     \RenderFigure
+%   \end{FigurePanel}
+%
+% spostamentoX: di quanto si sposta il pannello verso destra.
+% distanza barra: se c'è, una barra verticale grigia in x = base + distanza,
+%   da ymin a ymax; {8.2/} o {8.2} = nessuna barra.
+%
+% I punti di un pannello valgono SOLO in quel pannello: lo stesso nome si
+% può riusare in un altro pannello. Un nome citato che nel pannello non c'è
+% (o che ha mostra=0) ferma la compilazione con un errore in italiano.
+% I \Set... e \PoliSet scritti FUORI dai pannelli valgono per tutti.
+%
+% LISTE: elementi separati da virgola, campi separati da /. Gli spazi attorno
+% a virgole e barre non contano; una riga commentata con % o una virgola in
+% più non danno fastidio. Un campo con virgole o / va tra graffe:
+% {thick, dashed}, {$A(0,0)$}, {sqrt(3)}. Un campo lasciato vuoto prende il
+% valore predefinito (tra parentesi quadre qui sotto). mostra: 1 = disegna,
+% 0 = non disegnare (un punto con mostra=0 non esiste).
+%
+% PUNTI CITATI (A, B, centro...): il nome di un punto dello stesso pannello
+% (da \SetPoints, \SetDerived, \SetProjections, o una \coordinate scritta
+% nel pannello prima di \RenderFigure), oppure una coordinata tra graffe:
+% {1,2.5}.
+%
+% LUNGHEZZE (distanze, raggi, tacche, tangenti): un numero senza unità è in
+% unità del disegno, come le coordinate, e cresce o cala con [scale=...].
+% Con l'unità (5pt, 0.3cm) la misura resta quella sulla pagina.
+%
+% \SetPoints     nome/x/y/etichetta/posizione/mostra/pallino
+%                x e y accettano espressioni: {2*cos(60)}, {sqrt(3)}.
+%                [posizione: above] [mostra: 1] [pallino: 1]
+% \SetDerived    nome/A/B/rapporto/etichetta/posizione/linea/mostra/pallino
+%                punto sulla retta AB: rapporto 0 = A, 1 = B, 0.5 = medio;
+%                linea=1 disegna il segmento da A al punto.
+%                [rapporto: 0.5] [linea: 0]
+% \SetProjections nome/punto/A/B/etichetta/posizione/linea/stile linea/mostra/pallino
+%                piede della perpendicolare dal punto alla retta AB.
+%                [linea: 1] [stile linea: continua]
+%                Derivati e proiezioni possono usarsi a vicenda (il medio
+%                di un lato proiettato su un altro, o il medio di CH).
+% \SetSegments   A/B/colore/spessore/stile/mostra     [nero sottile continuo]
+% \SetPolygons   percorso/stile/riempimento/mostra
+%                percorso TikZ: (A)--(B)--(C) oppure {(0,0)--(3,0)--(1.5,2)};
+%                si chiude da solo. [stile: sottile] [riempimento: nessuno]
+%                I riempimenti stanno sotto tutte le linee; dove un poligono
+%                e un cerchio colorati si sovrappongono vince il poligono
+%                (\PoliSet{circle fill above=1} per il contrario).
+% \SetCircles    centro/punto/angolo iniziale/angolo finale/colore/riempi/colore riempimento/mostra
+%                arco (o circonferenza) di centro dato che passa per il punto;
+%                riempi=1 lo colora (un arco si chiude con la corda).
+%                [0/360] [colore: nero] [riempi: 0]
+%                [colore riempimento: black!10]
+% \SetTangents   punto/centro/lunghezza oraria/lunghezza antioraria/etichetta/posizione/mostra
+%                tangente nel punto alla circonferenza di quel centro;
+%                l'etichetta va all'estremo antiorario. [lunghezze: 1] [above]
+% \SetArcAngles  A/B/C/raggio/etichetta/eccentricita/archi/mostra
+%                angolo di vertice B fra BA e BC, sempre il convesso (<=180°)
+%                qualunque sia l'ordine di A e C. Per un angolo concavo:
+%                \PoliSet{convex angles=0}, e allora l'arco va in senso
+%                antiorario da BA a BC (nei poligoni coi vertici in senso
+%                antiorario: successivo/vertice/precedente, es. C/B/A).
+%                eccentricita: distanza dell'etichetta dal vertice, in raggi
+%                (1 = sull'arco). archi: 1, 2 o 3 archi; 0 = solo l'etichetta.
+%                [raggio: angle radius] [eccentricita: 0.6] [archi: 1]
+% \SetRightAngles A/B/C/lato/mostra        quadratino in B    [lato: right angle size]
+% \SetPerpQuotes A/B/distanza/etichetta/posizione/inclinazione/frecce/stile/spessore/mostra
+%                quota parallela ad AB, staccata della distanza: positiva a
+%                sinistra andando da A a B, negativa a destra.
+%                [distanza: quote distance] [posizione: dalla parte esterna]
+%                [inclinazione: sloped] [frecce: <->] [spessore: normale]
+% \SetTickMarks  A/B/tacche/posizione/distanza/mezza lunghezza/stile/mostra
+%                tacche di uguaglianza sul segmento AB; posizione 0.5 = a metà;
+%                tacche=0: nessuna. [1] [0.5] [tick spacing] [tick size]
+%
+% Stili (\tikzset{poli ... /.style={...}}): poli derived line,
+% poli projection line, poli tangent, poli circle, poli quote guide,
+% poli tick, poli label.
+% Pallini dei punti: \ShowPointDotsfalse li toglie tutti;
+% \renewcommand{\PointDotColor}{blue}, \renewcommand{\PointDotRadius}{3pt}.
+% Nell'etichetta di un punto \\ va a capo.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% CONTROLLI GLOBALI
+\newif\ifShowPointDots
+\ShowPointDotstrue % metti \ShowPointDotsfalse per nascondere i cerchietti
+\newcommand{\PointDotRadius}{2pt}
+\newcommand{\PointDotColor}{red}
+
+% Parametri (si cambiano con \PoliSet{chiave=valore, ...}, anche in un pannello)
+\pgfkeys{
+  /poli/.is family, /poli,
+  angle radius/.initial=0.5,       % raggio di un arco d'angolo lasciato vuoto
+  angle step/.initial=0.15,        % distanza fra gli archi di un angolo doppio o triplo
+  angle eccentricity/.initial=0.6, % eccentricità lasciata vuota
+  convex angles/.initial=1,        % 1 = sempre l'angolo convesso; 0 = antiorario da BA a BC
+  right angle size/.initial=0.3,   % lato del quadratino lasciato vuoto
+  quote distance/.initial=0.3,     % distanza di una quota lasciata vuota
+  tick spacing/.initial=0.08,      % distanza fra due tacche vicine
+  tick size/.initial=0.1,          % mezza lunghezza di una tacca
+  circle fill above/.initial=0,    % 1 = dove si sovrappongono, il colore dei
+                                   %     cerchi copre quello dei poligoni
+}
+\newcommand{\PoliSet}[1]{\pgfkeys{/poli/.cd,#1}}
+\newcommand{\poliget}[1]{\pgfkeysvalueof{/poli/#1}}
+
+% Stili grafici (si cambiano con \tikzset{poli ... /.style={...}})
+\tikzset{
+  poli derived line/.style={thick},
+  poli projection line/.style={thick},
+  poli tangent/.style={thick},
+  poli circle/.style={thick},
+  poli quote guide/.style={dashed},
+  poli tick/.style={line width=1.2pt, line cap=round},
+  poli label/.style={},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% Livelli: i riempimenti stanno sotto tutte le linee, i punti e le tacche
+% sopra tutto.
+\pgfdeclarelayer{figbg}
+\pgfdeclarelayer{figfg}
+\pgfsetlayers{figbg,main,figfg}
+
+% --- lettura delle liste --------------------------------------------------
+% \PoliLista{SetX}{descrizione dei campi}{\Dati}{\campo1\campo2...}{codice}
+% Per ogni elemento della lista mette i campi nelle macro \campo1, \campo2...
+% ed esegue il codice. Toglie gli spazi attorno a virgole e barre, salta gli
+% elementi vuoti, toglie un livello di graffe a ogni campo, rimette insieme
+% un elemento spezzato da una virgola tra parentesi tonde, es. (0,0)--(3,0),
+% e ferma con un errore in italiano un elemento col numero di campi sbagliato.
+\ExplSyntaxOn
+\seq_new:N \l__poli_grezze_seq
+\seq_new:N \l__poli_voci_seq
+\seq_new:N \l__poli_campi_seq
+\seq_new:N \l__poli_nomi_seq
+\tl_new:N \l__poli_acc_tl
+\tl_new:N \l__poli_tmp_tl
+\int_new:N \l__poli_bil_int
+\int_new:N \l__poli_indice_int
+\bool_new:N \l__poli_pari_bool
+\cs_generate_variant:Nn \regex_match:nnTF { nV }
+\cs_generate_variant:Nn \regex_extract_all:nnN { nV }
+
+\cs_new_protected:Npn \__poli_voci:Nn #1#2
+  {
+    \seq_set_split:Nnn \l__poli_grezze_seq { , } {#2}
+    \seq_clear:N #1
+    \tl_clear:N \l__poli_acc_tl
+    \int_zero:N \l__poli_bil_int
+    \seq_map_inline:Nn \l__poli_grezze_seq
+      {
+        \int_compare:nNnT \l__poli_bil_int > 0
+          { \tl_put_right:Nn \l__poli_acc_tl { , } }
+        \tl_put_right:Nn \l__poli_acc_tl {##1}
+        \tl_map_inline:nn {##1}
+          {
+            \tl_if_eq:nnT {####1} { ( } { \int_incr:N \l__poli_bil_int }
+            \tl_if_eq:nnT {####1} { ) } { \int_decr:N \l__poli_bil_int }
+          }
+        \int_compare:nNnF \l__poli_bil_int > 0
+          {
+            \tl_if_blank:VF \l__poli_acc_tl
+              { \seq_put_right:NV #1 \l__poli_acc_tl }
+            \tl_clear:N \l__poli_acc_tl
+            \int_zero:N \l__poli_bil_int
+          }
+      }
+    \tl_if_blank:VF \l__poli_acc_tl
+      { \seq_put_right:NV #1 \l__poli_acc_tl }
+  }
+\cs_generate_variant:Nn \__poli_voci:Nn { NV }
+
+\cs_new_protected:Npn \PoliLista #1#2#3#4#5
+  {
+    \__poli_voci:NV \l__poli_voci_seq #3
+    \int_zero:N \l__poli_indice_int
+    \seq_map_inline:Nn \l__poli_voci_seq
+      {
+        \int_incr:N \l__poli_indice_int
+        \tl_set:Nx \PoliIndice { \int_use:N \l__poli_indice_int }
+        \seq_set_split:Nnn \l__poli_campi_seq { / } {##1}
+        \int_compare:nNnTF
+          { \seq_count:N \l__poli_campi_seq } = { \tl_count:n {#4} }
+          {
+            \tl_map_inline:nn {#4}
+              {
+                \seq_pop_left:NN \l__poli_campi_seq \l__poli_tmp_tl
+                \tl_set_eq:NN ####1 \l__poli_tmp_tl
+              }
+            #5
+          }
+          {
+            \use:e
+              {
+                \exp_not:N \PoliErroreCampi {#1} {#2} { \exp_not:n {##1} }
+                  { \seq_count:N \l__poli_campi_seq } { \tl_count:n {#4} }
+              }
+          }
+      }
+  }
+
+% \PoliSeVuoto{\campo}{se vuoto}{se pieno}
+\cs_new:Npn \PoliSeVuoto #1#2#3 { \tl_if_blank:VTF #1 {#2} {#3} }
+% \PoliSeContiene{\campo}{testo}{sì}{no}
+\cs_new_protected:Npn \PoliSeContiene #1#2#3#4 { \tl_if_in:NnTF #1 {#2} {#3} {#4} }
+% \PoliIntero{\campo}{predefinito}{descrizione}: vuoto = predefinito,
+% altrimenti deve essere un numero intero
+\cs_new_protected:Npn \PoliIntero #1#2#3
+  {
+    \tl_if_blank:VTF #1
+      { \tl_set:Nn #1 {#2} }
+      {
+        \regex_match:nVTF { \A [\+\-]? \d+ \Z } #1
+          { }
+          { \PoliErroreIntero {#3} {#1} }
+      }
+  }
+% \PoliSeCoordinata{\campo}{sì}{no}: il campo è una coordinata scritta per
+% esteso (1,2), (30:1), $...$, A.north, e non il nome di un punto
+\cs_new_protected:Npn \PoliSeCoordinata #1#2#3
+  { \regex_match:nVTF { [\,\:\.\$\(] } #1 {#2} {#3} }
+% \PoliNomiPercorso{\percorso}{codice}: esegue il codice per ogni nome di
+% punto scritto tra parentesi nel percorso, es. (A) e (B) in
+% (A)--($(A)!0.5!(B)$); il nome è in \PoliNome
+\cs_new_protected:Npn \PoliNomiPercorso #1#2
+  {
+    \regex_extract_all:nVN
+      { \( \s* ([A-Za-z][^\,\:\$\!\.\(\)\=\s]*) \s* \) } #1 \l__poli_nomi_seq
+    \bool_set_false:N \l__poli_pari_bool
+    \seq_map_inline:Nn \l__poli_nomi_seq
+      {
+        \bool_if:NT \l__poli_pari_bool { \tl_set:Nn \PoliNome {##1} #2 }
+        \bool_set_inverse:N \l__poli_pari_bool
+      }
+  }
+\ExplSyntaxOff
+
+\makeatletter
+% --- messaggi d'errore -------------------------------------------------------
+% (in modalità non interattiva il log mostra solo il messaggio, non l'aiuto:
+% quello che serve al docente sta nel messaggio)
+\newcommand{\PoliErroreCampi}[5]{%
+  \PackageError{poligono}{\string\Set#1: l'elemento '\detokenize{#3}' ha #4
+    campi, ne servono #5 (#2). Un campo con virgole o / va tra graffe, es.
+    {thick, dashed}; i decimali si scrivono col punto (2.5, non 2,5)}{}}
+\newcommand{\PoliErroreIntero}[2]{%
+  \PackageError{poligono}{#1: il campo vale '\detokenize\expandafter{#2}',
+    ci vuole un numero intero. Forse manca o avanza un campo: controlla le
+    barre / dell'elemento}{}}
+\newcommand{\poli@errore}[2]{\PackageError{poligono}{#1}{#2}}
+
+% --- utilità -----------------------------------------------------------------
+% \poliDefault{\campo}{valore}: se il campo è vuoto gli dà il valore
+\newcommand{\poliDefault}[2]{\PoliSeVuoto{#1}{\edef#1{#2}}{}}
+% \poliStile{nome}{\campo}: il contenuto del campo (anche con più opzioni
+% separate da virgola) diventa lo stile TikZ «nome»
+\newcommand{\poliStile}[2]{\expandafter\poli@stile\expandafter{#2}{#1}}
+\newcommand{\poli@stile}[2]{\tikzset{#2/.style={#1}}}
+
+% registro dei punti di ogni pannello
+\newcount\poli@pannelli
+\newcount\poli@render
+\def\PolPanelId{0}
+\newcommand{\poli@registra}[1]{%
+  \expandafter\gdef\csname poli@pt@\PolPanelId @#1\endcsname{}}
+% \poli@seesiste{\nome}{sì}{no}: c'è se è un punto delle liste di questo
+% pannello, o una coordinata TikZ creata nel pannello dal docente
+% (\coordinate (X) at ...; prima di \RenderFigure)
+\newcommand{\poli@seesiste}[3]{%
+  \PoliSeCoordinata{#1}{#2}{%
+    \ifcsname poli@pt@\PolPanelId @#1\endcsname #2\else
+      \ifcsname pgf@sh@ns@\pgfkeysvalueof{/tikz/name prefix}#1\endcsname #2\else #3\fi
+    \fi}}
+% \poli@cita{elemento}{\nome}: errore se il punto citato non c'è
+\newcommand{\poli@cita}[2]{%
+  \poli@seesiste{#2}{}{%
+    \poli@errore{#1: il punto '#2' non c'e' in questo pannello (o ha
+      mostra=0). Valgono i punti di \string\SetPoints, \string\SetDerived\space
+      e \string\SetProjections\space dello stesso pannello, non quelli degli
+      altri pannelli}{}}}
+% \poli@nome{\nome}: il nome completo del punto nel pannello (serve ai pic)
+\newcommand{\poli@nome}[2]{\edef#1{\pgfkeysvalueof{/tikz/name prefix}#2}}
+
+% \poli@lunghezza{\risultato}{valore}: in pt, nel sistema locale (quello
+% che poi [scale=...] ingrandisce o rimpicciolisce).
+% Numero senza unità = unità del disegno (come le coordinate); con l'unità
+% la misura resta quella sulla pagina, qualunque sia la scala.
+\newcommand{\poli@lunghezza}[2]{%
+  \pgfmathparse{#2}%
+  \ifpgfmathunitsdeclared
+    \let\poli@v\pgfmathresult
+    \pgfgettransformentries{\poli@ma}{\poli@mb}{\poli@mc}{\poli@md}{\poli@ms}{\poli@mt}%
+    \pgfmathsetmacro#1{\poli@v/veclen(\poli@ma,\poli@mb)}%
+  \else
+    \let\poli@v\pgfmathresult
+    \pgfpointxy{1}{0}%
+    \pgfmathsetmacro#1{\poli@v*veclen(\the\pgf@x,\the\pgf@y)}%
+  \fi}
+% \poli@lunghezzatela{\risultato}{valore}: in pt sulla pagina, compresa la
+% scala del disegno (serve ai pic degli angoli, che non seguono scale).
+\newcommand{\poli@lunghezzatela}[2]{%
+  \pgfmathparse{#2}%
+  \ifpgfmathunitsdeclared
+    \let#1\pgfmathresult
+  \else
+    \let\poli@v\pgfmathresult
+    \pgfpointxy{1}{0}%
+    \edef\poli@px{\the\pgf@x}\edef\poli@py{\the\pgf@y}%
+    \pgfgettransformentries{\poli@ma}{\poli@mb}{\poli@mc}{\poli@md}{\poli@ms}{\poli@mt}%
+    \pgfmathsetmacro#1{\poli@v*veclen(\poli@ma*\poli@px+\poli@mc*\poli@py,
+      \poli@mb*\poli@px+\poli@md*\poli@py)}%
+  \fi}
+
+% ==================================================
+% PANNELLI AFFIANCATI CON BARRA VERTICALE
+% ==================================================
+% \begin{FigurePanel}{shiftX/sepDistance}{sepBaseX}{ymin}{ymax}
+% Esempio: {0/0.9} => barra verticale; {8.2/} o {8.2} => nessuna barra
+\def\ParsePanelShiftSep#1/#2/#3\@@{%
+  \def\PanelShiftX{#1}%
+  \def\PanelSepDistance{#2}%
+}
+\newenvironment{FigurePanel}[4]{%
+  \ParsePanelShiftSep#1//\@@
+  \def\PanelSepBaseX{#2}%
+  \def\PanelYMin{#3}%
+  \def\PanelYMax{#4}%
+  \global\advance\poli@pannelli by 1
+  \edef\PolPanelId{\the\poli@pannelli}%
+  % i nomi dei punti hanno un prefisso diverso in ogni pannello
+  \begin{scope}[shift={(\PanelShiftX,0)}, name prefix/.expanded=poli\PolPanelId-]
+}{%
+  \edef\PanelSepCheck{\PanelSepDistance}%
+  \ifx\PanelSepCheck\empty\else
+    \draw[gray, line width=0.35pt] (\PanelSepBaseX+\PanelSepDistance,\PanelYMin) -- (\PanelSepBaseX+\PanelSepDistance,\PanelYMax);
+  \fi
+  \end{scope}
+}
+
+% ==================================================
+% DATI (vuoti per default)
+% ==================================================
+\newcommand{\SetPoints}[1]{\def\PointsData{#1}}
+\newcommand{\SetDerived}[1]{\def\DerivedData{#1}}
+\newcommand{\SetSegments}[1]{\def\SegmentsData{#1}}
+\newcommand{\SetProjections}[1]{\def\ProjectionsData{#1}}
+\newcommand{\SetTangents}[1]{\def\TangentsData{#1}}
+\newcommand{\SetCircles}[1]{\def\CirclesData{#1}}
+\newcommand{\SetPolygons}[1]{\def\PolygonsData{#1}}
+\newcommand{\SetArcAngles}[1]{\def\ArcAnglesData{#1}}
+\newcommand{\SetRightAngles}[1]{\def\RightAnglesData{#1}}
+\newcommand{\SetPerpQuotes}[1]{\def\PerpQuotesData{#1}}
+\newcommand{\SetTickMarks}[1]{\def\TickMarksData{#1}}
+
+\SetPoints{}
+\SetDerived{}
+\SetSegments{}
+\SetProjections{}
+\SetTangents{}
+\SetCircles{}
+\SetPolygons{}
+\SetArcAngles{}
+\SetRightAngles{}
+\SetPerpQuotes{}
+\SetTickMarks{}
+
+% le liste dei punti, lette più volte: \poli@Lpunti{codice} esegue il codice
+% per ogni elemento, con il campo mostra già controllato
+\newcommand{\poli@Lpunti}[1]{\PoliLista{Points}{nome/x/y/etichetta/posizione/mostra/pallino}{\PointsData}{\plNome\plX\plY\plEtich\plPos\plMostra\plPall}{%
+  \PoliIntero\plMostra{1}{\string\SetPoints\space: mostra di '\plNome'}#1}}
+\newcommand{\poli@Lderivati}[1]{\PoliLista{Derived}{nome/A/B/rapporto/etichetta/posizione/linea/mostra/pallino}{\DerivedData}{\plNome\plA\plB\plRapp\plEtich\plPos\plLinea\plMostra\plPall}{%
+  \PoliIntero\plMostra{1}{\string\SetDerived\space: mostra di '\plNome'}#1}}
+\newcommand{\poli@Lproiezioni}[1]{\PoliLista{Projections}{nome/punto/A/B/etichetta/posizione/linea/stile linea/mostra/pallino}{\ProjectionsData}{\plNome\plP\plA\plB\plEtich\plPos\plLinea\plStile\plMostra\plPall}{%
+  \PoliIntero\plMostra{1}{\string\SetProjections\space: mostra di '\plNome'}#1}}
+
+% ==================================================
+% COSTRUZIONE DEI PUNTI
+% ==================================================
+\newif\ifpoli@progresso
+\newcommand{\poli@segnafatto}[1]{%
+  \expandafter\gdef\csname poli@fatto@\the\poli@render @#1\PoliIndice\endcsname{}}
+\newcommand{\poli@sefatto}[3]{%
+  \ifcsname poli@fatto@\the\poli@render @#1\PoliIndice\endcsname #2\else #3\fi}
+
+\newcommand{\BuildGeometry}{%
+  % punti
+  \poli@Lpunti{%
+    \ifnum\plMostra>0
+      \PoliSeVuoto\plX{\poli@errore{Punto '\plNome': manca la x}{}}{}%
+      \PoliSeVuoto\plY{\poli@errore{Punto '\plNome': manca la y}{}}{}%
+      \coordinate (\plNome) at ({\plX},{\plY});
+      \poli@registra\plNome
+    \fi}%
+  % proiezioni e derivati: a giri, finché ognuno trova i punti che cita
+  % (così una proiezione può partire da un derivato e viceversa)
+  \poli@giro
+  % quello che resta cita un punto che non c'è, o che è nella lista ma non
+  % si può costruire (un giro di dipendenze)
+  \poli@Lproiezioni{\ifnum\plMostra>0 \poli@sefatto{P}{}{\poli@dichiara\plNome}\fi}%
+  \poli@Lderivati{\ifnum\plMostra>0 \poli@sefatto{D}{}{\poli@dichiara\plNome}\fi}%
+  \poli@Lproiezioni{%
+    \ifnum\plMostra>0
+      \poli@sefatto{P}{}{%
+        \poli@citacostr{Proiezione '\plNome'}\plP
+        \poli@citacostr{Proiezione '\plNome'}\plA
+        \poli@citacostr{Proiezione '\plNome'}\plB}%
+    \fi}%
+  \poli@Lderivati{%
+    \ifnum\plMostra>0
+      \poli@sefatto{D}{}{%
+        \poli@citacostr{Punto derivato '\plNome'}\plA
+        \poli@citacostr{Punto derivato '\plNome'}\plB}%
+    \fi}%
+}
+% punti costruiti rimasti in sospeso, e il loro controllo
+\newcommand{\poli@dichiara}[1]{%
+  \expandafter\gdef\csname poli@sospeso@\the\poli@render @#1\endcsname{}}
+\newcommand{\poli@citacostr}[2]{%
+  \poli@seesiste{#2}{}{%
+    \ifcsname poli@sospeso@\the\poli@render @#2\endcsname
+      \poli@errore{#1: usa '#2', che a sua volta dipende da '\plNome'
+        (giro di dipendenze: un punto costruito non puo' dipendere da se
+        stesso)}{}%
+    \else
+      \poli@cita{#1}{#2}%
+    \fi}}
+% un giro su proiezioni e derivati: costruisce quelli che trovano già i
+% punti che citano, e ricomincia finché qualcosa cambia
+\newcommand{\poli@giro}{%
+  \global\poli@progressofalse
+  \poli@Lproiezioni{%
+    \ifnum\plMostra>0
+      \poli@sefatto{P}{}{%
+        \poli@seesiste\plP{\poli@seesiste\plA{\poli@seesiste\plB{%
+          \coordinate (\plNome) at ($(\plA)!(\plP)!(\plB)$);
+          \poli@registra\plNome
+          \poli@segnafatto{P}%
+          \global\poli@progressotrue}{}}{}}{}}%
+    \fi}%
+  \poli@Lderivati{%
+    \ifnum\plMostra>0
+      \poli@sefatto{D}{}{%
+        \poli@seesiste\plA{\poli@seesiste\plB{%
+          \poliDefault\plRapp{0.5}%
+          \path (\plA) -- (\plB) coordinate[pos=\plRapp] (\plNome);
+          \poli@registra\plNome
+          \poli@segnafatto{D}%
+          \global\poli@progressotrue}{}}{}}%
+    \fi}%
+  \ifpoli@progresso\expandafter\poli@giro\fi
+}
+
+% ==================================================
+% DISEGNO DEGLI ELEMENTI
+% ==================================================
+% riempimenti (sul livello di fondo)
+\newcommand{\poli@riempipoligoni}{%
+  \PoliLista{Polygons}{percorso/stile/riempimento/mostra}{\PolygonsData}{\plPath\plStile\plFill\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetPolygons\space: mostra}%
+    \ifnum\plMostra>0
+      \PoliNomiPercorso\plPath{\poli@cita{Poligono}\PoliNome}%
+      \poliStile{poli tmp}{\plStile}%
+      \PoliSeVuoto\plFill{%
+        \path[poli tmp, draw=none] \plPath -- cycle;}{%
+        \path[poli tmp, draw=none, fill=\plFill] \plPath -- cycle;}%
+    \fi}}
+\newcommand{\poli@Lcerchi}{\PoliLista{Circles}{centro/punto/angolo iniziale/angolo finale/colore/riempi/colore riempimento/mostra}{\CirclesData}{\plC\plR\plIni\plFin\plCol\plRiempi\plFill\plMostra}}
+\newcommand{\poli@cerchio}{%
+  \PoliIntero\plMostra{1}{\string\SetCircles\space: mostra}%
+  \PoliIntero\plRiempi{0}{\string\SetCircles\space: riempi}%
+  \poliDefault\plIni{0}%
+  \poliDefault\plFin{360}%
+  \poliDefault\plFill{black!10}%
+  \poliStile{poli tmp}{\plCol}}
+\newcommand{\poli@riempicerchi}{%
+  \poli@Lcerchi{%
+    \poli@cerchio
+    \ifnum\plMostra>0
+      \poli@cita{Circonferenza}\plC
+      \poli@cita{Circonferenza}\plR
+      \ifnum\plRiempi>0
+        \path[poli circle, poli tmp, draw=none, fill=\plFill]
+          let \p1=(\plC), \p2=(\plR), \n1={veclen(\x2-\x1,\y2-\y1)}
+          in (\plC) ++(\plIni:\n1)
+             arc[start angle=\plIni, end angle=\plFin, radius=\n1];
+      \fi
+    \fi}}
+
+\newcommand{\DrawFigurePrimitives}{%
+  \begin{pgfonlayer}{figbg}
+    \ifnum\poliget{circle fill above}>0
+      \poli@riempipoligoni \poli@riempicerchi
+    \else
+      \poli@riempicerchi \poli@riempipoligoni
+    \fi
+  \end{pgfonlayer}
+
+  % poligoni: percorso/stile/riempimento/mostra (il riempimento è già fatto)
+  \PoliLista{Polygons}{percorso/stile/riempimento/mostra}{\PolygonsData}{\plPath\plStile\plFill\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetPolygons\space: mostra}%
+    \ifnum\plMostra>0
+      \poliStile{poli tmp}{\plStile}%
+      \draw[poli tmp, fill=none] \plPath -- cycle;
+    \fi}%
+
+  % segmenti: A/B/colore/spessore/stile/mostra
+  \PoliLista{Segments}{A/B/colore/spessore/stile/mostra}{\SegmentsData}{\plA\plB\plCol\plSpess\plStile\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetSegments\space: mostra}%
+    \ifnum\plMostra>0
+      \poli@cita{Segmento \plA/\plB}\plA
+      \poli@cita{Segmento \plA/\plB}\plB
+      \poliStile{poli tmp col}{\plCol}%
+      \poliStile{poli tmp spess}{\plSpess}%
+      \poliStile{poli tmp}{\plStile}%
+      \draw[poli tmp col, poli tmp spess, poli tmp] (\plA) -- (\plB);
+    \fi}%
+
+  % linee ai punti derivati
+  \poli@Lderivati{%
+    \ifnum\plMostra>0
+      \PoliIntero\plLinea{0}{\string\SetDerived\space: linea di '\plNome'}%
+      \ifnum\plLinea>0
+        \draw[poli derived line] (\plA) -- (\plNome);
+      \fi
+    \fi}%
+
+  % linee di proiezione
+  \poli@Lproiezioni{%
+    \ifnum\plMostra>0
+      \PoliIntero\plLinea{1}{\string\SetProjections\space: linea di '\plNome'}%
+      \ifnum\plLinea>0
+        \poliStile{poli tmp}{\plStile}%
+        \draw[poli projection line, poli tmp] (\plP) -- (\plNome);
+      \fi
+    \fi}%
+
+  % tangenti: punto/centro/lunghezza oraria/lunghezza antioraria/etichetta/posizione/mostra
+  \PoliLista{Tangents}{punto/centro/lunghezza oraria/lunghezza antioraria/etichetta/posizione/mostra}{\TangentsData}{\plP\plC\plMeno\plPiu\plEtich\plPos\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetTangents\space: mostra}%
+    \ifnum\plMostra>0
+      \poli@cita{Tangente in \plP}\plP
+      \poli@cita{Tangente in \plP}\plC
+      \poliDefault\plMeno{1}%
+      \poliDefault\plPiu{1}%
+      \poliDefault\plPos{above}%
+      \poliStile{poli tmp pos}{\plPos}%
+      \poli@lunghezza\poliMeno{\plMeno}%
+      \poli@lunghezza\poliPiu{\plPiu}%
+      % l'estremo orario si toglie, quello antiorario si aggiunge
+      \path let \p1 = (\plC), \p2 = (\plP),
+                \n1 = {atan2(\y2-\y1,\x2-\x1)}
+        in coordinate (tangStart) at ($(\plP)-(\n1+90:\poliMeno pt)$)
+           coordinate (tangEnd) at ($(\plP)+(\n1+90:\poliPiu pt)$);
+      \draw[poli tangent] (tangStart) -- (tangEnd) node[poli tmp pos] {\plEtich};
+    \fi}%
+
+  % archi e circonferenze (il riempimento è già fatto)
+  \poli@Lcerchi{%
+    \poli@cerchio
+    \ifnum\plMostra>0
+      \draw[poli circle, poli tmp]
+        let \p1=(\plC), \p2=(\plR), \n1={veclen(\x2-\x1,\y2-\y1)}
+        in (\plC) ++(\plIni:\n1)
+           arc[start angle=\plIni, end angle=\plFin, radius=\n1];
+    \fi}%
+
+  % angoli a uno, due o tre archi: A/B/C/raggio/etichetta/eccentricita/archi/mostra
+  \PoliLista{ArcAngles}{A/B/C/raggio/etichetta/eccentricita/archi/mostra}{\ArcAnglesData}{\plA\plB\plC\plRaggio\plEtich\plEcc\plArchi\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetArcAngles\space: mostra}%
+    \ifnum\plMostra>0
+      \poli@cita{Angolo \plA/\plB/\plC}\plA
+      \poli@cita{Angolo \plA/\plB/\plC}\plB
+      \poli@cita{Angolo \plA/\plB/\plC}\plC
+      \PoliIntero\plArchi{1}{\string\SetArcAngles\space: numero di archi}%
+      \ifnum\plArchi<0
+        \poli@errore{Angolo \plA/\plB/\plC: il numero di archi e' negativo}{}%
+      \fi
+      \poliDefault\plRaggio{\poliget{angle radius}}%
+      \poliDefault\plEcc{\poliget{angle eccentricity}}%
+      \ifnum\poliget{convex angles}>0 \poli@convesso \fi
+      \poli@lunghezzatela\poliRaggio{\plRaggio}%
+      \poli@lunghezzatela\poliPasso{\poliget{angle step}}%
+      \poli@nome\poliNA\plA \poli@nome\poliNB\plB \poli@nome\poliNC\plC
+      \ifnum\plArchi=0
+        % solo l'etichetta, dove sarebbe con un arco solo
+        \PoliSeVuoto\plEtich{}{%
+          \pic [angle radius=\poliRaggio pt, angle eccentricity=\plEcc, "\plEtich"]
+            {angle = \poliNA--\poliNB--\poliNC};}%
+      \else
+        \foreach \k in {1,...,\plArchi} {
+          \pgfmathsetmacro{\currRad}{\poliRaggio + (\k-1)*\poliPasso}
+          \ifnum\k=\plArchi
+            \PoliSeVuoto\plEtich{%
+              \pic [draw, angle radius=\currRad pt, angle eccentricity=\plEcc]
+                {angle = \poliNA--\poliNB--\poliNC};}{%
+              \pic [draw, angle radius=\currRad pt, angle eccentricity=\plEcc, "\plEtich"]
+                {angle = \poliNA--\poliNB--\poliNC};}%
+          \else
+            \pic [draw, angle radius=\currRad pt, angle eccentricity=\plEcc]
+              {angle = \poliNA--\poliNB--\poliNC};
+          \fi
+        }
+      \fi
+    \fi}%
+
+  % angoli retti: A/B/C/lato/mostra
+  \PoliLista{RightAngles}{A/B/C/lato/mostra}{\RightAnglesData}{\plA\plB\plC\plRaggio\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetRightAngles\space: mostra}%
+    \ifnum\plMostra>0
+      \poli@cita{Angolo retto \plA/\plB/\plC}\plA
+      \poli@cita{Angolo retto \plA/\plB/\plC}\plB
+      \poli@cita{Angolo retto \plA/\plB/\plC}\plC
+      \poliDefault\plRaggio{\poliget{right angle size}}%
+      \poli@lunghezzatela\poliRaggio{\plRaggio}%
+      \poli@nome\poliNA\plA \poli@nome\poliNB\plB \poli@nome\poliNC\plC
+      \pic [draw, angle radius=\poliRaggio pt] {right angle = \poliNA--\poliNB--\poliNC};
+    \fi}%
+
+  % quote: A/B/distanza/etichetta/posizione/inclinazione/frecce/stile/spessore/mostra
+  \PoliLista{PerpQuotes}{A/B/distanza/etichetta/posizione/inclinazione/frecce/stile/spessore/mostra}{\PerpQuotesData}{\plA\plB\plDist\plEtich\plPos\plInc\plFrecce\plStile\plSpess\plMostra}{%
+    \PoliIntero\plMostra{1}{\string\SetPerpQuotes\space: mostra}%
+    \ifnum\plMostra>0
+      \poli@cita{Quota \plA/\plB}\plA
+      \poli@cita{Quota \plA/\plB}\plB
+      \poliDefault\plDist{\poliget{quote distance}}%
+      \poli@lunghezza\poliDist{\plDist}%
+      \PoliSeVuoto\plPos{%
+        \ifdim\poliDist pt<0pt \def\plPos{below}\else\def\plPos{above}\fi}{}%
+      \poliDefault\plInc{sloped}%
+      \poliDefault\plFrecce{<->}%
+      \poliStile{poli tmp pos}{\plPos}%
+      \poliStile{poli tmp inc}{\plInc}%
+      \poliStile{poli tmp arrows}{\plFrecce}%
+      \poliStile{poli tmp}{\plStile}%
+      \PoliSeVuoto\plSpess{\tikzset{poli tmp width/.style={}}}{%
+        \tikzset{poli tmp width/.style={line width=\plSpess}}}%
+      \path let \p1 = (\plA), \p2 = (\plB),
+                \n1 = {veclen(\x2-\x1,\y2-\y1)},
+                \n2 = {\poliDist}
+          in
+          % prima il versore, poi la distanza: con n2*(y1-y2) prima della
+          % divisione una quota lontana da un lato lungo supera i limiti di TeX
+          coordinate (qstart) at ($ (\plA) + ({\n2 * ((\y1-\y2)/\n1)}, {\n2 * ((\x2-\x1)/\n1)}) $)
+          coordinate (qend) at ($ (\plB) + ({\n2 * ((\y1-\y2)/\n1)}, {\n2 * ((\x2-\x1)/\n1)}) $);
+      \draw[poli quote guide, poli tmp width] (\plA) -- (qstart);
+      \draw[poli quote guide, poli tmp width] (\plB) -- (qend);
+      \draw[poli tmp arrows, poli tmp, poli tmp width] (qstart) -- (qend)
+        node[midway, poli tmp pos, poli tmp inc] {\plEtich};
+    \fi}%
+
+  % tacche sui segmenti: A/B/tacche/posizione/distanza/mezza lunghezza/stile/mostra
+  \begin{pgfonlayer}{figfg}
+    \PoliLista{TickMarks}{A/B/tacche/posizione/distanza/mezza lunghezza/stile/mostra}{\TickMarksData}{\plA\plB\plTacche\plPosiz\plDist\plMezza\plStile\plMostra}{%
+      \PoliIntero\plMostra{1}{\string\SetTickMarks\space: mostra}%
+      \ifnum\plMostra>0
+        \poli@cita{Tacche \plA/\plB}\plA
+        \poli@cita{Tacche \plA/\plB}\plB
+        \PoliIntero\plTacche{1}{\string\SetTickMarks\space: numero di tacche}%
+        \ifnum\plTacche<0
+          \poli@errore{Tacche \plA/\plB: il numero di tacche e' negativo}{}%
+        \fi
+        \poliDefault\plPosiz{0.5}%
+        \poliDefault\plDist{\poliget{tick spacing}}%
+        \poliDefault\plMezza{\poliget{tick size}}%
+        \poli@lunghezza\poliTD{\plDist}%
+        \poli@lunghezza\poliTH{\plMezza}%
+        \poliStile{poli tmp}{\plStile}%
+        \ifnum\plTacche>0
+          \path let \p1=(\plA), \p2=(\plB), \n1={veclen(\x2-\x1,\y2-\y1)} in
+            \pgfextra{%
+              \pgfmathsetmacro\poli@ux{(\x2-\x1)/\n1}\global\let\poliUx\poli@ux
+              \pgfmathsetmacro\poli@uy{(\y2-\y1)/\n1}\global\let\poliUy\poli@uy}
+            coordinate (tickBase) at ($(\plA)!\plPosiz!(\plB)$);
+          \foreach \k in {1,...,\plTacche} {
+            \pgfmathsetmacro{\poliOff}{(\k-(\plTacche+1)/2)*\poliTD}
+            \pgfmathsetmacro{\poliLx}{\poliOff*\poliUx-\poliTH*\poliUy}
+            \pgfmathsetmacro{\poliLy}{\poliOff*\poliUy+\poliTH*\poliUx}
+            \pgfmathsetmacro{\poliRx}{\poliOff*\poliUx+\poliTH*\poliUy}
+            \pgfmathsetmacro{\poliRy}{\poliOff*\poliUy-\poliTH*\poliUx}
+            \draw[poli tick, poli tmp]
+              ($(tickBase)+(\poliLx pt,\poliLy pt)$) -- ($(tickBase)+(\poliRx pt,\poliRy pt)$);
+          }
+        \fi
+      \fi}%
+  \end{pgfonlayer}
+}
+
+% angolo convesso: se da BA a BC in senso antiorario ci sono più di 180
+% gradi, scambia A e C
+\newcommand{\poli@convesso}{%
+  \path let \p1=(\plA), \p2=(\plB), \p3=(\plC) in
+    \pgfextra{%
+      \pgfmathsetmacro\poli@d{mod(atan2(\y3-\y2,\x3-\x2)-atan2(\y1-\y2,\x1-\x2)+720,360)}%
+      \global\let\poliAmpiezza\poli@d};
+  \ifdim\poliAmpiezza pt>180pt
+    \let\poli@t\plA \let\plA\plC \let\plC\poli@t
+  \fi}
+
+% ==================================================
+% PUNTI ED ETICHETTE IN PRIMO PIANO
+% ==================================================
+% \poli@punto{\nome}{\etichetta}{\posizione}{\pallino}
+\newcommand{\poli@punto}[4]{%
+  \ifnum\plMostra>0
+  \poliDefault#3{above}%
+  \PoliIntero#4{1}{pallino di '#1'}%
+  \poliStile{poli tmp pos}{#3}%
+  \PoliSeContiene#2{\\}%
+    {\node[poli label, poli tmp pos, align=center] at (#1) {#2};}%
+    {\node[poli label, poli tmp pos] at (#1) {#2};}%
+  \ifShowPointDots
+    \ifnum#4>0
+      \fill[\PointDotColor] (#1) circle (\PointDotRadius);
+    \fi
+  \fi
+  \fi}
+
+\newcommand{\DrawPointLayer}{%
+  \begin{pgfonlayer}{figfg}
+    \poli@Lpunti{\poli@punto\plNome\plEtich\plPos\plPall}%
+    \poli@Lderivati{\poli@punto\plNome\plEtich\plPos\plPall}%
+    \poli@Lproiezioni{\poli@punto\plNome\plEtich\plPos\plPall}%
+  \end{pgfonlayer}
+}
+
+\newcommand{\RenderFigure}{%
+  \global\advance\poli@render by 1
+  \BuildGeometry
+  \DrawFigurePrimitives
+  \DrawPointLayer
+}
+\makeatother
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}[scale=1.2]
+
+  % ================= FIGURA 1 =================
+  \begin{FigurePanel}{0/0.9}{6.2}{-1.2}{3.2}
+    \SetPoints{
+      A/0/0//below left/1/0,
+      B/5/0//below right/1/0,
+      C/5/2//below right/1/0,
+      D/0/2//above/1/1
+    }
+    \SetDerived{
+      E/A/D/0.5//{}/0/1/0,
+      F/B/C/0.5//{}/0/1/1
+    }
+    \SetSegments{}
+    \SetProjections{}
+    \SetTangents{}
+    \SetTickMarks{}
+    \SetCircles{
+      E/A/270/90/blue/1/yellow/1
+    }
+    \SetArcAngles{A/E/B/0.375/$\alpha$/1.25/2/1}
+    \SetRightAngles{}
+    \SetPerpQuotes{A/B/-0.2/$3\,\text{cm}$/below/sloped/<->/solid/1.2pt/1}
+    \SetPolygons{(A)--(B)--(C)--(D)/thick/yellow!30/1}
+    \RenderFigure
+  \end{FigurePanel}
+
+  % ================= FIGURA 2 =================
+  \begin{FigurePanel}{8.2/}{6.2}{-1.2}{3.2}
+    \SetPoints{
+      A/0/0/$A$/below left/1/1,
+      B/5/0/$B$/below right/1/0,
+      C/5/2/$C$/above right/1/1,
+      D/0/2/$D$/above left/1/1
+    }
+    \SetDerived{
+      E/A/B/0.5/$E$/below/0/1/1,
+      F/D/C/0.5/$F$/above/0/1/0
+    }
+    \SetSegments{A/C/blue/thick/solid/1, D/B/purple/thick/dashed/1}
+    \SetProjections{H/C/A/B/$H$/below left/1/dashed/1/1}
+    \SetTangents{}
+    \SetCircles{}
+    \SetArcAngles{C/B/A/1.125/$\beta$/1.2/3/1}
+    \SetRightAngles{B/A/D/1.02/1}
+    \SetPerpQuotes{}
+    \SetPolygons{(A)--(B)--(C)--(D)/thick/yellow!15/1}
+    \RenderFigure
+  \end{FigurePanel}
+
+\end{tikzpicture}
+\end{document}

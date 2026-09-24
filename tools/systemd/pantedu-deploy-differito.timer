@@ -1,0 +1,15 @@
+[Unit]
+Description=pantedu — controlla ogni dieci minuti se c'è un rilascio in attesa
+Documentation=file:///var/www/pantedu/wiki/dev-workflow.md
+
+[Timer]
+# Dieci minuti: la finestra si apre a un'ora tonda, e questo vuol dire che un
+# rilascio differito parte entro dieci minuti da quel momento. Più fitto non
+# serve — chi ha unito sa che sta aspettando la finestra — e meno fitto
+# allungherebbe l'attesa senza guadagnare niente.
+OnBootSec=5min
+OnUnitActiveSec=10min
+Unit=pantedu-deploy-differito.service
+
+[Install]
+WantedBy=timers.target

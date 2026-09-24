@@ -1,0 +1,126 @@
+[
+    {
+        "titolo": "Imparare ad imparare",
+        "contenuti": [
+            {
+                "label": "Acquisizione di un metodo strutturato ed organizzato di lavoro generalizzabile ad altri contesti",
+                "checked": false
+            },
+            {
+                "label": "Individuazione di procedure che sottendono scelte e decisioni tra varie alternative",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Progettare",
+        "contenuti": [
+            {
+                "label": "Costruire semplici algoritmi utilizzando un foglio di calcolo elettronico",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Comunicare",
+        "contenuti": [
+            {
+                "label": "Arricchire la capacità comunicativa attraverso l'uso di un linguaggio specifico e formale",
+                "checked": false
+            },
+            {
+                "label": "Padroneggiare le diverse forme espressive della matematica (retorica, grafica, simbolica, ...)",
+                "checked": false
+            },
+            {
+                "label": "Usare un linguaggio appropriato (definizioni, enunciati, ipotesi, ...)",
+                "checked": false
+            },
+            {
+                "label": "Utilizzare una forma di comunicazione essenziale ed oggettiva",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Collaborare e partecipare",
+        "contenuti": [
+            {
+                "label": "Contribuire alla costruzione di conoscenze e di abilità mediante lavori di gruppo ed interazioni con l'insegnante e con i compagni, in particolare sfruttando la metodologia del problem solving",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Agire in modo autonomo e responsabile",
+        "contenuti": [
+            {
+                "label": "Esigere puntualità e completezza nell'affrontare gli impegni richiesti durante il processo di apprendimento",
+                "checked": false
+            },
+            {
+                "label": "Saper argomentare le decisioni e le procedure adottate",
+                "checked": false
+            },
+            {
+                "label": "Saper dimostrare teoremi di geometria euclidea con sufficiente rigore logico",
+                "checked": false
+            },
+            {
+                "label": "Essere consapevoli del proprio grado di preparazione",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Risolvere problemi",
+        "contenuti": [
+            {
+                "label": "Applicazione degli strumenti matematici alla risoluzione di problemi in contesti di varia natura",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Individuare collegamenti e relazioni",
+        "contenuti": [
+            {
+                "label": "Individuare e riconoscere gli invarianti presenti nei diversi aspetti della disciplina che vengono affrontati",
+                "checked": false
+            },
+            {
+                "label": "Cogliere relazioni fra figure geometriche e le relative proprietà",
+                "checked": false
+            },
+            {
+                "label": "Applicazione degli strumenti matematici alla risoluzione di problemi in contesti di varia natura",
+                "checked": false
+            }
+        ]
+    },
+    {
+        "titolo": "Acquisire ed interpretare l'informazione",
+        "contenuti": [
+            {
+                "label": "Avere il senso del numero e del simbolo",
+                "checked": false
+            },
+            {
+                "label": "Leggere e comprendere diverse forme di rappresentazione",
+                "checked": false
+            },
+            {
+                "label": "Raccogliere, organizzare e rappresentare dati",
+                "checked": false
+            },
+            {
+                "label": "Leggere ed interpretare tabelle e grafici",
+                "checked": false
+            },
+            {
+                "label": "Confrontare dati al fine di prendere decisioni",
+                "checked": false
+            }
+        ]
+    }
+]

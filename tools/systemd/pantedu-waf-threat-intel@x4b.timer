@@ -1,0 +1,13 @@
+[Unit]
+Description=pantedu — WAF threat-intel sync X4BNet VPN/proxy IPs (settimanale)
+
+[Timer]
+# Ogni mercoledì alle 04:45 (spalmare load di rete su giorni diversi).
+OnCalendar=Wed *-*-* 04:45:00
+Persistent=true
+RandomizedDelaySec=15min
+AccuracySec=1min
+Unit=pantedu-waf-threat-intel@x4b.service
+
+[Install]
+WantedBy=timers.target

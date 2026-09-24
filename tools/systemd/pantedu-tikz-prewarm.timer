@@ -1,0 +1,20 @@
+[Unit]
+Description=pantedu — TikZ cache prewarm (timer notturno)
+Documentation=https://github.com/anthropic/pantedu/tools/tikz_prewarm_cache.php
+
+[Timer]
+# Ogni notte alle 03:15 (orario locale del server).
+# Se il server e' spento a quell'ora, Persistent=true rifa' la run alla prima
+# occasione utile (sempre meglio cache-stale che cache-vuota).
+OnCalendar=*-*-* 03:15:00
+Persistent=true
+
+# Random delay 0-10 minuti: se piu' VPS hanno pantedu, evita burst contemporanei.
+# Per single-tenant come noi e' poco utile ma costa 0.
+RandomizedDelaySec=10min
+
+# Accuratezza del trigger: 1 minuto (default 1m, qui esplicito per chiarezza).
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

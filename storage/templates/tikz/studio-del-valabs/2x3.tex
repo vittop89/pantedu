@@ -1,0 +1,558 @@
+% ==================================================
+% .....PREAMBOLO E LIBRERIE.....
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+
+\pagestyle{empty}
+
+% ==================================================
+% STUDIO DEI VALORI ASSOLUTI: TABELLA MODULARE
+% ==================================================
+% In alto l'asse con i valori che separano gli intervalli; sotto, una
+% riga per ogni condizione (disequazione a sinistra, un segno per
+% intervallo); in fondo, dopo la linea punteggiata, la riga delle
+% caselle gialle che numerano gli intervalli (I, II, III, ...).
+% Righe e colonne sono in numero libero: si aggiungono o tolgono
+% elementi nelle liste, senza toccare le macro.
+%
+%   \begin{Tabella}
+%     \ValabsSet{...}  \tikzset{valabs ...}  (facoltativi: valgono solo qui)
+%     \SetValori{...}  \SetRighe{...}  \SetCaselle{...}  \SetEtichette{...}
+%   \end{Tabella}
+%
+% La tabella si disegna da sola in chiusura. Tutto ciò che si imposta
+% FUORI dall'ambiente vale per ogni tabella del disegno; DENTRO vale solo
+% per quella tabella. Più tabelle nello stesso disegno: la seconda si
+% sposta con \ValabsSet{x tabella=..., y tabella=...}.
+%
+% LISTE (campi separati da /, elementi separati da virgola; un campo che
+% contiene una virgola o una / va tra graffe: {-2/3}, {red, dashed};
+% un campo lasciato vuoto prende il valore predefinito):
+%   - una voce può fermarsi prima: i campi che mancano in fondo valgono
+%     vuoti, cioè predefiniti («1/-5» è come «1/-5//»). Una voce con più
+%     campi del previsto ferma il disegno con un errore che dice quale
+%     lista e quale voce (di solito è una / da mettere tra graffe);
+%   - le voci vuote non contano: una virgola in fondo alla lista, o una
+%     lista svuotata lasciando l'a capo, non aggiunge niente;
+%   - mostra accetta solo 1, 0 o vuoto (= 1).
+%
+%   \SetValori{posizione/testo/stile/mostra, ...}
+%     posizione: ascissa della linea verticale; vuota = la precedente
+%                + larghezza colonna. Deve crescere da sinistra a destra.
+%                L'asse comincia a 0, dove finiscono le etichette delle
+%                righe: la prima posizione deve essere maggiore di 0.
+%     testo:     scritto sopra la linea (es. $-5$, {$\dfrac{1}{2}$})
+%     stile:     opzioni TikZ del testo (es. {yshift=6pt} per alzarlo
+%                se è troppo vicino al vicino)
+%     mostra:    1 = linea e testo; 0 = niente (l'intervallo resta diviso)
+%
+%   \SetRighe{etichetta/segni/cerchi vuoti/cerchi pieni/stile/mostra, ...}
+%     etichetta: condizione scritta a sinistra della riga
+%     segni:     un segno per intervallo, da sinistra, tra graffe:
+%                {-,+,+}. «+» e «-» diventano $+$ e $-$; altro testo
+%                (es. $0$, {$\nexists$}) si scrive così com'è; un segno
+%                vuoto in mezzo ({-,,+}) lascia l'intervallo senza segno.
+%                Gli intervalli sono i valori + 1.
+%     cerchi vuoti / cerchi pieni: numeri dei valori (1 = il primo da
+%                sinistra) su cui disegnare un cerchio in questa riga,
+%                es. {1,3}
+%     stile:     opzioni TikZ dei segni di questa riga (es. red)
+%     mostra:    1 = disegna; 0 = nascondi (lo spazio della riga resta)
+%
+%   \SetCaselle{testo/stile/mostra, ...}   (una voce per intervallo, da
+%     sinistra; voci mancanti o vuote = casella normale: {A,,C} cambia
+%     la prima e la terza)
+%     testo:     vuoto = numero romano dell'intervallo (I, II, III, ...)
+%     stile:     opzioni TikZ della casella (es. {fill=green!30})
+%     mostra:    1 = disegna; 0 = casella vuota (niente)
+%
+%   \SetEtichette{x/y/testo/stile/mostra, ...}   testi liberi, in
+%     coordinate della tabella (asse sulla retta y=0, righe verso il basso);
+%     x o y vuota = 0
+%
+% CHIAVI (\ValabsSet{chiave=valore, ...}) e STILI (\tikzset{...}): sotto,
+% nella sezione VARIABILI / PARAMETRI, ognuna col suo commento.
+
+% ==================================================
+% .....VARIABILI / PARAMETRI.....
+% Parametri numerici e testi (si cambiano con \ValabsSet{chiave=valore, ...})
+\pgfkeys{
+  /valabs/.is family, /valabs,
+  % posizione della tabella nel disegno
+  x tabella/.initial=0,
+  y tabella/.initial=0,
+  % asse e colonne
+  larghezza colonna/.initial=1, % passo dei valori con posizione vuota
+                                % e ultimo tratto dell'asse
+  fine asse/.initial={},        % vuota = ultimo valore + larghezza colonna;
+                                % se data, a destra dell'ultimo valore
+  sporgenza/.initial=0.2,       % quanto le linee salgono sopra l'asse
+                                % (i testi dei valori stanno lì)
+  % righe
+  passo righe/.initial=1,       % distanza verticale fra le righe
+  % riga delle caselle
+  caselle/.initial=1,           % 1 = disegna la riga delle caselle
+  etichetta caselle/.initial={},% testo a sinistra della riga delle caselle
+  separatore/.initial=1,        % 1 = linea punteggiata sopra le caselle
+  % cerchi
+  raggio cerchio/.initial=5pt,
+}
+\newcommand{\ValabsSet}[1]{\pgfkeys{/valabs/.cd,#1}}
+\newcommand{\valabsget}[1]{\pgfkeysvalueof{/valabs/#1}}
+
+% Stili grafici (si cambiano con \tikzset{valabs ... /.style={...}})
+\tikzset{
+  valabs asse/.style={},                 % retta orizzontale in alto
+  valabs linea/.style={},                % linee verticali dei valori
+  valabs valore/.style={above},          % testi dei valori
+  valabs etichetta/.style={left},        % condizioni a sinistra
+  valabs segno/.style={font=\huge},      % segni delle righe
+  valabs casella/.style={draw, fill=yellow, rectangle,
+    minimum width=0.7cm, minimum height=0.6cm, inner sep=0pt,
+    font=\fontsize{15}{24}\selectfont},  % caselle numerate
+  valabs separatore/.style={dotted},     % linea sopra le caselle
+  valabs cerchio vuoto/.style={draw, line width=0.4mm},
+  valabs cerchio pieno/.style={draw, fill, line width=0.4mm},
+  valabs etichetta libera/.style={},
+}
+
+% ==================================================
+% .....COMANDI E MACRO.....
+% --- dati (vuoti per default) ---
+% \valabsDati\macro{lista}: salva la lista; una riga bianca in mezzo
+% (che TeX legge come \par, e che \foreach non accetta) vale uno spazio
+\makeatletter
+\newtoks\valabs@tk
+\def\valabs@np@stop{\valabs@np@stop}
+\long\def\valabs@np#1\par#2\valabs@np@stop{%
+  \valabs@tk\expandafter{\the\valabs@tk#1}%
+  \if\relax\detokenize{#2}\relax\else
+    \edef\valabs@tmp{\the\valabs@tk\space}%
+    \valabs@tk\expandafter{\valabs@tmp}%
+    \valabs@np#2\valabs@np@stop
+  \fi}
+% (lo spazio davanti impedisce a TeX di togliere le graffe a una lista
+% fatta di un solo gruppo, es. {{A, B}})
+\newcommand{\valabsDati}[2]{%
+  \valabs@tk{}%
+  \expandafter\valabs@np\@firstofone{ }#2\par\valabs@np@stop
+  \edef#1{\the\valabs@tk}}
+\makeatother
+\newcommand{\SetValori}[1]{\valabsDati\ValabsValoriData{#1}}
+\newcommand{\SetRighe}[1]{\valabsDati\ValabsRigheData{#1}}
+\newcommand{\SetCaselle}[1]{\valabsDati\ValabsCaselleData{#1}}
+\newcommand{\SetEtichette}[1]{\valabsDati\ValabsEtichetteData{#1}}
+
+\SetValori{}
+\SetRighe{}
+\SetCaselle{}
+\SetEtichette{}
+
+% --- utilità ---
+% \valabsIfEmpty{\macro}{se vuota}{se piena}
+\newcommand{\valabsIfEmpty}[3]{%
+  \if\relax\detokenize\expandafter{#1}\relax #2\else #3\fi}
+% \valabsTrim\macro: toglie gli spazi attorno al contenuto (e le graffe
+% esterne): « {1, 3} » diventa «1, 3»
+\makeatletter
+\newcommand{\valabsTrim}[1]{%
+  \expandafter\pgfkeys@spdef\expandafter#1\expandafter{#1}}
+
+% \valabsPulisci{\dati}{campi}{nome della lista}{vuote}{\lista}: prepara
+% in \lista le voci di \dati per il \foreach che le disegna.
+%  - Una voce vuota (solo spazi: la virgola in fondo, la lista svuotata
+%    lasciando l'a capo) non conta. Con vuote=0 si salta; con vuote=1
+%    (liste per posizione: caselle, segni) quelle in mezzo restano e
+%    prendono i valori predefiniti, quelle in fondo si tolgono.
+%  - Con campi>0 conta i campi di ogni voce (separati da / fuori dalle
+%    graffe): quelli che mancano in fondo si aggiungono vuoti (pgffor
+%    altrimenti ci copierebbe l'ultimo campo scritto); uno di troppo
+%    ferma il disegno con un errore che dice lista e voce.
+\newcount\valabs@nc
+\def\valabs@stop{\valabs@stop}
+\def\valabs@cc#1/{\def\valabs@t{#1}%
+  \ifx\valabs@t\valabs@stop\else
+    \advance\valabs@nc by 1 \expandafter\valabs@cc\fi}
+% aggiunge / a \valabs@voce finché i campi sono #1
+\def\valabs@pad#1{%
+  \ifnum\valabs@nc<#1\relax
+    \edef\valabs@voce{\unexpanded\expandafter{\valabs@voce}/}%
+    \advance\valabs@nc by 1
+    \expandafter\valabs@pad
+  \else
+    \expandafter\@gobble
+  \fi{#1}}
+% aggiunge la voce #1 (una macro), tra graffe, alla lista in costruzione
+\def\valabs@aggiungi#1{%
+  \xdef\valabs@acc{\unexpanded\expandafter{\valabs@acc}\valabs@sep
+    {\unexpanded\expandafter{#1}}}%
+  \gdef\valabs@sep{,}}
+% scrive le voci vuote rimaste in mezzo (#1 = campi)
+\def\valabs@svuota#1{%
+  \ifnum\valabs@vuote>0
+    \begingroup
+      \def\valabs@voce{}\valabs@nc=1 \valabs@pad{#1}%
+      \valabs@aggiungi\valabs@voce
+    \endgroup
+    \xdef\valabs@vuote{\the\numexpr\valabs@vuote-1\relax}%
+    \expandafter\valabs@svuota
+  \else
+    \expandafter\@gobble
+  \fi{#1}}
+\newcommand{\valabsPulisci}[5]{%
+  \gdef\valabs@acc{}\gdef\valabs@sep{}%
+  \gdef\valabs@nv{0}\gdef\valabs@vuote{0}%
+  \valabsIfEmpty{#1}{}{%
+    \foreach \valabs@voce in #1 {%
+      \valabsTrim\valabs@voce
+      \valabsIfEmpty{\valabs@voce}{%
+        \ifnum#4>0
+          \xdef\valabs@vuote{\the\numexpr\valabs@vuote+1\relax}%
+        \fi
+      }{%
+        \xdef\valabs@nv{\the\numexpr\valabs@nv+\valabs@vuote+1\relax}%
+        \valabs@svuota{#2}%
+        \ifnum#2>0
+          \valabs@nc=0 \expandafter\valabs@cc\valabs@voce/\valabs@stop/%
+          \ifnum\valabs@nc>#2\relax
+            \PackageError{valabs}{#3, voce \valabs@nv:
+              '\detokenize\expandafter{\valabs@voce}' ha \the\valabs@nc\space
+              campi, ma le voci di questa lista ne hanno al massimo #2
+              (separati da /). Un campo che contiene una / o una virgola
+              va tra graffe, es. {$1/2$}}{I campi che mancano in fondo si
+              possono omettere.}%
+          \fi
+          \valabs@pad{#2}%
+        \fi
+        \valabs@aggiungi\valabs@voce
+      }%
+    }%
+  }%
+  \let#5\valabs@acc
+}
+% \valabsShow\campo{lista}{voce}: «mostra» vuoto vale 1; ammessi 1, 0
+\def\valabs@uno{1}
+\def\valabs@zero{0}
+\newcommand{\valabsShow}[3]{%
+  \valabsTrim#1%
+  \valabsIfEmpty{#1}{\def#1{1}}{%
+    \ifx#1\valabs@uno\else\ifx#1\valabs@zero\else
+      \PackageError{valabs}{#2, voce #3: mostra (l'ultimo campo) vale
+        '\detokenize\expandafter{#1}', ma deve essere 1 (disegna), 0
+        (nascondi) o vuoto (= 1)}{}%
+      \def#1{1}%
+    \fi\fi}}
+\makeatother
+% \valabsStyle{nome}{\campo}: il contenuto del campo (anche con più
+% opzioni separate da virgola) diventa lo stile TikZ «nome»
+\newcommand{\valabsStyle}[2]{\expandafter\valabsStyleAux\expandafter{#2}{#1}}
+\newcommand{\valabsStyleAux}[2]{\tikzset{#2/.style={#1}}}
+% \valabsStile{nome}\campo{lista}{voce}: come \valabsStyle, ma uno stile
+% che vale 1 o 0 è quasi sempre «mostra» scritto un campo prima (manca
+% una /): lo dice, invece dell'errore di TikZ sulla chiave '1'
+\makeatletter
+\def\valabs@stilemostra#1#2#3{%
+  \PackageError{valabs}{#1, voce #2: il campo stile vale '#3', che
+    sembra il valore di mostra scritto un campo prima: manca una /.
+    I campi vanno nell'ordine della guida e uno vuoto resta vuoto,
+    es. 1/-5//1 (stile vuoto, mostra 1)}{}}
+\newcommand{\valabsStile}[4]{%
+  \valabsTrim#2%
+  \ifx#2\valabs@uno\valabs@stilemostra{#3}{#4}{1}\def#2{}\fi
+  \ifx#2\valabs@zero\valabs@stilemostra{#3}{#4}{0}\def#2{}\fi
+  \valabsStyle{#1}{#2}}
+\makeatother
+% \valabsSegno\campo: «+» e «-» diventano segni matematici
+\def\valabsPiu{+}
+\def\valabsMeno{-}
+\newcommand{\valabsSegno}[1]{%
+  \ifx#1\valabsPiu $+$\else\ifx#1\valabsMeno $-$\else #1\fi\fi}
+% \valabsRomano{n}: numero romano maiuscolo
+\newcommand{\valabsRomano}[1]{\uppercase\expandafter{\romannumeral#1}}
+% coordinate calcolate: ascissa del valore k (0 = inizio asse,
+% N+1 = fine asse) e centro dell'intervallo k
+\newcommand{\valabsX}[1]{\csname valabs@x@#1\endcsname}
+\newcommand{\valabsM}[1]{\csname valabs@m@#1\endcsname}
+
+% --- valori: posizioni, fine dell'asse, centri degli intervalli ---
+% Prepara \valabsN (valori), \valabsNi (intervalli = valori + 1).
+% Legge \valabsListaValori (preparata da \valabsPulisci).
+\newcommand{\valabsCalcolaValori}{%
+  \gdef\valabsN{0}%
+  \expandafter\gdef\csname valabs@x@0\endcsname{0}%
+  \valabsIfEmpty{\valabsListaValori}{}{%
+    \foreach \vx/\vtesto/\vstile/\vmostra in \valabsListaValori {
+      \valabsTrim\vx
+      \edef\valabsPrec{\valabsX{\valabsN}}%
+      \valabsIfEmpty{\vx}{%
+        \pgfmathsetmacro{\vx}{\valabsPrec+\valabsget{larghezza colonna}}}{}%
+      \pgfmathtruncatemacro{\valabsNn}{\valabsN+1}%
+      \pgfmathtruncatemacro{\valabsCresce}{\vx>\valabsPrec}%
+      \ifnum\valabsCresce=0
+        \ifnum\valabsNn=1
+          \PackageError{valabs}{Valore 1: la posizione \vx\space non e'
+            maggiore di 0. L'asse comincia a 0, dove finiscono le
+            etichette delle righe: le posizioni in \string\SetValori\space
+            devono essere maggiori di 0 e crescere da sinistra a destra}{}%
+        \else
+          \PackageError{valabs}{Valore \valabsNn: la posizione \vx\space non
+            sta a destra della precedente (\valabsPrec). Le posizioni in
+            \string\SetValori\space devono crescere}{}%
+        \fi
+      \fi
+      \xdef\valabsN{\valabsNn}%
+      \expandafter\xdef\csname valabs@x@\valabsN\endcsname{\vx}%
+    }%
+  }%
+  \pgfmathtruncatemacro{\valabsNi}{\valabsN+1}%
+  \xdef\valabsNi{\valabsNi}%
+  \edef\valabsUltimo{\valabsX{\valabsN}}%
+  \edef\valabsFine{\valabsget{fine asse}}%
+  \valabsIfEmpty{\valabsFine}{%
+    \pgfmathsetmacro{\valabsFine}{\valabsUltimo+\valabsget{larghezza colonna}}%
+    \pgfmathtruncatemacro{\valabsCresce}{\valabsFine>\valabsUltimo}%
+    \ifnum\valabsCresce=0
+      \PackageError{valabs}{larghezza colonna=%
+        \valabsget{larghezza colonna}: deve essere maggiore di 0 (con
+        fine asse vuota l'asse finisce all'ultimo valore + larghezza
+        colonna)}{}%
+    \fi
+  }{%
+    \pgfmathtruncatemacro{\valabsCresce}{\valabsFine>\valabsUltimo}%
+    \ifnum\valabsCresce=0
+      \PackageError{valabs}{fine asse=\valabsFine: non sta a destra
+        dell'ultimo valore (\valabsUltimo), e l'ultimo intervallo non
+        avrebbe spazio. Deve essere maggiore dell'ultimo valore (o vuota
+        = ultimo valore + larghezza colonna); impostata fuori dalla
+        tabella vale per ogni tabella}{}%
+    \fi
+  }%
+  \xdef\valabsFine{\valabsFine}%
+  \expandafter\xdef\csname valabs@x@\valabsNi\endcsname{\valabsFine}%
+  \foreach \qk in {1,...,\valabsNi} {
+    \pgfmathtruncatemacro{\qkp}{\qk-1}%
+    \pgfmathsetmacro{\valabsMid}{(\valabsX{\qkp}+\valabsX{\qk})/2}%
+    \expandafter\xdef\csname valabs@m@\qk\endcsname{\valabsMid}%
+  }%
+}
+
+% \valabsConta{\lista}: quanti elementi (in \valabsQuanti)
+\newcommand{\valabsConta}[1]{%
+  \gdef\valabsQuanti{0}%
+  \valabsIfEmpty{#1}{}{%
+    \foreach \qe [count=\qi] in #1 {\xdef\valabsQuanti{\qi}}}%
+}
+
+% \valabsCerchi{\lista}{stile}{y}{riga}: cerchi sui valori elencati
+% (le voci vuote, es. una virgola in fondo, si saltano)
+\newcommand{\valabsCerchi}[4]{%
+  \valabsTrim#1%
+  \valabsIfEmpty{#1}{}{%
+    \foreach \qc in #1 {
+      \valabsTrim\qc
+      \valabsIfEmpty{\qc}{}{%
+        \pgfmathtruncatemacro{\valabsOk}{(\qc>=1)&&(\qc<=\valabsN)&&(\qc==int(\qc))}%
+        \ifnum\valabsOk=0
+          \PackageError{valabs}{Riga #4: cerchio sul valore \qc, ma i valori
+            in \string\SetValori\space sono \valabsN\space (si contano da 1,
+            da sinistra)}{}%
+        \else
+          \pgfmathtruncatemacro{\qci}{\qc}%
+          \path[#2] (\valabsX{\qci},-#3) circle (\valabsget{raggio cerchio});
+        \fi
+      }%
+    }%
+  }%
+}
+
+% --- la tabella intera ---
+\newcommand{\valabsDisegna}{%
+  % le quattro liste, pronte per i \foreach (voci vuote tolte, campi
+  % mancanti aggiunti vuoti)
+  \valabsPulisci{\ValabsValoriData}{4}{\string\SetValori}{0}{\valabsListaValori}%
+  \valabsPulisci{\ValabsRigheData}{6}{\string\SetRighe}{0}{\valabsListaRighe}%
+  \valabsPulisci{\ValabsCaselleData}{3}{\string\SetCaselle}{1}{\valabsListaCaselle}%
+  \valabsPulisci{\ValabsEtichetteData}{5}{\string\SetEtichette}{0}{\valabsListaEtichette}%
+  \valabsCalcolaValori
+  \edef\valabsP{\valabsget{passo righe}}%
+  % righe dei segni (anche quelle nascoste: tengono il loro posto)
+  \valabsConta{\valabsListaRighe}%
+  \edef\valabsR{\valabsQuanti}%
+  \ifnum\valabsget{caselle}>0
+    \pgfmathsetmacro{\valabsFondo}{(\valabsR+1)*\valabsP}%
+  \else
+    \pgfmathsetmacro{\valabsFondo}{\valabsR*\valabsP}%
+  \fi
+  % asse
+  \draw[valabs asse] (0,0) -- (\valabsFine,0);
+  % linea punteggiata sopra le caselle
+  \ifnum\valabsget{caselle}>0
+    \ifnum\valabsget{separatore}>0
+      \pgfmathsetmacro{\valabsYsep}{\valabsR*\valabsP}%
+      \draw[valabs separatore] (0,-\valabsYsep) -- (\valabsFine,-\valabsYsep);
+    \fi
+  \fi
+  % linee verticali e testi dei valori
+  \valabsIfEmpty{\valabsListaValori}{}{%
+    \foreach \vx/\vtesto/\vstile/\vmostra [count=\qk] in \valabsListaValori {
+      \valabsShow\vmostra{\string\SetValori}{\qk}%
+      \ifnum\vmostra>0
+        \valabsStile{valabs tmp}\vstile{\string\SetValori}{\qk}%
+        \draw[valabs linea] (\valabsX{\qk},\valabsget{sporgenza})
+          -- (\valabsX{\qk},-\valabsFondo);
+        \valabsIfEmpty{\vtesto}{}{%
+          \node[valabs valore, valabs tmp] at (\valabsX{\qk},\valabsget{sporgenza}) {\vtesto};}%
+      \fi
+    }%
+  }%
+  % righe dei segni: etichetta/segni/cerchi vuoti/cerchi pieni/stile/mostra
+  \valabsIfEmpty{\valabsListaRighe}{}{%
+    \foreach \retich/\rsegni/\rvuoti/\rpieni/\rstile/\rmostra [count=\qr] in \valabsListaRighe {
+      \valabsShow\rmostra{\string\SetRighe}{\qr}%
+      \ifnum\rmostra>0
+        \pgfmathsetmacro{\ry}{(\qr-0.5)*\valabsP}%
+        \valabsIfEmpty{\retich}{}{%
+          \node[valabs etichetta] at (0,-\ry) {\retich};}%
+        \valabsStile{valabs tmp riga}\rstile{\string\SetRighe}{\qr}%
+        \valabsTrim\rsegni
+        % segni per posizione: uno vuoto in mezzo resta, in fondo no
+        \valabsPulisci{\rsegni}{0}{Riga \qr, segni}{1}{\valabsListaSegni}%
+        \valabsIfEmpty{\valabsListaSegni}{}{%
+          \valabsConta{\valabsListaSegni}%
+          \ifnum\valabsQuanti=\valabsNi\else
+            \PackageError{valabs}{Riga \qr: ci sono \valabsQuanti\space segni,
+              ma gli intervalli sono \valabsNi\space (un segno per
+              intervallo: valori + 1)}{}%
+          \fi
+          \foreach \qs [count=\qk] in \valabsListaSegni {
+            \ifnum\qk>\valabsNi\else
+              \valabsTrim\qs
+              \node[valabs segno, valabs tmp riga] at (\valabsM{\qk},-\ry) {\valabsSegno\qs};
+            \fi
+          }%
+        }%
+        \valabsCerchi{\rvuoti}{valabs cerchio vuoto}{\ry}{\qr}%
+        \valabsCerchi{\rpieni}{valabs cerchio pieno}{\ry}{\qr}%
+      \fi
+    }%
+  }%
+  % riga delle caselle: testo/stile/mostra, una voce per intervallo
+  \ifnum\valabsget{caselle}>0
+    \pgfmathsetmacro{\valabsYc}{(\valabsR+0.5)*\valabsP}%
+    % letta senza espanderla: il testo può contenere \textbf, \sqrt, ...
+    \pgfkeysgetvalue{/valabs/etichetta caselle}{\valabsEtC}%
+    \valabsIfEmpty{\valabsEtC}{}{%
+      \node[valabs etichetta] at (0,-\valabsYc) {\valabsEtC};}%
+    \gdef\valabsNc{0}%
+    \valabsIfEmpty{\valabsListaCaselle}{}{%
+      \foreach \ct/\cs/\cm [count=\qk] in \valabsListaCaselle {
+        \expandafter\global\expandafter\let\csname valabs@ct@\qk\endcsname\ct
+        \expandafter\global\expandafter\let\csname valabs@cs@\qk\endcsname\cs
+        \expandafter\global\expandafter\let\csname valabs@cm@\qk\endcsname\cm
+        \xdef\valabsNc{\qk}%
+      }%
+    }%
+    \ifnum\valabsNc>\valabsNi
+      \PackageError{valabs}{\string\SetCaselle: ci sono \valabsNc\space
+        caselle, ma gli intervalli sono \valabsNi}{}%
+    \fi
+    \foreach \qk in {1,...,\valabsNi} {
+      \ifnum\qk>\valabsNc
+        \def\ct{}\def\cs{}\def\cm{1}%
+      \else
+        \expandafter\let\expandafter\ct\csname valabs@ct@\qk\endcsname
+        \expandafter\let\expandafter\cs\csname valabs@cs@\qk\endcsname
+        \expandafter\let\expandafter\cm\csname valabs@cm@\qk\endcsname
+      \fi
+      \valabsShow\cm{\string\SetCaselle}{\qk}%
+      \ifnum\cm>0
+        \valabsStile{valabs tmp}\cs{\string\SetCaselle}{\qk}%
+        \node[valabs casella, valabs tmp] at (\valabsM{\qk},-\valabsYc)
+          {\valabsIfEmpty{\ct}{\valabsRomano{\qk}}{\ct}};
+      \fi
+    }%
+  \fi
+  % etichette libere: x/y/testo/stile/mostra (x o y vuota = 0)
+  \valabsIfEmpty{\valabsListaEtichette}{}{%
+    \foreach \lx/\ly/\ltesto/\lstile/\lmostra [count=\qe] in \valabsListaEtichette {
+      \valabsShow\lmostra{\string\SetEtichette}{\qe}%
+      \ifnum\lmostra>0
+        \valabsTrim\lx
+        \valabsIfEmpty{\lx}{\def\lx{0}}{}%
+        \valabsTrim\ly
+        \valabsIfEmpty{\ly}{\def\ly{0}}{}%
+        \valabsStile{valabs tmp}\lstile{\string\SetEtichette}{\qe}%
+        \node[valabs etichetta libera, valabs tmp] at (\lx,\ly) {\ltesto};
+      \fi
+    }%
+  }%
+}
+
+% --- l'ambiente: si disegna in chiusura ---
+\newenvironment{Tabella}{%
+  \begin{scope}%
+}{%
+  \begin{scope}[shift={(\valabsget{x tabella},\valabsget{y tabella})}]
+    \valabsDisegna
+  \end{scope}
+  \end{scope}%
+}
+
+% ==================================================
+% .....DOCUMENTO.....
+\begin{document}
+% ==================================================
+% .....FIGURA TIKZ.....
+\begin{tikzpicture}
+
+  % ============ IMPOSTAZIONI DI TUTTO IL DISEGNO ============
+  \ValabsSet{
+    larghezza colonna=1, passo righe=1, sporgenza=0.2,
+    caselle=1, separatore=1,
+  }
+  % stili: \tikzset{valabs casella/.append style={fill=orange!40}}
+
+  \begin{Tabella}
+    % posizione/testo/stile/mostra
+    \SetValori{
+      1/-1//1,
+      2/0//1,
+      3/{$\dfrac{1}{2}$}//1
+    }
+    % etichetta/segni/cerchi vuoti/cerchi pieni/stile/mostra
+    \SetRighe{
+      {$2x^2+x-1\ge 0 \Longleftrightarrow x\le -1 \vee x\ge \dfrac{1}{2}$}/{+,-,-,+}////1,
+      {$x^2+x\ge 0 \Longleftrightarrow x\le -1\vee x\ge 0$}/{+,-,+,+}////1
+    }
+    % testo/stile/mostra (vuota: I, II, III, ... in automatico)
+    \SetCaselle{}
+  \end{Tabella}
+
+\end{tikzpicture}
+\end{document}
+
+% Dopo \end{document} LaTeX non legge piu' niente. Quello che segue viene
+% dall'originale ed e' lasciato com'era: lo schema del testo che accompagna
+% la tabella (MathJax, caselle I, II, ... e sistemi).
+\(\begin{array}{lclclcl}
+    \colorbox{yellow}{$ \,\text{ I }\,$} &      &
+    \colorbox{yellow}{$ \text{ II }$}    &      &
+    \colorbox{yellow}{$ \text{ III }$}   &      &
+    \colorbox{yellow}{$ \text{ IV }$}             \\
+    \begin{cases}
+
+    \end{cases}
+                                         & \cup &
+    \begin{cases}
+
+    \end{cases}
+                                         & \cup &
+    \begin{cases}
+
+    \end{cases}
+                                         & \cup &
+    \begin{cases}
+
+    \end{cases}
+\end{array}\)

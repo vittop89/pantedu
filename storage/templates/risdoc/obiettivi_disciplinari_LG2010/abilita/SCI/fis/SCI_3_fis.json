@@ -1,0 +1,19 @@
+[
+  {
+    "titolo": "ABILITA'",
+    "contenuti": [
+      {
+        "label": "Rileggere i fenomeni meccanici mediante grandezze diverse (es. quantità di moto) e applicare i principi di conservazione.",
+        "checked": false
+      },
+      {
+        "label": "Approfondire, anche in rapporto con la storia e la filosofia, il dibattito sui sistemi cosmologici.",
+        "checked": false
+      },
+      {
+        "label": "Progettare e condurre osservazioni e misure, confrontando esperimenti e teorie.",
+        "checked": false
+      }
+    ]
+  }
+]

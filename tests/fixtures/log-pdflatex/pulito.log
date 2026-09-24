@@ -1,0 +1,6 @@
+Package shellesc Warning: Shell escape disabled on input line 73.
+Package epstopdf Warning: Shell escape feature is not enabled.
+Missing character: There is no ; in font nullfont!
+Overfull \hbox (3.2pt too wide) in paragraph at lines 10--12
+[1] (./doc.aux) )
+Output written on doc.pdf (1 page, 71939 bytes).

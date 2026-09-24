@@ -1,0 +1,6 @@
+{
+    "errori": 81,
+    "aggiornato": "2026-09-23",
+    "perche_esiste": "La baseline di PHPStan (phpstan-baseline.neon) tollera gli errori noti del codice vecchio. reportUnmatchedIgnoredErrors: true impedisce le voci morte, ma non quelle nuove: `composer stan:baseline` riscrive il file con gli errori di oggi, compresi quelli nuovi, e un errore nuovo messo in baseline insieme al codice che lo introduce passava. Questo numero è la somma dei `count` della baseline, e LaBaselineDiPhpstanPuoSoloScendereTest lo confronta con il file: se la baseline cresce, la prova fallisce (revisione architetturale del 23/9/2026, A-6 e R-5).",
+    "come_si_aggiorna": "Quando si corregge un errore della baseline, si toglie la sua voce e si abbassa questo numero allo stesso totale: la prova lo chiede, perché un tetto più alto del vero lascerebbe spazio a errori nuovi. Alzarlo è una decisione di una persona, che scrive qui accanto il perché; non si fa per far passare un ramo."
+}

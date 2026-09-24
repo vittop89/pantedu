@@ -1,0 +1,24 @@
+{
+    "_perche": "Il corpus delle regole delle credenziali di classe (ADR-044), uno solo per le due parti che le applicano: il server (tests/Unit/Repositories/TeacherCredentialRulesTest.php) e il browser, che legge i pattern HTML stampati dalla vista (tests/js-unit/credenziali-regole.test.js, flag v come l'attributo pattern). Se le due parti non dicono la stessa cosa su questi casi, una delle due prove fallisce.",
+    "username": {
+        "accettati": ["abc", "3a-mate", "3A.Mate_1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+        "rifiutati": ["", "ab", "non valido", "àbc", "a@b", " abc", "abc ", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+    },
+    "password": {
+        "accettate": ["123456", "Pa55!profilo_e2e", "E2e!0123456789ab", "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"],
+        "rifiutate": {
+            "": "weak_password",
+            "12345": "weak_password",
+            "🙂🙂🙂": "password_non_valida",
+            "àèìòù1": "password_non_valida",
+            "con spazio": "password_non_valida",
+            "tab\tinmezzo": "password_non_valida",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx": "password_troppo_lunga",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaY": "password_troppo_lunga"
+        }
+    },
+    "aggiunta": {
+        "accettate": ["a", "GRUPPO-B", "pomeriggio", "123456789012"],
+        "rifiutate": ["", "Prof Rossi", "a_b", "1234567890123", "àè", "gruppo.b"]
+    }
+}

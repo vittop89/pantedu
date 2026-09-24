@@ -1,0 +1,44 @@
+# La prova periodica del piano per le violazioni di dati.
+#
+# PERCHE' ESISTE QUESTA UNITA' (2026-09-22)
+#   `tools/gdpr/breach_drill.php` c'era dal 10 settembre e misurava davvero —
+#   interroga i registri, controlla che ci sia una copia di sicurezza recente,
+#   che la chiave master sia configurata, che il modello di comunicazione
+#   esista, che il servizio delle cancellazioni si istanzi. Non l'aveva mai
+#   eseguito nessuno: la cartella dei rapporti non esisteva, la DPIA segnava
+#   «drill semestrale PENDING», e l'unica pianificazione proposta era una riga
+#   di crontab in un sistema dove i lavori periodici sono unita' systemd — cioe'
+#   senza OnFailure, quindi con un fallimento muto.
+#
+#   Uno strumento che nessuno lancia e il cui esito nessuno raccoglie e' un
+#   controllo assente con l'aria di essere presente.
+#
+# CHE COSA CAMBIA
+#   Il drill esce 1 quando trova qualcosa. Agganciato qui, quell'1 diventa
+#   un'unita' fallita, e `OnFailure` manda l'avviso per la stessa strada di
+#   tutti gli altri guasti. Il rapporto resta nei dati d'istanza, dove
+#   sopravvive allo scambio dei container.
+#
+# NON TOCCA DATI REALI: legge e scrive solo il proprio rapporto.
+
+[Unit]
+Description=pantedu — prova periodica del piano per le violazioni di dati (art. 33-34)
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+ExecStart=/usr/bin/php /var/www/pantedu/tools/gdpr/breach_drill.php
+TimeoutStartSec=600
+
+UMask=0007
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true

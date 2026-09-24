@@ -1,0 +1,17 @@
+[Unit]
+Description=pantedu - Ensure .env + storage dirs before app start
+After=local-fs.target
+Before=php8.4-fpm.service nginx.service
+DefaultDependencies=yes
+
+# 2026-09-08 — avvisa se fallisce: prepara .env e le cartelle prima che l'applicazione parta: se
+# fallisce, il sito puo' non rispondere affatto.
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/pantedu-ensure-config.sh
+
+[Install]
+WantedBy=multi-user.target

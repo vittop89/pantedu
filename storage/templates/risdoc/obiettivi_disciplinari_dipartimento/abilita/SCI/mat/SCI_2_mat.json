@@ -1,0 +1,165 @@
+[
+    {
+        "titolo": "SISTEMI LINEARI",
+        "contenuti": [
+            { "label": "Riconoscere e definire un sistema di equazioni lineari.", "checked": true },
+            { "label": "Risolvere sistemi lineari con il metodo di sostituzione.", "checked": true },
+            { "label": "Risolvere sistemi lineari con il metodo del confronto.", "checked": true },
+            { "label": "Risolvere sistemi lineari con il metodo di riduzione.", "checked": true },
+            { "label": "Risolvere sistemi lineari 2x2 con il metodo di Cramer.", "checked": true },
+            { "label": "Utilizzare matrici e calcolare determinanti 2x2.", "checked": true },
+            { "label": "Risolvere sistemi di tre equazioni in tre incognite.", "checked": true },
+            { "label": "Risolvere e discutere sistemi lineari letterali e fratti.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "RADICALI",
+        "contenuti": [
+            { "label": "Comprendere l'insieme dei numeri reali e la loro relazione con i radicali.", "checked": true },
+            { "label": "Definire e calcolare radici quadrate e cubiche.", "checked": true },
+            { "label": "Definire le radici n-esime e le loro condizioni di esistenza.", "checked": true },
+            { "label": "Applicare la proprietà invariantiva, semplificare e confrontare radicali.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "OPERAZIONI CON I RADICALI",
+        "contenuti": [
+            { "label": "Eseguire moltiplicazioni e divisioni tra radicali.", "checked": true },
+            { "label": "Portare un fattore dentro o fuori dal segno di radice.", "checked": true },
+            { "label": "Calcolare potenze e radici di radicali.", "checked": true },
+            { "label": "Eseguire addizioni e sottrazioni tra radicali simili.", "checked": true },
+            { "label": "Razionalizzare il denominatore di una frazione contenente radicali.", "checked": true },
+            { "label": "Risolvere equazioni, disequazioni e sistemi contenenti radicali semplici.", "checked": true },
+            { "label": "Utilizzare le potenze con esponente razionale e collegarle ai radicali.", "checked": true },
+            { "label": "Risolvere problemi che coinvolgono i numeri irrazionali.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PIANO CARTESIANO E RETTA",
+        "contenuti": [
+            { "label": "Rappresentare punti e calcolare la distanza tra due punti nel piano cartesiano.", "checked": true },
+            { "label": "Rappresentare rette e interpretare i coefficienti della loro equazione.", "checked": true },
+            { "label": "Determinare condizioni di parallelismo e perpendicolarità tra rette.", "checked": true },
+            { "label": "Scrivere l'equazione di una retta passante per un punto e per due punti.", "checked": true },
+            { "label": "Scrivere e identificare i fasci di rette e le loro  caratteristiche.", "checked": true },
+            { "label": "Calcolare la distanza di un punto da una retta.", "checked": true },
+            { "label": "Rappresentare semipiani e segmenti/semirette nel piano cartesiano.", "checked": true },
+            { "label": "Risolvere problemi inerenti la geometria analitica sulle rette.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "EQUAZIONI DI SECONDO GRADO",
+        "contenuti": [
+            { "label": "Risolvere un'equazione di secondo grado completa e incompleta.", "checked": true },
+            { "label": "Risolvere equazioni numeriche intere e problemi riconducibili ad esse.", "checked": true },
+            { "label": "Risolvere equazioni numeriche fratte riconducibili al secondo grado.", "checked": true },
+            { "label": "Risolvere e discutere equazioni letterali di secondo grado.", "checked": true },
+            { "label": "Applicare le relazioni tra soluzioni e coefficienti (somma, prodotto e Regola di Cartesio).", "checked": true },
+            { "label": "Scomporre un trinomio di secondo grado in fattori.", "checked": true },
+            { "label": "Risolvere e discutere equazioni parametriche di secondo grado.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PARABOLE, EQUAZIONI, SISTEMI",
+        "contenuti": [
+            { "label": "Rappresentare la parabola e determinarne vertice, fuoco e direttrice.", "checked": true },
+            { "label": "Ricercare l'equazione di una parabola noto il suo grafico o alcuni suoi elementi caratteristici.", "checked": true },
+            { "label": "Risolvere sistemi di secondo grado (es. retta-parabola).", "checked": true },
+            { "label": "Risolvere equazioni di grado superiore al secondo (biquadratiche, trinomie, reciproche).", "checked": true },
+            { "label": "Risolvere sistemi simmetrici o riconducibili a sistemi simmetrici.", "checked": true },
+            { "label": "Risolvere sistemi omogenei.", "checked": true },
+            { "label": "Ricercare graficamente le soluzioni di equazioni o disequazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "DISEQUAZIONI DI SECONDO GRADO",
+        "contenuti": [
+            { "label": "Comprendere definizioni, principi di equivalenza e risolvere disequazioni lineari.", "checked": true },
+            { "label": "Risolvere disequazioni di secondo grado intere.", "checked": true },
+            { "label": "Risolvere disequazioni intere di grado superiore al secondo mediante scomposizione.", "checked": true },
+            { "label": "Risolvere disequazioni fratte.", "checked": true },
+            { "label": "Risolvere sistemi di disequazioni.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "APPLICAZIONI DELLE DISEQUAZIONI",
+        "contenuti": [
+            { "label": "Risolvere equazioni irrazionali.", "checked": true },
+            { "label": "Risolvere disequazioni irrazionali.", "checked": true },
+            { "label": "Risolvere equazioni contenenti valori assoluti.", "checked": true },
+            { "label": "Risolvere disequazioni contenenti valori assoluti.", "checked": true },
+            { "label": "Rappresentare funzioni con radici e valori assoluti riconducibili a funzioni lineari o quadratiche.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PROBABILITÀ",
+        "contenuti": [
+            { "label": "Distinguere esperimenti aleatori da quelli deterministici e identificare eventi.", "checked": true },
+            { "label": "Applicare le diverse definizioni di probabilità (classica, frequentista, soggettiva).", "checked": true },
+            { "label": "Calcolare la probabilità della somma logica di eventi compatibili e incompatibili.", "checked": true },
+            { "label": "Calcolare la probabilità del prodotto logico di eventi dipendenti e indipendenti.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "CIRCONFERENZE",
+        "contenuti": [
+            { "label": "Definire e identificare luoghi geometrici fondamentali.", "checked": true },
+            { "label": "Distinguere tra circonferenza e cerchio, conoscendone definizioni ed contenuti.", "checked": true },
+            { "label": "Analizzare le proprietà delle corde di una circonferenza.", "checked": true },
+            { "label": "Determinare le posizioni reciproche tra una retta e una circonferenza.", "checked": true },
+            { "label": "Determinare le posizioni reciproche tra due circonferenze.", "checked": true },
+            { "label": "Riconoscere e calcolare angoli al centro e angoli alla circonferenza.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "CIRCONFERENZE E POLIGONI",
+        "contenuti": [
+            { "label": "Riconoscere e costruire poligoni inscritti e circoscritti a una circonferenza.", "checked": true },
+            { "label": "Identificare e utilizzare i punti notevoli di un triangolo (incentro, circocentro, etc.).", "checked": true },
+            { "label": "Analizzare le proprietà dei quadrilateri inscrittibili e circoscrittibili.", "checked": true },
+            { "label": "Riconoscere e utilizzare le proprietà dei poligoni regolari.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "SUPERFICI EQUIVALENTI E AREE",
+        "contenuti": [
+            { "label": "Comprendere il concetto di equivalenza tra superfici piane.", "checked": true },
+            { "label": "Calcolare l'area di parallelogrammi e applicare criteri di equivalenza.", "checked": true },
+            { "label": "Calcolare l'area di triangoli e trapezi e applicare criteri di equivalenza.", "checked": true },
+            { "label": "Trasformare un poligono in un altro poligono equivalente.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "TEOREMI DI EUCLIDE E DI PITAGORA",
+        "contenuti": [
+            { "label": "Enunciare e applicare il primo teorema di Euclide.", "checked": true },
+            { "label": "Enunciare e applicare il teorema di Pitagora e il suo inverso.", "checked": true },
+            { "label": "Applicare il teorema di Pitagora a particolari triangoli rettangoli (es. con angoli 30-60-90, 45-45-90).", "checked": true },
+            { "label": "Enunciare e applicare il secondo teorema di Euclide.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "PROPORZIONALITÀ E SIMILITUDINE",
+        "contenuti": [
+            { "label": "Utilizzare proporzioni tra grandezze geometriche.", "checked": true },
+            { "label": "Applicare il teorema di Talete e le sue conseguenze.", "checked": true },
+            { "label": "Applicare i criteri di similitudine dei triangoli.", "checked": true },
+            { "label": "Utilizzare i teoremi di Euclide in contesti di similitudine.", "checked": true },
+            { "label": "Riconoscere e utilizzare le proprietà dei poligoni simili.", "checked": true },
+            { "label": "Applicare la similitudine a problemi con corde, secanti e tangenti.", "checked": true },
+            { "label": "Comprendere e applicare il concetto di sezione aurea.", "checked": true },
+            { "label": "Calcolare la lunghezza della circonferenza e l'area del cerchio.", "checked": true }
+        ]
+    },
+    {
+        "titolo": "TRASFORMAZIONI GEOMETRICHE",
+        "contenuti": [
+            { "label": "Definire trasformazioni geometriche e riconoscere le isometrie.", "checked": true },
+            { "label": "Eseguire e descrivere traslazioni nel piano.", "checked": true },
+            { "label": "Eseguire e descrivere rotazioni nel piano.", "checked": true },
+            { "label": "Eseguire e descrivere simmetrie centrali nel piano.", "checked": true },
+            { "label": "Eseguire e descrivere simmetrie assiali nel piano.", "checked": true },
+            { "label": "Eseguire e descrivere omotetie nel piano.", "checked": true }
+        ]
+    }
+]

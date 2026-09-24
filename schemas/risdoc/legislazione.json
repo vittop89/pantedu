@@ -1,0 +1,21 @@
+{
+    "$id": "legislazione",
+    "title": "Indicazioni Nazionali e Linee Guida - Legislazione",
+    "category": "ALTRO",
+    "origin": "strcomp",
+    "body_class": "fm-studio-strcomp",
+    "_g23_status": "implemented (page-doc linkListPdf block, ADR-020)",
+    "body_pt_seed_ref": "schemas/risdoc/_pt/seeds/legislazione.pt.json",
+    "sections": [
+        {
+            "type": "header",
+            "title": "Indicazioni Nazionali e Linee Guida",
+            "selectors": []
+        },
+        {
+            "type": "link-list-pdf",
+            "name": "legislazione_links",
+            "seed_ref": "schemas/risdoc/_pt/seeds/legislazione.pt.json"
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+-- 135 — il registro del filtro di sicurezza perdeva le righe più importanti (22/9/2026).
+--
+-- `waf_logs.outcome` era VARCHAR(16). Cinque esiti che il codice scrive sono
+-- più lunghi, e in modalità stretta l'INSERT falliva con «Data too long»:
+--
+--     'fingerprint_collected'      21   il controllo anti-bot
+--     'under_attack_interstitial'  25   modalità sotto attacco
+--     'challenge_threat_intel'     22   verifica da threat intelligence
+--     'blocked_threat_intel'       20   blocco da threat intelligence
+--     'challenge_crowdsec'         18   verifica da CrowdSec
+--
+-- `WafLogService::log()` inghiotte le eccezioni di proposito — il filtro non
+-- deve far cadere il sito se il database non risponde — e così quelle righe
+-- sparivano senza un errore, senza un avviso, senza niente. Proprio le cinque
+-- che contano: le altre (pass, blocked_geo, honeypot_trap, whitelist,
+-- challenge_first) stanno nei sedici caratteri e si scrivevano regolarmente.
+--
+-- Misurato in produzione il 22/9/2026 prima di scriverla: 20.340 righe dal 10
+-- agosto, di cui ZERO con `fp_hash` valorizzato e ZERO su `/waf/fingerprint`,
+-- mentre il browser quella richiesta la fa davvero (osservata con il browser
+-- su pantedu.eu: POST /waf/fingerprint → 200).
+--
+-- Si allarga la colonna invece di accorciare i valori: il pannello di
+-- amministrazione (`WafAdminController`) classifica gli esiti per nome, e
+-- accorciarli vorrebbe dire cambiare due vocabolari invece di una larghezza.
+-- A 32 ci stanno tutti con margine.
+--
+-- Nessun dato da convertire: le righe esistenti sono tutte più corte.
+
+-- SICUREZZA: allargare una VARCHAR non rompe il codice della versione
+-- precedente. Quel codice scrive valori da sedici caratteri o meno, che in una
+-- colonna da trentadue entrano identici; e legge stringhe, senza dipendere
+-- dalla larghezza dichiarata. La colonna resta NOT NULL come prima: nessuna
+-- riga esistente diventa invalida, nessun dato viene convertito o perso. Il
+-- pannello di amministrazione classifica gli esiti per nome e non li tronca.
+--
+-- ROLLBACK: `ALTER TABLE waf_logs MODIFY COLUMN outcome VARCHAR(16) NOT NULL;`
+-- ma NON è simmetrico, e va fatto sapendo che cosa comporta: dopo questa
+-- migrazione il registro contiene anche i cinque esiti lunghi, e restringere la
+-- colonna li troncherebbe (o farebbe fallire l'ALTER in modalità stretta).
+-- Prima di restringere, quindi: `DELETE FROM waf_logs WHERE CHAR_LENGTH(outcome) > 16`
+-- oppure si aspetta la purga dei trenta giorni, che li porta via da sé. Il
+-- registro è di sola sicurezza e a conservazione breve: perderne una parte per
+-- tornare indietro è accettabile, ma va deciso, non subito.
+
+ALTER TABLE `waf_logs`
+    MODIFY COLUMN `outcome` VARCHAR(32) NOT NULL;

@@ -1,0 +1,432 @@
+{
+  "timestamp": "2026-05-23T20:22:11.333Z",
+  "css": {
+    "files": 39,
+    "totalLines": 20626,
+    "totalImportant": 667,
+    "totalHex": 3148,
+    "totalTokenUsage": 1364,
+    "totalBytes": 642772,
+    "bemClasses": 1333,
+    "legacyClasses": 659
+  },
+  "views": {
+    "filesWithInlineStyles": 4,
+    "totalInlineStyles": 8,
+    "totalFmClassUsage": 289
+  },
+  "files": [
+    {
+      "path": "css\\a11y.css",
+      "lines": 242,
+      "important": 8,
+      "hex": 9,
+      "tokens": 8,
+      "bemClasses": 12,
+      "legacyClasses": 4,
+      "bytes": 8305
+    },
+    {
+      "path": "css\\admin.css",
+      "lines": 827,
+      "important": 1,
+      "hex": 230,
+      "tokens": 100,
+      "bemClasses": 94,
+      "legacyClasses": 6,
+      "bytes": 28282
+    },
+    {
+      "path": "css\\components.css",
+      "lines": 38,
+      "important": 0,
+      "hex": 0,
+      "tokens": 0,
+      "bemClasses": 0,
+      "legacyClasses": 2,
+      "bytes": 1832
+    },
+    {
+      "path": "css\\critical.css",
+      "lines": 129,
+      "important": 0,
+      "hex": 17,
+      "tokens": 14,
+      "bemClasses": 7,
+      "legacyClasses": 2,
+      "bytes": 3864
+    },
+    {
+      "path": "css\\elements.css",
+      "lines": 125,
+      "important": 0,
+      "hex": 0,
+      "tokens": 19,
+      "bemClasses": 0,
+      "legacyClasses": 2,
+      "bytes": 2955
+    },
+    {
+      "path": "css\\layout.css",
+      "lines": 7068,
+      "important": 460,
+      "hex": 1196,
+      "tokens": 19,
+      "bemClasses": 337,
+      "legacyClasses": 203,
+      "bytes": 253173
+    },
+    {
+      "path": "css\\layout_editor.css",
+      "lines": 1227,
+      "important": 31,
+      "hex": 114,
+      "tokens": 0,
+      "bemClasses": 1,
+      "legacyClasses": 78,
+      "bytes": 24763
+    },
+    {
+      "path": "css\\layout_es.css",
+      "lines": 3932,
+      "important": 66,
+      "hex": 388,
+      "tokens": 52,
+      "bemClasses": 32,
+      "legacyClasses": 236,
+      "bytes": 94453
+    },
+    {
+      "path": "css\\main.css",
+      "lines": 47,
+      "important": 0,
+      "hex": 0,
+      "tokens": 0,
+      "bemClasses": 5,
+      "legacyClasses": 2,
+      "bytes": 2473
+    },
+    {
+      "path": "css\\modules\\_admin-cards.css",
+      "lines": 155,
+      "important": 0,
+      "hex": 2,
+      "tokens": 65,
+      "bemClasses": 19,
+      "legacyClasses": 1,
+      "bytes": 3889
+    },
+    {
+      "path": "css\\modules\\_admin-tabs.css",
+      "lines": 113,
+      "important": 0,
+      "hex": 1,
+      "tokens": 36,
+      "bemClasses": 8,
+      "legacyClasses": 1,
+      "bytes": 2607
+    },
+    {
+      "path": "css\\modules\\_admin-toolnav.css",
+      "lines": 102,
+      "important": 0,
+      "hex": 0,
+      "tokens": 23,
+      "bemClasses": 5,
+      "legacyClasses": 3,
+      "bytes": 2847
+    },
+    {
+      "path": "css\\modules\\_alerts.css",
+      "lines": 94,
+      "important": 0,
+      "hex": 0,
+      "tokens": 28,
+      "bemClasses": 9,
+      "legacyClasses": 0,
+      "bytes": 2836
+    },
+    {
+      "path": "css\\modules\\_badges.css",
+      "lines": 53,
+      "important": 0,
+      "hex": 0,
+      "tokens": 24,
+      "bemClasses": 5,
+      "legacyClasses": 0,
+      "bytes": 1766
+    },
+    {
+      "path": "css\\modules\\_breadcrumb.css",
+      "lines": 46,
+      "important": 0,
+      "hex": 0,
+      "tokens": 10,
+      "bemClasses": 2,
+      "legacyClasses": 0,
+      "bytes": 1261
+    },
+    {
+      "path": "css\\modules\\_buttons.css",
+      "lines": 148,
+      "important": 0,
+      "hex": 0,
+      "tokens": 49,
+      "bemClasses": 10,
+      "legacyClasses": 1,
+      "bytes": 3947
+    },
+    {
+      "path": "css\\modules\\_cards.css",
+      "lines": 65,
+      "important": 1,
+      "hex": 0,
+      "tokens": 16,
+      "bemClasses": 4,
+      "legacyClasses": 1,
+      "bytes": 2057
+    },
+    {
+      "path": "css\\modules\\_editor-toolbar.css",
+      "lines": 323,
+      "important": 74,
+      "hex": 36,
+      "tokens": 43,
+      "bemClasses": 15,
+      "legacyClasses": 8,
+      "bytes": 12433
+    },
+    {
+      "path": "css\\modules\\_forms.css",
+      "lines": 159,
+      "important": 0,
+      "hex": 0,
+      "tokens": 40,
+      "bemClasses": 12,
+      "legacyClasses": 0,
+      "bytes": 4194
+    },
+    {
+      "path": "css\\modules\\_grid.css",
+      "lines": 78,
+      "important": 0,
+      "hex": 0,
+      "tokens": 28,
+      "bemClasses": 19,
+      "legacyClasses": 1,
+      "bytes": 2726
+    },
+    {
+      "path": "css\\modules\\_import-bundle.css",
+      "lines": 264,
+      "important": 0,
+      "hex": 20,
+      "tokens": 62,
+      "bemClasses": 16,
+      "legacyClasses": 2,
+      "bytes": 6173
+    },
+    {
+      "path": "css\\modules\\_login-federated.css",
+      "lines": 119,
+      "important": 0,
+      "hex": 12,
+      "tokens": 21,
+      "bemClasses": 7,
+      "legacyClasses": 3,
+      "bytes": 3075
+    },
+    {
+      "path": "css\\modules\\_modals.css",
+      "lines": 125,
+      "important": 2,
+      "hex": 0,
+      "tokens": 20,
+      "bemClasses": 11,
+      "legacyClasses": 3,
+      "bytes": 3633
+    },
+    {
+      "path": "css\\modules\\_print-info.css",
+      "lines": 302,
+      "important": 2,
+      "hex": 85,
+      "tokens": 0,
+      "bemClasses": 26,
+      "legacyClasses": 1,
+      "bytes": 9630
+    },
+    {
+      "path": "css\\modules\\_sidebar.css",
+      "lines": 159,
+      "important": 0,
+      "hex": 0,
+      "tokens": 43,
+      "bemClasses": 9,
+      "legacyClasses": 3,
+      "bytes": 4619
+    },
+    {
+      "path": "css\\modules\\_sidepage.css",
+      "lines": 86,
+      "important": 0,
+      "hex": 0,
+      "tokens": 25,
+      "bemClasses": 13,
+      "legacyClasses": 2,
+      "bytes": 2610
+    },
+    {
+      "path": "css\\modules\\_source-editor.css",
+      "lines": 161,
+      "important": 0,
+      "hex": 5,
+      "tokens": 66,
+      "bemClasses": 15,
+      "legacyClasses": 1,
+      "bytes": 4345
+    },
+    {
+      "path": "css\\modules\\_sync-bar.css",
+      "lines": 183,
+      "important": 0,
+      "hex": 54,
+      "tokens": 0,
+      "bemClasses": 20,
+      "legacyClasses": 5,
+      "bytes": 6500
+    },
+    {
+      "path": "css\\modules\\_tables.css",
+      "lines": 94,
+      "important": 0,
+      "hex": 0,
+      "tokens": 20,
+      "bemClasses": 6,
+      "legacyClasses": 1,
+      "bytes": 2323
+    },
+    {
+      "path": "css\\modules\\_template-form.css",
+      "lines": 113,
+      "important": 0,
+      "hex": 0,
+      "tokens": 58,
+      "bemClasses": 11,
+      "legacyClasses": 1,
+      "bytes": 3045
+    },
+    {
+      "path": "css\\modules\\_toasts.css",
+      "lines": 166,
+      "important": 0,
+      "hex": 36,
+      "tokens": 14,
+      "bemClasses": 8,
+      "legacyClasses": 13,
+      "bytes": 4162
+    },
+    {
+      "path": "css\\modules\\_topbar.css",
+      "lines": 48,
+      "important": 0,
+      "hex": 0,
+      "tokens": 9,
+      "bemClasses": 2,
+      "legacyClasses": 0,
+      "bytes": 1239
+    },
+    {
+      "path": "css\\modules\\_verifica-doc.css",
+      "lines": 1427,
+      "important": 9,
+      "hex": 451,
+      "tokens": 20,
+      "bemClasses": 164,
+      "legacyClasses": 11,
+      "bytes": 47504
+    },
+    {
+      "path": "css\\modules\\_waf-dashboard.css",
+      "lines": 132,
+      "important": 0,
+      "hex": 0,
+      "tokens": 48,
+      "bemClasses": 11,
+      "legacyClasses": 9,
+      "bytes": 3562
+    },
+    {
+      "path": "css\\risdoc-tokens.css",
+      "lines": 186,
+      "important": 0,
+      "hex": 122,
+      "tokens": 1,
+      "bemClasses": 1,
+      "legacyClasses": 1,
+      "bytes": 6631
+    },
+    {
+      "path": "css\\shell.css",
+      "lines": 282,
+      "important": 0,
+      "hex": 19,
+      "tokens": 76,
+      "bemClasses": 38,
+      "legacyClasses": 3,
+      "bytes": 10578
+    },
+    {
+      "path": "css\\tokens.css",
+      "lines": 332,
+      "important": 0,
+      "hex": 129,
+      "tokens": 1,
+      "bemClasses": 2,
+      "legacyClasses": 3,
+      "bytes": 13678
+    },
+    {
+      "path": "css\\utilities.css",
+      "lines": 784,
+      "important": 13,
+      "hex": 27,
+      "tokens": 248,
+      "bemClasses": 331,
+      "legacyClasses": 2,
+      "bytes": 26133
+    },
+    {
+      "path": "css\\waf.css",
+      "lines": 692,
+      "important": 0,
+      "hex": 195,
+      "tokens": 58,
+      "bemClasses": 46,
+      "legacyClasses": 44,
+      "bytes": 22669
+    }
+  ],
+  "topInlineStyleOffenders": [
+    {
+      "path": "views\\partials\\head.php",
+      "inlineStyles": 5,
+      "fmClassUsage": 0
+    },
+    {
+      "path": "views\\admin\\waf\\reports.php",
+      "inlineStyles": 1,
+      "fmClassUsage": 43
+    },
+    {
+      "path": "views\\errors\\generic.php",
+      "inlineStyles": 1,
+      "fmClassUsage": 7
+    },
+    {
+      "path": "views\\teacher\\dashboard.php",
+      "inlineStyles": 1,
+      "fmClassUsage": 239
+    }
+  ]
+}

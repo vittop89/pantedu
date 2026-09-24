@@ -1,0 +1,23 @@
+[
+  {
+    "titolo": "CONOSCENZE",
+    "contenuti": [
+      {
+        "label": "Conoscere la definizione e le proprietà di calcolo dei numeri complessi, nella forma algebrica, geometrica e trigonometrica.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere le sezioni coniche dal punto di vista geometrico sintetico e analitico.",
+        "checked": true
+      },
+      {
+        "label": "Comprendere il problema del numero delle soluzioni delle equazioni polinomiali e il concetto di velocità di variazione di un processo rappresentato mediante una funzione.",
+        "checked": true
+      },
+      {
+        "label": "Conoscere la probabilità condizionata e composta, la formula di Bayes e le sue applicazioni, e gli elementi di base del calcolo combinatorio.",
+        "checked": true
+      }
+    ]
+  }
+]

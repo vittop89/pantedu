@@ -1,0 +1,19 @@
+[Unit]
+Description=pantedu — timer della sincronizzazione notturna con Drive
+
+[Timer]
+# 03:40, dopo il salvataggio cifrato (02:35) e la catena di audit (02:50), e
+# prima che qualcuno si alzi. Lo script salta i docenti sincronizzati da meno
+# di ventiquattr'ore, quindi l'orario esatto conta poco: conta non accavallarsi
+# con i lavori che leggono il database tutto insieme.
+OnCalendar=03:40
+
+# Qui `Persistent` serve: se la macchina era spenta all'ora giusta, la
+# sincronizzazione va comunque fatta, e prima è meglio.
+Persistent=true
+
+RandomizedDelaySec=10min
+Unit=pantedu-drive-sync.service
+
+[Install]
+WantedBy=timers.target

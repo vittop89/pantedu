@@ -1,0 +1,56 @@
+[Unit]
+# 2026-09-22 (ADR-046) — avviso e cancellazione delle bozze di compilazione
+# scadute.
+#
+# Una compilazione è ciò che il docente scrive dentro un atto della scuola:
+# relazione finale, scheda di recupero, piano annuale. Per natura può nominare
+# uno studente. Restava sul server per sempre, e ogni giorno in più è un giorno
+# in cui quei dati possono uscire da una violazione che non è ancora successa.
+#
+# La regola — quindici giorni dall'ultima fra scaricamento e modifica, e
+# comunque il 31 agosto per ciò che è fermo dal 1° giugno — è dichiarata
+# nell'informativa e nel registro art. 30. Senza questo lavoro quella
+# dichiarazione sarebbe falsa, e falsa in silenzio: il sito funzionerebbe
+# esattamente come prima.
+Description=pantedu — avviso e cancellazione delle bozze di compilazione scadute
+After=network-online.target mariadb.service
+Wants=network-online.target
+Requires=mariadb.service
+
+# Se non gira, la conservazione dichiarata non viene applicata: si deve sapere
+# quel giorno, non al prossimo audit. L'invariante `bozze` della diagnostica
+# guarda la stessa cosa dall'altro lato (il risultato, non l'esecuzione).
+OnFailure=pantedu-avviso@%n.service
+
+[Service]
+Type=oneshot
+User=pantedu
+WorkingDirectory=/var/www/pantedu
+# --applica: senza, lo strumento dice soltanto che cosa farebbe. È il verso
+# prudente per difetto, ed è il motivo per cui il flag sta qui e non nel
+# codice: chi lo lancia a mano vede prima, il timer agisce.
+ExecStart=/usr/bin/php /var/www/pantedu/tools/gdpr/spazza_bozze_scadute.php --applica
+TimeoutStartSec=900
+
+# ── Contenimento ──────────────────────────────────────────────────────────
+#
+# Stesso blocco di tutte le altre unità del progetto, misurato il 9 settembre
+# 2026 con `systemd-analyze security`. Questo è uno script PHP che legge un
+# database, manda una mail e cancella righe: non carica moduli del kernel, non
+# tocca l'orologio, non ha bisogno di /home.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target
